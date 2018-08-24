@@ -1,0 +1,16 @@
+install:
+- mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -P !snapshot -B -V
+script:
+- mvn clean package -P !snapshot -B
+cache:
+  directories:
+  - "~/.m2/repository"
+before_install:
+- chmod +x ./cd/deploy.sh
+after_success:
+- "./cd/deploy.sh"
+language: java
+jdk:
+- oraclejdk10
+- oraclejdk9
+- oraclejdk8
