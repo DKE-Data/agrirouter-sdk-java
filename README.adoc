@@ -17,6 +17,7 @@ As a universal data exchange platform, agrirouter fills a gap on the way to Farm
 This project contains the API for the communication with the agrirouter. Everything you need for the onboarding process, secure communication and much more.
 
 == Project status
+image::https://travis-ci.com/DKE-Data/agrirouter-api-java.svg?branch=develop[Build status]
 
 == External resources
 
