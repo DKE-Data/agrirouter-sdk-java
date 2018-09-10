@@ -8,21 +8,24 @@ import com.dke.data.agrirouter.impl.common.UtcTimeService;
 
 public abstract class AbstractOnboardingService extends EnvironmentalService {
 
-    protected AbstractOnboardingService(Environment environment) {
-        super(environment);
-    }
+  protected AbstractOnboardingService(Environment environment) {
+    super(environment);
+  }
 
-    public OnboardingRequest getOnboardRequest(String uuid, String applicationId, String certificationVersionId, String gatewayId, CertificationType certificationType) {
-        OnboardingRequest onboardingRequest = new OnboardingRequest();
-        onboardingRequest.setId(uuid);
-        onboardingRequest.setApplicationId(applicationId);
-        onboardingRequest.setCertificationVersionId(certificationVersionId);
-        onboardingRequest.setGatewayId(gatewayId);
-        onboardingRequest.setCertificateType(certificationType.getKey());
-        onboardingRequest.setUTCTimestamp(UtcTimeService.inThePast(10).toString());
-        onboardingRequest.setTimeZone(UtcTimeService.offset());
-        return onboardingRequest;
-    }
-
-
+  public OnboardingRequest getOnboardRequest(
+      String uuid,
+      String applicationId,
+      String certificationVersionId,
+      String gatewayId,
+      CertificationType certificationType) {
+    OnboardingRequest onboardingRequest = new OnboardingRequest();
+    onboardingRequest.setId(uuid);
+    onboardingRequest.setApplicationId(applicationId);
+    onboardingRequest.setCertificationVersionId(certificationVersionId);
+    onboardingRequest.setGatewayId(gatewayId);
+    onboardingRequest.setCertificateType(certificationType.getKey());
+    onboardingRequest.setUTCTimestamp(UtcTimeService.inThePast(10).toString());
+    onboardingRequest.setTimeZone(UtcTimeService.offset());
+    return onboardingRequest;
+  }
 }

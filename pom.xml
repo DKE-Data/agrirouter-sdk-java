@@ -116,6 +116,7 @@
         <build-helper-maven-plugin.version>1.12</build-helper-maven-plugin.version>
         <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
+        <fmt-maven-plugin.version>2.5.1</fmt-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -447,6 +448,18 @@
                         <phase>test-compile</phase>
                         <goals>
                             <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.coveo</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <version>${fmt-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>format</goal>
                         </goals>
                     </execution>
                 </executions>

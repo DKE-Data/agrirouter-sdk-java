@@ -4,25 +4,22 @@ import agrirouter.commons.MessageOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.google.protobuf.ByteString;
 
-/**
- * Decoding of messages.
- */
+/** Decoding of messages. */
 public interface DecodeMessageService {
 
-    /**
-     * Decode a given message using the internal protobuf implementation.
-     *
-     * @param encodedResponse -
-     * @return -
-     */
-    DecodeMessageResponse decode(String encodedResponse);
+  /**
+   * Decode a given message using the internal protobuf implementation.
+   *
+   * @param encodedResponse -
+   * @return -
+   */
+  DecodeMessageResponse decode(String encodedResponse);
 
-    /**
-     * Decoding a given message using the internal protobuf implementation.
-     *
-     * @param message -
-     * @return -
-     */
-    MessageOuterClass.Message decode(ByteString message);
-
+  /**
+   * Decoding a given message using the internal protobuf implementation.
+   *
+   * @param message -
+   * @return -
+   */
+  MessageOuterClass.Message decode(ByteString message);
 }
