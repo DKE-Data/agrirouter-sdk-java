@@ -22,34 +22,50 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
   @Override
   public OnboardingResponse onboard(OnboardingParameters parameters) {
+    this.getLogger().info("BEGIN | Onboarding process. | '{}'.", parameters);
     parameters.validate();
-    return this.onboard(
+
+    this.getLogger().debug("Onboard device.");
+    OnboardingResponse onboardingResponse = this.onboard(
         parameters.getRegistrationCode(), this.createOnboardingRequestBody(parameters));
+
+    this.getLogger().info("END | Onboarding process. | '{}'.", parameters);
+    return onboardingResponse;
   }
 
   private OnboardingRequest createOnboardingRequestBody(OnboardingParameters parameters) {
-    return this.getOnboardRequest(
-        parameters.getUuid(),
-        parameters.getApplicationId(),
-        parameters.getCertificationVersionId(),
-        parameters.getGatewayId(),
-        parameters.getCertificationType());
+    this.getLogger().info("BEGIN | Create onboarding request. | '{}'.", parameters);
+    OnboardingRequest onboardRequest = this.getOnboardRequest(
+            parameters.getUuid(),
+            parameters.getApplicationId(),
+            parameters.getCertificationVersionId(),
+            parameters.getGatewayId(),
+            parameters.getCertificationType());
+    this.getLogger().info("END | Create onboarding request. | '{}'.", parameters);
+    return onboardRequest;
   }
 
   private OnboardingResponse onboard(String registrationCode, OnboardingRequest onboardingRequest) {
+    this.getLogger().info("BEGIN | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
     Response response =
         RequestFactory.bearerTokenRequest(this.environment.getOnboardUrl(), registrationCode)
             .post(Entity.json(onboardingRequest));
     this.assertResponseStatusIsValid(response, HttpStatus.SC_CREATED);
-    return response.readEntity(OnboardingResponse.class);
+    OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
+
+    this.getLogger().info("END | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
+    return onboardingResponse;
   }
 
   @Override
   public String generateAuthenticationUrl(AuthenticationUrlParameters parameters) {
-    return this.environment.getSecuredOnboardingAuthenticationUrl(
-        parameters.getApplicationId(),
-        parameters.getResponseType(),
-        parameters.getState(),
-        parameters.getRedirectUri());
+    this.getLogger().info("BEGIN | Generating authentication URL. | '{}'.", parameters);
+    String securedOnboardingAuthenticationUrl = this.environment.getSecuredOnboardingAuthenticationUrl(
+            parameters.getApplicationId(),
+            parameters.getResponseType(),
+            parameters.getState(),
+            parameters.getRedirectUri());
+    this.getLogger().info("END | Generating authentication URL. | '{}'.", parameters);
+    return securedOnboardingAuthenticationUrl;
   }
 }

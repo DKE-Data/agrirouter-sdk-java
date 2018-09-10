@@ -5,6 +5,7 @@ import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
+import org.apache.logging.log4j.message.ObjectArrayMessage;
 
 public abstract class AbstractOnboardingService extends EnvironmentalService {
 
@@ -12,12 +13,15 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
     super(environment);
   }
 
-  public OnboardingRequest getOnboardRequest(
-      String uuid,
-      String applicationId,
-      String certificationVersionId,
-      String gatewayId,
-      CertificationType certificationType) {
+  protected OnboardingRequest getOnboardRequest(
+          String uuid,
+          String applicationId,
+          String certificationVersionId,
+          String gatewayId,
+          CertificationType certificationType) {
+    this.getLogger().info("BEGIN | Creating onboard request.");
+    this.getLogger().debug(new ObjectArrayMessage(uuid, applicationId, certificationType, gatewayId, certificationType));
+
     OnboardingRequest onboardingRequest = new OnboardingRequest();
     onboardingRequest.setId(uuid);
     onboardingRequest.setApplicationId(applicationId);
@@ -26,6 +30,8 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
     onboardingRequest.setCertificateType(certificationType.getKey());
     onboardingRequest.setUTCTimestamp(UtcTimeService.inThePast(10).toString());
     onboardingRequest.setTimeZone(UtcTimeService.offset());
+
+    this.getLogger().info("END | Creating onboard request.");
     return onboardingRequest;
   }
 }

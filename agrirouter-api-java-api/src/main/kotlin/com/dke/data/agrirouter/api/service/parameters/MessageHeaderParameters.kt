@@ -4,9 +4,11 @@ import agrirouter.commons.Chunk
 import agrirouter.request.Request
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType
 import com.dke.data.agrirouter.api.service.ParameterValidation
+import lombok.ToString
 import java.util.*
 import javax.validation.constraints.NotNull
 
+@ToString
 class MessageHeaderParameters : ParameterValidation {
 
     @NotNull

@@ -128,7 +128,7 @@ public class KeyStoreCreationUtils {
     return keystore;
   }
 
-  public static char[] getDefaultPassword() {
+  private static char[] getDefaultPassword() {
     return DEFAULT_PASSWORD.toCharArray();
   }
 }

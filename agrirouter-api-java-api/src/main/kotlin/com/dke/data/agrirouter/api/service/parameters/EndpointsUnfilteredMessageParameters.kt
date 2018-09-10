@@ -2,8 +2,10 @@ package com.dke.data.agrirouter.api.service.parameters
 
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType
 import com.dke.data.agrirouter.api.service.ParameterValidation
+import lombok.ToString
 import javax.validation.constraints.NotNull
 
+@ToString
 class EndpointsUnfilteredMessageParameters : ParameterValidation {
 
     @NotNull
