@@ -1,0 +1,43 @@
+package com.dke.data.agrirouter.api.factories.impl;
+
+import agrirouter.request.payload.account.Endpoints;
+import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.factories.impl.parameters.EndpointsFilteredMessageParameters;
+import com.google.protobuf.ByteString;
+import kotlin.UninitializedPropertyAccessException;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class EndpointsFilteredMessageContentFactoryTest extends AbstractMessageContentFactoryTest<EndpointsFilteredMessageContentFactory> {
+
+    @Test
+    void givenValidEndpointsFilteredParameters_Message_ShouldNotFail() {
+        EndpointsFilteredMessageParameters endpointsFilteredMessageParameters = new EndpointsFilteredMessageParameters();
+        endpointsFilteredMessageParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND;
+        endpointsFilteredMessageParameters.technicalMessageType = TechnicalMessageType.ISO_11783_TASKDATA_ZIP;
+        ByteString message = this.getInstanceToTest().message(endpointsFilteredMessageParameters);
+        assertFalse(message.isEmpty());
+    }
+
+    @Test
+    void givenEmptyEndpointsFilteredParameters_Message_ShouldNotFail() {
+        EndpointsFilteredMessageParameters endpointsFilteredMessageParameters = new EndpointsFilteredMessageParameters();
+        assertThrows(UninitializedPropertyAccessException.class, () -> this.getInstanceToTest().message(endpointsFilteredMessageParameters));
+    }
+
+    @Test
+    @SuppressWarnings("ConstantConditions")
+    void givenEndpointsFilteredParametersWithNullValues_Message_ShouldThrowException() {
+        EndpointsFilteredMessageParameters endpointsFilteredMessageParameters = new EndpointsFilteredMessageParameters();
+        endpointsFilteredMessageParameters.direction = null;
+        endpointsFilteredMessageParameters.technicalMessageType = null;
+        assertThrows(UninitializedPropertyAccessException.class, () -> this.getInstanceToTest().message(endpointsFilteredMessageParameters));
+    }
+
+    @Override
+    protected EndpointsFilteredMessageContentFactory getInstanceToTest() {
+        return new EndpointsFilteredMessageContentFactory();
+    }
+}
