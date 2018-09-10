@@ -1,7 +1,5 @@
 package com.dke.data.agrirouter.api.exception;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-
 /**
  * Will be thrown if the registration code could not be obtained.
  */
