@@ -20,9 +20,7 @@ import com.dke.data.agrirouter.api.service.messaging.MessageQueryService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
-import com.dke.data.agrirouter.api.service.parameters.inner.Message;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
-import com.dke.data.agrirouter.impl.common.MessageCreationService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
@@ -51,14 +49,10 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
   public void send(MessageConfirmationParameters parameters) {
     parameters.validate();
 
-    String messageId = MessageIdService.generateMessageId();
-
     String encodedMessage = encodeMessage(parameters);
-    List<Message> messages = MessageCreationService.create(messageId, encodedMessage);
-
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setMessages(messages);
+    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 

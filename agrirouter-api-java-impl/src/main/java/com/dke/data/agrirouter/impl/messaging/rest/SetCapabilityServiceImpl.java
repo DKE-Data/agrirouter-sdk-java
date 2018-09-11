@@ -12,12 +12,12 @@ import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.api.service.parameters.SetCapabilitiesParameters;
-import com.dke.data.agrirouter.api.service.parameters.inner.Message;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.http.HttpStatus;
 
@@ -35,22 +35,10 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
   public void send(SetCapabilitiesParameters parameters) {
     parameters.validate();
 
-    String messageId = MessageIdService.generateMessageId();
-
     String encodedMessage = encodeMessage(parameters);
-    List<Message> messages =
-        new ArrayList<Message>() {
-          {
-            Message message = new Message();
-            message.setMessageId(messageId);
-            message.setEncodedMessage(encodedMessage);
-            add(message);
-          }
-        };
-
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setMessages(messages);
+    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
