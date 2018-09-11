@@ -2,7 +2,6 @@ package com.dke.data.agrirouter.impl.messaging.encoding;
 
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +38,7 @@ class DecodeMessageServiceImplTest {
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
         DecodeMessageResponse decodedMessage =
                 decodeMessageService.decode(DecodeMessageServiceImplTest.ENCODED_MESSAGE);
-        Assert.assertEquals(decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),
+        Assertions.assertEquals(decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),
                 "secretMessage");
     }
 
@@ -55,7 +54,7 @@ class DecodeMessageServiceImplTest {
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
         DecodeMessageResponse decodedMessage =
                 decodeMessageService.decode(DecodeMessageServiceImplTest.ENCODED_MESSAGE);
-        Assert.assertEquals(decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),
+        Assertions.assertEquals(decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),
                 "secretMessage");
     }
 }

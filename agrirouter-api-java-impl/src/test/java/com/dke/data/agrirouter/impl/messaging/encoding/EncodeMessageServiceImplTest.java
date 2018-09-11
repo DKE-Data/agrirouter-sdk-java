@@ -9,7 +9,7 @@ import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.google.protobuf.ByteString;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,7 +27,7 @@ class EncodeMessageServiceImplTest {
         String encodedMessage = encodeMessageService.encode(messageHeaderParameters, payloadParameters);
         DecodeMessageServiceImpl decodeMessageService = new DecodeMessageServiceImpl();
         DecodeMessageResponse response = decodeMessageService.decode(encodedMessage);
-        Assert.assertEquals("secretMessage",
+        Assertions.assertEquals("secretMessage",
                 response.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8());
     }
 
@@ -42,7 +42,7 @@ class EncodeMessageServiceImplTest {
         String encodedMessage = encodeMessageService.encode(messageHeaderParameters, payloadParameters);
         DecodeMessageServiceImpl decodeMessageService = new DecodeMessageServiceImpl();
         DecodeMessageResponse response = decodeMessageService.decode(encodedMessage);
-        Assert.assertNotEquals("secretMessage",
+        Assertions.assertNotEquals("secretMessage",
                 response.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8());
     }
 

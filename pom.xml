@@ -97,6 +97,10 @@
         <kotlin.version>1.2.61</kotlin.version>
         <log4j-api.version>2.11.1</log4j-api.version>
         <org.eclipse.paho.client.mqttv3.version>1.2.0</org.eclipse.paho.client.mqttv3.version>
+        <commons-codec.version>1.11</commons-codec.version>
+        <javax.ws.rs-api.version>2.1</javax.ws.rs-api.version>
+        <annotations.version>13.0</annotations.version>
+        <jackson-annotations.version>2.9.0</jackson-annotations.version>
 
         <!-- PLUGINS -->
         <protoc-jar-maven-plugin.version>3.5.1.1</protoc-jar-maven-plugin.version>
@@ -111,10 +115,12 @@
         <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
         <build-helper-maven-plugin.version>1.12</build-helper-maven-plugin.version>
         <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+
             <!-- INTERNAL -->
             <dependency>
                 <groupId>com.agrirouter.api.lmis</groupId>
@@ -150,12 +156,6 @@
 
             <!-- JUNIT -->
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
                 <version>${junit-jupiter.version}</version>
@@ -179,6 +179,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>
@@ -217,6 +222,11 @@
                 <artifactId>jersey-media-json-jackson</artifactId>
                 <version>${jersey-client.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson-annotations.version}</version>
+            </dependency>
 
             <!-- HTTP -->
             <dependency>
@@ -239,63 +249,6 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
                 <scope>test</scope>
-            </dependency>
-
-            <!-- SELENIUM HQ -->
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-remote-driver</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-support</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-server</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-api</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-
-            <!-- GEB -->
-            <dependency>
-                <groupId>org.gebish</groupId>
-                <artifactId>geb-junit4</artifactId>
-                <version>${geb.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.gebish</groupId>
-                <artifactId>geb-core</artifactId>
-                <version>${geb.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- SPOCK -->
-            <dependency>
-                <groupId>org.spockframework</groupId>
-                <artifactId>spock-core</artifactId>
-                <version>${spock-core.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.gebish</groupId>
-                <artifactId>geb-spock</artifactId>
-                <version>${geb.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- GMAVEN -->
-            <dependency>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-mojo</artifactId>
-                <version>${gmaven-mojo.version}</version>
             </dependency>
 
             <!-- DRIVERS -->
@@ -361,24 +314,35 @@
                 <artifactId>protobuf-java</artifactId>
                 <version>${protobuf.version}</version>
             </dependency>
+
+            <!-- KOTLIN -->
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${annotations.version}</version>
+            </dependency>
+
+            <!-- JAX-RS -->
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${javax.ws.rs-api.version}</version>
+            </dependency>
+
+            <!-- VALIDATION -->
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation-api.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
