@@ -13,24 +13,29 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-public class MessageQueryServiceImpl extends EnvironmentalService implements MessageQueryService, MessageSender, MessageDecoder<FeedResponse.MessageQueryResponse>, ResponseValidator {
+public class MessageQueryServiceImpl extends EnvironmentalService
+    implements MessageQueryService,
+        MessageSender,
+        MessageDecoder<FeedResponse.MessageQueryResponse>,
+        ResponseValidator {
 
-    private final MessageQueryHelper messageQueryHelper;
+  private final MessageQueryHelper messageQueryHelper;
 
-    public MessageQueryServiceImpl(Environment environment) {
-        super(environment);
-        this.messageQueryHelper = new MessageQueryHelper(new EncodeMessageServiceImpl(), TechnicalMessageType.DKE_FEED_MESSAGE_QUERY);
-    }
+  public MessageQueryServiceImpl(Environment environment) {
+    super(environment);
+    this.messageQueryHelper =
+        new MessageQueryHelper(
+            new EncodeMessageServiceImpl(), TechnicalMessageType.DKE_FEED_MESSAGE_QUERY);
+  }
 
-    @Override
-    public void send(MessageQueryParameters parameters) {
-        this.messageQueryHelper.send(parameters);
-    }
+  @Override
+  public void send(MessageQueryParameters parameters) {
+    this.messageQueryHelper.send(parameters);
+  }
 
-    @Override
-    public FeedResponse.MessageQueryResponse unsafeDecode(ByteString message) throws InvalidProtocolBufferException {
-        return FeedResponse.MessageQueryResponse
-                .parseFrom(message);
-    }
-
+  @Override
+  public FeedResponse.MessageQueryResponse unsafeDecode(ByteString message)
+      throws InvalidProtocolBufferException {
+    return FeedResponse.MessageQueryResponse.parseFrom(message);
+  }
 }

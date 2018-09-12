@@ -6,14 +6,13 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 public interface MessageDecoder<T> {
 
-    default T decode(ByteString message) {
-        try {
-            return unsafeDecode(message);
-        } catch (InvalidProtocolBufferException e) {
-            throw new CouldNotDecodeMessageException(e);
-        }
+  default T decode(ByteString message) {
+    try {
+      return unsafeDecode(message);
+    } catch (InvalidProtocolBufferException e) {
+      throw new CouldNotDecodeMessageException(e);
     }
+  }
 
-    T unsafeDecode(ByteString message) throws InvalidProtocolBufferException;
-
+  T unsafeDecode(ByteString message) throws InvalidProtocolBufferException;
 }

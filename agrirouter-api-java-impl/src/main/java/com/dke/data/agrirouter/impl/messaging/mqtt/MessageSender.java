@@ -5,9 +5,8 @@ import com.google.gson.Gson;
 
 public interface MessageSender {
 
-    default String createSendMessageRequest(SendMessageParameters parameters) {
-        parameters.validate();
-        return new Gson().toJson(this.createSendMessageRequest(parameters));
-    }
-
+  default String createSendMessageRequest(SendMessageParameters parameters) {
+    parameters.validate();
+    return new Gson().toJson(this.createSendMessageRequest(parameters));
+  }
 }

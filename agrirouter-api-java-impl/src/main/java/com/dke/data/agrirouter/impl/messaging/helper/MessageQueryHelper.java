@@ -15,59 +15,59 @@ import com.dke.data.agrirouter.impl.common.MessageCreationService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import org.apache.http.HttpStatus;
-
 import java.util.List;
 import java.util.Objects;
+import org.apache.http.HttpStatus;
 
 public class MessageQueryHelper implements MessageSender, ResponseValidator {
 
-    private final EncodeMessageService encodeMessageService;
-    private final TechnicalMessageType technicalMessageType;
+  private final EncodeMessageService encodeMessageService;
+  private final TechnicalMessageType technicalMessageType;
 
-    public MessageQueryHelper(EncodeMessageService encodeMessageService, TechnicalMessageType technicalMessageType) {
-        this.encodeMessageService = encodeMessageService;
-        this.technicalMessageType = technicalMessageType;
-    }
+  public MessageQueryHelper(
+      EncodeMessageService encodeMessageService, TechnicalMessageType technicalMessageType) {
+    this.encodeMessageService = encodeMessageService;
+    this.technicalMessageType = technicalMessageType;
+  }
 
-    public void send(MessageQueryParameters parameters) {
-        parameters.validate();
+  public void send(MessageQueryParameters parameters) {
+    parameters.validate();
 
-        String messageId = MessageIdService.generateMessageId();
+    String messageId = MessageIdService.generateMessageId();
 
-        String encodedMessage = encodeMessage(parameters);
-        List<Message> messages = MessageCreationService.create(messageId, encodedMessage);
+    String encodedMessage = encodeMessage(parameters);
+    List<Message> messages = MessageCreationService.create(messageId, encodedMessage);
 
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
-        sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-        sendMessageParameters.setMessages(messages);
+    SendMessageParameters sendMessageParameters = new SendMessageParameters();
+    sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+    sendMessageParameters.setMessages(messages);
 
-        MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+    MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
-        this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
-    }
+    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+  }
 
-    private String encodeMessage(MessageQueryParameters parameters) {
-        String applicationMessageId = MessageIdService.generateMessageId();
+  private String encodeMessage(MessageQueryParameters parameters) {
+    String applicationMessageId = MessageIdService.generateMessageId();
 
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-        messageHeaderParameters.setApplicationMessageId(applicationMessageId);
-        messageHeaderParameters.setApplicationMessageSeqNo(1);
-        messageHeaderParameters.setTechnicalMessageType(this.technicalMessageType);
-        messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+    messageHeaderParameters.setApplicationMessageId(applicationMessageId);
+    messageHeaderParameters.setApplicationMessageSeqNo(1);
+    messageHeaderParameters.setTechnicalMessageType(this.technicalMessageType);
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-        MessageQueryMessageParameters messageQueryMessageParameters = new MessageQueryMessageParameters();
-        messageQueryMessageParameters.setMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
-        messageQueryMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
-        messageQueryMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
-        messageQueryMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
+    MessageQueryMessageParameters messageQueryMessageParameters =
+        new MessageQueryMessageParameters();
+    messageQueryMessageParameters.setMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
+    messageQueryMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
+    messageQueryMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
+    messageQueryMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
 
-        PayloadParameters payloadParameters = new PayloadParameters();
-        payloadParameters.setTypeUrl(FeedRequests.MessageQuery.getDescriptor().getFullName());
-        payloadParameters.setValue(new MessageQueryMessageContentFactory().message(messageQueryMessageParameters));
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(FeedRequests.MessageQuery.getDescriptor().getFullName());
+    payloadParameters.setValue(
+        new MessageQueryMessageContentFactory().message(messageQueryMessageParameters));
 
-        return this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    }
-
-
+    return this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+  }
 }
