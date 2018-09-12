@@ -28,11 +28,11 @@ public interface MessageSender {
         parameters.getOnboardingResponse().getCapabilityAlternateId());
     List<Message> messages = new ArrayList<>();
     parameters
-        .getMessages()
+        .getEncodedMessages()
         .forEach(
             messageToSend -> {
               Message message = new Message();
-              message.setMessage(messageToSend.getEncodedMessage());
+              message.setMessage(messageToSend);
               message.setTimestamp("" + UtcTimeService.now().toEpochSecond());
               messages.add(message);
             });

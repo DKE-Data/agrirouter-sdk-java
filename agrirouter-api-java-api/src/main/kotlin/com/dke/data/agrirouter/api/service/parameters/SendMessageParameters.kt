@@ -13,11 +13,6 @@ open class SendMessageParameters : ParameterValidation {
     lateinit var onboardingResponse: OnboardingResponse
 
     @NotNull
-    lateinit var messages: List<Message>
-
-    override fun validate() {
-        super.validate()
-        messages.forEach { m -> m.validate() }
-    }
+    lateinit var encodedMessages: List<String>
 
 }
