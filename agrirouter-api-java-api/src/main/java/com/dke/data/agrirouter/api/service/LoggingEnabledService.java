@@ -5,10 +5,9 @@ import org.apache.logging.log4j.Logger;
 
 public interface LoggingEnabledService {
 
-    Logger LOGGER = LogManager.getLogger();
+  Logger LOGGER = LogManager.getLogger();
 
-    default Logger getLogger(){
-        return LOGGER;
-    }
-
+  default Logger getLogger() {
+    return LOGGER;
+  }
 }

@@ -14,13 +14,16 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
   }
 
   protected OnboardingRequest getOnboardRequest(
-          String uuid,
-          String applicationId,
-          String certificationVersionId,
-          String gatewayId,
-          CertificationType certificationType) {
+      String uuid,
+      String applicationId,
+      String certificationVersionId,
+      String gatewayId,
+      CertificationType certificationType) {
     this.getLogger().info("BEGIN | Creating onboard request.");
-    this.getLogger().debug(new ObjectArrayMessage(uuid, applicationId, certificationType, gatewayId, certificationType));
+    this.getLogger()
+        .debug(
+            new ObjectArrayMessage(
+                uuid, applicationId, certificationType, gatewayId, certificationType));
 
     OnboardingRequest onboardingRequest = new OnboardingRequest();
     onboardingRequest.setId(uuid);

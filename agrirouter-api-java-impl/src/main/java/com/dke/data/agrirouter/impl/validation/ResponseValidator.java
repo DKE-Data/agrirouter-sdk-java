@@ -48,7 +48,7 @@ public interface ResponseValidator {
    * @param exceptedHttpStatus The expected HTTP status.
    */
   default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus) {
-      LOGGER.debug("Validating response.");
+    LOGGER.debug("Validating response.");
     LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
     if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND) {
       throw new InvalidUrlForRequestException();

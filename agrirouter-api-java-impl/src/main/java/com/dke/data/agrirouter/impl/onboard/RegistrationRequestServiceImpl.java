@@ -9,46 +9,42 @@ import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.CookieResolverService;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.gargoylesoftware.htmlunit.util.Cookie;
-
 import java.util.Set;
 import javax.ws.rs.core.Response;
-
 import org.apache.http.HttpStatus;
 
-/**
- * Internal service implementation.
- */
+/** Internal service implementation. */
 public class RegistrationRequestServiceImpl extends EnvironmentalService
-        implements RegistrationRequestService, ResponseValidator {
+    implements RegistrationRequestService, ResponseValidator {
 
-    private final CookieResolverService cookieResolverService;
+  private final CookieResolverService cookieResolverService;
 
-    public RegistrationRequestServiceImpl(Environment environment) {
-        super(environment);
-        this.cookieResolverService = new CookieResolverService(environment);
-    }
+  public RegistrationRequestServiceImpl(Environment environment) {
+    super(environment);
+    this.cookieResolverService = new CookieResolverService(environment);
+  }
 
-    @Override
-    public RegistrationRequestResponse getRegistrationCode(RegistrationRequestParameters parameters) {
-        this.getLogger().info("BEGIN | Fetching registration code from agrirouter | '{}'.", parameters);
+  @Override
+  public RegistrationRequestResponse getRegistrationCode(RegistrationRequestParameters parameters) {
+    this.getLogger().info("BEGIN | Fetching registration code from agrirouter | '{}'.", parameters);
 
-        parameters.validate();
+    parameters.validate();
 
-        this.getLogger().debug("Fetching cookies for current user.");
-        Set<Cookie> cookies =
-                this.cookieResolverService.cookies(
-                        this.environment.getAgrirouterLoginUsername(),
-                        this.environment.getAgrirouterLoginPassword());
-        String url =
-                this.environment.getRegistrationServiceDataServiceUrl(parameters.getApplicationId());
+    this.getLogger().debug("Fetching cookies for current user.");
+    Set<Cookie> cookies =
+        this.cookieResolverService.cookies(
+            this.environment.getAgrirouterLoginUsername(),
+            this.environment.getAgrirouterLoginPassword());
+    String url =
+        this.environment.getRegistrationServiceDataServiceUrl(parameters.getApplicationId());
 
-        this.getLogger().debug("Fetching response for registration code request.");
-        Response response = RequestFactory.request(url, cookies).get();
+    this.getLogger().debug("Fetching response for registration code request.");
+    Response response = RequestFactory.request(url, cookies).get();
 
-        this.getLogger().debug("Validating response | {}.", response);
-        this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+    this.getLogger().debug("Validating response | {}.", response);
+    this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
 
-        this.getLogger().info("END | Fetching registration code from agrirouter | '{}'.", parameters);
-        return response.readEntity(RegistrationRequestResponse.class);
-    }
+    this.getLogger().info("END | Fetching registration code from agrirouter | '{}'.", parameters);
+    return response.readEntity(RegistrationRequestResponse.class);
+  }
 }
