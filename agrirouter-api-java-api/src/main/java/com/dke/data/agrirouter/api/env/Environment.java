@@ -7,7 +7,6 @@ public interface Environment {
 
   String AGRIROUTER_LOGIN_URL = "/app";
 
-  String MQTT_URL_TEMPLATE = "ssl://%s:%s";
   String REGISTRATION_SERVICE_DATA_SERVICE_URL_TEMPLATE = "/application/%s/registrationcode";
   String AUTHENTICATION_SERVICE_DATA_SERVICE_URL_TEMPLATE = "/application/%s/authorize";
   String SECURED_ONBOARDING_AUTHENTICATION_LINK_TEMPLATE =
@@ -86,16 +85,6 @@ public interface Environment {
   }
 
   /**
-   * Returning the URL for the ui service to generate secured registration / TAN codes.
-   *
-   * @return -
-   */
-  default String getAuthenticationServiceDataServiceUrl(String applicationId) {
-    return this.getEnvironmentBaseUrl()
-        + String.format(AUTHENTICATION_SERVICE_DATA_SERVICE_URL_TEMPLATE, applicationId);
-  }
-
-  /**
    * Returning the URL to login into the AR. This is necessary, because there are services within
    * the UI whiche are only avalailable if the user is logged in.
    *
@@ -125,17 +114,5 @@ public interface Environment {
             responseType.getKey(),
             state,
             redirectUrl);
-  }
-
-  /**
-   * Returning the server URL for MQTT communication.
-   *
-   * @param host Host
-   * @param port Port
-   * @param suffix Command or Measure suffix.
-   * @return -
-   */
-  default String getMqttServerUrl(String host, String port) {
-    return String.format(MQTT_URL_TEMPLATE, host, port);
   }
 }
