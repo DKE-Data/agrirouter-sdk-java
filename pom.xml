@@ -52,7 +52,6 @@
     </repositories>
 
     <modules>
-        <module>agrirouter-api-java-protobuf</module>
         <module>agrirouter-api-java-api</module>
         <module>agrirouter-api-java-impl</module>
     </modules>
@@ -122,12 +121,14 @@
     <dependencyManagement>
         <dependencies>
 
-            <!-- INTERNAL -->
+            <!-- PROTOBUF DEFINITIONS -->
             <dependency>
-                <groupId>com.agrirouter.api.lmis</groupId>
-                <artifactId>agrirouter-api-java-protobuf</artifactId>
-                <version>${project.version}</version>
+                <groupId>com.agrirouter.proto</groupId>
+                <artifactId>agrirouter-api-protobuf-definitions</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
+
+            <!-- INTERNAL -->
             <dependency>
                 <groupId>com.agrirouter.api.lmis</groupId>
                 <artifactId>agrirouter-api-java-api</artifactId>

@@ -14,8 +14,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.agrirouter.api.lmis</groupId>
-            <artifactId>agrirouter-api-java-protobuf</artifactId>
+            <groupId>com.agrirouter.proto</groupId>
+            <artifactId>agrirouter-api-protobuf-definitions</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
