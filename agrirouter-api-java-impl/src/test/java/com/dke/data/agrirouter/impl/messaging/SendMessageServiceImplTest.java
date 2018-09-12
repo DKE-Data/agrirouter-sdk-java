@@ -174,7 +174,7 @@ class SendMessageServiceImplTest {
     onboardingResponse.setCapabilityAlternateId(SendMessageServiceImplTest.CAPABILITY_ALTERNATE_ID);
 
     sendMessageParameters.setOnboardingResponse(onboardingResponse);
-    sendMessageParameters.setMessages(new ArrayList<>());
+    sendMessageParameters.setEncodedMessages(new ArrayList<>());
     return sendMessageParameters;
   }
 }

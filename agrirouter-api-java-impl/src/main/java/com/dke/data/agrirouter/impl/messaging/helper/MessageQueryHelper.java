@@ -10,12 +10,10 @@ import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
-import com.dke.data.agrirouter.api.service.parameters.inner.Message;
-import com.dke.data.agrirouter.impl.common.MessageCreationService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import java.util.List;
+import java.util.Collections;
 import java.util.Objects;
 import org.apache.http.HttpStatus;
 
@@ -32,18 +30,11 @@ public class MessageQueryHelper implements MessageSender, ResponseValidator {
 
   public void send(MessageQueryParameters parameters) {
     parameters.validate();
-
-    String messageId = MessageIdService.generateMessageId();
-
-    String encodedMessage = encodeMessage(parameters);
-    List<Message> messages = MessageCreationService.create(messageId, encodedMessage);
-
+    String encodedMessage = this.encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setMessages(messages);
-
+    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
     MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
   }
 

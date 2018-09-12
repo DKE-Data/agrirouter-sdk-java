@@ -2,7 +2,6 @@ package com.dke.data.agrirouter.api.service.parameters
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
 import com.dke.data.agrirouter.api.service.ParameterValidation
-import com.dke.data.agrirouter.api.service.parameters.inner.Message
 import javax.validation.constraints.NotNull
 
 open class SendMessageParameters : ParameterValidation {
@@ -11,11 +10,6 @@ open class SendMessageParameters : ParameterValidation {
     lateinit var onboardingResponse: OnboardingResponse
 
     @NotNull
-    lateinit var messages: List<Message>
-
-    override fun validate() {
-        super.validate()
-        messages.forEach { m -> m.validate() }
-    }
+    lateinit var encodedMessages: List<String>
 
 }
