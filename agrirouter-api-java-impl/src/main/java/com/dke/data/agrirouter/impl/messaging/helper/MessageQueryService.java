@@ -10,6 +10,7 @@ import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
+import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
@@ -17,12 +18,12 @@ import java.util.Collections;
 import java.util.Objects;
 import org.apache.http.HttpStatus;
 
-public class MessageQueryHelper implements MessageSender, ResponseValidator {
+public class MessageQueryService extends NonEnvironmentalService implements MessageSender, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
   private final TechnicalMessageType technicalMessageType;
 
-  public MessageQueryHelper(
+  public MessageQueryService(
       EncodeMessageService encodeMessageService, TechnicalMessageType technicalMessageType) {
     this.encodeMessageService = encodeMessageService;
     this.technicalMessageType = technicalMessageType;
