@@ -28,7 +28,7 @@ public class CookieResolverService extends EnvironmentalService {
   }
 
   public Set<Cookie> cookies(String username, String password) {
-    this.getLogger().debug("Deliver cookies.");
+    this.getLogger().debug("BEGIN | Deliver cookies.");
     this.getLogger().trace(new ObjectArrayMessage(username, password));
 
     if (StringUtils.isAnyBlank(username, password)) {
