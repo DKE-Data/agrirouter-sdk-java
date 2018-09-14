@@ -52,7 +52,6 @@
     </repositories>
 
     <modules>
-        <module>agrirouter-api-java-protobuf</module>
         <module>agrirouter-api-java-api</module>
         <module>agrirouter-api-java-impl</module>
     </modules>
@@ -67,7 +66,7 @@
         <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
 
         <!-- DEPENDENCIES -->
-        <definitions.version>0.0.1-SNAPSHOT</definitions.version>
+        <agrirouter-api-protobuf-definitions.version>0.0.1-SNAPSHOT</agrirouter-api-protobuf-definitions.version>
         <rest-assured.version>3.0.5</rest-assured.version>
         <junit.version>4.12</junit.version>
         <junit-jupiter.version>5.0.2</junit-jupiter.version>
@@ -122,12 +121,15 @@
     <dependencyManagement>
         <dependencies>
 
-            <!-- INTERNAL -->
+            <!-- PROTOBUF DEFINITIONS -->
             <dependency>
-                <groupId>com.agrirouter.api.lmis</groupId>
-                <artifactId>agrirouter-api-java-protobuf</artifactId>
-                <version>${project.version}</version>
+                <groupId>com.agrirouter.proto</groupId>
+                <artifactId>agrirouter-api-protobuf-definitions</artifactId>
+                <version>${agrirouter-api-protobuf-definitions.version}</version>
+                <classifier>${jdk.dependent.jar.classifier}</classifier>
             </dependency>
+
+            <!-- INTERNAL -->
             <dependency>
                 <groupId>com.agrirouter.api.lmis</groupId>
                 <artifactId>agrirouter-api-java-api</artifactId>
