@@ -9,7 +9,7 @@ import java.util.*
 /**
  * Implementation of a message content factory.
  */
-class EndpointsUnfiltererdMessageContentFactory : MessageContentFactory<EndpointsUnfilteredMessageParameters> {
+class EndpointsUnfilteredMessageContentFactory : MessageContentFactory<EndpointsUnfilteredMessageParameters> {
 
     override fun message(vararg parameters: EndpointsUnfilteredMessageParameters): ByteString {
         parameters.forEach { p -> p.validate() }
