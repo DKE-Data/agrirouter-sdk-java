@@ -126,6 +126,7 @@
                 <groupId>com.agrirouter.proto</groupId>
                 <artifactId>agrirouter-api-protobuf-definitions</artifactId>
                 <version>${agrirouter-api-protobuf-definitions.version}</version>
+                <classifier>${jdk.dependent.jar.classifier}</classifier>
             </dependency>
 
             <!-- INTERNAL -->
