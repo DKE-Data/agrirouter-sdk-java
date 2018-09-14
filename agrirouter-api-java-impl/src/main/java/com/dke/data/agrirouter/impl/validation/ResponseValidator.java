@@ -29,6 +29,12 @@ public interface ResponseValidator {
       throw new ForbiddenRequestException();
     }
     if (response.getStatus() != exceptedHttpStatus) {
+      if (exceptedHttpStatus == HttpStatus.SC_OK) {
+        int actualStatus = response.getStatus();
+        if (actualStatus < 200 || actualStatus > 299) {
+          throw new UnexpectedHttpStatusException(response.getStatus(), exceptedHttpStatus);
+        }
+      }
       throw new UnexpectedHttpStatusException(response.getStatus(), exceptedHttpStatus);
     }
   }
@@ -51,6 +57,12 @@ public interface ResponseValidator {
       throw new ForbiddenRequestException();
     }
     if (response.getStatusCode() != exceptedHttpStatus) {
+      if (exceptedHttpStatus == HttpStatus.SC_OK) {
+        int actualStatus = response.getStatusCode();
+        if (actualStatus < 200 || actualStatus > 299) {
+          throw new UnexpectedHttpStatusException(response.getStatusCode(), exceptedHttpStatus);
+        }
+      }
       throw new UnexpectedHttpStatusException(response.getStatusCode(), exceptedHttpStatus);
     }
   }
