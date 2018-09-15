@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 class EncodeMessageServiceImplTest {
 
   @Test
-  void rq43_givenValidParameters_EncodeAndDecodeBack_ShouldNotFail() {
+  void givenValidParametersEncodeAndDecodeBackShouldNotFail() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     ByteString toSendMessage = ByteString.copyFromUtf8("secretMessage");
@@ -33,7 +33,7 @@ class EncodeMessageServiceImplTest {
   }
 
   @Test
-  void rq43_givenWrongPayload_EncodeAndDecodeBack_ShouldFail() {
+  void givenWrongPayloadEncodeAndDecodeBackShouldFail() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     ByteString toSendMessage = ByteString.copyFromUtf8("wrong Message");
@@ -49,7 +49,7 @@ class EncodeMessageServiceImplTest {
   }
 
   @Test
-  void rq43_givenNullPayLoadParameters_Encode_ShouldThrowException() {
+  void givenNullPayLoadParametersEncodeShouldThrowException() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
@@ -59,7 +59,7 @@ class EncodeMessageServiceImplTest {
   }
 
   @Test
-  void rq43_givenNullMessageHeader_Encode_ShouldThrowException() {
+  void givenNullMessageHeaderEncodeShouldThrowException() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     PayloadParameters payloadParameters =
