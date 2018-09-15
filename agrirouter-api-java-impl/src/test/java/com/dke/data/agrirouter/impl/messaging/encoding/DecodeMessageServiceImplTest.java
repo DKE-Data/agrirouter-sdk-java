@@ -16,7 +16,7 @@ class DecodeMessageServiceImplTest {
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void rq43givenNullDecodeShouldNotFail() {
+  void givenNullDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     String message = null;
     Assertions.assertThrows(
@@ -24,20 +24,20 @@ class DecodeMessageServiceImplTest {
   }
 
   @Test
-  void rq43givenEmptyMessageDecodeShouldNotFail() {
+  void givenEmptyMessageDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     Assertions.assertThrows(IllegalArgumentException.class, () -> decodeMessageService.decode(""));
   }
 
   @Test
-  void rq43givenWhitespaceMessageDecodeShouldNotFail() {
+  void givenWhitespaceMessageDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     Assertions.assertThrows(
         IllegalArgumentException.class, () -> decodeMessageService.decode("   "));
   }
 
   @Test
-  void rq43givenValidEncodedPasswordDecodeShouldNotFail() {
+  void givenValidEncodedPasswordDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     DecodeMessageResponse decodedMessage =
         decodeMessageService.decode(DecodeMessageServiceImplTest.ENCODED_MESSAGE);
@@ -47,7 +47,7 @@ class DecodeMessageServiceImplTest {
   }
 
   @Test
-  void rq43givenWrongEncodedPasswordDecodeShouldThrowException() {
+  void givenWrongEncodedPasswordDecodeShouldThrowException() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     String wrongEncodedMessage = "Wrong Message";
     assertThrows(
@@ -55,7 +55,7 @@ class DecodeMessageServiceImplTest {
   }
 
   @Test
-  void rq43givenNullEnvironmentDecodeShouldNotFail() {
+  void givenNullEnvironmentDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     DecodeMessageResponse decodedMessage =
         decodeMessageService.decode(DecodeMessageServiceImplTest.ENCODED_MESSAGE);
