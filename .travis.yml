@@ -14,5 +14,6 @@ jdk:
 - oraclejdk10
 - oraclejdk9
 - oraclejdk8
+- oraclejdk8
 notifications:
   slack: agrirouter:lcS7DGOgPaZ5cwz5bb6owTF3
