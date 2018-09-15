@@ -7,17 +7,18 @@ import org.apache.logging.log4j.MarkerManager;
 import org.apache.logging.log4j.message.ObjectArrayMessage;
 
 /**
- * Interface to encapsulate logging capabilities. Logging will be done using LOG4J2, ruleset should be:
+ * Interface to encapsulate logging capabilities. Logging will be done using LOG4J2, ruleset should
+ * be:
+ *
  * <ul>
- *     <li>Log method entry on level DEBUG.</li>
- *     <li>Log method parameters on level TRACE.</li>
- *     <li>Log method steps on level TRACE.</li>
- *     <li>Log method result on level TRACE.</li>
- *     <li>Log method exit on level DEBUG.</li>
+ *   <li>Log method entry on level DEBUG.
+ *   <li>Log method parameters on level TRACE.
+ *   <li>Log method steps on level TRACE.
+ *   <li>Log method result on level TRACE.
+ *   <li>Log method exit on level DEBUG.
  * </ul>
  *
  * Please be aware of the rule "Log or throw" regarding exceptions.
- *
  */
 public interface LoggingEnabledService {
 
