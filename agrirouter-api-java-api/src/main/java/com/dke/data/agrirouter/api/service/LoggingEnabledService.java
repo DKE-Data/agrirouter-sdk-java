@@ -19,19 +19,14 @@ public interface LoggingEnabledService {
     return LOGGER;
   }
 
-  default void logMethodBegin() {
+  default void logMethodBegin(Object... objects) {
     LOGGER.debug(METHOD_BEGIN, "BEGIN | Start of method.");
-  }
-
-  default void logParameters(Object... objects) {
     LOGGER.trace(METHOD_PARAMETERS, new ObjectArrayMessage(objects));
   }
 
-  default void logResult(Object object) {
-    LOGGER.trace(METHOD_RESULTS, new ObjectArrayMessage(object));
+  default void logMethodEnd(Object... objects) {
+    LOGGER.debug(METHOD_END, "END | End of method.");
+    LOGGER.trace(METHOD_RESULTS, new ObjectArrayMessage(objects));
   }
 
-  default void logMethodEnd() {
-    LOGGER.debug(METHOD_END, "END | End of method.");
-  }
 }

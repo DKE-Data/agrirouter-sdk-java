@@ -32,8 +32,7 @@ public class KeyStoreCreationService implements LoggingEnabledService {
   private static final String DEFAULT_PASSWORD = "changeit";
 
   public KeyStore createAndReturnKeystoreFromP12(String certificate, String password) {
-    this.logMethodBegin();
-    this.logParameters(certificate, password);
+    this.logMethodBegin(certificate, password);
 
     KeyStore keyStore;
     try {
@@ -51,14 +50,12 @@ public class KeyStoreCreationService implements LoggingEnabledService {
       throw new CouldNotCreateDynamicKeyStoreException(e);
     }
 
-    this.logResult(keyStore);
-    this.logMethodEnd();
+    this.logMethodEnd(keyStore);
     return keyStore;
   }
 
   public TrustManager[] createTrustManagers(List<String> certificates) {
-    this.logMethodBegin();
-    this.logParameters(certificates);
+    this.logMethodBegin(certificates);
 
     List<TrustManager> trustManagers = new ArrayList<>();
     certificates.forEach(
@@ -89,14 +86,12 @@ public class KeyStoreCreationService implements LoggingEnabledService {
           }
         });
 
-    this.logResult(trustManagers);
-    this.logMethodEnd();
+    this.logMethodEnd(trustManagers);
     return trustManagers.toArray(new TrustManager[0]);
   }
 
   public KeyStore createAndReturnKeystoreFromPEM(String certificateAndPrivateKey, String password) {
-    this.logMethodBegin();
-    this.logParameters(certificateAndPrivateKey, password);
+    this.logMethodBegin(certificateAndPrivateKey, password);
 
     KeyStore keyStore;
     try {
@@ -121,15 +116,13 @@ public class KeyStoreCreationService implements LoggingEnabledService {
       throw new CouldNotCreateDynamicKeyStoreException(e);
     }
 
-    this.logResult(keyStore);
-    this.logMethodEnd();
+    this.logMethodEnd(keyStore);
     return keyStore;
   }
 
   String createKeyStoreInClasspath(X509Certificate cert, PrivateKey key)
       throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
-    this.logMethodBegin();
-    this.logParameters(cert, key);
+    this.logMethodBegin(cert, key);
 
     this.getNativeLogger().debug("Create keystore.");
     KeyStore keystore = createKeyStore(cert, key);
@@ -142,14 +135,12 @@ public class KeyStoreCreationService implements LoggingEnabledService {
         new FileOutputStream("./target/test-classes/" + tmpKeystoreName + ".jks"),
         TEMPORARY_KEY_PASSWORD.toCharArray());
 
-    this.logResult(tmpKeystoreName);
-    this.logMethodEnd();
+    this.logMethodEnd(tmpKeystoreName);
     return tmpKeystoreName;
   }
 
   private String extractFromOriginal(String original, String beginDelimiter, String endDelimiter) {
-    this.logMethodBegin();
-    this.logParameters(original, beginDelimiter, endDelimiter);
+    this.logMethodBegin(original, beginDelimiter, endDelimiter);
 
     this.getNativeLogger().debug("Split by delimiter.");
     String[] tokens = original.split(beginDelimiter);
@@ -160,14 +151,12 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     this.getNativeLogger().debug("Replace all line breaks.");
     String certificate = tokens[0].replaceAll("\\s", "");
 
-    this.logResult(certificate);
-    this.logMethodEnd();
+    this.logMethodEnd(certificate);
     return certificate;
   }
 
   PrivateKey createPrivateKey(String privateKey, String password) throws Exception {
-    this.logMethodBegin();
-    this.logParameters(privateKey, password);
+    this.logMethodBegin(privateKey, password);
 
     this.getNativeLogger().debug("Create PBE key spec.");
     PBEKeySpec pbeSpec = new PBEKeySpec(password.toCharArray());
@@ -189,14 +178,12 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     KeyFactory kf = KeyFactory.getInstance("RSA");
 
     PrivateKey privateKeyWithSpec = kf.generatePrivate(keySpec);
-    this.logResult(privateKey);
-    this.logMethodEnd();
+    this.logMethodEnd(privateKey);
     return privateKeyWithSpec;
   }
 
   X509Certificate createCertificate(String x509Certificate) throws Exception {
-    this.logMethodBegin();
-    this.logParameters(x509Certificate);
+    this.logMethodBegin(x509Certificate);
 
     this.getNativeLogger().debug("Decode certificate.");
     byte[] certBytes = Base64.getDecoder().decode(x509Certificate);
@@ -206,15 +193,13 @@ public class KeyStoreCreationService implements LoggingEnabledService {
 
     X509Certificate certificate =
         (X509Certificate) factory.generateCertificate(new ByteArrayInputStream(certBytes));
-    this.logResult(certificate);
-    this.logMethodEnd();
+    this.logMethodEnd(certificate);
     return certificate;
   }
 
   private KeyStore createKeyStore(X509Certificate x509Certificate, PrivateKey key)
       throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
-    this.logMethodBegin();
-    this.logParameters(x509Certificate, key);
+    this.logMethodBegin(x509Certificate, key);
 
     this.getNativeLogger().debug("Create JKS keystore.");
     KeyStore keystore = KeyStore.getInstance("JKS");
@@ -225,8 +210,7 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     keystore.setKeyEntry(
         "key-alias", key, getDefaultPassword(), new Certificate[] {x509Certificate});
 
-    this.logResult(keystore);
-    this.logMethodEnd();
+    this.logMethodEnd(keystore);
     return keystore;
   }
 

@@ -15,8 +15,7 @@ import java.util.Base64;
 public class SecurityKeyCreationService implements LoggingEnabledService {
 
   public PrivateKey createPrivateKey(String privateKey) {
-    this.logMethodBegin();
-    this.logParameters(privateKey);
+    this.logMethodBegin(privateKey);
 
     PrivateKey result;
     try {
@@ -36,14 +35,12 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
       throw new CouldNotCreatePrivateKeyException(e);
     }
 
-    this.logResult(result);
-    this.logMethodEnd();
+    this.logMethodEnd(result);
     return result;
   }
 
   public PublicKey createPublicKey(String publicKey) {
-    this.logMethodBegin();
-    this.logParameters(publicKey);
+    this.logMethodBegin(publicKey);
 
     PublicKey result;
     try {
@@ -63,8 +60,7 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
       throw new CouldNotCreatePublicKeyException(e);
     }
 
-    this.logResult(result);
-    this.logMethodEnd();
+    this.logMethodEnd(result);
     return result;
   }
 }

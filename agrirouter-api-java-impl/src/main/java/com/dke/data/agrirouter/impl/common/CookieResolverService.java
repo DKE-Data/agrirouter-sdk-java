@@ -28,8 +28,7 @@ public class CookieResolverService extends EnvironmentalService {
   }
 
   public Set<Cookie> cookies(String username, String password) {
-    this.getNativeLogger().debug("BEGIN | Deliver cookies.");
-    this.getNativeLogger().trace(new ObjectArrayMessage(username, password));
+    this.logMethodBegin(username, password);
 
     if (StringUtils.isAnyBlank(username, password)) {
       throw new IllegalArgumentException(
@@ -52,13 +51,12 @@ public class CookieResolverService extends EnvironmentalService {
       cookies = fetchCookiesFromAgrirouter(username, password);
     }
 
-    this.getNativeLogger().debug("END | Deliver cookies for user '{}'.", username);
+    this.logMethodEnd(cookies);
     return cookies;
   }
 
   private Set<Cookie> fetchCookiesFromAgrirouter(String username, String password) {
-    this.getNativeLogger().debug("BEGIN | Fetching cookies.");
-    this.getNativeLogger().trace(new ObjectArrayMessage(username, password));
+    this.logMethodBegin(username, password);
 
     this.getNativeLogger().debug("Creating web client.");
     try (final WebClient webClient = new WebClient()) {
@@ -85,7 +83,7 @@ public class CookieResolverService extends EnvironmentalService {
       this.getNativeLogger().debug("Cookies {} found.", cookiesFromWebClient);
       cookieCache.put(username, cookiesFromWebClient);
 
-      this.getNativeLogger().debug("END | Fetching cookies.");
+      this.logMethodEnd(cookiesFromWebClient);
       return cookiesFromWebClient;
 
     } catch (IOException e) {
