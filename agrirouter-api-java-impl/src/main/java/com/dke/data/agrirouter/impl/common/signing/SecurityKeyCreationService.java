@@ -19,15 +19,15 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
 
     PrivateKey result;
     try {
-      this.getNativeLogger().debug("Replacing comments within file.");
+      this.getNativeLogger().trace("Replacing comments within file.");
       String pkcs8Pem = privateKey.replace("-----BEGIN PRIVATE KEY-----", "");
       pkcs8Pem = pkcs8Pem.replace("-----END PRIVATE KEY-----", "");
       pkcs8Pem = pkcs8Pem.replaceAll("\\s+", "");
 
-      this.getNativeLogger().debug("Decode base 64 values.");
+      this.getNativeLogger().trace("Decode base 64 values.");
       byte[] pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
 
-      this.getNativeLogger().debug("Generate private key.");
+      this.getNativeLogger().trace("Generate private key.");
       PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pkcs8EncodedBytes);
       KeyFactory keyFactory = KeyFactory.getInstance("RSA");
       result = keyFactory.generatePrivate(keySpec);
@@ -44,15 +44,15 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
 
     PublicKey result;
     try {
-      this.getNativeLogger().debug("Replacing comments within file.");
+      this.getNativeLogger().trace("Replacing comments within file.");
       String pkcs8Pem = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
       pkcs8Pem = pkcs8Pem.replace("-----END PUBLIC KEY-----", "");
       pkcs8Pem = pkcs8Pem.replaceAll("\\s+", "");
 
-      this.getNativeLogger().debug("Decode base 64 values.");
+      this.getNativeLogger().trace("Decode base 64 values.");
       byte[] pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
 
-      this.getNativeLogger().debug("Generate public key.");
+      this.getNativeLogger().trace("Generate public key.");
       X509EncodedKeySpec keySpec = new X509EncodedKeySpec(pkcs8EncodedBytes);
       KeyFactory keyFactory = KeyFactory.getInstance("RSA");
       result = keyFactory.generatePublic(keySpec);

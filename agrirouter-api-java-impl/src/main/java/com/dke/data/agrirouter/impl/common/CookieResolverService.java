@@ -40,14 +40,14 @@ public class CookieResolverService extends EnvironmentalService {
 
     if (cookiesFromCache.isPresent()) {
       if (this.isAnyCookieExpired(cookiesFromCache.get())) {
-        this.getNativeLogger().debug("Deliver cookies from agrirouter.");
+        this.getNativeLogger().trace("Deliver cookies from agrirouter.");
         cookies = fetchCookiesFromAgrirouter(username, password);
       } else {
-        this.getNativeLogger().debug("Deliver cookies from cache.");
+        this.getNativeLogger().trace("Deliver cookies from cache.");
         cookies = cookiesFromCache.get();
       }
     } else {
-      this.getNativeLogger().debug("Deliver cookies from agrirouter ");
+      this.getNativeLogger().trace("Deliver cookies from agrirouter ");
       cookies = fetchCookiesFromAgrirouter(username, password);
     }
 
@@ -58,13 +58,13 @@ public class CookieResolverService extends EnvironmentalService {
   private Set<Cookie> fetchCookiesFromAgrirouter(String username, String password) {
     this.logMethodBegin(username, password);
 
-    this.getNativeLogger().debug("Creating web client.");
+    this.getNativeLogger().trace("Creating web client.");
     try (final WebClient webClient = new WebClient()) {
       webClient.getOptions().setThrowExceptionOnScriptError(false);
       webClient.getOptions().setUseInsecureSSL(true);
 
       this.getNativeLogger()
-          .debug("Define URL '{}' for cookie resolving.", this.environment.getAgrirouterLoginUrl());
+          .trace("Define URL '{}' for cookie resolving.", this.environment.getAgrirouterLoginUrl());
       final String url = this.environment.getAgrirouterLoginUrl();
       final HtmlPage page = webClient.getPage(url);
 
@@ -77,10 +77,10 @@ public class CookieResolverService extends EnvironmentalService {
       final HtmlButton submitInput = page.getHtmlElementById("logOnFormSubmit");
       submitInput.click();
 
-      this.getNativeLogger().debug("Read cookies from cookie manager.");
+      this.getNativeLogger().trace("Read cookies from cookie manager.");
       Set<Cookie> cookiesFromWebClient = webClient.getCookieManager().getCookies();
 
-      this.getNativeLogger().debug("Cookies {} found.", cookiesFromWebClient);
+      this.getNativeLogger().trace("Cookies {} found.", cookiesFromWebClient);
       cookieCache.put(username, cookiesFromWebClient);
 
       this.logMethodEnd(cookiesFromWebClient);

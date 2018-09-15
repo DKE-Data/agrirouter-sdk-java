@@ -19,8 +19,7 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
 
   @Override
   public DecodeMessageResponse decode(String encodedResponse) {
-    this.getNativeLogger().debug("BEGIN | Decode message response.");
-    this.getNativeLogger().trace(new ObjectArrayMessage(encodedResponse));
+    this.logMethodBegin(encodedResponse);
 
     if (StringUtils.isBlank(encodedResponse)) {
       throw new IllegalArgumentException("Please provide a valid encoded response.");
@@ -42,8 +41,7 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
       decodeMessageResponse.setResponseEnvelope(responseEnvelope);
       decodeMessageResponse.setResponsePayloadWrapper(responsePayloadWrapper);
 
-      this.getNativeLogger().trace(new ObjectArrayMessage(decodeMessageResponse));
-      this.getNativeLogger().debug("END | Decode message response.");
+      this.logMethodEnd(decodeMessageResponse);
       return decodeMessageResponse;
     } catch (IOException e) {
       throw new CouldNotDecodeMessageException(e);
@@ -53,13 +51,12 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
   @Override
   public MessageOuterClass.Message decode(ByteString message) {
     try {
-      this.getNativeLogger().debug("BEGIN | Decode message.");
+      this.logMethodBegin(message);
 
       this.getNativeLogger().trace("Decoding byte string.");
       MessageOuterClass.Message decodedMessage = MessageOuterClass.Message.parseFrom(message);
 
-      this.getNativeLogger().trace(new ObjectArrayMessage(decodedMessage));
-      this.getNativeLogger().debug("BEGIN | Decode message.");
+      this.logMethodEnd(decodedMessage);
       return decodedMessage;
     } catch (InvalidProtocolBufferException e) {
       throw new CouldNotDecodeMessageException(e);
