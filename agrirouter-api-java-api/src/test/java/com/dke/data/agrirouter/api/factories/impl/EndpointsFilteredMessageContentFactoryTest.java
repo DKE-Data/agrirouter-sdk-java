@@ -14,7 +14,7 @@ class EndpointsFilteredMessageContentFactoryTest
     extends AbstractMessageContentFactoryTest<EndpointsFilteredMessageContentFactory> {
 
   @Test
-  void givenValidEndpointsFilteredParameters_Message_ShouldNotFail() {
+  void givenValidEndpointsFilteredParametersMessageShouldNotFail() {
     EndpointsFilteredMessageParameters endpointsFilteredMessageParameters =
         new EndpointsFilteredMessageParameters();
     endpointsFilteredMessageParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND;
@@ -25,7 +25,7 @@ class EndpointsFilteredMessageContentFactoryTest
   }
 
   @Test
-  void givenEmptyEndpointsFilteredParameters_Message_ShouldNotFail() {
+  void givenEmptyEndpointsFilteredParametersMessageShouldNotFail() {
     EndpointsFilteredMessageParameters endpointsFilteredMessageParameters =
         new EndpointsFilteredMessageParameters();
     assertThrows(
@@ -35,7 +35,7 @@ class EndpointsFilteredMessageContentFactoryTest
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void givenEndpointsFilteredParametersWithNullValues_Message_ShouldThrowException() {
+  void givenEndpointsFilteredParametersWithNullValuesMessageShouldThrowException() {
     EndpointsFilteredMessageParameters endpointsFilteredMessageParameters =
         new EndpointsFilteredMessageParameters();
     endpointsFilteredMessageParameters.direction = null;
