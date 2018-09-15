@@ -26,7 +26,8 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
 
   @Override
   public RegistrationRequestResponse getRegistrationCode(RegistrationRequestParameters parameters) {
-    this.getNativeLogger().info("BEGIN | Fetching registration code from agrirouter | '{}'.", parameters);
+    this.getNativeLogger()
+        .info("BEGIN | Fetching registration code from agrirouter | '{}'.", parameters);
 
     parameters.validate();
 
@@ -44,7 +45,8 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
     this.getNativeLogger().debug("Validating response | {}.", response);
     this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
 
-    this.getNativeLogger().info("END | Fetching registration code from agrirouter | '{}'.", parameters);
+    this.getNativeLogger()
+        .info("END | Fetching registration code from agrirouter | '{}'.", parameters);
     return response.readEntity(RegistrationRequestResponse.class);
   }
 }

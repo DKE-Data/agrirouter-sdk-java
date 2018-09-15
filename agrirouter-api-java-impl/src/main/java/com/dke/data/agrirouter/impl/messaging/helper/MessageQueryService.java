@@ -18,7 +18,8 @@ import java.util.Collections;
 import java.util.Objects;
 import org.apache.http.HttpStatus;
 
-public class MessageQueryService extends NonEnvironmentalService implements MessageSender, ResponseValidator {
+public class MessageQueryService extends NonEnvironmentalService
+    implements MessageSender, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
   private final TechnicalMessageType technicalMessageType;

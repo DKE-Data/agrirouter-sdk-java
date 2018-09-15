@@ -8,12 +8,11 @@ import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.google.protobuf.Any;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.message.ObjectArrayMessage;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.message.ObjectArrayMessage;
 
 /** Internal service implementation. */
 public class EncodeMessageServiceImpl extends NonEnvironmentalService
@@ -22,7 +21,8 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
   public String encode(
       MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
     this.getNativeLogger().debug("BEGIN | Encode message.");
-    this.getNativeLogger().trace(new ObjectArrayMessage(messageHeaderParameters, payloadParameters));
+    this.getNativeLogger()
+        .trace(new ObjectArrayMessage(messageHeaderParameters, payloadParameters));
 
     if (null == messageHeaderParameters || null == payloadParameters) {
       throw new IllegalArgumentException("Parameters cannot be NULL");
