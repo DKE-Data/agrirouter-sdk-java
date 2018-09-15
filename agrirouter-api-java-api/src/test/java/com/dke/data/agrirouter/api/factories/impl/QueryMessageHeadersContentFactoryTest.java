@@ -13,7 +13,7 @@ class QueryMessageHeadersContentFactoryTest
     extends AbstractMessageContentFactoryTest<MessageQueryMessageContentFactory> {
 
   @Test
-  void givenValidParameters_Message_ShouldNotFail() {
+  void givenValidParametersMessageShouldNotFail() {
     MessageQueryMessageParameters parameters = new MessageQueryMessageParameters();
     parameters.senderIds = Collections.singletonList("2");
     parameters.messageIds = Collections.singletonList("2");
@@ -22,7 +22,7 @@ class QueryMessageHeadersContentFactoryTest
   }
 
   @Test
-  void givenEmptyParameters_Message_ShouldThrowException() {
+  void givenEmptyParametersMessageShouldThrowException() {
     MessageQueryMessageParameters queryMessagesMessageParameters =
         new MessageQueryMessageParameters();
     assertThrows(
@@ -32,7 +32,7 @@ class QueryMessageHeadersContentFactoryTest
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void givenParametersWithNullValues_Message_ShouldNotFail() {
+  void givenParametersWithNullValuesMessageShouldNotFail() {
     MessageQueryMessageParameters queryMessagesMessageParameters =
         new MessageQueryMessageParameters();
     queryMessagesMessageParameters.senderIds = null;
