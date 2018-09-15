@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.message.ObjectArrayMessage;
 
 /** Resolve the cookies after login to use them for further requests. */
 public class CookieResolverService extends EnvironmentalService {

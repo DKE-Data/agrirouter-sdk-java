@@ -28,5 +28,4 @@ public interface LoggingEnabledService {
     LOGGER.debug(METHOD_END, "END | End of method.");
     LOGGER.trace(METHOD_RESULTS, new ObjectArrayMessage(objects));
   }
-
 }

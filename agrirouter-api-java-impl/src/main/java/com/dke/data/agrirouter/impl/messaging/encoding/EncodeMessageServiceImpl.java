@@ -12,7 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.message.ObjectArrayMessage;
 
 /** Internal service implementation. */
 public class EncodeMessageServiceImpl extends NonEnvironmentalService
@@ -20,7 +19,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
   public String encode(
       MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
-this.logMethodBegin(messageHeaderParameters, payloadParameters);
+    this.logMethodBegin(messageHeaderParameters, payloadParameters);
 
     if (null == messageHeaderParameters || null == payloadParameters) {
       throw new IllegalArgumentException("Parameters cannot be NULL");

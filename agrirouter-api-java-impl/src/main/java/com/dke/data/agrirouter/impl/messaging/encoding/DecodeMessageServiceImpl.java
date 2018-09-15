@@ -11,7 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.message.ObjectArrayMessage;
 
 /** Internal service implementation. */
 public class DecodeMessageServiceImpl extends NonEnvironmentalService
