@@ -22,20 +22,20 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
   @Override
   public OnboardingResponse onboard(OnboardingParameters parameters) {
-    this.getLogger().info("BEGIN | Onboarding process. | '{}'.", parameters);
+    this.getNativeLogger().info("BEGIN | Onboarding process. | '{}'.", parameters);
     parameters.validate();
 
-    this.getLogger().debug("Onboard device.");
+    this.getNativeLogger().debug("Onboard device.");
     OnboardingResponse onboardingResponse =
         this.onboard(
             parameters.getRegistrationCode(), this.createOnboardingRequestBody(parameters));
 
-    this.getLogger().info("END | Onboarding process. | '{}'.", parameters);
+    this.getNativeLogger().info("END | Onboarding process. | '{}'.", parameters);
     return onboardingResponse;
   }
 
   private OnboardingRequest createOnboardingRequestBody(OnboardingParameters parameters) {
-    this.getLogger().info("BEGIN | Create onboarding request. | '{}'.", parameters);
+    this.getNativeLogger().info("BEGIN | Create onboarding request. | '{}'.", parameters);
     OnboardingRequest onboardRequest =
         this.getOnboardRequest(
             parameters.getUuid(),
@@ -43,12 +43,12 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
             parameters.getCertificationVersionId(),
             parameters.getGatewayId(),
             parameters.getCertificationType());
-    this.getLogger().info("END | Create onboarding request. | '{}'.", parameters);
+    this.getNativeLogger().info("END | Create onboarding request. | '{}'.", parameters);
     return onboardRequest;
   }
 
   private OnboardingResponse onboard(String registrationCode, OnboardingRequest onboardingRequest) {
-    this.getLogger()
+    this.getNativeLogger()
         .info("BEGIN | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
     Response response =
         RequestFactory.bearerTokenRequest(this.environment.getOnboardUrl(), registrationCode)
@@ -56,21 +56,21 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     this.assertResponseStatusIsValid(response, HttpStatus.SC_CREATED);
     OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
 
-    this.getLogger()
+    this.getNativeLogger()
         .info("END | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
     return onboardingResponse;
   }
 
   @Override
   public String generateAuthenticationUrl(AuthenticationUrlParameters parameters) {
-    this.getLogger().info("BEGIN | Generating authentication URL. | '{}'.", parameters);
+    this.getNativeLogger().info("BEGIN | Generating authentication URL. | '{}'.", parameters);
     String securedOnboardingAuthenticationUrl =
         this.environment.getSecuredOnboardingAuthenticationUrl(
             parameters.getApplicationId(),
             parameters.getResponseType(),
             parameters.getState(),
             parameters.getRedirectUri());
-    this.getLogger().info("END | Generating authentication URL. | '{}'.", parameters);
+    this.getNativeLogger().info("END | Generating authentication URL. | '{}'.", parameters);
     return securedOnboardingAuthenticationUrl;
   }
 }

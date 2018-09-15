@@ -19,8 +19,8 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
       String certificationVersionId,
       String gatewayId,
       CertificationType certificationType) {
-    this.getLogger().info("BEGIN | Creating onboard request.");
-    this.getLogger()
+    this.getNativeLogger().info("BEGIN | Creating onboard request.");
+    this.getNativeLogger()
         .debug(
             new ObjectArrayMessage(
                 uuid, applicationId, certificationType, gatewayId, certificationType));
@@ -34,7 +34,7 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
     onboardingRequest.setUTCTimestamp(UtcTimeService.inThePast(10).toString());
     onboardingRequest.setTimeZone(UtcTimeService.offset());
 
-    this.getLogger().info("END | Creating onboard request.");
+    this.getNativeLogger().info("END | Creating onboard request.");
     return onboardingRequest;
   }
 }

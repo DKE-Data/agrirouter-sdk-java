@@ -19,31 +19,31 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
 
   @Override
   public DecodeMessageResponse decode(String encodedResponse) {
-    this.getLogger().debug("BEGIN | Decode message response.");
-    this.getLogger().trace(new ObjectArrayMessage(encodedResponse));
+    this.getNativeLogger().debug("BEGIN | Decode message response.");
+    this.getNativeLogger().trace(new ObjectArrayMessage(encodedResponse));
 
     if (StringUtils.isBlank(encodedResponse)) {
       throw new IllegalArgumentException("Please provide a valid encoded response.");
     }
     try {
 
-      this.getLogger().trace("Decoding byte array.");
+      this.getNativeLogger().trace("Decoding byte array.");
       byte[] decodedBytes = Base64.getDecoder().decode(encodedResponse);
       ByteArrayInputStream inputStream = new ByteArrayInputStream(decodedBytes);
 
-      this.getLogger().trace("Parse response envelope.");
+      this.getNativeLogger().trace("Parse response envelope.");
       agrirouter.response.Response.ResponseEnvelope responseEnvelope =
           agrirouter.response.Response.ResponseEnvelope.parseDelimitedFrom(inputStream);
 
-      this.getLogger().trace("Parse response payload wrapper.");
+      this.getNativeLogger().trace("Parse response payload wrapper.");
       agrirouter.response.Response.ResponsePayloadWrapper responsePayloadWrapper =
           agrirouter.response.Response.ResponsePayloadWrapper.parseDelimitedFrom(inputStream);
       DecodeMessageResponse decodeMessageResponse = new DecodeMessageResponse();
       decodeMessageResponse.setResponseEnvelope(responseEnvelope);
       decodeMessageResponse.setResponsePayloadWrapper(responsePayloadWrapper);
 
-      this.getLogger().trace(new ObjectArrayMessage(decodeMessageResponse));
-      this.getLogger().debug("END | Decode message response.");
+      this.getNativeLogger().trace(new ObjectArrayMessage(decodeMessageResponse));
+      this.getNativeLogger().debug("END | Decode message response.");
       return decodeMessageResponse;
     } catch (IOException e) {
       throw new CouldNotDecodeMessageException(e);
@@ -53,13 +53,13 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
   @Override
   public MessageOuterClass.Message decode(ByteString message) {
     try {
-      this.getLogger().debug("BEGIN | Decode message.");
+      this.getNativeLogger().debug("BEGIN | Decode message.");
 
-      this.getLogger().trace("Decoding byte string.");
+      this.getNativeLogger().trace("Decoding byte string.");
       MessageOuterClass.Message decodedMessage = MessageOuterClass.Message.parseFrom(message);
 
-      this.getLogger().trace(new ObjectArrayMessage(decodedMessage));
-      this.getLogger().debug("BEGIN | Decode message.");
+      this.getNativeLogger().trace(new ObjectArrayMessage(decodedMessage));
+      this.getNativeLogger().debug("BEGIN | Decode message.");
       return decodedMessage;
     } catch (InvalidProtocolBufferException e) {
       throw new CouldNotDecodeMessageException(e);

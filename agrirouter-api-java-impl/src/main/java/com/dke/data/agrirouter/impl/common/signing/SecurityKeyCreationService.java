@@ -16,20 +16,20 @@ import org.apache.logging.log4j.message.ObjectArrayMessage;
 public class SecurityKeyCreationService implements LoggingEnabledService {
 
   public PrivateKey createPrivateKey(String privateKey) {
-    this.getLogger().debug("BEGIN | Creating private key.");
-    this.getLogger().trace(new ObjectArrayMessage(privateKey));
+    this.logMethodBegin();
+    this.logParameters(privateKey);
 
     PrivateKey result;
     try {
-      this.getLogger().debug("Replacing comments within file.");
+      this.getNativeLogger().debug("Replacing comments within file.");
       String pkcs8Pem = privateKey.replace("-----BEGIN PRIVATE KEY-----", "");
       pkcs8Pem = pkcs8Pem.replace("-----END PRIVATE KEY-----", "");
       pkcs8Pem = pkcs8Pem.replaceAll("\\s+", "");
 
-      this.getLogger().debug("Decode base 64 values.");
+      this.getNativeLogger().debug("Decode base 64 values.");
       byte[] pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
 
-      this.getLogger().debug("Generate private key.");
+      this.getNativeLogger().debug("Generate private key.");
       PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pkcs8EncodedBytes);
       KeyFactory keyFactory = KeyFactory.getInstance("RSA");
       result = keyFactory.generatePrivate(keySpec);
@@ -37,25 +37,26 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
       throw new CouldNotCreatePrivateKeyException(e);
     }
 
-    this.getLogger().debug("END | Creating private key.");
+    this.logResult(result);
+    this.logMethodEnd();
     return result;
   }
 
   public PublicKey createPublicKey(String publicKey) {
-    this.getLogger().debug("BEGIN | Creating public key.");
-    this.getLogger().trace(new ObjectArrayMessage(publicKey));
+    this.logMethodBegin();
+    this.logParameters(publicKey);
 
     PublicKey result;
     try {
-      this.getLogger().debug("Replacing comments within file.");
+      this.getNativeLogger().debug("Replacing comments within file.");
       String pkcs8Pem = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
       pkcs8Pem = pkcs8Pem.replace("-----END PUBLIC KEY-----", "");
       pkcs8Pem = pkcs8Pem.replaceAll("\\s+", "");
 
-      this.getLogger().debug("Decode base 64 values.");
+      this.getNativeLogger().debug("Decode base 64 values.");
       byte[] pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
 
-      this.getLogger().debug("Generate public key.");
+      this.getNativeLogger().debug("Generate public key.");
       X509EncodedKeySpec keySpec = new X509EncodedKeySpec(pkcs8EncodedBytes);
       KeyFactory keyFactory = KeyFactory.getInstance("RSA");
       result = keyFactory.generatePublic(keySpec);
@@ -63,7 +64,8 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
       throw new CouldNotCreatePublicKeyException(e);
     }
 
-    this.getLogger().debug("END | Creating public key.");
+    this.logResult(result);
+    this.logMethodEnd();
     return result;
   }
 }

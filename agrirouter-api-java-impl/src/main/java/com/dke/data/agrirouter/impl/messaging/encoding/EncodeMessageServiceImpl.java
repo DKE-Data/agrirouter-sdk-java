@@ -21,8 +21,8 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
   public String encode(
       MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
-    this.getLogger().debug("BEGIN | Encode message.");
-    this.getLogger().trace(new ObjectArrayMessage(messageHeaderParameters, payloadParameters));
+    this.getNativeLogger().debug("BEGIN | Encode message.");
+    this.getNativeLogger().trace(new ObjectArrayMessage(messageHeaderParameters, payloadParameters));
 
     if (null == messageHeaderParameters || null == payloadParameters) {
       throw new IllegalArgumentException("Parameters cannot be NULL");
@@ -32,17 +32,17 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
     try (ByteArrayOutputStream streamedMessage = new ByteArrayOutputStream()) {
 
-      this.getLogger().trace("Encode header.");
+      this.getNativeLogger().trace("Encode header.");
       this.header(messageHeaderParameters).writeDelimitedTo(streamedMessage);
 
-      this.getLogger().trace("Encode payload.");
+      this.getNativeLogger().trace("Encode payload.");
       this.payload(payloadParameters).writeDelimitedTo(streamedMessage);
 
-      this.getLogger().trace("Encoding message.");
+      this.getNativeLogger().trace("Encoding message.");
       String encodedMessage = Base64.getEncoder().encodeToString(streamedMessage.toByteArray());
 
-      this.getLogger().trace(new ObjectArrayMessage(encodedMessage));
-      this.getLogger().debug("END | Encode message.");
+      this.getNativeLogger().trace(new ObjectArrayMessage(encodedMessage));
+      this.getNativeLogger().debug("END | Encode message.");
       return encodedMessage;
     } catch (IOException e) {
       throw new CouldNotEncodeMessageException(e);
@@ -50,7 +50,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
   }
 
   private Request.RequestEnvelope header(MessageHeaderParameters parameters) {
-    this.getLogger().debug("BEGIN | Encode message header.");
+    this.getNativeLogger().debug("BEGIN | Encode message header.");
     agrirouter.request.Request.RequestEnvelope.Builder messageHeader =
         Request.RequestEnvelope.newBuilder();
     messageHeader.setApplicationMessageId(parameters.getApplicationMessageId());
@@ -66,13 +66,13 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     messageHeader.setTimestamp(new TimestampUtil().current());
     Request.RequestEnvelope requestEnvelope = messageHeader.build();
 
-    this.getLogger().trace(new ObjectArrayMessage(requestEnvelope));
-    this.getLogger().debug("END | Encode message header.");
+    this.getNativeLogger().trace(new ObjectArrayMessage(requestEnvelope));
+    this.getNativeLogger().debug("END | Encode message header.");
     return requestEnvelope;
   }
 
   private Request.RequestPayloadWrapper payload(PayloadParameters parameters) {
-    this.getLogger().debug("BEGIN | Encode message payload.");
+    this.getNativeLogger().debug("BEGIN | Encode message payload.");
     Request.RequestPayloadWrapper.Builder messagePayload =
         Request.RequestPayloadWrapper.newBuilder();
     Any.Builder builder = Any.newBuilder();
@@ -81,8 +81,8 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     messagePayload.setDetails(builder.build());
     Request.RequestPayloadWrapper requestPayloadWrapper = messagePayload.build();
 
-    this.getLogger().trace(new ObjectArrayMessage(requestPayloadWrapper));
-    this.getLogger().debug("END | Encode message payload.");
+    this.getNativeLogger().trace(new ObjectArrayMessage(requestPayloadWrapper));
+    this.getNativeLogger().debug("END | Encode message payload.");
     return requestPayloadWrapper;
   }
 }
