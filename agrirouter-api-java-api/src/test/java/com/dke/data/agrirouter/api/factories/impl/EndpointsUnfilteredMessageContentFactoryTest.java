@@ -14,7 +14,7 @@ class EndpointsUnfilteredMessageContentFactoryTest
     extends AbstractMessageContentFactoryTest<EndpointsUnfilteredMessageContentFactory> {
 
   @Test
-  void givenValidEndpointsUnfilteredMessageParameters_Message_ShouldNotFail() {
+  void givenValidEndpointsUnfilteredMessageParametersMessageShouldNotFail() {
     EndpointsUnfilteredMessageParameters endpointsUnfilteredMessageParameters =
         new EndpointsUnfilteredMessageParameters();
     endpointsUnfilteredMessageParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND;
@@ -25,7 +25,7 @@ class EndpointsUnfilteredMessageContentFactoryTest
   }
 
   @Test
-  void givenEmptyEndpointsUnfilteredMessageParameters_Message_ShouldThrowException() {
+  void givenEmptyEndpointsUnfilteredMessageParametersMessageShouldThrowException() {
     EndpointsUnfilteredMessageParameters endpointsUnfilteredMessageParameters =
         new EndpointsUnfilteredMessageParameters();
     assertThrows(
@@ -35,7 +35,7 @@ class EndpointsUnfilteredMessageContentFactoryTest
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void givenEndpointsUnfilteredMessageParametersWithNullValues_Message_ShouldThrowException() {
+  void givenEndpointsUnfilteredMessageParametersWithNullValuesMessageShouldThrowException() {
     EndpointsUnfilteredMessageParameters endpointsUnfilteredMessageParameters =
         new EndpointsUnfilteredMessageParameters();
     endpointsUnfilteredMessageParameters.direction = null;
