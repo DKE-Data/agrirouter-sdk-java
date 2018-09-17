@@ -14,6 +14,7 @@ import java.util.Optional;
 public class FetchMessageServiceImpl
     implements FetchMessageService, MessageFetcher, ResponseValidator {
 
+  @Override
   public Optional<List<FetchMessageResponse>> fetch(
       OnboardingResponse onboardingResponse, int maxTries, long interval) {
     FetchMessageParameters fetchMessageParameters = new FetchMessageParameters();
@@ -21,6 +22,7 @@ public class FetchMessageServiceImpl
     return this.fetch(fetchMessageParameters, maxTries, interval);
   }
 
+  @Override
   public Optional<List<FetchMessageResponse>> fetch(
       FetchMessageParameters parameters, int maxTries, long interval) {
     parameters.validate();
@@ -31,5 +33,11 @@ public class FetchMessageServiceImpl
   private List<FetchMessageResponse> parseJson(String json) {
     Type type = new TypeToken<List<FetchMessageResponse>>() {}.getType();
     return new Gson().fromJson(json, type);
+  }
+
+  @Override
+  public FetchMessageResponse parseJson(byte[] json) {
+    Type type = new TypeToken<FetchMessageResponse>() {}.getType();
+    return new Gson().fromJson(new String(json), type);
   }
 }

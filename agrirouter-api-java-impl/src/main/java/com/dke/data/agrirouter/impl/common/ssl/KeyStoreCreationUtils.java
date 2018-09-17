@@ -15,6 +15,9 @@ import java.util.*;
 import javax.crypto.EncryptedPrivateKeyInfo;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.net.SocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
@@ -29,6 +32,18 @@ public class KeyStoreCreationUtils {
   private static final String END_DELIMITER_CERTIFICATE = "-----END CERTIFICATE-----";
   private static final String DEFAULT_PASSWORD = "changeit";
 
+  public static SocketFactory getSocketFactory(
+      List<String> rootCertificates, String certificate, String password) throws Exception {
+    TrustManager[] trustManagers = KeyStoreCreationUtils.createTrustManagers(rootCertificates);
+    KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+    kmf.init(
+        KeyStoreCreationUtils.createAndReturnKeystoreFromPEM(certificate, password),
+        getDefaultPassword());
+    SSLContext context = SSLContext.getInstance("TLSv1.2");
+    context.init(kmf.getKeyManagers(), trustManagers, null);
+    return context.getSocketFactory();
+  }
+
   public static KeyStore createAndReturnKeystoreFromP12(String certificate, String password) {
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
@@ -41,7 +56,7 @@ public class KeyStoreCreationUtils {
     }
   }
 
-  public static TrustManager[] createTrustManagers(List<String> certificates) {
+  private static TrustManager[] createTrustManagers(List<String> certificates) {
     List<TrustManager> trustManagers = new ArrayList<>();
     certificates.forEach(
         certificate -> {

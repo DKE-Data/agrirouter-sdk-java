@@ -6,7 +6,8 @@ import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
-import com.google.gson.Gson;
+import com.dke.data.agrirouter.impl.gson.MessageTypeAdapter;
+import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.client.Entity;
@@ -14,9 +15,12 @@ import javax.ws.rs.core.Response;
 
 public interface MessageSender {
 
-  default String getMessageAsJson(SendMessageParameters parameters) {
+  default String createMessageBody(SendMessageParameters parameters) {
     parameters.validate();
-    return new Gson().toJson(this.createSendMessageRequest(parameters));
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.registerTypeAdapter(Message.class, new MessageTypeAdapter());
+    String json = gsonBuilder.create().toJson(this.createSendMessageRequest(parameters));
+    return json;
   }
 
   default SendMessageRequest createSendMessageRequest(SendMessageParameters parameters) {
