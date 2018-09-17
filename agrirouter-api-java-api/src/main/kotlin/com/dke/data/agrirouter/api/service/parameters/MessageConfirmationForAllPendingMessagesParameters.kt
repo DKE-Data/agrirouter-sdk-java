@@ -6,6 +6,9 @@ import lombok.ToString
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
+/**
+ * Parameters class. Encapsulation for the services.
+ */
 @ToString
 class MessageConfirmationForAllPendingMessagesParameters : ParameterValidation {
 

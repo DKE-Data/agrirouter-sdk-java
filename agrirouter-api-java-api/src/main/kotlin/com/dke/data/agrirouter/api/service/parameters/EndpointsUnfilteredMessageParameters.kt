@@ -5,6 +5,9 @@ import com.dke.data.agrirouter.api.service.ParameterValidation
 import lombok.ToString
 import javax.validation.constraints.NotNull
 
+/**
+ * Parameters class. Encapsulation for the services.
+ */
 @ToString
 class EndpointsUnfilteredMessageParameters : ParameterValidation {
 

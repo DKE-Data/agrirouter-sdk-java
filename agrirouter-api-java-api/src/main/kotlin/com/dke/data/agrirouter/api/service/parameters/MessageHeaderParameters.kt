@@ -8,6 +8,9 @@ import lombok.ToString
 import java.util.*
 import javax.validation.constraints.NotNull
 
+/**
+ * Parameters class. Encapsulation for the services.
+ */
 @ToString
 class MessageHeaderParameters : ParameterValidation {
 
