@@ -21,8 +21,8 @@ of IT solutions. We also provide professional IT consulting services and trainin
 the whole project during the development in the field of test management and are currently responsible for the development
 support of the platform.
 
-We are active maintainers of the API and are using the API for internal testing purposes as well. Therefore we have a high interest
-in a stable and usable interface to connect to the agrirouter.
+We are active maintainers of the API and are using the API for internal testing purposes as well. Therefore we have a
+high interest in a stable and usable interface to connect to the agrirouter.
 
 Feel free to get in touch by visiting our https://www.lmis.de[website] or contacting us via GitHub.
 
