@@ -4,6 +4,8 @@ import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import org.apache.commons.lang3.NotImplementedException;
+
 import java.io.IOException;
 
 public class MessageTypeAdapter extends TypeAdapter<Message> {
@@ -18,6 +20,6 @@ public class MessageTypeAdapter extends TypeAdapter<Message> {
 
   @Override
   public Message read(JsonReader jsonReader) throws IOException {
-    throw new RuntimeException("Not yet supported.");
+    throw new NotImplementedException("Not yet supported.");
   }
 }
