@@ -9,6 +9,7 @@ import java.net.URL;
 import javax.ws.rs.core.Response;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class ResponseValidatorTest implements ResponseValidator {
@@ -21,6 +22,7 @@ class ResponseValidatorTest implements ResponseValidator {
   }
 
   @Test
+  @Disabled("not necessary according to issue #14")
   void
       givenValidUrl_AssertResponseStatusIsValid_ShouldThrowUnexpectedHttpStatusExceptionIfResponseStatusDoesNotMatch()
           throws Exception {
