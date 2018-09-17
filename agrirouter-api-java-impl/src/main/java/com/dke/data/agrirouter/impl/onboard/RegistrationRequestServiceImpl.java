@@ -7,6 +7,7 @@ import com.dke.data.agrirouter.api.service.parameters.RegistrationRequestParamet
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.CookieResolverService;
+import com.dke.data.agrirouter.impl.validation.ResponseStatusChecker;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import java.util.Set;
@@ -34,7 +35,11 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
     String url =
         this.environment.getRegistrationServiceDataServiceUrl(parameters.getApplicationId());
     Response response = RequestFactory.request(url, cookies).get();
-    this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+
+    if (!ResponseStatusChecker.isStatusInSuccessRange(response.getStatus())) {
+      this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+    }
+
     return response.readEntity(RegistrationRequestResponse.class);
   }
 }

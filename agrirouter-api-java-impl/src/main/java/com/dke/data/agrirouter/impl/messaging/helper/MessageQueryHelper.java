@@ -12,6 +12,7 @@ import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
+import com.dke.data.agrirouter.impl.validation.ResponseStatusChecker;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 import java.util.Objects;
@@ -35,7 +36,11 @@ public class MessageQueryHelper implements MessageSender, ResponseValidator {
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
     MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+
+    int status = response.getNativeResponse().getStatus();
+    if (!ResponseStatusChecker.isStatusInSuccessRange(status)) {
+      this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    }
   }
 
   private String encodeMessage(MessageQueryParameters parameters) {
