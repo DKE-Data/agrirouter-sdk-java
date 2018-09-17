@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.api.enums
 
 enum class TechnicalMessageType(val key: String) {
 
+    DKE_ONBOARD_VCU("dke:cloud_onboard_endpoints"),
     DKE_CAPABILITIES("dke:capabilities"),
     DKE_SUBSCRIPTION("dke:subscription"),
     DKE_LIST_ENDPOINTS("dke:list_endpoints"),
