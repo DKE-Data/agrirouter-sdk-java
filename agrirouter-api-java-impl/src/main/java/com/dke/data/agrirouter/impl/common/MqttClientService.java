@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.impl.common;
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.exception.CouldNotCreateMqttClientException;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -21,7 +22,7 @@ public class MqttClientService extends EnvironmentalService {
               onboardingResponse.getConnectionCriteria().getPort()),
           onboardingResponse.getConnectionCriteria().getClientId());
     } catch (MqttException e) {
-      throw new RuntimeException("Could not create MQTT client.", e);
+      throw new CouldNotCreateMqttClientException("Could not create MQTT client.", e);
     }
   }
 }
