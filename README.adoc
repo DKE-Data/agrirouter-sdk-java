@@ -18,6 +18,7 @@ This project contains the API for the communication with the agrirouter. Everyth
 
 == Project status
 image::https://travis-ci.com/DKE-Data/agrirouter-api-java.svg?branch=develop[Build status]
+image:https://api.codacy.com/project/badge/Grade/d8fde962e7814c96badd43e65aa84815["Codacy code quality", link="https://www.codacy.com/app/cf4thqgxcnxaovouxtnv/agrirouter-api-java?utm_source=github.com&utm_medium=referral&utm_content=DKE-Data/agrirouter-api-java&utm_campaign=Badge_Grade"]
 
 == External resources
 

@@ -26,15 +26,27 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
 
   @Override
   public RegistrationRequestResponse getRegistrationCode(RegistrationRequestParameters parameters) {
+    this.getNativeLogger()
+        .info("BEGIN | Fetching registration code from agrirouter | '{}'.", parameters);
+
     parameters.validate();
+
+    this.getNativeLogger().debug("Fetching cookies for current user.");
     Set<Cookie> cookies =
         this.cookieResolverService.cookies(
             this.environment.getAgrirouterLoginUsername(),
             this.environment.getAgrirouterLoginPassword());
     String url =
         this.environment.getRegistrationServiceDataServiceUrl(parameters.getApplicationId());
+
+    this.getNativeLogger().debug("Fetching response for registration code request.");
     Response response = RequestFactory.request(url, cookies).get();
+
+    this.getNativeLogger().debug("Validating response | {}.", response);
     this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+
+    this.getNativeLogger()
+        .info("END | Fetching registration code from agrirouter | '{}'.", parameters);
     return response.readEntity(RegistrationRequestResponse.class);
   }
 }
