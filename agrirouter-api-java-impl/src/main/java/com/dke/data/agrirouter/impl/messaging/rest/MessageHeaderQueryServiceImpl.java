@@ -13,7 +13,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class MessageHeaderQueryServiceImpl extends EnvironmentalService
-    implements MessageHeaderQueryService, MessageSender, ResponseValidator {
+    implements MessageHeaderQueryService, MessageSender {
 
   private final MessageQueryService messageQueryService;
 

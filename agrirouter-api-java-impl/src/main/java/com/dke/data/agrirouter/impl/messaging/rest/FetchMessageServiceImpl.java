@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class FetchMessageServiceImpl
-    implements FetchMessageService, MessageFetcher, ResponseValidator {
+    implements FetchMessageService, MessageFetcher {
 
   public Optional<List<FetchMessageResponse>> fetch(
       OnboardingResponse onboardingResponse, int maxTries, long interval) {
