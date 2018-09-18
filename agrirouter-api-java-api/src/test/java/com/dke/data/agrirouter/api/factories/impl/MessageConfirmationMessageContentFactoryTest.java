@@ -13,7 +13,7 @@ class MessageConfirmationMessageContentFactoryTest
     extends AbstractMessageContentFactoryTest<MessageConfirmationMessageContentFactory> {
 
   @Test
-  void givenValidQueryMessagesMessageParameters_Message_ShouldNotFail() {
+  void givenValidQueryMessagesMessageParametersMessageShouldNotFail() {
     MessageConfirmationMessageParameters parameters = new MessageConfirmationMessageParameters();
     parameters.messageIds = Collections.singletonList("2");
     ByteString message = this.getInstanceToTest().message(parameters);
@@ -21,7 +21,7 @@ class MessageConfirmationMessageContentFactoryTest
   }
 
   @Test
-  void givenEmptyQueryMessagesMessageParameters_Message_ShouldThrowException() {
+  void givenEmptyQueryMessagesMessageParametersMessageShouldThrowException() {
     MessageConfirmationMessageParameters parameters = new MessageConfirmationMessageParameters();
     assertThrows(
         IllegalParameterDefinitionException.class,
@@ -30,7 +30,7 @@ class MessageConfirmationMessageContentFactoryTest
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void givenQueryMessagesMessageParametersWithNullValues_Message_ShouldNotFail() {
+  void givenQueryMessagesMessageParametersWithNullValuesMessageShouldNotFail() {
     MessageConfirmationMessageParameters parameters = new MessageConfirmationMessageParameters();
     parameters.messageIds = null;
     assertThrows(
