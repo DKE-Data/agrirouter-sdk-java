@@ -51,14 +51,10 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     parameters.validate();
 
     EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
-    //String encodedMessage = encodeMessage(parameters);
-
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
 
     sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
-    //sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
-
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
@@ -70,8 +66,6 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
 
     final String applicationMessageID = MessageIdService.generateMessageId();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
-    //messageHeaderParameters.setApplicationMessageId(applicationMessageId);
-
     messageHeaderParameters.setApplicationMessageSeqNo(1);
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_CONFIRM);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
@@ -86,7 +80,6 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
         new MessageConfirmationMessageContentFactory()
             .message(messageConfirmationMessageParameters));
 
-    //return this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     String encodedMessage = this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
   }

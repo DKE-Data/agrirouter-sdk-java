@@ -33,14 +33,9 @@ public class DeleteMessageServiceImpl
     parameters.validate();
 
     EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
-    //String encodedMessage = encodeMessage(parameters);
-
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-
     sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
-    //sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
-
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
@@ -52,8 +47,6 @@ public class DeleteMessageServiceImpl
 
     final String applicationMessageID = MessageIdService.generateMessageId();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
-    //messageHeaderParameters.setApplicationMessageId(applicationMessageId);
-
     messageHeaderParameters.setApplicationMessageSeqNo(1);
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
@@ -70,8 +63,6 @@ public class DeleteMessageServiceImpl
     payloadParameters.setTypeUrl(FeedRequests.MessageDelete.getDescriptor().getFullName());
     payloadParameters.setValue(
         new DeleteMessageMessageContentFactory().message(deleteMessageMessageParameters));
-
-    //return this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
 
     String encodedMessage = this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);

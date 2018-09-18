@@ -54,6 +54,8 @@ public class MessageQueryService extends NonEnvironmentalService
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
 
     this.logMethodEnd();
+
+    // I assume return after logMethodEnd() is bad style, but at the moment I don't know how to solve this...
     return encodedMessageResponse.getApplicationMessageID();
   }
 
@@ -65,7 +67,6 @@ public class MessageQueryService extends NonEnvironmentalService
 
     final String applicationMessageID = MessageIdService.generateMessageId();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
-    //messageHeaderParameters.setApplicationMessageId(MessageIdService.generateMessageId());
 
     messageHeaderParameters.setApplicationMessageSeqNo(1);
     messageHeaderParameters.setTechnicalMessageType(this.technicalMessageType);
@@ -91,7 +92,7 @@ public class MessageQueryService extends NonEnvironmentalService
 
     this.logMethodEnd(encodedMessage);
 
-    //return encodedMessage;
+    // same as above
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
   }
 }

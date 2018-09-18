@@ -37,14 +37,9 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     parameters.validate();
 
     EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
-    //String encodedMessage = encodeMessage(parameters);
-
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-
     sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
-    //sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
-
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
@@ -56,7 +51,6 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
 
     final String applicationMessageID = MessageIdService.generateMessageId();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
-    //messageHeaderParameters.setApplicationMessageId(MessageIdService.generateMessageId());
 
     messageHeaderParameters.setApplicationMessageSeqNo(1);
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
@@ -91,7 +85,6 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     payloadParameters.setValue(
         new CapabilitiesMessageContentFactory().message(capabilitiesMessageParameters));
 
-    //return this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     String encodedMessage = this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
   }
