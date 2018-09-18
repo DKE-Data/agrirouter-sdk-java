@@ -3,7 +3,7 @@ package com.dke.data.agrirouter.impl;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.exception.CertificationTypeNotSupportedException;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
-import com.dke.data.agrirouter.impl.common.ssl.KeyStoreCreationUtils;
+import com.dke.data.agrirouter.impl.common.ssl.KeyStoreCreationService;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import java.security.KeyStore;
 import java.util.Set;
@@ -54,7 +54,7 @@ public final class RequestFactory {
         case PEM:
           return ClientBuilder.newBuilder()
               .withConfig(clientConfig)
-              .keyStore(keyStore, KeyStoreCreationUtils.TEMPORARY_KEY_PASSWORD)
+              .keyStore(keyStore, KeyStoreCreationService.TEMPORARY_KEY_PASSWORD)
               .build();
         case P12:
           return ClientBuilder.newBuilder()
@@ -71,12 +71,13 @@ public final class RequestFactory {
 
   private static KeyStore createKeyStore(
       String x509Certificate, String password, CertificationType certificationType) {
+    KeyStoreCreationService keyStoreCreationService = new KeyStoreCreationService();
     try {
       switch (certificationType) {
         case PEM:
-          return KeyStoreCreationUtils.createAndReturnKeystoreFromPEM(x509Certificate, password);
+          return keyStoreCreationService.createAndReturnKeystoreFromPEM(x509Certificate, password);
         case P12:
-          return KeyStoreCreationUtils.createAndReturnKeystoreFromP12(x509Certificate, password);
+          return keyStoreCreationService.createAndReturnKeystoreFromP12(x509Certificate, password);
         default:
           throw new CertificationTypeNotSupportedException(certificationType);
       }

@@ -6,9 +6,13 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /** Parameter validation using bean validation. */
 public interface ParameterValidation {
+
+  Logger LOGGER = LogManager.getLogger();
 
   /**
    * Validation of the parameters. If there are any constraint violations, there will be a
@@ -17,6 +21,7 @@ public interface ParameterValidation {
    * @throws IllegalParameterDefinitionException -
    */
   default void validate() {
+    LOGGER.debug("Validating parameters.");
     ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
     Validator validator = validatorFactory.getValidator();
     Set<ConstraintViolation<ParameterValidation>> validate = validator.validate(this);
