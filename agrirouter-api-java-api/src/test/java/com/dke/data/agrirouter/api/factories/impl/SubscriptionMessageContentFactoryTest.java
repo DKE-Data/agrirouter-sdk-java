@@ -15,7 +15,7 @@ class SubscriptionMessageContentFactoryTest
     extends AbstractMessageContentFactoryTest<SubscriptionMessageContentFactory> {
 
   @Test
-  void givenValidSubscriptionMessageParameters_Message_ShouldNotFail() {
+  void givenValidSubscriptionMessageParametersMessageShouldNotFail() {
     SubscriptionMessageParameters subscriptionMessageParameters =
         new SubscriptionMessageParameters();
     List<Integer> ddis = new ArrayList<>();
@@ -29,7 +29,7 @@ class SubscriptionMessageContentFactoryTest
   }
 
   @Test
-  void givenEmptySubscriptionMessageParameters_Message_ShouldThrowException() {
+  void givenEmptySubscriptionMessageParametersMessageShouldThrowException() {
     SubscriptionMessageParameters subscriptionMessageParameters =
         new SubscriptionMessageParameters();
     assertThrows(
@@ -39,7 +39,7 @@ class SubscriptionMessageContentFactoryTest
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void givenSubscriptionMessageParametersWithNullValues_Message_ShouldNotFail() {
+  void givenSubscriptionMessageParametersWithNullValuesMessageShouldNotFail() {
     SubscriptionMessageParameters subscriptionMessageParameters =
         new SubscriptionMessageParameters();
     List<Integer> ddis = new ArrayList<>();

@@ -14,7 +14,7 @@ class QueryMessagesMessageContentFactoryTest
     extends AbstractMessageContentFactoryTest<MessageQueryMessageContentFactory> {
 
   @Test
-  void givenValidQueryMessagesMessageParameters_Message_ShouldNotFail() {
+  void givenValidQueryMessagesMessageParametersMessageShouldNotFail() {
     List<String> messageIds = new ArrayList<>();
     messageIds.add("1");
     List<String> senderIds = new ArrayList<>();
@@ -28,7 +28,7 @@ class QueryMessagesMessageContentFactoryTest
   }
 
   @Test
-  void givenEmptyMessageQueryMessageParameters_Message_ShouldThrowException() {
+  void givenEmptyMessageQueryMessageParametersMessageShouldThrowException() {
     MessageQueryMessageParameters queryMessagesMessageParameters =
         new MessageQueryMessageParameters();
     assertThrows(
@@ -38,7 +38,7 @@ class QueryMessagesMessageContentFactoryTest
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void givenMessageQueryMessageParametersWithNullValues_Message_ShouldNotFail() {
+  void givenMessageQueryMessageParametersWithNullValuesMessageShouldNotFail() {
     MessageQueryMessageParameters queryMessagesMessageParameters =
         new MessageQueryMessageParameters();
     queryMessagesMessageParameters.messageIds = null;
