@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 class ResponseValidatorTest implements ResponseValidator {
 
   @Test
-  void givenValidUrl_AssertResponseStatusIsValid_ShouldThrowNoException() throws Exception {
+  void givenValidUrlAssertResponseStatusIsValidShouldThrowNoException() throws Exception {
     Response getResponse =
         Response.status(this.openConnection("https://exme.net/").getResponseCode()).build();
     this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_OK);
@@ -22,7 +22,7 @@ class ResponseValidatorTest implements ResponseValidator {
 
   @Test
   void
-      givenValidUrl_AssertResponseStatusIsValid_ShouldThrowUnexpectedHttpStatusExceptionIfResponseStatusDoesNotMatch()
+      givenValidUrlAssertResponseStatusIsValidShouldThrowUnexpectedHttpStatusExceptionIfResponseStatusDoesNotMatch()
           throws Exception {
     Response getResponse =
         Response.status(this.openConnection("https://exme.net/").getResponseCode()).build();
@@ -32,7 +32,7 @@ class ResponseValidatorTest implements ResponseValidator {
   }
 
   @Test
-  void givenInvalidUrl_AssertResponseStatusIsValid_ShouldThrowUnauthorizedRequestException()
+  void givenInvalidUrlAssertResponseStatusIsValidShouldThrowUnauthorizedRequestException()
       throws Exception {
     Response getResponse =
         Response.status(this.openConnection("https://exme.net/401").getResponseCode()).build();
@@ -42,7 +42,7 @@ class ResponseValidatorTest implements ResponseValidator {
   }
 
   @Test
-  void givenInvalidUrl_AssertResponseStatusIsValid_ShouldThrowForbiddenRequestException()
+  void givenInvalidUrlAssertResponseStatusIsValidShouldThrowForbiddenRequestException()
       throws Exception {
     Response getResponse =
         Response.status(this.openConnection("https://exme.net/403").getResponseCode()).build();
@@ -52,7 +52,7 @@ class ResponseValidatorTest implements ResponseValidator {
   }
 
   @Test
-  void givenInvalidUrl_AssertResponseStatusIsValid_ShouldThrowInvalidUrlForRequestException()
+  void givenInvalidUrlAssertResponseStatusIsValidShouldThrowInvalidUrlForRequestException()
       throws Exception {
     Response getResponse =
         Response.status(this.openConnection("https://exme.net/404").getResponseCode()).build();

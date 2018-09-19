@@ -46,7 +46,7 @@ class SendMessageServiceImplTest {
           + "LbRs59f9S2ZElRLw6hBA\n"
           + "-----END ENCRYPTED PRIVATE KEY-----\n";
 
-  private static final String CERTIFICATE_PRIVATE_KEY =
+  private static final String CERTIFICATE_PRIVATEKEY =
       "-----BEGIN CERTIFICATE-----\n"
           + "MIIEPzCCAyegAwIBAgIOYxFUp0BtW2EQAQIAX1wwDQYJKoZIhvcNAQELBQAwVjEL\n"
           + "MAkGA1UEBhMCREUxIzAhBgNVBAoTGlNBUCBJb1QgVHJ1c3QgQ29tbXVuaXR5IElJ\n"
@@ -75,18 +75,18 @@ class SendMessageServiceImplTest {
 
   private static final String MEASURES =
       "https://dke-dev.eu10.cp.iot.sap/iot/gateway/rest/measures/e19aa55c-998b-42db-a223-41e436d9bb3b";
-  private static final String SENSOR_ALTERNATE_ID = "5e26f0e1-856f-4d93-a839-68c2d973f5c1";
-  private static final String CAPABILITY_ALTERNATE_ID = "81ce3fd5-2f70-4270-ad15-1689ab6971bf";
+  private static final String SENSORALTERNATE_ID = "5e26f0e1-856f-4d93-a839-68c2d973f5c1";
+  private static final String CAPABILITYALTERNATE_ID = "81ce3fd5-2f70-4270-ad15-1689ab6971bf";
   private static final String PASSWORD = "NbEJai3BwcOXLi77";
 
   @Test
-  void rq43_givenNullParams_Send_ShouldThrowException() {
+  void rq43givenNullParamsSendShouldThrowException() {
     SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
     assertThrows(NullPointerException.class, () -> sendMessageService.send(null));
   }
 
   @Test
-  void rq43_givenEmptyParams_Send_ShouldThrowException() {
+  void rq43givenEmptyParamsSendShouldThrowException() {
     SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     assertThrows(
@@ -95,7 +95,7 @@ class SendMessageServiceImplTest {
   }
 
   @Test
-  void rq43_givenEmptyCertificate_Send_ShouldThrowException() {
+  void rq43givenEmptyCertificateSendShouldThrowException() {
     SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
     SendMessageParameters sendMessageParameters = this.createDefaultParameters();
     sendMessageParameters.getOnboardingResponse().getAuthentication().setCertificate("");
@@ -106,7 +106,7 @@ class SendMessageServiceImplTest {
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void rq43_givenNullCertificate_Send_ShouldThrowException() {
+  void rq43givenNullCertificateSendShouldThrowException() {
     SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
     SendMessageParameters sendMessageParameters = this.createDefaultParameters();
     sendMessageParameters.getOnboardingResponse().getAuthentication().setCertificate(null);
@@ -116,7 +116,7 @@ class SendMessageServiceImplTest {
   }
 
   @Test
-  void rq43_givenCertificateWithMissingPrivateKey_Send_ShouldThrowException() {
+  void rq43givenCertificateWithMissingPrivateKeySendShouldThrowException() {
     SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
     SendMessageParameters sendMessageParameters = this.createDefaultParameters();
     sendMessageParameters
@@ -129,20 +129,20 @@ class SendMessageServiceImplTest {
   }
 
   @Test
-  void rq43_givenCertificateOnlyPrivateKey_Send_ShouldThrowException() {
+  void rq43givenCertificateOnlyPrivateKeySendShouldThrowException() {
     SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
     SendMessageParameters sendMessageParameters = this.createDefaultParameters();
     sendMessageParameters
         .getOnboardingResponse()
         .getAuthentication()
-        .setCertificate(CERTIFICATE_PRIVATE_KEY);
+        .setCertificate(CERTIFICATE_PRIVATEKEY);
     assertThrows(
         CouldNotCreateDynamicKeyStoreException.class,
         () -> sendMessageService.send(sendMessageParameters));
   }
 
   @Test
-  void rq43_givenWrongCertificationType_Send_ShouldThrowException() {
+  void rq43givenWrongCertificationTypeSendShouldThrowException() {
     SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
     SendMessageParameters sendMessageParameters = this.createDefaultParameters();
     sendMessageParameters
@@ -160,7 +160,7 @@ class SendMessageServiceImplTest {
 
     Authentication authentication = new Authentication();
     authentication.setCertificate(
-        SendMessageServiceImplTest.CERTIFICATE_PRIVATE_KEY
+        SendMessageServiceImplTest.CERTIFICATE_PRIVATEKEY
             + SendMessageServiceImplTest.CERTIFICATE_CERTIFICATE);
     authentication.setSecret(SendMessageServiceImplTest.PASSWORD);
     authentication.setType(CertificationType.PEM.getKey());
@@ -170,8 +170,8 @@ class SendMessageServiceImplTest {
 
     onboardingResponse.setAuthentication(authentication);
     onboardingResponse.setConnectionCriteria(connectionCriteria);
-    onboardingResponse.setSensorAlternateId(SendMessageServiceImplTest.SENSOR_ALTERNATE_ID);
-    onboardingResponse.setCapabilityAlternateId(SendMessageServiceImplTest.CAPABILITY_ALTERNATE_ID);
+    onboardingResponse.setSensorAlternateId(SendMessageServiceImplTest.SENSORALTERNATE_ID);
+    onboardingResponse.setCapabilityAlternateId(SendMessageServiceImplTest.CAPABILITYALTERNATE_ID);
 
     sendMessageParameters.setOnboardingResponse(onboardingResponse);
     sendMessageParameters.setEncodedMessages(new ArrayList<>());

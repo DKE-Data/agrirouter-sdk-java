@@ -31,4 +31,6 @@ public interface FetchMessageService {
    */
   Optional<List<FetchMessageResponse>> fetch(
       FetchMessageParameters parameters, int maxTries, long interval);
+
+  FetchMessageResponse parseJson(byte[] json);
 }
