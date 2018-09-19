@@ -8,7 +8,7 @@ abstract class AbstractMessageContentFactoryTest<T extends MessageContentFactory
 
   @Test
   @SuppressWarnings({"unchecked", "ConfusingArgumentToVarargsMethod", "ConstantConditions"})
-  void givenNullParameters_Message_ShouldThrowIllegalArgumentException() {
+  void givenNullParametersMessageShouldThrowIllegalArgumentException() {
     Assertions.assertThrows(
         IllegalArgumentException.class, () -> this.getInstanceToTest().message(null));
   }

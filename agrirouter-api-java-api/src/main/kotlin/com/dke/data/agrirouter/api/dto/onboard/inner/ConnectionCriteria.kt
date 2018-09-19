@@ -11,9 +11,4 @@ class ConnectionCriteria {
 
     lateinit var commands: String
 
-    lateinit var host: String
-
-    lateinit var port: String
-
-    lateinit var clientId: String
 }

@@ -15,8 +15,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 public class MessageQueryServiceImpl extends EnvironmentalService
     implements com.dke.data.agrirouter.api.service.messaging.MessageQueryService,
         MessageSender,
-        MessageDecoder<FeedResponse.MessageQueryResponse>,
-        ResponseValidator {
+        MessageDecoder<FeedResponse.MessageQueryResponse> {
 
   private final MessageQueryService messageQueryService;
 

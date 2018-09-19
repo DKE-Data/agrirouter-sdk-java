@@ -15,7 +15,7 @@ class CapabilitiesMessageContentFactoryTest
     extends AbstractMessageContentFactoryTest<CapabilitiesMessageContentFactory> {
 
   @Test
-  void givenValidCapabilitiesMessageParameters_Message_ShouldNotFail() {
+  void givenValidCapabilitiesMessageParametersMessageShouldNotFail() {
     List<Capabilities.CapabilitySpecification.Capability> capabilities = new ArrayList<>();
     CapabilitiesMessageParameters capabilitiesMessageParameters =
         new CapabilitiesMessageParameters();
@@ -27,7 +27,7 @@ class CapabilitiesMessageContentFactoryTest
   }
 
   @Test
-  void givenEmptyCapabilitiesMessageParameters_Message_ShouldThrowException() {
+  void givenEmptyCapabilitiesMessageParametersMessageShouldThrowException() {
     CapabilitiesMessageParameters capabilitiesMessageParameters =
         new CapabilitiesMessageParameters();
     assertThrows(
@@ -37,7 +37,7 @@ class CapabilitiesMessageContentFactoryTest
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void givenCapabilitiesMessageParametersWithNullValues_Message_ShouldNotFail() {
+  void givenCapabilitiesMessageParametersWithNullValuesMessageShouldNotFail() {
     List<Capabilities.CapabilitySpecification.Capability> capabilities = new ArrayList<>();
     CapabilitiesMessageParameters capabilitiesMessageParameters =
         new CapabilitiesMessageParameters();
