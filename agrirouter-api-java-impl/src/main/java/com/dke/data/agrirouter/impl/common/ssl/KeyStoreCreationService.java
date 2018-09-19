@@ -16,8 +16,8 @@ import java.util.*;
 import javax.crypto.EncryptedPrivateKeyInfo;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
+import javax.net.SocketFactory;
+import javax.net.ssl.*;
 
 public class KeyStoreCreationService implements LoggingEnabledService {
 
@@ -30,6 +30,28 @@ public class KeyStoreCreationService implements LoggingEnabledService {
   private static final String END_DELIMITER_CERTIFICATE = "-----END CERTIFICATE-----";
 
   private static final String DEFAULT_PASSWORD = "changeit";
+
+  public SocketFactory getSocketFactory(
+      List<String> rootCertificates, String certificate, String password) throws Exception {
+    this.logMethodBegin(rootCertificates, certificate, password);
+
+    this.getNativeLogger().trace("Create trust managers.");
+    TrustManager[] trustManagers = this.createTrustManagers(rootCertificates);
+
+    this.getNativeLogger().trace("Init key manager factory.");
+    KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+    kmf.init(this.createAndReturnKeystoreFromPEM(certificate, password), getDefaultPassword());
+
+    this.getNativeLogger().trace("Generate SSL context.");
+    SSLContext context = SSLContext.getInstance("TLSv1.2");
+
+    this.getNativeLogger().trace("Initi SSL context.");
+    context.init(kmf.getKeyManagers(), trustManagers, null);
+
+    SSLSocketFactory socketFactory = context.getSocketFactory();
+    this.logMethodEnd(socketFactory);
+    return socketFactory;
+  }
 
   public KeyStore createAndReturnKeystoreFromP12(String certificate, String password) {
     this.logMethodBegin(certificate, password);
