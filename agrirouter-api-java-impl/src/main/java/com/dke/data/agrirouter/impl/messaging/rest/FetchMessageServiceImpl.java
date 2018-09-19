@@ -4,15 +4,13 @@ import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
-import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
-public class FetchMessageServiceImpl
-    implements FetchMessageService, MessageFetcher {
+public class FetchMessageServiceImpl implements FetchMessageService, MessageFetcher {
 
   @Override
   public Optional<List<FetchMessageResponse>> fetch(

@@ -5,4 +5,8 @@ public class CouldNotCreateMqttClientException extends RuntimeException {
   public CouldNotCreateMqttClientException(String message, Throwable throwable) {
     super(message, throwable);
   }
+
+  public CouldNotCreateMqttClientException(String message) {
+    super(message);
+  }
 }
