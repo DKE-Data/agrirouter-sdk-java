@@ -2,6 +2,8 @@ package com.dke.data.agrirouter.api.enums
 
 enum class Direction(val key: Int) {
 
-    ZERO(0)
+    SEND(0),
+    RECEIVE(1),
+    SEND_RECEIVE(2)
 
 }
