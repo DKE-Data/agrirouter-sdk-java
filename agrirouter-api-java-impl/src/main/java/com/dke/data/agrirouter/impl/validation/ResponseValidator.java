@@ -25,7 +25,8 @@ public interface ResponseValidator {
    *
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
-   * @param checkRange If a range check should be performed
+   * @param checkRange If any status code between <code>HTTP_STATUS_OK_MIN</code> and <code>HTTP_STATUS_OK_MAX</code>
+   *                   should be interpreted as valid HTTP_OK status
    */
   default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus, boolean checkRange) {
     LOGGER.debug("Validating response.");
@@ -33,7 +34,7 @@ public interface ResponseValidator {
 
     int actualHttpStatus = this.getStatus(response);
     if (checkRange) {
-      this.assertResponseStatusIsValidWithRange(actualHttpStatus, HTTP_STATUS_OK_MIN, HTTP_STATUS_OK_MAX);
+      this.assertResponseStatusIsValidWithRange(actualHttpStatus);
     } else {
       this.assertResponseStatusIsValidWithoutRange(actualHttpStatus, exceptedHttpStatus);
     }
@@ -45,30 +46,27 @@ public interface ResponseValidator {
    *
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
+   * @param checkRange If any status code between <code>HTTP_STATUS_OK_MIN</code> and <code>HTTP_STATUS_OK_MAX</code>
+   *                   should be interpreted as valid HTTP_OK status
    */
-  default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus) {
+  default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus, boolean checkRange) {
     LOGGER.debug("Validating response.");
-    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
+    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus, checkRange));
 
     int actualHttpStatus = this.getStatus(response);
-    this.assertResponseStatusIsValidWithoutRange(actualHttpStatus, exceptedHttpStatus);
+    if (checkRange) {
+      this.assertResponseStatusIsValidWithRange(actualHttpStatus);
+    } else {
+      this.assertResponseStatusIsValidWithoutRange(actualHttpStatus, exceptedHttpStatus);
+    }
   }
 
   /**
-   * Will assert, that the response status is valid. If there will be an 404 or 401 a business
-   * exception will rise.
+   * Helper method to check if response status code is valid.
    *
-   * @param response The current response.
-   * @param exceptedHttpStatus The expected HTTP status.
+   * @param actualStatus The actual HTTP status of the response
+   * @param expectedStatus The expected HTTP status
    */
-  default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus) {
-    LOGGER.debug("Validating response.");
-    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
-
-    int actualHttpStatus = this.getStatus(response);
-    this.assertResponseStatusIsValidWithoutRange(actualHttpStatus, exceptedHttpStatus);
-  }
-
   default void assertResponseStatusIsValidWithoutRange(int actualStatus, int expectedStatus) {
     if (actualStatus == HttpStatus.SC_NOT_FOUND) {
       throw new InvalidUrlForRequestException();
@@ -84,40 +82,13 @@ public interface ResponseValidator {
     }
   }
 
-
   /**
-   * Will assert, that the response status is within a valid range. If there will be an 404 or 401 a business
-   * exception will rise.
+   * Helper method to check if response status code is within the valid range <code>HTTP_STATUS_OK_MIN</code> and
+   * <code>HTTP_STATUS_OK_MAX</code>
    *
-   * @param response The current response.
-   * @param expectedMinimumState the minimum allowed value
-   * @param expectedMaximumState the maximum value allowed
+   * @param actualStatus The actual HTTP status of the response
    */
-  default void assertResponseStatusIsInRange(Response response, int expectedMinimumState, int expectedMaximumState){
-    LOGGER.debug("Validating response in Range.");
-    LOGGER.trace(new ObjectArrayMessage(response, expectedMinimumState,expectedMaximumState));
-
-    int status = this.getStatus(response);
-    this.assertResponseStatusIsValidWithRange(status, expectedMinimumState, expectedMaximumState);
-  }
-
-  /**
-   * Will assert, that the response status is within a valid range. If there will be an 404 or 401 a business
-   * exception will rise.
-   *
-   * @param response The current response.
-   * @param expectedMinimumState the minimum allowed value
-   * @param expectedMaximumState the maximum value allowed
-   */
-  default void assertResponseStatusIsInRange(WebResponse response, int expectedMinimumState, int expectedMaximumState){
-    LOGGER.debug("Validating response in Range.");
-    LOGGER.trace(new ObjectArrayMessage(response, expectedMinimumState,expectedMaximumState));
-
-    int status = this.getStatus(response);
-    this.assertResponseStatusIsValidWithRange(status, expectedMinimumState, expectedMaximumState);
-  }
-
-  default void assertResponseStatusIsValidWithRange(int actualStatus, int expectedMinimumState, int expectedMaximumState) {
+  default void assertResponseStatusIsValidWithRange(int actualStatus) {
     if (actualStatus == HttpStatus.SC_NOT_FOUND) {
       throw new InvalidUrlForRequestException();
     }
@@ -127,13 +98,12 @@ public interface ResponseValidator {
     if (actualStatus == HttpStatus.SC_FORBIDDEN) {
       throw new ForbiddenRequestException();
     }
-    if (actualStatus < expectedMinimumState) {
-      throw new UnexpectedHttpStatusException(actualStatus, expectedMinimumState);
-    } else if (actualStatus > expectedMaximumState) {
-      throw new UnexpectedHttpStatusException(actualStatus, expectedMinimumState);
+    if (actualStatus < HTTP_STATUS_OK_MIN) {
+      throw new UnexpectedHttpStatusException(actualStatus, HTTP_STATUS_OK_MIN);
+    } else if (actualStatus > HTTP_STATUS_OK_MAX) {
+      throw new UnexpectedHttpStatusException(actualStatus, HTTP_STATUS_OK_MAX);
     }
   }
-
 
   default int getStatus(WebResponse response) {
     return response.getStatusCode();

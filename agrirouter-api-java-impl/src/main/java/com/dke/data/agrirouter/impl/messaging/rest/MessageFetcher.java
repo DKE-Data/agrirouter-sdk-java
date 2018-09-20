@@ -28,7 +28,7 @@ public interface MessageFetcher extends ResponseValidator {
                   CertificationType.valueOf(
                       parameters.getOnboardingResponse().getAuthentication().getType()))
               .get();
-      this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+      this.assertResponseStatusIsValid(response, HttpStatus.SC_OK, false);
       String entityContent = response.readEntity(String.class);
       if (!StringUtils.equalsIgnoreCase(entityContent, EMPTY_CONTENT)) {
         return Optional.of(entityContent);

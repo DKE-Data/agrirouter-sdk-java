@@ -42,7 +42,7 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK, false);
   }
 
   private String encodeMessage(SetCapabilitiesParameters parameters) {

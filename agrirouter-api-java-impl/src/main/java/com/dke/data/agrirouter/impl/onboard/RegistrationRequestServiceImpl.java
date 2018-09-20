@@ -43,7 +43,7 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
     Response response = RequestFactory.request(url, cookies).get();
 
     this.getNativeLogger().debug("Validating response | {}.", response);
-    this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+    this.assertResponseStatusIsValid(response, HttpStatus.SC_OK, false);
 
     this.getNativeLogger()
         .info("END | Fetching registration code from agrirouter | '{}'.", parameters);

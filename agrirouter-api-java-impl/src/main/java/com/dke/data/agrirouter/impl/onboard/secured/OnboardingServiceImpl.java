@@ -74,7 +74,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
                 securedOnboardingParameters.getApplicationId(),
                 encodedSignature)
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
-    this.assertResponseStatusIsValid(response, HttpStatus.SC_CREATED);
+    this.assertResponseStatusIsValid(response, HttpStatus.SC_CREATED, false);
     return response.readEntity(OnboardingResponse.class);
   }
 
@@ -95,7 +95,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
                 encodedSignature)
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
     try {
-      this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+      this.assertResponseStatusIsValid(response, HttpStatus.SC_OK, false);
     } catch (UnexpectedHttpStatusException e) {
       throw new CouldNotVerifySecuredOnboardingRequestException(e);
     }
