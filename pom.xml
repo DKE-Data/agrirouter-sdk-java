@@ -64,6 +64,7 @@
         <maven-compiler-plugin.encoding>UTF-8</maven-compiler-plugin.encoding>
         <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
         <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
 
         <!-- DEPENDENCIES -->
         <agrirouter-api-protobuf-definitions.version>0.0.1-SNAPSHOT</agrirouter-api-protobuf-definitions.version>
