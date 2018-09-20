@@ -50,7 +50,7 @@ public class MessageQueryService extends NonEnvironmentalService
     MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.getNativeLogger().trace("Validate message response.");
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK, false);
 
     this.logMethodEnd();
   }
