@@ -17,7 +17,7 @@ class ResponseValidatorTest implements ResponseValidator {
   void givenValidUrlAssertResponseStatusIsValidShouldThrowNoException() throws Exception {
     Response getResponse =
         Response.status(this.openConnection("https://exme.net/").getResponseCode()).build();
-    this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_OK);
+    this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_OK, false);
   }
 
   @Test
@@ -28,7 +28,7 @@ class ResponseValidatorTest implements ResponseValidator {
         Response.status(this.openConnection("https://exme.net/").getResponseCode()).build();
     Assertions.assertThrows(
         UnexpectedHttpStatusException.class,
-        () -> this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_CREATED));
+        () -> this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_CREATED, false));
   }
 
   @Test
@@ -38,7 +38,7 @@ class ResponseValidatorTest implements ResponseValidator {
         Response.status(this.openConnection("https://exme.net/401").getResponseCode()).build();
     Assertions.assertThrows(
         UnauthorizedRequestException.class,
-        () -> this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_NOT_FOUND));
+        () -> this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_NOT_FOUND, false));
   }
 
   @Test
@@ -48,7 +48,7 @@ class ResponseValidatorTest implements ResponseValidator {
         Response.status(this.openConnection("https://exme.net/403").getResponseCode()).build();
     Assertions.assertThrows(
         ForbiddenRequestException.class,
-        () -> this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_NOT_FOUND));
+        () -> this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_NOT_FOUND, false));
   }
 
   @Test
@@ -58,7 +58,7 @@ class ResponseValidatorTest implements ResponseValidator {
         Response.status(this.openConnection("https://exme.net/404").getResponseCode()).build();
     Assertions.assertThrows(
         InvalidUrlForRequestException.class,
-        () -> this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_NOT_FOUND));
+        () -> this.assertResponseStatusIsValid(getResponse, HttpStatus.SC_NOT_FOUND, false));
   }
 
   private HttpURLConnection openConnection(String spec) throws Exception {
