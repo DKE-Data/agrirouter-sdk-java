@@ -25,19 +25,30 @@ public interface ResponseValidator {
    *
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
-   * @param checkRange If true, any status code between <code>HTTP_STATUS_OK_MIN</code> and
-   *                   <code>HTTP_STATUS_OK_MAX</code> should be interpreted as valid HTTP_OK status
    */
-  default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus, boolean checkRange) {
+  default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus) {
     LOGGER.debug("Validating response.");
-    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus, checkRange));
+    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
 
     int actualHttpStatus = this.getStatus(response);
-    if (checkRange) {
-      this.assertResponseStatusIsValidWithRange(actualHttpStatus);
-    } else {
-      this.assertResponseStatusIsValidWithoutRange(actualHttpStatus, exceptedHttpStatus);
-    }
+    this.assertResponseStatusIsValidWithoutRangeCheck(actualHttpStatus, exceptedHttpStatus);
+  }
+
+  /**
+   * Will assert that the response status is valid within a certain range.
+   * Any HTTP status from <code>HTTP_STATUS_OK_MIN</code> up to <code>HTTP_STATUS_OK_MAX</code> will
+   * count as a valid HTTP OK status.
+   * If there will be an 404 or 401 a business exception will rise.
+   *
+   * @param response The current response.
+   * @param exceptedHttpStatus The expected HTTP status.
+   */
+  default void assertResponseStatusIsValidWithinRange(Response response, int exceptedHttpStatus) {
+    LOGGER.debug("Validating response.");
+    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
+
+    int actualHttpStatus = this.getStatus(response);
+    this.assertResponseStatusIsValidWithRangeCheck(actualHttpStatus);
   }
 
   /**
@@ -46,19 +57,30 @@ public interface ResponseValidator {
    *
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
-   * @param checkRange If true, any status code between <code>HTTP_STATUS_OK_MIN</code> and
-   *                   <code>HTTP_STATUS_OK_MAX</code> should be interpreted as valid HTTP_OK status
    */
-  default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus, boolean checkRange) {
+  default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus) {
     LOGGER.debug("Validating response.");
-    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus, checkRange));
+    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
 
     int actualHttpStatus = this.getStatus(response);
-    if (checkRange) {
-      this.assertResponseStatusIsValidWithRange(actualHttpStatus);
-    } else {
-      this.assertResponseStatusIsValidWithoutRange(actualHttpStatus, exceptedHttpStatus);
-    }
+    this.assertResponseStatusIsValidWithoutRangeCheck(actualHttpStatus, exceptedHttpStatus);
+  }
+
+  /**
+   * Will assert that the response status is valid within a certain range.
+   * Any HTTP status from <code>HTTP_STATUS_OK_MIN</code> up to <code>HTTP_STATUS_OK_MAX</code> will
+   * count as a valid HTTP OK status.
+   * If there will be an 404 or 401 a business exception will rise.
+   *
+   * @param response The current response.
+   * @param exceptedHttpStatus The expected HTTP status.
+   */
+  default void assertResponseStatusIsValidWithinRange(WebResponse response, int exceptedHttpStatus) {
+    LOGGER.debug("Validating response.");
+    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
+
+    int actualHttpStatus = this.getStatus(response);
+    this.assertResponseStatusIsValidWithRangeCheck(actualHttpStatus);
   }
 
   /**
@@ -67,7 +89,7 @@ public interface ResponseValidator {
    * @param actualStatus The actual HTTP status of the response
    * @param expectedStatus The expected HTTP status
    */
-  default void assertResponseStatusIsValidWithoutRange(int actualStatus, int expectedStatus) {
+  default void assertResponseStatusIsValidWithoutRangeCheck(int actualStatus, int expectedStatus) {
     if (actualStatus == HttpStatus.SC_NOT_FOUND) {
       throw new InvalidUrlForRequestException();
     }
@@ -88,7 +110,7 @@ public interface ResponseValidator {
    *
    * @param actualStatus The actual HTTP status of the response
    */
-  default void assertResponseStatusIsValidWithRange(int actualStatus) {
+  default void assertResponseStatusIsValidWithRangeCheck(int actualStatus) {
     if (actualStatus == HttpStatus.SC_NOT_FOUND) {
       throw new InvalidUrlForRequestException();
     }

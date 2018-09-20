@@ -12,6 +12,6 @@ public class SendMessageServiceImpl
   public void send(SendMessageParameters parameters) {
     parameters.validate();
     MessageSenderResponse response = this.sendMessage(parameters);
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK, false);
+    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
   }
 }

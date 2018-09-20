@@ -53,7 +53,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     Response response =
         RequestFactory.bearerTokenRequest(this.environment.getOnboardUrl(), registrationCode)
             .post(Entity.json(onboardingRequest));
-    this.assertResponseStatusIsValid(response, HttpStatus.SC_CREATED, false);
+    this.assertResponseStatusIsValid(response, HttpStatus.SC_CREATED);
     OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
 
     this.getNativeLogger()

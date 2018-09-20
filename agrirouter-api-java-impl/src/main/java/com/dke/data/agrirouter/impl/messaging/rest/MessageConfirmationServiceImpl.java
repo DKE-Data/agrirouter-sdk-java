@@ -56,7 +56,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK, false);
+    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
   }
 
   private String encodeMessage(MessageConfirmationParameters parameters) {
