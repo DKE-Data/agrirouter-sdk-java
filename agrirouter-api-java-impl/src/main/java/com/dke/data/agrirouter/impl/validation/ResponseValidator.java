@@ -25,8 +25,8 @@ public interface ResponseValidator {
    *
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
-   * @param checkRange If any status code between <code>HTTP_STATUS_OK_MIN</code> and <code>HTTP_STATUS_OK_MAX</code>
-   *                   should be interpreted as valid HTTP_OK status
+   * @param checkRange If true, any status code between <code>HTTP_STATUS_OK_MIN</code> and
+   *                   <code>HTTP_STATUS_OK_MAX</code> should be interpreted as valid HTTP_OK status
    */
   default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus, boolean checkRange) {
     LOGGER.debug("Validating response.");
@@ -46,8 +46,8 @@ public interface ResponseValidator {
    *
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
-   * @param checkRange If any status code between <code>HTTP_STATUS_OK_MIN</code> and <code>HTTP_STATUS_OK_MAX</code>
-   *                   should be interpreted as valid HTTP_OK status
+   * @param checkRange If true, any status code between <code>HTTP_STATUS_OK_MIN</code> and
+   *                   <code>HTTP_STATUS_OK_MAX</code> should be interpreted as valid HTTP_OK status
    */
   default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus, boolean checkRange) {
     LOGGER.debug("Validating response.");
