@@ -34,9 +34,103 @@ This project contains the API for the communication with the agrirouter. Everyth
 image::https://travis-ci.com/DKE-Data/agrirouter-api-java.svg?branch=develop[Build status]
 image:https://api.codacy.com/project/badge/Grade/d8fde962e7814c96badd43e65aa84815["Codacy code quality", link="https://www.codacy.com/app/cf4thqgxcnxaovouxtnv/agrirouter-api-java?utm_source=github.com&utm_medium=referral&utm_content=DKE-Data/agrirouter-api-java&utm_campaign=Badge_Grade"]
 
+=== Java
+
+If you want to add a Maven dependency feel free to fetch the latest snapshot from Maven Central. Just add the following repository:
+
+```xml
+<repositories>
+    <repository>
+        <id>snapshots-repo</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+    </repository>
+</repositories>
+```
+
+After adding the snapshot repository feel free to add the Maven dependencies:
+
+```xml
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-api</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-impl</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
+```
+
+Currently we are supporting JDK 8, JDK 9 and JDK 10 by using classifiers.
+
+==== JDK 8
+
+After adding the snapshot repository feel free to add the following Maven dependencies:
+
+```xml
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-api</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk8</classifier>
+</dependency>
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-impl</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk8</classifier>
+</dependency>
+```
+==== JDK 9
+
+After adding the snapshot repository feel free to add the following Maven dependencies:
+
+```xml
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-api</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk9</classifier>
+</dependency>
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-impl</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk9</classifier>
+</dependency>
+```
+==== JDK 10
+
+After adding the snapshot repository feel free to add the following Maven dependencies:
+
+```xml
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-api</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-impl</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
+```
+
 == External resources
 
 Here are some external resources for the development:
 
 * https://my-agrirouter.com[My Agrirouter Website]
 * https://www.aef-online.org[EFDI Protobuf Definition]
+* https://www.lmis.de[LMIS - Maintenance & Support]
