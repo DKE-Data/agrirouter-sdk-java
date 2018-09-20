@@ -14,6 +14,7 @@ import com.dke.data.agrirouter.api.service.parameters.SecuredOnboardingParameter
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.signing.SecurityKeyCreationService;
 import com.dke.data.agrirouter.impl.onboard.AbstractOnboardingService;
+import com.dke.data.agrirouter.impl.validation.ResponseStatusChecker;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.gson.Gson;
 import java.security.InvalidKeyException;
@@ -94,10 +95,13 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
                 securedOnboardingParameters.getApplicationId(),
                 encodedSignature)
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
-    try {
-      this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
-    } catch (UnexpectedHttpStatusException e) {
-      throw new CouldNotVerifySecuredOnboardingRequestException(e);
+
+    if (!ResponseStatusChecker.isStatusInSuccessRange(response.getStatus())) {
+      try {
+        this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+      } catch (UnexpectedHttpStatusException e) {
+        throw new CouldNotVerifySecuredOnboardingRequestException(e);
+      }
     }
   }
 

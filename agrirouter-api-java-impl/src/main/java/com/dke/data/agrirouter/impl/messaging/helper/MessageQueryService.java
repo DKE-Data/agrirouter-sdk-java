@@ -13,6 +13,7 @@ import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
+import com.dke.data.agrirouter.impl.validation.ResponseStatusChecker;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 import java.util.Objects;
@@ -50,7 +51,10 @@ public class MessageQueryService extends NonEnvironmentalService
     MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.getNativeLogger().trace("Validate message response.");
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    int status = response.getNativeResponse().getStatus();
+    if (!ResponseStatusChecker.isStatusInSuccessRange(status)) {
+      this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    }
 
     this.logMethodEnd();
   }

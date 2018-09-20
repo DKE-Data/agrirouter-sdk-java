@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
+import com.dke.data.agrirouter.impl.validation.ResponseStatusChecker;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
@@ -28,7 +29,11 @@ public interface MessageFetcher extends ResponseValidator {
                   CertificationType.valueOf(
                       parameters.getOnboardingResponse().getAuthentication().getType()))
               .get();
-      this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+
+      if (!ResponseStatusChecker.isStatusInSuccessRange(response.getStatus())) {
+        this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+      }
+
       String entityContent = response.readEntity(String.class);
       if (!StringUtils.equalsIgnoreCase(entityContent, EMPTY_CONTENT)) {
         return Optional.of(entityContent);

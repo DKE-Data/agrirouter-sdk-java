@@ -13,6 +13,7 @@ import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
+import com.dke.data.agrirouter.impl.validation.ResponseStatusChecker;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 import java.util.Objects;
@@ -38,7 +39,10 @@ public class DeleteMessageServiceImpl
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    int status = response.getNativeResponse().getStatus();
+    if (!ResponseStatusChecker.isStatusInSuccessRange(status)) {
+      this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    }
   }
 
   private String encodeMessage(DeleteMessageParameters parameters) {

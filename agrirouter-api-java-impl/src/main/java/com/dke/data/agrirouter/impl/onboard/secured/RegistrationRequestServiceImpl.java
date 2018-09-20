@@ -13,6 +13,7 @@ import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.CookieResolverService;
 import com.dke.data.agrirouter.impl.common.StateIdService;
 import com.dke.data.agrirouter.impl.onboard.OnboardingServiceImpl;
+import com.dke.data.agrirouter.impl.validation.ResponseStatusChecker;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
@@ -78,7 +79,11 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
 
       HtmlAnchor anchorByHref = page.getAnchorByHref("javascript:{}");
       final Page redirectPage = anchorByHref.click();
-      assertResponseStatusIsValid(redirectPage.getWebResponse(), HttpStatus.SC_OK);
+
+      int status = redirectPage.getWebResponse().getStatusCode();
+      if (!ResponseStatusChecker.isStatusInSuccessRange(status)) {
+        this.assertResponseStatusIsValid(redirectPage.getWebResponse(), HttpStatus.SC_OK);
+      }
 
       URL redirectPageUrl = redirectPage.getUrl();
       return this.extractAuthenticationResults(redirectPageUrl);
