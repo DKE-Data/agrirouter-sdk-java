@@ -7,10 +7,24 @@
 
 [abstract]
 == Abstract
-image::logo.svg[agrirouter]
+image::agrirouter.svg[agrirouter]
 
 The agrirouter is a universal data exchange platform for farmers and agricultural contractors that makes it possible to connect machinery and agricultural software, regardless of vendor or manufacturer. Agrirouter does not save data; it transfers data.
 As a universal data exchange platform, agrirouter fills a gap on the way to Farming 4.0. Its underlying concept unites cross-vendor and discrimination-free data transfer. You retain full control over your data. Even data exchange with service providers (e.g. agricultural contractors) and other partners is uncomplicated: Data are very rapidly transferred via the online connection, and if you wish, is intelligently connected to other datasets.
+
+== Supporters & Maintainers
+image::lmis.svg[agrirouter]
+
+The LMIS AG is a recognised german IT service company, certified according to DIN EN ISO 9001:2015 and based in
+Osnabrück, Berlin, Friedland and Wuppertal. Our core competence is the individual development, optimisation and support
+of IT solutions. We also provide professional IT consulting services and training courses. We have been supporting
+the whole project during the development in the field of test management and are currently responsible for the development
+support of the platform.
+
+We are active maintainers of the API and are using the API for internal testing purposes as well. Therefore we have a
+high interest in a stable and usable interface to connect to the agrirouter.
+
+Feel free to get in touch by visiting our https://www.lmis.de[website] or contacting us via GitHub.
 
 == The current project you're looking at
 
@@ -20,9 +34,103 @@ This project contains the API for the communication with the agrirouter. Everyth
 image::https://travis-ci.com/DKE-Data/agrirouter-api-java.svg?branch=develop[Build status]
 image:https://api.codacy.com/project/badge/Grade/d8fde962e7814c96badd43e65aa84815["Codacy code quality", link="https://www.codacy.com/app/cf4thqgxcnxaovouxtnv/agrirouter-api-java?utm_source=github.com&utm_medium=referral&utm_content=DKE-Data/agrirouter-api-java&utm_campaign=Badge_Grade"]
 
+=== Java
+
+If you want to add a Maven dependency feel free to fetch the latest snapshot from Maven Central. Just add the following repository:
+
+```xml
+<repositories>
+    <repository>
+        <id>snapshots-repo</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+    </repository>
+</repositories>
+```
+
+After adding the snapshot repository feel free to add the Maven dependencies:
+
+```xml
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-api</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-impl</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
+```
+
+Currently we are supporting JDK 8, JDK 9 and JDK 10 by using classifiers.
+
+==== JDK 8
+
+After adding the snapshot repository feel free to add the following Maven dependencies:
+
+```xml
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-api</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk8</classifier>
+</dependency>
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-impl</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk8</classifier>
+</dependency>
+```
+==== JDK 9
+
+After adding the snapshot repository feel free to add the following Maven dependencies:
+
+```xml
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-api</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk9</classifier>
+</dependency>
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-impl</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk9</classifier>
+</dependency>
+```
+==== JDK 10
+
+After adding the snapshot repository feel free to add the following Maven dependencies:
+
+```xml
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-api</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
+<dependency>
+    <groupId>om.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-impl</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
+```
+
 == External resources
 
 Here are some external resources for the development:
 
 * https://my-agrirouter.com[My Agrirouter Website]
 * https://www.aef-online.org[EFDI Protobuf Definition]
+* https://www.lmis.de[LMIS - Maintenance & Support]

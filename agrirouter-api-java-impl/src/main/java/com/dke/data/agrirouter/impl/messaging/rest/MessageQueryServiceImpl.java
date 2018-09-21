@@ -8,15 +8,13 @@ import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.helper.MessageQueryService;
-import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class MessageQueryServiceImpl extends EnvironmentalService
     implements com.dke.data.agrirouter.api.service.messaging.MessageQueryService,
         MessageSender,
-        MessageDecoder<FeedResponse.MessageQueryResponse>,
-        ResponseValidator {
+        MessageDecoder<FeedResponse.MessageQueryResponse> {
 
   private final MessageQueryService messageQueryService;
 
