@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.common.ssl;
 
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
+import com.dke.data.agrirouter.api.exception.ExceptionToRuntimeExceptionWrapper;
 import com.dke.data.agrirouter.api.service.LoggingEnabledService;
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
@@ -75,14 +76,6 @@ public class KeyStoreCreationService implements LoggingEnabledService {
 
     this.logMethodEnd(keyStore);
     return keyStore;
-  }
-
-  // This class is used to transport Exceptions from within the forEach loop to outsite the forEach
-  // Loop
-  public class ExceptionToRuntimeExceptionWrapper extends RuntimeException {
-    public ExceptionToRuntimeExceptionWrapper(Exception e) {
-      super(e);
-    }
   }
 
   public TrustManager[] createTrustManagers(List<String> certificates)
