@@ -6,7 +6,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 public interface MessageDecoder<T> {
 
-  default T decode(ByteString message) {
+  default T decode(ByteString message) throws CouldNotDecodeMessageException {
     try {
       return unsafeDecode(message);
     } catch (InvalidProtocolBufferException e) {

@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.factories.impl.DeleteMessageMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.DeleteMessageMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.DeleteMessageService;
@@ -28,7 +29,10 @@ public class DeleteMessageServiceImpl
   }
 
   @Override
-  public void send(DeleteMessageParameters parameters) {
+  public void send(DeleteMessageParameters parameters)
+      throws InvalidUrlForRequestException, UnauthorizedRequestException, ForbiddenRequestException,
+          CouldNotCreateDynamicKeyStoreException, UnexpectedHttpStatusException,
+          CouldNotEncodeMessageException {
     parameters.validate();
 
     String encodedMessage = encodeMessage(parameters);
@@ -41,7 +45,8 @@ public class DeleteMessageServiceImpl
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
   }
 
-  private String encodeMessage(DeleteMessageParameters parameters) {
+  private String encodeMessage(DeleteMessageParameters parameters)
+      throws CouldNotEncodeMessageException {
     String applicationMessageId = MessageIdService.generateMessageId();
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();

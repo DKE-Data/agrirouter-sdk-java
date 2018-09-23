@@ -3,7 +3,7 @@ package com.dke.data.agrirouter.api.exception;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 
 /** Will be thrown if the certification type is not known. */
-public class CertificationTypeNotSupportedException extends RuntimeException {
+public class CertificationTypeNotSupportedException extends Exception {
 
   private final CertificationType unknown;
 

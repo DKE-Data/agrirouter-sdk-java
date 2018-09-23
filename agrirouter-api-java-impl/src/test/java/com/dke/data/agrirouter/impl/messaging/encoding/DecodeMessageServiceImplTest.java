@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.encoding;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
+import com.dke.data.agrirouter.api.exception.CouldNotDecodeMessageException;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ class DecodeMessageServiceImplTest {
   }
 
   @Test
-  void givenValidEncodedPasswordDecodeShouldNotFail() {
+  void givenValidEncodedPasswordDecodeShouldNotFail() throws CouldNotDecodeMessageException {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     DecodeMessageResponse decodedMessage =
         decodeMessageService.decode(DecodeMessageServiceImplTest.ENCODED_MESSAGE);
@@ -55,7 +56,7 @@ class DecodeMessageServiceImplTest {
   }
 
   @Test
-  void givenNullEnvironmentDecodeShouldNotFail() {
+  void givenNullEnvironmentDecodeShouldNotFail() throws CouldNotDecodeMessageException {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     DecodeMessageResponse decodedMessage =
         decodeMessageService.decode(DecodeMessageServiceImplTest.ENCODED_MESSAGE);

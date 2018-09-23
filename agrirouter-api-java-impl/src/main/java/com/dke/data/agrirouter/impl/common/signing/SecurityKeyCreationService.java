@@ -14,7 +14,7 @@ import java.util.Base64;
 
 public class SecurityKeyCreationService implements LoggingEnabledService {
 
-  public PrivateKey createPrivateKey(String privateKey) {
+  public PrivateKey createPrivateKey(String privateKey) throws CouldNotCreatePrivateKeyException {
     this.logMethodBegin(privateKey);
 
     PrivateKey result;
@@ -39,7 +39,7 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
     return result;
   }
 
-  public PublicKey createPublicKey(String publicKey) {
+  public PublicKey createPublicKey(String publicKey) throws CouldNotCreatePublicKeyException {
     this.logMethodBegin(publicKey);
 
     PublicKey result;

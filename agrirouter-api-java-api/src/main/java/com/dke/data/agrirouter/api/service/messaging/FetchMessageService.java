@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.api.service.messaging;
 
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,10 @@ public interface FetchMessageService {
    * @return Native response.
    */
   Optional<List<FetchMessageResponse>> fetch(
-      OnboardingResponse onboardingResponse, int maxTries, long interval);
+      OnboardingResponse onboardingResponse, int maxTries, long interval)
+      throws InvalidUrlForRequestException, ForbiddenRequestException,
+          CouldNotCreateDynamicKeyStoreException, UnauthorizedRequestException,
+          UnexpectedHttpStatusException;
 
   /**
    * Fetch messages using the given parameters using the number of tries and the given interval.
@@ -30,7 +34,10 @@ public interface FetchMessageService {
    * @return Native response.
    */
   Optional<List<FetchMessageResponse>> fetch(
-      FetchMessageParameters parameters, int maxTries, long interval);
+      FetchMessageParameters parameters, int maxTries, long interval)
+      throws InvalidUrlForRequestException, ForbiddenRequestException,
+          UnexpectedHttpStatusException, UnauthorizedRequestException,
+          CouldNotCreateDynamicKeyStoreException;
 
   FetchMessageResponse parseJson(byte[] json);
 }

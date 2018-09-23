@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.api.service.onboard.secured;
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.parameters.AuthenticationUrlParameters;
 import com.dke.data.agrirouter.api.service.parameters.SecuredOnboardingParameters;
 
@@ -13,14 +14,20 @@ public interface OnboardingService {
    * @param parameters-
    * @return -
    */
-  OnboardingResponse onboard(SecuredOnboardingParameters parameters);
+  OnboardingResponse onboard(SecuredOnboardingParameters parameters)
+      throws CouldNotFindTimeZoneException, InvalidUrlForRequestException,
+          ForbiddenRequestException, UnauthorizedRequestException, UnexpectedHttpStatusException,
+          InvalidSignatureException, CouldNotCreatePrivateKeyException,
+          CouldNotCreatePublicKeyException;
 
   /**
    * Verify the onboarding request to ensure correct signature and hashing.
    *
    * @param parameters -
    */
-  void verify(SecuredOnboardingParameters parameters);
+  void verify(SecuredOnboardingParameters parameters)
+      throws CouldNotFindTimeZoneException, InvalidSignatureException,
+          CouldNotCreatePrivateKeyException, CouldNotCreatePublicKeyException;
 
   /**
    * Generating the authentication URL.

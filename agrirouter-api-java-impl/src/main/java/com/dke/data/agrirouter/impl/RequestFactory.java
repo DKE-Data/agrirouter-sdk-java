@@ -33,7 +33,8 @@ public final class RequestFactory {
    * @return Builder -
    */
   public static Invocation.Builder securedRequest(
-      String url, String certificate, String password, CertificationType certificationType) {
+      String url, String certificate, String password, CertificationType certificationType)
+      throws CouldNotCreateDynamicKeyStoreException {
     ClientConfig clientConfig = new ClientConfig();
     KeyStore keyStore = createKeyStore(certificate, password, certificationType);
     Client client = createClient(clientConfig, keyStore, password, certificationType);
@@ -48,7 +49,8 @@ public final class RequestFactory {
       ClientConfig clientConfig,
       KeyStore keyStore,
       String password,
-      CertificationType certificationType) {
+      CertificationType certificationType)
+      throws CouldNotCreateDynamicKeyStoreException {
     try {
       switch (certificationType) {
         case PEM:
@@ -70,7 +72,8 @@ public final class RequestFactory {
   }
 
   private static KeyStore createKeyStore(
-      String x509Certificate, String password, CertificationType certificationType) {
+      String x509Certificate, String password, CertificationType certificationType)
+      throws CouldNotCreateDynamicKeyStoreException {
     KeyStoreCreationService keyStoreCreationService = new KeyStoreCreationService();
     try {
       switch (certificationType) {

@@ -15,7 +15,8 @@ public class MqttClientService extends EnvironmentalService {
     super(environment);
   }
 
-  public IMqttClient create(OnboardingResponse onboardingResponse) {
+  public IMqttClient create(OnboardingResponse onboardingResponse)
+      throws CouldNotCreateMqttClientException {
     try {
       if (StringUtils.isAnyBlank(
           onboardingResponse.getConnectionCriteria().getHost(),

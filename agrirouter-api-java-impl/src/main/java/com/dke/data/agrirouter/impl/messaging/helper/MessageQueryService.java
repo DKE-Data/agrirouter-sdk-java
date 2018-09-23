@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.helper;
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
@@ -32,7 +33,10 @@ public class MessageQueryService extends NonEnvironmentalService
     this.logMethodEnd();
   }
 
-  public void send(MessageQueryParameters parameters) {
+  public void send(MessageQueryParameters parameters)
+      throws CouldNotCreateDynamicKeyStoreException, InvalidUrlForRequestException,
+          ForbiddenRequestException, UnauthorizedRequestException, UnexpectedHttpStatusException,
+          CouldNotEncodeMessageException {
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Validate parameters.");
@@ -55,7 +59,8 @@ public class MessageQueryService extends NonEnvironmentalService
     this.logMethodEnd();
   }
 
-  private String encodeMessage(MessageQueryParameters parameters) {
+  private String encodeMessage(MessageQueryParameters parameters)
+      throws CouldNotEncodeMessageException {
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Build message header parameters.");

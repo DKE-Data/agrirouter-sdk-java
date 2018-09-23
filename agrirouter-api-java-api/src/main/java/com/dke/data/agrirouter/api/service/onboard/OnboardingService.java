@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.api.service.onboard;
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.parameters.AuthenticationUrlParameters;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
 
@@ -13,7 +14,9 @@ public interface OnboardingService {
    * @param parameters-
    * @return -
    */
-  OnboardingResponse onboard(OnboardingParameters parameters);
+  OnboardingResponse onboard(OnboardingParameters parameters)
+      throws CouldNotFindTimeZoneException, InvalidUrlForRequestException,
+          ForbiddenRequestException, UnauthorizedRequestException, UnexpectedHttpStatusException;
 
   String generateAuthenticationUrl(AuthenticationUrlParameters parameters);
 }

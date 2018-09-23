@@ -26,7 +26,8 @@ public class CookieResolverService extends EnvironmentalService {
     super(environment);
   }
 
-  public Set<Cookie> cookies(String username, String password) {
+  public Set<Cookie> cookies(String username, String password)
+      throws CouldNotFetchCookiesException {
     this.logMethodBegin(username, password);
 
     if (StringUtils.isAnyBlank(username, password)) {
@@ -54,7 +55,8 @@ public class CookieResolverService extends EnvironmentalService {
     return cookies;
   }
 
-  private Set<Cookie> fetchCookiesFromAgrirouter(String username, String password) {
+  private Set<Cookie> fetchCookiesFromAgrirouter(String username, String password)
+      throws CouldNotFetchCookiesException {
     this.logMethodBegin(username, password);
 
     this.getNativeLogger().trace("Creating web client.");

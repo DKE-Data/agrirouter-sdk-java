@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import com.dke.data.agrirouter.api.enums.CertificationType;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
@@ -16,7 +17,9 @@ public interface MessageFetcher extends ResponseValidator {
 
   String EMPTY_CONTENT = "[]";
 
-  default Optional<String> poll(FetchMessageParameters parameters, int maxTries, long interval) {
+  default Optional<String> poll(FetchMessageParameters parameters, int maxTries, long interval)
+      throws CouldNotCreateDynamicKeyStoreException, InvalidUrlForRequestException,
+          ForbiddenRequestException, UnauthorizedRequestException, UnexpectedHttpStatusException {
     parameters.validate();
     int nrOfTries = 0;
     while (nrOfTries < maxTries) {

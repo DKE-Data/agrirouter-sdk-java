@@ -41,7 +41,7 @@ public class UtcTimeService {
     return Instant.MAX.atOffset(ZoneOffset.UTC);
   }
 
-  public static String offset() {
+  public static String offset() throws CouldNotFindTimeZoneException {
     Optional<String> currentTimeZone = timeZone();
     if (currentTimeZone.isPresent()) {
       ZonedDateTime zdt = Instant.now().atZone(ZoneId.of(currentTimeZone.get()));

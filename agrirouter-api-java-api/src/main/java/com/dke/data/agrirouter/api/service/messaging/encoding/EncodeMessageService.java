@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.api.service.messaging.encoding;
 
+import com.dke.data.agrirouter.api.exception.CouldNotEncodeMessageException;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 
@@ -14,5 +15,6 @@ public interface EncodeMessageService {
    * @return -
    */
   String encode(
-      MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters);
+      MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters)
+      throws CouldNotEncodeMessageException;
 }

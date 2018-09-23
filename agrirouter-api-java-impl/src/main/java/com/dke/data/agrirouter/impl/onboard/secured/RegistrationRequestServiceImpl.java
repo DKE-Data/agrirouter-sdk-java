@@ -4,7 +4,7 @@ import com.dke.data.agrirouter.api.dto.registrationrequest.secured.RegistrationR
 import com.dke.data.agrirouter.api.dto.registrationrequest.secured.RegistrationRequestToken;
 import com.dke.data.agrirouter.api.enums.SecuredOnboardingResponseType;
 import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.exception.CouldNotGetRegistrationCodeException;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.onboard.secured.RegistrationRequestService;
 import com.dke.data.agrirouter.api.service.parameters.AuthenticationUrlParameters;
@@ -50,7 +50,10 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
 
   @Override
   public RegistrationRequestResponse getRegistrationCode(
-      SecuredRegistrationRequestParameters securedRegistrationRequestParameters) {
+      SecuredRegistrationRequestParameters securedRegistrationRequestParameters)
+      throws InvalidUrlForRequestException, ForbiddenRequestException, UnauthorizedRequestException,
+          UnexpectedHttpStatusException, CouldNotGetRegistrationCodeException,
+          CouldNotFetchCookiesException {
     securedRegistrationRequestParameters.validate();
     Set<Cookie> cookies =
         this.cookieResolverService.cookies(

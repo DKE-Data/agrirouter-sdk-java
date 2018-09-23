@@ -11,7 +11,7 @@ import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.factories.impl.MessageConfirmationMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmationMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
@@ -46,7 +46,10 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public void send(MessageConfirmationParameters parameters) {
+  public void send(MessageConfirmationParameters parameters)
+      throws InvalidUrlForRequestException, UnauthorizedRequestException, ForbiddenRequestException,
+          CouldNotCreateDynamicKeyStoreException, UnexpectedHttpStatusException,
+          CouldNotEncodeMessageException {
     parameters.validate();
 
     String encodedMessage = encodeMessage(parameters);
@@ -59,7 +62,8 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
   }
 
-  private String encodeMessage(MessageConfirmationParameters parameters) {
+  private String encodeMessage(MessageConfirmationParameters parameters)
+      throws CouldNotEncodeMessageException {
     String applicationMessageId = MessageIdService.generateMessageId();
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
@@ -83,7 +87,11 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
 
   @Override
   public void confirmAllPendingMessages(
-      MessageConfirmationForAllPendingMessagesParameters parameters) {
+      MessageConfirmationForAllPendingMessagesParameters parameters)
+      throws InvalidUrlForRequestException, ForbiddenRequestException,
+          UnexpectedHttpStatusException, UnauthorizedRequestException,
+          CouldNotCreateDynamicKeyStoreException, CouldNotDecodeMessageException,
+          CouldNotEncodeMessageException {
     MessageQueryParameters messageQueryParameters = new MessageQueryParameters();
     messageQueryParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     messageQueryParameters.setMessageIds(Collections.emptyList());

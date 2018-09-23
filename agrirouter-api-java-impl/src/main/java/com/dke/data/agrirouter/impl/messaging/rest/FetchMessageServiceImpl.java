@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.google.gson.Gson;
@@ -14,7 +15,10 @@ public class FetchMessageServiceImpl implements FetchMessageService, MessageFetc
 
   @Override
   public Optional<List<FetchMessageResponse>> fetch(
-      OnboardingResponse onboardingResponse, int maxTries, long interval) {
+      OnboardingResponse onboardingResponse, int maxTries, long interval)
+      throws InvalidUrlForRequestException, ForbiddenRequestException,
+          CouldNotCreateDynamicKeyStoreException, UnauthorizedRequestException,
+          UnexpectedHttpStatusException {
     FetchMessageParameters fetchMessageParameters = new FetchMessageParameters();
     fetchMessageParameters.setOnboardingResponse(onboardingResponse);
     return this.fetch(fetchMessageParameters, maxTries, interval);
@@ -22,7 +26,10 @@ public class FetchMessageServiceImpl implements FetchMessageService, MessageFetc
 
   @Override
   public Optional<List<FetchMessageResponse>> fetch(
-      FetchMessageParameters parameters, int maxTries, long interval) {
+      FetchMessageParameters parameters, int maxTries, long interval)
+      throws InvalidUrlForRequestException, ForbiddenRequestException,
+          UnexpectedHttpStatusException, UnauthorizedRequestException,
+          CouldNotCreateDynamicKeyStoreException {
     parameters.validate();
     Optional<String> response = this.poll(parameters, maxTries, interval);
     return response.map(this::parseJson);

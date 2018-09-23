@@ -4,6 +4,7 @@ import agrirouter.request.Request;
 import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.factories.impl.CapabilitiesMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.CapabilitiesMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.SetCapabilityService;
@@ -32,7 +33,10 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public void send(SetCapabilitiesParameters parameters) {
+  public void send(SetCapabilitiesParameters parameters)
+      throws InvalidUrlForRequestException, UnauthorizedRequestException, ForbiddenRequestException,
+          CouldNotCreateDynamicKeyStoreException, UnexpectedHttpStatusException,
+          CouldNotEncodeMessageException {
     parameters.validate();
 
     String encodedMessage = encodeMessage(parameters);
@@ -45,7 +49,8 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
   }
 
-  private String encodeMessage(SetCapabilitiesParameters parameters) {
+  private String encodeMessage(SetCapabilitiesParameters parameters)
+      throws CouldNotEncodeMessageException {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(MessageIdService.generateMessageId());
     messageHeaderParameters.setApplicationMessageSeqNo(1);

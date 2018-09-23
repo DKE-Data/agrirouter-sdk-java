@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.onboard;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingRequest;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.AuthenticationUrlParameters;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
@@ -21,7 +22,9 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   @Override
-  public OnboardingResponse onboard(OnboardingParameters parameters) {
+  public OnboardingResponse onboard(OnboardingParameters parameters)
+      throws CouldNotFindTimeZoneException, InvalidUrlForRequestException,
+          ForbiddenRequestException, UnauthorizedRequestException, UnexpectedHttpStatusException {
     this.getNativeLogger().info("BEGIN | Onboarding process. | '{}'.", parameters);
     parameters.validate();
 
@@ -34,7 +37,8 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     return onboardingResponse;
   }
 
-  private OnboardingRequest createOnboardingRequestBody(OnboardingParameters parameters) {
+  private OnboardingRequest createOnboardingRequestBody(OnboardingParameters parameters)
+      throws CouldNotFindTimeZoneException {
     this.getNativeLogger().info("BEGIN | Create onboarding request. | '{}'.", parameters);
     OnboardingRequest onboardRequest =
         this.getOnboardRequest(
@@ -47,7 +51,9 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     return onboardRequest;
   }
 
-  private OnboardingResponse onboard(String registrationCode, OnboardingRequest onboardingRequest) {
+  private OnboardingResponse onboard(String registrationCode, OnboardingRequest onboardingRequest)
+      throws InvalidUrlForRequestException, ForbiddenRequestException, UnauthorizedRequestException,
+          UnexpectedHttpStatusException {
     this.getNativeLogger()
         .info("BEGIN | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
     Response response =

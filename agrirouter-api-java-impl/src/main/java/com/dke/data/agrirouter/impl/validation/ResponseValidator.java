@@ -23,7 +23,9 @@ public interface ResponseValidator {
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
    */
-  default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus) {
+  default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus)
+      throws InvalidUrlForRequestException, UnauthorizedRequestException, ForbiddenRequestException,
+          UnexpectedHttpStatusException {
     LOGGER.debug("Validating response.");
     LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
     if (response.getStatus() == HttpStatus.SC_NOT_FOUND) {
@@ -47,7 +49,9 @@ public interface ResponseValidator {
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
    */
-  default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus) {
+  default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus)
+      throws InvalidUrlForRequestException, UnauthorizedRequestException, ForbiddenRequestException,
+          UnexpectedHttpStatusException {
     LOGGER.debug("Validating response.");
     LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
     if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND) {

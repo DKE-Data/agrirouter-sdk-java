@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.api.service.messaging;
 
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 
 /** Service for sending a message */
@@ -10,5 +11,7 @@ public interface SendMessageService {
    *
    * @param sendMessageParameters -
    */
-  void send(SendMessageParameters sendMessageParameters);
+  void send(SendMessageParameters sendMessageParameters)
+      throws InvalidUrlForRequestException, UnauthorizedRequestException, ForbiddenRequestException,
+          UnexpectedHttpStatusException, CouldNotCreateDynamicKeyStoreException;
 }

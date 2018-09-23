@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 import com.dke.data.agrirouter.api.dto.messaging.SendMessageRequest;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.dke.data.agrirouter.api.enums.CertificationType;
+import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
@@ -44,7 +45,8 @@ public interface MessageSender {
     return sendMessageRequest;
   }
 
-  default MessageSenderResponse sendMessage(SendMessageParameters parameters) {
+  default MessageSenderResponse sendMessage(SendMessageParameters parameters)
+      throws CouldNotCreateDynamicKeyStoreException {
     Response response =
         RequestFactory.securedRequest(
                 parameters.getOnboardingResponse().getConnectionCriteria().getMeasures(),

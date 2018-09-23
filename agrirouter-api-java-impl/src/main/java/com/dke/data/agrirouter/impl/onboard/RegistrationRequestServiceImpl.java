@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.impl.onboard;
 
 import com.dke.data.agrirouter.api.dto.registrationrequest.RegistrationRequestResponse;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.onboard.RegistrationRequestService;
 import com.dke.data.agrirouter.api.service.parameters.RegistrationRequestParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
@@ -25,7 +26,9 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public RegistrationRequestResponse getRegistrationCode(RegistrationRequestParameters parameters) {
+  public RegistrationRequestResponse getRegistrationCode(RegistrationRequestParameters parameters)
+      throws CouldNotFetchCookiesException, InvalidUrlForRequestException,
+          ForbiddenRequestException, UnauthorizedRequestException, UnexpectedHttpStatusException {
     this.getNativeLogger()
         .info("BEGIN | Fetching registration code from agrirouter | '{}'.", parameters);
 

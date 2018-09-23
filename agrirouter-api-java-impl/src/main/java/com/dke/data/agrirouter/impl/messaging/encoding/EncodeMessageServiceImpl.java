@@ -18,7 +18,8 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     implements EncodeMessageService {
 
   public String encode(
-      MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
+      MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters)
+      throws CouldNotEncodeMessageException {
     this.logMethodBegin(messageHeaderParameters, payloadParameters);
 
     if (null == messageHeaderParameters || null == payloadParameters) {

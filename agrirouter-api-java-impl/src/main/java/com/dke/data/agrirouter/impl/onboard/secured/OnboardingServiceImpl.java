@@ -5,9 +5,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingRequest;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.exception.CouldNotVerifySecuredOnboardingRequestException;
-import com.dke.data.agrirouter.api.exception.InvalidSignatureException;
-import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.onboard.secured.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.AuthenticationUrlParameters;
 import com.dke.data.agrirouter.api.service.parameters.SecuredOnboardingParameters;
@@ -38,20 +36,27 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   @Override
-  public OnboardingResponse onboard(SecuredOnboardingParameters securedOnboardingParameters) {
+  public OnboardingResponse onboard(SecuredOnboardingParameters securedOnboardingParameters)
+      throws CouldNotFindTimeZoneException, InvalidUrlForRequestException,
+          ForbiddenRequestException, UnauthorizedRequestException, UnexpectedHttpStatusException,
+          InvalidSignatureException, CouldNotCreatePrivateKeyException,
+          CouldNotCreatePublicKeyException {
     securedOnboardingParameters.validate();
     return this.onboard(
         securedOnboardingParameters, this.createOnboardingRequestBody(securedOnboardingParameters));
   }
 
   @Override
-  public void verify(SecuredOnboardingParameters securedOnboardingParameters) {
+  public void verify(SecuredOnboardingParameters securedOnboardingParameters)
+      throws CouldNotFindTimeZoneException, InvalidSignatureException,
+          CouldNotCreatePrivateKeyException, CouldNotCreatePublicKeyException {
     securedOnboardingParameters.validate();
     this.verify(
         securedOnboardingParameters, this.createOnboardingRequestBody(securedOnboardingParameters));
   }
 
-  private OnboardingRequest createOnboardingRequestBody(SecuredOnboardingParameters parameters) {
+  private OnboardingRequest createOnboardingRequestBody(SecuredOnboardingParameters parameters)
+      throws CouldNotFindTimeZoneException {
     return this.getOnboardRequest(
         parameters.getUuid(),
         parameters.getApplicationId(),
@@ -61,8 +66,10 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   private OnboardingResponse onboard(
-      SecuredOnboardingParameters securedOnboardingParameters,
-      OnboardingRequest onboardingRequest) {
+      SecuredOnboardingParameters securedOnboardingParameters, OnboardingRequest onboardingRequest)
+      throws InvalidUrlForRequestException, ForbiddenRequestException, UnauthorizedRequestException,
+          UnexpectedHttpStatusException, InvalidSignatureException,
+          CouldNotCreatePrivateKeyException, CouldNotCreatePublicKeyException {
     String jsonBody = new Gson().toJson(onboardingRequest).replace("\n", "");
     String encodedSignature = this.createSignature(securedOnboardingParameters, jsonBody);
     this.verifySignature(
@@ -79,8 +86,9 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   private void verify(
-      SecuredOnboardingParameters securedOnboardingParameters,
-      OnboardingRequest onboardingRequest) {
+      SecuredOnboardingParameters securedOnboardingParameters, OnboardingRequest onboardingRequest)
+      throws InvalidSignatureException, CouldNotCreatePrivateKeyException,
+          CouldNotCreatePublicKeyException {
     String jsonBody = new Gson().toJson(onboardingRequest).replace("\n", "");
     String encodedSignature = this.createSignature(securedOnboardingParameters, jsonBody);
     this.verifySignature(
@@ -96,7 +104,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
     try {
       this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
-    } catch (UnexpectedHttpStatusException e) {
+    } catch (Exception e) {
       throw new CouldNotVerifySecuredOnboardingRequestException(e);
     }
   }
@@ -110,7 +118,9 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   private String createSignature(
-      SecuredOnboardingParameters securedOnboardingParameters, String jsonBody) {
+      SecuredOnboardingParameters securedOnboardingParameters, String jsonBody)
+      throws InvalidSignatureException, CouldNotCreatePrivateKeyException,
+          CouldNotCreatePublicKeyException {
     byte[] signature = this.createSignature(jsonBody, securedOnboardingParameters.getPrivateKey());
     this.verifySignature(jsonBody, signature, securedOnboardingParameters.getPublicKey());
     String encodedSignature = Hex.encodeHexString(signature);
@@ -119,7 +129,8 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     return encodedSignature;
   }
 
-  byte[] createSignature(String requestBody, String privateKey) {
+  byte[] createSignature(String requestBody, String privateKey)
+      throws CouldNotCreatePrivateKeyException {
     try {
       SecurityKeyCreationService securityKeyCreationService = new SecurityKeyCreationService();
       Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
@@ -131,7 +142,8 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     }
   }
 
-  void verifySignature(String requestBody, byte[] signedBytes, String publicKey) {
+  void verifySignature(String requestBody, byte[] signedBytes, String publicKey)
+      throws InvalidSignatureException, CouldNotCreatePublicKeyException {
     try {
       SecurityKeyCreationService securityKeyCreationService = new SecurityKeyCreationService();
       Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);

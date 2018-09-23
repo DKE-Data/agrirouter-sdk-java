@@ -6,6 +6,8 @@ import agrirouter.request.Request;
 import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.exception.CouldNotDecodeMessageException;
+import com.dke.data.agrirouter.api.exception.CouldNotEncodeMessageException;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
@@ -17,7 +19,8 @@ import org.junit.jupiter.api.Test;
 class EncodeMessageServiceImplTest {
 
   @Test
-  void givenValidParametersEncodeAndDecodeBackShouldNotFail() {
+  void givenValidParametersEncodeAndDecodeBackShouldNotFail()
+      throws CouldNotEncodeMessageException, CouldNotDecodeMessageException {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     ByteString toSendMessage = ByteString.copyFromUtf8("secretMessage");
@@ -33,7 +36,8 @@ class EncodeMessageServiceImplTest {
   }
 
   @Test
-  void givenWrongPayloadEncodeAndDecodeBackShouldFail() {
+  void givenWrongPayloadEncodeAndDecodeBackShouldFail()
+      throws CouldNotDecodeMessageException, CouldNotEncodeMessageException {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     ByteString toSendMessage = ByteString.copyFromUtf8("wrong Message");

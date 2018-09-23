@@ -53,7 +53,8 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     return socketFactory;
   }
 
-  public KeyStore createAndReturnKeystoreFromP12(String certificate, String password) {
+  public KeyStore createAndReturnKeystoreFromP12(String certificate, String password)
+      throws CouldNotCreateDynamicKeyStoreException {
     this.logMethodBegin(certificate, password);
 
     KeyStore keyStore;
@@ -76,43 +77,57 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     return keyStore;
   }
 
-  public TrustManager[] createTrustManagers(List<String> certificates) {
+  // This class is used to transport Exceptions from within the forEach loop to outsite the forEach
+  // Loop
+  public class ExceptionToRuntimeExceptionWrapper extends RuntimeException {
+    public ExceptionToRuntimeExceptionWrapper(Exception e) {
+      super(e);
+    }
+  }
+
+  public TrustManager[] createTrustManagers(List<String> certificates)
+      throws CouldNotCreateDynamicKeyStoreException {
     this.logMethodBegin(certificates);
 
     List<TrustManager> trustManagers = new ArrayList<>();
-    certificates.forEach(
-        certificate -> {
-          try {
-            this.getNativeLogger().trace("Create certificate for '{}'.", certificate);
-            X509Certificate cert =
-                createCertificate(
-                    extractFromOriginal(
-                        certificate, BEGIN_DELIMITER_CERTIFICATE, END_DELIMITER_CERTIFICATE));
+    try {
+      certificates.forEach(
+          certificate -> {
+            try {
+              this.getNativeLogger().trace("Create certificate for '{}'.", certificate);
+              X509Certificate cert =
+                  createCertificate(
+                      extractFromOriginal(
+                          certificate, BEGIN_DELIMITER_CERTIFICATE, END_DELIMITER_CERTIFICATE));
 
-            this.getNativeLogger().trace("Create default keystore type.");
-            KeyStore caKs = KeyStore.getInstance(KeyStore.getDefaultType());
-            caKs.load(null, null);
-            caKs.setCertificateEntry("ca-certificate", cert);
+              this.getNativeLogger().trace("Create default keystore type.");
+              KeyStore caKs = KeyStore.getInstance(KeyStore.getDefaultType());
+              caKs.load(null, null);
+              caKs.setCertificateEntry("ca-certificate", cert);
 
-            this.getNativeLogger().trace("Create trust manager factory.");
-            TrustManagerFactory tmf =
-                TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+              this.getNativeLogger().trace("Create trust manager factory.");
+              TrustManagerFactory tmf =
+                  TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 
-            this.getNativeLogger().trace("Init trust manager factory.");
-            tmf.init(caKs);
+              this.getNativeLogger().trace("Init trust manager factory.");
+              tmf.init(caKs);
 
-            this.getNativeLogger().trace("Add all trust managers from factory.");
-            trustManagers.addAll(Arrays.asList(tmf.getTrustManagers()));
-          } catch (Exception e) {
-            throw new CouldNotCreateDynamicKeyStoreException(e);
-          }
-        });
+              this.getNativeLogger().trace("Add all trust managers from factory.");
+              trustManagers.addAll(Arrays.asList(tmf.getTrustManagers()));
+            } catch (Exception e) {
+              throw new ExceptionToRuntimeExceptionWrapper(e);
+            }
+          });
+    } catch (ExceptionToRuntimeExceptionWrapper e) {
+      throw new CouldNotCreateDynamicKeyStoreException(e);
+    }
 
     this.logMethodEnd(trustManagers);
     return trustManagers.toArray(new TrustManager[0]);
   }
 
-  public KeyStore createAndReturnKeystoreFromPEM(String certificateAndPrivateKey, String password) {
+  public KeyStore createAndReturnKeystoreFromPEM(String certificateAndPrivateKey, String password)
+      throws CouldNotCreateDynamicKeyStoreException {
     this.logMethodBegin(certificateAndPrivateKey, password);
 
     KeyStore keyStore;

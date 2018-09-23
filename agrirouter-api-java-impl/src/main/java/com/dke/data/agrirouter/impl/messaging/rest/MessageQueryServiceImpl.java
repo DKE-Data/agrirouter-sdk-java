@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 import agrirouter.feed.response.FeedResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.exception.*;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
@@ -26,7 +27,10 @@ public class MessageQueryServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public void send(MessageQueryParameters parameters) {
+  public void send(MessageQueryParameters parameters)
+      throws InvalidUrlForRequestException, UnauthorizedRequestException, ForbiddenRequestException,
+          CouldNotCreateDynamicKeyStoreException, UnexpectedHttpStatusException,
+          CouldNotEncodeMessageException {
     this.messageQueryService.send(parameters);
   }
 

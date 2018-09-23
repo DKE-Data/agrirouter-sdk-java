@@ -17,7 +17,8 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
     implements DecodeMessageService {
 
   @Override
-  public DecodeMessageResponse decode(String encodedResponse) {
+  public DecodeMessageResponse decode(String encodedResponse)
+      throws CouldNotDecodeMessageException {
     this.logMethodBegin(encodedResponse);
 
     if (StringUtils.isBlank(encodedResponse)) {
@@ -48,7 +49,8 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
   }
 
   @Override
-  public MessageOuterClass.Message decode(ByteString message) {
+  public MessageOuterClass.Message decode(ByteString message)
+      throws CouldNotDecodeMessageException {
     try {
       this.logMethodBegin(message);
 
