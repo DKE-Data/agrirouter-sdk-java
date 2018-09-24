@@ -46,7 +46,7 @@ public class CookieResolverService extends EnvironmentalService {
       this.getNativeLogger().trace("Deliver cookies from cache.");
       cookies = cookiesFromCache.get();
     } else {
-      cookies = deliverCookiesFromAgrirouter();
+      cookies = this.deliverCookiesFromAgrirouter();
     }
 
     this.logMethodEnd(cookies);
@@ -55,7 +55,7 @@ public class CookieResolverService extends EnvironmentalService {
 
   private Set<Cookie> deliverCookiesFromAgrirouter() {
     this.getNativeLogger().trace("Deliver cookies from agrirouter.");
-    return fetchCookiesFromAgrirouter();
+    return this.fetchCookiesFromAgrirouter();
   }
 
   private Set<Cookie> fetchCookiesFromAgrirouter() {

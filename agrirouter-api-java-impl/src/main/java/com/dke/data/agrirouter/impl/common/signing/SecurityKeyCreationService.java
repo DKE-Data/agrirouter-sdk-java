@@ -21,7 +21,7 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
     this.privateKey = privateKey;
     PrivateKey result;
     try {
-      result = generateValidPrivateKey();
+      result = this.generateValidPrivateKey();
     } catch (IllegalArgumentException | InvalidKeySpecException | NoSuchAlgorithmException e) {
       throw new CouldNotCreatePrivateKeyException(e);
     }
@@ -37,7 +37,7 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
     this.publicKey = publicKey;
     PublicKey result;
     try {
-      result = generateValidPublicKey();
+      result = this.generateValidPublicKey();
     } catch (IllegalArgumentException | InvalidKeySpecException | NoSuchAlgorithmException e) {
       throw new CouldNotCreatePublicKeyException(e);
     }
@@ -48,8 +48,8 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
   }
 
   private PublicKey generateValidPublicKey() throws InvalidKeySpecException, NoSuchAlgorithmException {
-    String pkcs8Pem = replaceCommentsInPublic();
-    byte[] pkcs8EncodedBytes = getEncodedBytes(pkcs8Pem);
+    String pkcs8Pem = this.replaceCommentsInPublic();
+    byte[] pkcs8EncodedBytes = this.getEncodedBytes(pkcs8Pem);
 
     this.getNativeLogger().trace("Generate public key.");
     X509EncodedKeySpec keySpec = new X509EncodedKeySpec(pkcs8EncodedBytes);
@@ -58,8 +58,8 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
   }
 
   private PrivateKey generateValidPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-    String pkcs8Pem = replaceCommentsInPrivate();
-    byte[] pkcs8EncodedBytes = getEncodedBytes(pkcs8Pem);
+    String pkcs8Pem = this.replaceCommentsInPrivate();
+    byte[] pkcs8EncodedBytes = this.getEncodedBytes(pkcs8Pem);
 
     this.getNativeLogger().trace("Generate private key.");
     PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pkcs8EncodedBytes);
@@ -68,18 +68,18 @@ public class SecurityKeyCreationService implements LoggingEnabledService {
   }
 
   private String replaceCommentsInPublic() {
-    return replaceComments(publicKey, "public");
+    return this.replaceComments(publicKey, "public");
   }
 
   private String replaceCommentsInPrivate() {
-    return replaceComments(privateKey, "private");
+    return this.replaceComments(privateKey, "private");
   }
 
-  private String replaceComments(String key, String publicOrPrivate) {
+  private String replaceComments(String key, String keyType) {
     this.getNativeLogger().trace("Replacing comments within file.");
     
-    String pkcs8Pem = key.replace("-----BEGIN " + publicOrPrivate.toUpperCase() + " KEY-----", "");
-    pkcs8Pem = pkcs8Pem.replace("-----END " + publicOrPrivate.toUpperCase() + " KEY-----", "");
+    String pkcs8Pem = key.replace("-----BEGIN " + keyType.toUpperCase() + " KEY-----", "");
+    pkcs8Pem = pkcs8Pem.replace("-----END " + keyType.toUpperCase() + " KEY-----", "");
     pkcs8Pem = pkcs8Pem.replaceAll("\\s+", "");
     return pkcs8Pem;
   }

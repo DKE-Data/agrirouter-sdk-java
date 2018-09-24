@@ -83,7 +83,7 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     certificates.forEach(
         certificate -> {
           try {
-            getTrustManagers(certificate, trustManagers);
+            this.getTrustManagers(certificate, trustManagers);
           } catch (Exception e) {
             throw new CouldNotCreateDynamicKeyStoreException(e);
           }
@@ -121,13 +121,15 @@ public class KeyStoreCreationService implements LoggingEnabledService {
 
       this.getNativeLogger().trace("Create private key.");
       PrivateKey key =
-          createPrivateKey(
-              extractFromOriginal(
-                  certificateAndPrivateKey, BEGIN_DELIMITER_PRIVATE_KEY, END_DELIMITER_PRIVATE_KEY),
+          this.createPrivateKey(
+                  extractFromOriginal(
+                          certificateAndPrivateKey,
+                          BEGIN_DELIMITER_PRIVATE_KEY,
+                          END_DELIMITER_PRIVATE_KEY),
               password);
 
       this.getNativeLogger().trace("Create key store.");
-      keyStore = createKeyStore(cert, key);
+      keyStore = this.createKeyStore(cert, key);
     } catch (Exception e) {
       throw new CouldNotCreateDynamicKeyStoreException(e);
     }
@@ -138,7 +140,7 @@ public class KeyStoreCreationService implements LoggingEnabledService {
 
   private X509Certificate createCertificateHelper(String certificate) throws Exception {
     this.getNativeLogger().trace("Create certificate for '{}'.", certificate);
-    return createCertificate(
+    return this.createCertificate(
             extractFromOriginal(
                     certificate,
                     BEGIN_DELIMITER_CERTIFICATE,
@@ -150,7 +152,7 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     this.logMethodBegin(cert, key);
 
     this.getNativeLogger().trace("Create keystore.");
-    KeyStore keystore = createKeyStore(cert, key);
+    KeyStore keystore = this.createKeyStore(cert, key);
 
     this.getNativeLogger().trace("Create random keystore name.");
     String tmpKeystoreName = UUID.randomUUID().toString();
