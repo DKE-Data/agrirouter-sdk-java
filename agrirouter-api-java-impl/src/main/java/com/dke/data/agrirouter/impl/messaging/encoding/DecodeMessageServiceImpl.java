@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.encoding;
 
 import agrirouter.commons.MessageOuterClass;
+import agrirouter.response.Response;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotDecodeMessageException;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
@@ -23,28 +24,52 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
     if (StringUtils.isBlank(encodedResponse)) {
       throw new IllegalArgumentException("Please provide a valid encoded response.");
     }
+
     try {
-
-      this.getNativeLogger().trace("Decoding byte array.");
-      byte[] decodedBytes = Base64.getDecoder().decode(encodedResponse);
-      ByteArrayInputStream inputStream = new ByteArrayInputStream(decodedBytes);
-
-      this.getNativeLogger().trace("Parse response envelope.");
-      agrirouter.response.Response.ResponseEnvelope responseEnvelope =
-          agrirouter.response.Response.ResponseEnvelope.parseDelimitedFrom(inputStream);
-
-      this.getNativeLogger().trace("Parse response payload wrapper.");
-      agrirouter.response.Response.ResponsePayloadWrapper responsePayloadWrapper =
-          agrirouter.response.Response.ResponsePayloadWrapper.parseDelimitedFrom(inputStream);
-      DecodeMessageResponse decodeMessageResponse = new DecodeMessageResponse();
-      decodeMessageResponse.setResponseEnvelope(responseEnvelope);
-      decodeMessageResponse.setResponsePayloadWrapper(responsePayloadWrapper);
-
-      this.logMethodEnd(decodeMessageResponse);
-      return decodeMessageResponse;
+      return this.parseResponse(encodedResponse);
     } catch (IOException e) {
       throw new CouldNotDecodeMessageException(e);
     }
+  }
+
+  private DecodeMessageResponse parseResponse(String encodedResponse) throws IOException {
+    byte[] decodedBytes = getDecodedBytes(encodedResponse);
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(decodedBytes);
+    agrirouter.response.Response.ResponseEnvelope responseEnvelope =
+            this.parseResponseEnvelope(inputStream);
+    Response.ResponsePayloadWrapper responsePayloadWrapper =
+            this.parseResponsePayloadWrapper(inputStream);
+    DecodeMessageResponse decodeMessageResponse =
+            this.getDecodedMessageResponse(responseEnvelope, responsePayloadWrapper);
+
+    this.logMethodEnd(decodeMessageResponse);
+    return decodeMessageResponse;
+  }
+
+  private byte[] getDecodedBytes(String encodedResponse) {
+    this.getNativeLogger().trace("Decoding byte array.");
+    return Base64.getDecoder().decode(encodedResponse);
+  }
+
+  private agrirouter.response.Response.ResponseEnvelope parseResponseEnvelope
+          (ByteArrayInputStream inputStream) throws IOException {
+    this.getNativeLogger().trace("Parse response envelope.");
+    return agrirouter.response.Response.ResponseEnvelope.parseDelimitedFrom(inputStream);
+  }
+
+  private agrirouter.response.Response.ResponsePayloadWrapper parseResponsePayloadWrapper
+          (ByteArrayInputStream inputStream) throws IOException {
+    this.getNativeLogger().trace("Parse response payload wrapper.");
+    return agrirouter.response.Response.ResponsePayloadWrapper.parseDelimitedFrom(inputStream);
+  }
+
+  private DecodeMessageResponse getDecodedMessageResponse(
+          Response.ResponseEnvelope responseEnvelope,
+          Response.ResponsePayloadWrapper responsePayloadWrapper) {
+    DecodeMessageResponse decodeMessageResponse = new DecodeMessageResponse();
+    decodeMessageResponse.setResponseEnvelope(responseEnvelope);
+    decodeMessageResponse.setResponsePayloadWrapper(responsePayloadWrapper);
+    return decodeMessageResponse;
   }
 
   @Override
