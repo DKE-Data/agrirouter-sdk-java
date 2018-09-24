@@ -45,7 +45,7 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     this.getNativeLogger().trace("Generate SSL context.");
     SSLContext context = SSLContext.getInstance("TLSv1.2");
 
-    this.getNativeLogger().trace("Initi SSL context.");
+    this.getNativeLogger().trace("Init SSL context.");
     context.init(kmf.getKeyManagers(), trustManagers, null);
 
     SSLSocketFactory socketFactory = context.getSocketFactory();
@@ -83,26 +83,7 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     certificates.forEach(
         certificate -> {
           try {
-            this.getNativeLogger().trace("Create certificate for '{}'.", certificate);
-            X509Certificate cert =
-                createCertificate(
-                    extractFromOriginal(
-                        certificate, BEGIN_DELIMITER_CERTIFICATE, END_DELIMITER_CERTIFICATE));
-
-            this.getNativeLogger().trace("Create default keystore type.");
-            KeyStore caKs = KeyStore.getInstance(KeyStore.getDefaultType());
-            caKs.load(null, null);
-            caKs.setCertificateEntry("ca-certificate", cert);
-
-            this.getNativeLogger().trace("Create trust manager factory.");
-            TrustManagerFactory tmf =
-                TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-
-            this.getNativeLogger().trace("Init trust manager factory.");
-            tmf.init(caKs);
-
-            this.getNativeLogger().trace("Add all trust managers from factory.");
-            trustManagers.addAll(Arrays.asList(tmf.getTrustManagers()));
+            getTrustManagers(certificate, trustManagers);
           } catch (Exception e) {
             throw new CouldNotCreateDynamicKeyStoreException(e);
           }
@@ -112,18 +93,31 @@ public class KeyStoreCreationService implements LoggingEnabledService {
     return trustManagers.toArray(new TrustManager[0]);
   }
 
+  private void getTrustManagers(String certificate, List<TrustManager> trustManagers) throws Exception {
+    X509Certificate cert = this.createCertificateHelper(certificate);
+
+    this.getNativeLogger().trace("Create default keystore type.");
+    KeyStore caKs = KeyStore.getInstance(KeyStore.getDefaultType());
+    caKs.load(null, null);
+    caKs.setCertificateEntry("ca-certificate", cert);
+
+    this.getNativeLogger().trace("Create trust manager factory.");
+    TrustManagerFactory tmf =
+            TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+
+    this.getNativeLogger().trace("Init trust manager factory.");
+    tmf.init(caKs);
+
+    this.getNativeLogger().trace("Add all trust managers from factory.");
+    trustManagers.addAll(Arrays.asList(tmf.getTrustManagers()));
+  }
+
   public KeyStore createAndReturnKeystoreFromPEM(String certificateAndPrivateKey, String password) {
     this.logMethodBegin(certificateAndPrivateKey, password);
 
     KeyStore keyStore;
     try {
-      this.getNativeLogger().trace("Create certificate.");
-      X509Certificate cert =
-          createCertificate(
-              extractFromOriginal(
-                  certificateAndPrivateKey,
-                  BEGIN_DELIMITER_CERTIFICATE,
-                  END_DELIMITER_CERTIFICATE));
+      X509Certificate cert = this.createCertificateHelper(certificateAndPrivateKey);
 
       this.getNativeLogger().trace("Create private key.");
       PrivateKey key =
@@ -140,6 +134,15 @@ public class KeyStoreCreationService implements LoggingEnabledService {
 
     this.logMethodEnd(keyStore);
     return keyStore;
+  }
+
+  private X509Certificate createCertificateHelper(String certificate) throws Exception {
+    this.getNativeLogger().trace("Create certificate for '{}'.", certificate);
+    return createCertificate(
+            extractFromOriginal(
+                    certificate,
+                    BEGIN_DELIMITER_CERTIFICATE,
+                    END_DELIMITER_CERTIFICATE));
   }
 
   String createKeyStoreInClasspath(X509Certificate cert, PrivateKey key)
