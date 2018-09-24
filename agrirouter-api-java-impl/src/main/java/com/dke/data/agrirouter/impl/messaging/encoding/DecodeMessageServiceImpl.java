@@ -35,10 +35,8 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
   private DecodeMessageResponse parseResponse(String encodedResponse) throws IOException {
     byte[] decodedBytes = getDecodedBytes(encodedResponse);
     ByteArrayInputStream inputStream = new ByteArrayInputStream(decodedBytes);
-    agrirouter.response.Response.ResponseEnvelope responseEnvelope =
-            this.parseResponseEnvelope(inputStream);
-    Response.ResponsePayloadWrapper responsePayloadWrapper =
-            this.parseResponsePayloadWrapper(inputStream);
+    Response.ResponseEnvelope responseEnvelope = this.parseResponseEnvelope(inputStream);
+    Response.ResponsePayloadWrapper responsePayloadWrapper = this.parseResponsePayloadWrapper(inputStream);
     DecodeMessageResponse decodeMessageResponse =
             this.getDecodedMessageResponse(responseEnvelope, responsePayloadWrapper);
 
@@ -51,13 +49,13 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
     return Base64.getDecoder().decode(encodedResponse);
   }
 
-  private agrirouter.response.Response.ResponseEnvelope parseResponseEnvelope
+  private Response.ResponseEnvelope parseResponseEnvelope
           (ByteArrayInputStream inputStream) throws IOException {
     this.getNativeLogger().trace("Parse response envelope.");
     return agrirouter.response.Response.ResponseEnvelope.parseDelimitedFrom(inputStream);
   }
 
-  private agrirouter.response.Response.ResponsePayloadWrapper parseResponsePayloadWrapper
+  private Response.ResponsePayloadWrapper parseResponsePayloadWrapper
           (ByteArrayInputStream inputStream) throws IOException {
     this.getNativeLogger().trace("Parse response payload wrapper.");
     return agrirouter.response.Response.ResponsePayloadWrapper.parseDelimitedFrom(inputStream);
