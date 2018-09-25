@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.request.Request;
 import agrirouter.request.payload.endpoint.Capabilities;
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.factories.impl.CapabilitiesMessageContentFactory;
@@ -32,22 +33,26 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public void send(SetCapabilitiesParameters parameters) {
+  public String send(SetCapabilitiesParameters parameters) {
     parameters.validate();
 
-    String encodedMessage = encodeMessage(parameters);
+    EncodeMessageResponse encodeMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
+    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodeMessageResponse.getEncodedMessage()));
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    return encodeMessageResponse.getApplicationMessageID();
   }
 
-  private String encodeMessage(SetCapabilitiesParameters parameters) {
+  private EncodeMessageResponse encodeMessage(SetCapabilitiesParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-    messageHeaderParameters.setApplicationMessageId(MessageIdService.generateMessageId());
+
+    final String applicationMessageID = MessageIdService.generateMessageId();
+    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+
     messageHeaderParameters.setApplicationMessageSeqNo(1);
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
@@ -81,6 +86,7 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     payloadParameters.setValue(
         new CapabilitiesMessageContentFactory().message(capabilitiesMessageParameters));
 
-    return this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+    String encodedMessage = this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
   }
 }

@@ -18,7 +18,7 @@ public class MessageQueryServiceImpl extends EnvironmentalService
 
   private final MessageQueryService messageQueryService;
 
-  public MessageQueryServiceImpl(Environment environment) {
+  MessageQueryServiceImpl(Environment environment) {
     super(environment);
     this.messageQueryService =
         new MessageQueryService(
@@ -26,8 +26,9 @@ public class MessageQueryServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public void send(MessageQueryParameters parameters) {
-    this.messageQueryService.send(parameters);
+  public String send(MessageQueryParameters parameters) {
+    String applicationMessageID = this.messageQueryService.send(parameters);
+    return applicationMessageID;
   }
 
   @Override
