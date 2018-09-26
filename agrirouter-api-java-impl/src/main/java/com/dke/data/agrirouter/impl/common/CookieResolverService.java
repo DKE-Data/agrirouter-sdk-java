@@ -31,11 +31,7 @@ public class CookieResolverService extends EnvironmentalService {
   public Set<Cookie> cookies(String username, String password) {
     this.logMethodBegin(username, password);
 
-    if (StringUtils.isAnyBlank(username, password)) {
-      throw new IllegalArgumentException(
-          "Please provide valid - means no blank values - values for username and password.");
-    }
-
+    this.checkIfUsernameOrPasswordBlank(username, password);
     this.username = username;
     this.password = password;
 
@@ -46,19 +42,22 @@ public class CookieResolverService extends EnvironmentalService {
       this.getNativeLogger().trace("Deliver cookies from cache.");
       cookies = cookiesFromCache.get();
     } else {
-      cookies = this.deliverCookiesFromAgrirouter();
+      this.getNativeLogger().trace("Deliver cookies from agrirouter.");
+      return this.deliverCookiesFromAgrirouter();
     }
 
     this.logMethodEnd(cookies);
     return cookies;
   }
 
-  private Set<Cookie> deliverCookiesFromAgrirouter() {
-    this.getNativeLogger().trace("Deliver cookies from agrirouter.");
-    return this.fetchCookiesFromAgrirouter();
+  private void checkIfUsernameOrPasswordBlank(String username, String password) {
+    if (StringUtils.isAnyBlank(username, password)) {
+      throw new IllegalArgumentException(
+          "Please provide valid - means no blank values - values for username and password.");
+    }
   }
 
-  private Set<Cookie> fetchCookiesFromAgrirouter() {
+  private Set<Cookie> deliverCookiesFromAgrirouter() {
     this.logMethodBegin(username, password);
 
     this.getNativeLogger().trace("Creating web client.");
@@ -70,23 +69,23 @@ public class CookieResolverService extends EnvironmentalService {
   }
 
   private Set<Cookie> getCookiesFromWebClient(WebClient webClient) throws IOException {
-    webClient.getOptions().setThrowExceptionOnScriptError(false);
-    webClient.getOptions().setUseInsecureSSL(true);
+    this.configureWebClient(webClient);
 
     final String url = this.environment.getAgrirouterLoginUrl();
     this.getNativeLogger()
             .trace("Define URL '{}' for cookie resolving.", url);
 
     this.fillHtmlForm(webClient.getPage(url));
-
-    this.getNativeLogger().trace("Read cookies from cookie manager.");
-    Set<Cookie> cookiesFromWebClient = webClient.getCookieManager().getCookies();
-
-    this.getNativeLogger().trace("Cookies {} found.", cookiesFromWebClient);
-    cookieCache.put(username, cookiesFromWebClient);
+    Set<Cookie> cookiesFromWebClient = this.readCookiesFromCookieManager(webClient);
+    this.storeCookiesInCache(cookiesFromWebClient);
 
     this.logMethodEnd(cookiesFromWebClient);
     return cookiesFromWebClient;
+  }
+
+  private void configureWebClient(WebClient webClient) {
+    webClient.getOptions().setThrowExceptionOnScriptError(false);
+    webClient.getOptions().setUseInsecureSSL(true);
   }
 
   private void fillHtmlForm(HtmlPage page) throws IOException {
@@ -98,6 +97,16 @@ public class CookieResolverService extends EnvironmentalService {
 
     final HtmlButton submitInput = page.getHtmlElementById("logOnFormSubmit");
     submitInput.click();
+  }
+
+  private Set<Cookie> readCookiesFromCookieManager(WebClient webClient) {
+    this.getNativeLogger().trace("Read cookies from cookie manager.");
+    return webClient.getCookieManager().getCookies();
+  }
+
+  private void storeCookiesInCache(Set<Cookie> cookiesFromWebClient) {
+    this.getNativeLogger().trace("Cookies {} found.", cookiesFromWebClient);
+    cookieCache.put(username, cookiesFromWebClient);
   }
 
   private boolean isAnyCookieExpired(Set<Cookie> cookies) {
