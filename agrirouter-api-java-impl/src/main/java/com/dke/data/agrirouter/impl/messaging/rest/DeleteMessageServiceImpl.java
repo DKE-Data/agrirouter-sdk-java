@@ -44,11 +44,7 @@ public class DeleteMessageServiceImpl
   }
 
   private EncodeMessageResponse encodeMessage(DeleteMessageParameters parameters) {
-    String applicationMessageId = MessageIdService.generateMessageId();
-
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-    messageHeaderParameters.setApplicationMessageId(applicationMessageId);
-
     final String applicationMessageID = MessageIdService.generateMessageId();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
 
