@@ -55,20 +55,30 @@ public class DeleteMessageServiceImpl
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-    DeleteMessageMessageParameters deleteMessageMessageParameters =
-        new DeleteMessageMessageParameters();
-    deleteMessageMessageParameters.setMessageIds(
-        Objects.requireNonNull(parameters.getMessageIds()));
-    deleteMessageMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
-    deleteMessageMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
-    deleteMessageMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
-
-    PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(FeedRequests.MessageDelete.getDescriptor().getFullName());
-    payloadParameters.setValue(
-        new DeleteMessageMessageContentFactory().message(deleteMessageMessageParameters));
+    DeleteMessageMessageParameters deleteMessageMessageParameters = this.getDeleteMessageMessageParameters(parameters);
+    
+    PayloadParameters payloadParameters = this.getPayloadParameters(deleteMessageMessageParameters);
 
     String encodedMessage = this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+  }
+
+  private DeleteMessageMessageParameters getDeleteMessageMessageParameters(DeleteMessageParameters parameters) {
+    DeleteMessageMessageParameters deleteMessageMessageParameters =
+            new DeleteMessageMessageParameters();
+    deleteMessageMessageParameters.setMessageIds(
+            Objects.requireNonNull(parameters.getMessageIds()));
+    deleteMessageMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
+    deleteMessageMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
+    deleteMessageMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
+    return deleteMessageMessageParameters;
+  }
+
+  private PayloadParameters getPayloadParameters(DeleteMessageMessageParameters deleteMessageMessageParameters) {
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(FeedRequests.MessageDelete.getDescriptor().getFullName());
+    payloadParameters.setValue(
+            new DeleteMessageMessageContentFactory().message(deleteMessageMessageParameters));
+    return payloadParameters;
   }
 }
