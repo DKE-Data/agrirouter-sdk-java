@@ -36,7 +36,10 @@ public final class RequestFactory {
       String url, String certificate, String password, CertificationType certificationType) {
     ClientConfig clientConfig = new ClientConfig();
     KeyStore keyStore = createKeyStore(certificate, password, certificationType);
-    Client client = createClient(clientConfig, keyStore, password, certificationType);
+
+    ConfigData configData = new ConfigData(clientConfig, keyStore, password, certificationType);
+
+    Client client = createClient(configData);
     client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
     WebTarget target = client.target(url);
     Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
@@ -44,29 +47,51 @@ public final class RequestFactory {
     return request;
   }
 
-  private static Client createClient(
-      ClientConfig clientConfig,
-      KeyStore keyStore,
-      String password,
-      CertificationType certificationType) {
+  private static class ConfigData {
+    ClientConfig clientConfig;
+    KeyStore keyStore;
+    String password;
+    CertificationType certificationType;
+
+    ConfigData(ClientConfig clientConfig, KeyStore keyStore, String password, CertificationType certificationType) {
+      this.clientConfig = clientConfig;
+      this.keyStore = keyStore;
+      this.password = password;
+      this.certificationType = certificationType;
+    }
+  }
+
+  private static Client createClient(ConfigData configData) {
     try {
-      switch (certificationType) {
-        case PEM:
-          return ClientBuilder.newBuilder()
-              .withConfig(clientConfig)
-              .keyStore(keyStore, KeyStoreCreationService.TEMPORARY_KEY_PASSWORD)
-              .build();
-        case P12:
-          return ClientBuilder.newBuilder()
-              .withConfig(clientConfig)
-              .keyStore(keyStore, password)
-              .build();
-        default:
-          throw new CertificationTypeNotSupportedException(certificationType);
-      }
+      return createClientDependingOnCertificationType(configData);
     } catch (Exception e) {
       throw new CouldNotCreateDynamicKeyStoreException(e);
     }
+  }
+
+  private static Client createClientDependingOnCertificationType(ConfigData configData) {
+    switch (configData.certificationType) {
+      case PEM:
+        return buildConcreteClient(configData, KeyStoreCreationService.TEMPORARY_KEY_PASSWORD);
+      case P12:
+        return buildConcreteClient(configData);
+      default:
+        throw new CertificationTypeNotSupportedException(configData.certificationType);
+    }
+  }
+
+  private static Client buildConcreteClient(ConfigData configData, String password) {
+    return ClientBuilder.newBuilder()
+            .withConfig(configData.clientConfig)
+            .keyStore(configData.keyStore, password)
+            .build();
+  }
+
+  private static Client buildConcreteClient(ConfigData configData) {
+    return ClientBuilder.newBuilder()
+            .withConfig(configData.clientConfig)
+            .keyStore(configData.keyStore, configData.password)
+            .build();
   }
 
   private static KeyStore createKeyStore(
@@ -85,6 +110,7 @@ public final class RequestFactory {
       throw new CouldNotCreateDynamicKeyStoreException(e);
     }
   }
+
 
   /**
    * Setting the 'reg_access_token' within the header.
@@ -151,3 +177,4 @@ public final class RequestFactory {
     return request;
   }
 }
+
