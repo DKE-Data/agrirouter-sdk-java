@@ -34,17 +34,37 @@ public final class RequestFactory {
    */
   public static Invocation.Builder securedRequest(
       String url, String certificate, String password, CertificationType certificationType) {
+    Client client = createClient(certificate, password, certificationType);
+    WebTarget target = client.target(url);
+    return target
+            .request(MediaType.APPLICATION_JSON_TYPE)
+            .accept(MediaType.APPLICATION_JSON_TYPE);
+  }
+
+  private static Client createClient(String certificate, String password, CertificationType certificationType) {
     ClientConfig clientConfig = new ClientConfig();
     KeyStore keyStore = createKeyStore(certificate, password, certificationType);
-
     ConfigData configData = new ConfigData(clientConfig, keyStore, password, certificationType);
-
-    Client client = createClient(configData);
+    Client client = createClientWithConfiguration(configData);
     client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
-    WebTarget target = client.target(url);
-    Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
-    request.accept(MediaType.APPLICATION_JSON_TYPE);
-    return request;
+    return client;
+  }
+
+  private static KeyStore createKeyStore(
+          String x509Certificate, String password, CertificationType certificationType) {
+    KeyStoreCreationService keyStoreCreationService = new KeyStoreCreationService();
+    try {
+      switch (certificationType) {
+        case PEM:
+          return keyStoreCreationService.createAndReturnKeystoreFromPEM(x509Certificate, password);
+        case P12:
+          return keyStoreCreationService.createAndReturnKeystoreFromP12(x509Certificate, password);
+        default:
+          throw new CertificationTypeNotSupportedException(certificationType);
+      }
+    } catch (Exception e) {
+      throw new CouldNotCreateDynamicKeyStoreException(e);
+    }
   }
 
   private static class ConfigData {
@@ -61,7 +81,7 @@ public final class RequestFactory {
     }
   }
 
-  private static Client createClient(ConfigData configData) {
+  private static Client createClientWithConfiguration(ConfigData configData) {
     try {
       return createClientDependingOnCertificationType(configData);
     } catch (Exception e) {
@@ -94,24 +114,6 @@ public final class RequestFactory {
             .build();
   }
 
-  private static KeyStore createKeyStore(
-      String x509Certificate, String password, CertificationType certificationType) {
-    KeyStoreCreationService keyStoreCreationService = new KeyStoreCreationService();
-    try {
-      switch (certificationType) {
-        case PEM:
-          return keyStoreCreationService.createAndReturnKeystoreFromPEM(x509Certificate, password);
-        case P12:
-          return keyStoreCreationService.createAndReturnKeystoreFromP12(x509Certificate, password);
-        default:
-          throw new CertificationTypeNotSupportedException(certificationType);
-      }
-    } catch (Exception e) {
-      throw new CouldNotCreateDynamicKeyStoreException(e);
-    }
-  }
-
-
   /**
    * Setting the 'reg_access_token' within the header.
    *
@@ -120,14 +122,7 @@ public final class RequestFactory {
    * @return Builder -
    */
   public static Invocation.Builder bearerTokenRequest(String url, String accessToken) {
-    Client client = ClientBuilder.newClient();
-    client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
-    WebTarget target = client.target(url);
-    Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
-    request.accept(MediaType.APPLICATION_JSON_TYPE);
-    request.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-
-    return request;
+    return getBearerTokenRequest(url, accessToken);
   }
 
   /**
@@ -139,15 +134,18 @@ public final class RequestFactory {
    */
   public static Invocation.Builder bearerTokenRequest(
       String url, String accessToken, String applicationId, String signature) {
+    return getBearerTokenRequest(url, accessToken)
+            .header(AgrirouterHttpHeader.APPLICATION_ID, applicationId)
+            .header(AgrirouterHttpHeader.SIGNATURE, signature);
+  }
+
+  private static Invocation.Builder getBearerTokenRequest(String url, String accessToken) {
     Client client = ClientBuilder.newClient();
     client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
     WebTarget target = client.target(url);
-    Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
-    request.accept(MediaType.APPLICATION_JSON_TYPE);
-    request.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-    request.header(AgrirouterHttpHeader.APPLICATION_ID, applicationId);
-    request.header(AgrirouterHttpHeader.SIGNATURE, signature);
-    return request;
+    return target.request(MediaType.APPLICATION_JSON_TYPE)
+            .accept(MediaType.APPLICATION_JSON_TYPE)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
   }
 
   public class AgrirouterHttpHeader {
