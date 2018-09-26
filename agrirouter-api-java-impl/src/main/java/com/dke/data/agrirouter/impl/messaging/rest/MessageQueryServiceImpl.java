@@ -18,7 +18,7 @@ public class MessageQueryServiceImpl extends EnvironmentalService
 
   private final MessageQueryService messageQueryService;
 
-  MessageQueryServiceImpl(Environment environment) {
+  public MessageQueryServiceImpl(Environment environment) {
     super(environment);
     this.messageQueryService =
         new MessageQueryService(
