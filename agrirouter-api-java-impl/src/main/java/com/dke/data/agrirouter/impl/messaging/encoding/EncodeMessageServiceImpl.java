@@ -8,6 +8,7 @@ import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.google.protobuf.Any;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
@@ -28,21 +29,27 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     payloadParameters.validate();
 
     try (ByteArrayOutputStream streamedMessage = new ByteArrayOutputStream()) {
-
-      this.getNativeLogger().trace("Encode header.");
-      this.header(messageHeaderParameters).writeDelimitedTo(streamedMessage);
-
-      this.getNativeLogger().trace("Encode payload.");
-      this.payload(payloadParameters).writeDelimitedTo(streamedMessage);
-
-      this.getNativeLogger().trace("Encoding message.");
-      String encodedMessage = Base64.getEncoder().encodeToString(streamedMessage.toByteArray());
-
-      this.logMethodEnd(encodedMessage);
-      return encodedMessage;
+      return this.getEncodedMessage(messageHeaderParameters, payloadParameters, streamedMessage);
     } catch (IOException e) {
       throw new CouldNotEncodeMessageException(e);
     }
+  }
+
+  private String getEncodedMessage(MessageHeaderParameters messageHeaderParameters,
+                                   PayloadParameters payloadParameters,
+                                   ByteArrayOutputStream streamedMessage) throws IOException {
+    this.getNativeLogger().trace("Encode header.");
+    this.header(messageHeaderParameters).writeDelimitedTo(streamedMessage);
+
+    this.getNativeLogger().trace("Encode payload.");
+    this.payload(payloadParameters).writeDelimitedTo(streamedMessage);
+
+    this.getNativeLogger().trace("Encoding message.");
+    String encodedMessage = Base64.getEncoder().encodeToString(streamedMessage.toByteArray());
+
+    this.logMethodEnd(encodedMessage);
+    return encodedMessage;
+
   }
 
   private Request.RequestEnvelope header(MessageHeaderParameters parameters) {

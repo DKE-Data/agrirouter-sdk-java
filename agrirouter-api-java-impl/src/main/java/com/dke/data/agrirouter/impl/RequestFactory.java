@@ -34,43 +34,24 @@ public final class RequestFactory {
    */
   public static Invocation.Builder securedRequest(
       String url, String certificate, String password, CertificationType certificationType) {
-    ClientConfig clientConfig = new ClientConfig();
-    KeyStore keyStore = createKeyStore(certificate, password, certificationType);
-    Client client = createClient(clientConfig, keyStore, password, certificationType);
-    client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+    Client client = createClient(certificate, password, certificationType);
     WebTarget target = client.target(url);
-    Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
-    request.accept(MediaType.APPLICATION_JSON_TYPE);
-    return request;
+    return target
+            .request(MediaType.APPLICATION_JSON_TYPE)
+            .accept(MediaType.APPLICATION_JSON_TYPE);
   }
 
-  private static Client createClient(
-      ClientConfig clientConfig,
-      KeyStore keyStore,
-      String password,
-      CertificationType certificationType) {
-    try {
-      switch (certificationType) {
-        case PEM:
-          return ClientBuilder.newBuilder()
-              .withConfig(clientConfig)
-              .keyStore(keyStore, KeyStoreCreationService.TEMPORARY_KEY_PASSWORD)
-              .build();
-        case P12:
-          return ClientBuilder.newBuilder()
-              .withConfig(clientConfig)
-              .keyStore(keyStore, password)
-              .build();
-        default:
-          throw new CertificationTypeNotSupportedException(certificationType);
-      }
-    } catch (Exception e) {
-      throw new CouldNotCreateDynamicKeyStoreException(e);
-    }
+  private static Client createClient(String certificate, String password, CertificationType certificationType) {
+    ClientConfig clientConfig = new ClientConfig();
+    KeyStore keyStore = createKeyStore(certificate, password, certificationType);
+    ConfigData configData = new ConfigData(clientConfig, keyStore, password, certificationType);
+    Client client = createClientWithConfiguration(configData);
+    client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+    return client;
   }
 
   private static KeyStore createKeyStore(
-      String x509Certificate, String password, CertificationType certificationType) {
+          String x509Certificate, String password, CertificationType certificationType) {
     KeyStoreCreationService keyStoreCreationService = new KeyStoreCreationService();
     try {
       switch (certificationType) {
@@ -86,6 +67,53 @@ public final class RequestFactory {
     }
   }
 
+  private static class ConfigData {
+    ClientConfig clientConfig;
+    KeyStore keyStore;
+    String password;
+    CertificationType certificationType;
+
+    ConfigData(ClientConfig clientConfig, KeyStore keyStore, String password, CertificationType certificationType) {
+      this.clientConfig = clientConfig;
+      this.keyStore = keyStore;
+      this.password = password;
+      this.certificationType = certificationType;
+    }
+  }
+
+  private static Client createClientWithConfiguration(ConfigData configData) {
+    try {
+      return createClientDependingOnCertificationType(configData);
+    } catch (Exception e) {
+      throw new CouldNotCreateDynamicKeyStoreException(e);
+    }
+  }
+
+  private static Client createClientDependingOnCertificationType(ConfigData configData) {
+    switch (configData.certificationType) {
+      case PEM:
+        return buildConcreteClient(configData, KeyStoreCreationService.TEMPORARY_KEY_PASSWORD);
+      case P12:
+        return buildConcreteClient(configData);
+      default:
+        throw new CertificationTypeNotSupportedException(configData.certificationType);
+    }
+  }
+
+  private static Client buildConcreteClient(ConfigData configData, String password) {
+    return ClientBuilder.newBuilder()
+            .withConfig(configData.clientConfig)
+            .keyStore(configData.keyStore, password)
+            .build();
+  }
+
+  private static Client buildConcreteClient(ConfigData configData) {
+    return ClientBuilder.newBuilder()
+            .withConfig(configData.clientConfig)
+            .keyStore(configData.keyStore, configData.password)
+            .build();
+  }
+
   /**
    * Setting the 'reg_access_token' within the header.
    *
@@ -94,14 +122,7 @@ public final class RequestFactory {
    * @return Builder -
    */
   public static Invocation.Builder bearerTokenRequest(String url, String accessToken) {
-    Client client = ClientBuilder.newClient();
-    client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
-    WebTarget target = client.target(url);
-    Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
-    request.accept(MediaType.APPLICATION_JSON_TYPE);
-    request.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-
-    return request;
+    return getBearerTokenRequest(url, accessToken);
   }
 
   /**
@@ -113,15 +134,18 @@ public final class RequestFactory {
    */
   public static Invocation.Builder bearerTokenRequest(
       String url, String accessToken, String applicationId, String signature) {
+    return getBearerTokenRequest(url, accessToken)
+            .header(AgrirouterHttpHeader.APPLICATION_ID, applicationId)
+            .header(AgrirouterHttpHeader.SIGNATURE, signature);
+  }
+
+  private static Invocation.Builder getBearerTokenRequest(String url, String accessToken) {
     Client client = ClientBuilder.newClient();
     client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
     WebTarget target = client.target(url);
-    Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
-    request.accept(MediaType.APPLICATION_JSON_TYPE);
-    request.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-    request.header(AgrirouterHttpHeader.APPLICATION_ID, applicationId);
-    request.header(AgrirouterHttpHeader.SIGNATURE, signature);
-    return request;
+    return target.request(MediaType.APPLICATION_JSON_TYPE)
+            .accept(MediaType.APPLICATION_JSON_TYPE)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
   }
 
   public class AgrirouterHttpHeader {
@@ -151,3 +175,4 @@ public final class RequestFactory {
     return request;
   }
 }
+

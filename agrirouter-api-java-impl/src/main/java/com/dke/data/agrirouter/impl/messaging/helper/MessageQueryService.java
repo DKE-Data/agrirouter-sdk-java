@@ -42,10 +42,7 @@ public class MessageQueryService extends NonEnvironmentalService
     this.getNativeLogger().trace("Encode message.");
     EncodeMessageResponse encodedMessageResponse = this.encodeMessage(parameters);
 
-    this.getNativeLogger().trace("Build message parameters.");
-    SendMessageParameters sendMessageParameters = new SendMessageParameters();
-    sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+    SendMessageParameters sendMessageParameters = this.buildMessageParameters(parameters, encodedMessageResponse);
 
     this.getNativeLogger().trace("Send and fetch message response.");
     MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
@@ -60,35 +57,65 @@ public class MessageQueryService extends NonEnvironmentalService
   private EncodeMessageResponse encodeMessage(MessageQueryParameters parameters) {
     this.logMethodBegin(parameters);
 
-    this.getNativeLogger().trace("Build message header parameters.");
-    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+    BuildMessageHeaderData headerData = this.buildMessageHeaderParameters();
+    MessageQueryMessageParameters messageQueryMessageParameters = this.buildMessageQueryParameters(parameters);
+    PayloadParameters payloadParameters = this.buildMessagePayloadParameters(messageQueryMessageParameters);
 
-    final String applicationMessageID = MessageIdService.generateMessageId();
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    this.getNativeLogger().trace("Encode message.");
+    String encodedMessage =
+        this.encodeMessageService.encode(headerData.parameters, payloadParameters);
 
-    messageHeaderParameters.setApplicationMessageSeqNo(1);
-    messageHeaderParameters.setTechnicalMessageType(this.technicalMessageType);
-    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+    this.logMethodEnd(encodedMessage);
+    return new EncodeMessageResponse(headerData.applicationMessageId, encodedMessage);
+  }
 
+  private MessageQueryMessageParameters buildMessageQueryParameters(MessageQueryParameters parameters) {
     this.getNativeLogger().trace("Build message query parameters.");
     MessageQueryMessageParameters messageQueryMessageParameters =
-        new MessageQueryMessageParameters();
+            new MessageQueryMessageParameters();
     messageQueryMessageParameters.setMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
     messageQueryMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
     messageQueryMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
     messageQueryMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
+    return messageQueryMessageParameters;
+  }
 
+  private PayloadParameters buildMessagePayloadParameters(MessageQueryMessageParameters messageQueryMessageParameters) {
     this.getNativeLogger().trace("Build message payload parameters.");
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(FeedRequests.MessageQuery.getDescriptor().getFullName());
     payloadParameters.setValue(
-        new MessageQueryMessageContentFactory().message(messageQueryMessageParameters));
+            new MessageQueryMessageContentFactory().message(messageQueryMessageParameters));
+    return payloadParameters;
+  }
 
-    this.getNativeLogger().trace("Encode message.");
-    String encodedMessage =
-        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+  private BuildMessageHeaderData buildMessageHeaderParameters() {
+    this.getNativeLogger().trace("Build message header parameters.");
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+    final String applicationMessageID = MessageIdService.generateMessageId();
+    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    messageHeaderParameters.setApplicationMessageSeqNo(1);
+    messageHeaderParameters.setTechnicalMessageType(this.technicalMessageType);
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+    return new BuildMessageHeaderData(messageHeaderParameters, applicationMessageID);
+  }
 
-    this.logMethodEnd(encodedMessage);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+  private SendMessageParameters buildMessageParameters(MessageQueryParameters parameters,
+                                                       EncodeMessageResponse encodedMessageResponse) {
+    this.getNativeLogger().trace("Build message parameters.");
+    SendMessageParameters sendMessageParameters = new SendMessageParameters();
+    sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+    return sendMessageParameters;
+  }
+
+  private class BuildMessageHeaderData {
+    MessageHeaderParameters parameters;
+    String applicationMessageId;
+
+    BuildMessageHeaderData(MessageHeaderParameters parameters, String applicationMessageId) {
+      this.parameters = parameters;
+      this.applicationMessageId = applicationMessageId;
+    }
   }
 }
