@@ -45,8 +45,7 @@ public class MessageQueryService extends NonEnvironmentalService
     this.getNativeLogger().trace("Build message parameters.");
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
 
     this.getNativeLogger().trace("Send and fetch message response.");
     MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
