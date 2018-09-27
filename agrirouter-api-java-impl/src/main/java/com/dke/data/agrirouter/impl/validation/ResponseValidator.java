@@ -14,6 +14,9 @@ import org.apache.logging.log4j.message.ObjectArrayMessage;
 /** Validation of the response, encapsulated using an interface. */
 public interface ResponseValidator {
 
+  int HTTP_STATUS_OK_MIN = 200;
+  int HTTP_STATUS_OK_MAX = 299;
+
   Logger LOGGER = LogManager.getLogger();
 
   /**
@@ -26,18 +29,26 @@ public interface ResponseValidator {
   default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus) {
     LOGGER.debug("Validating response.");
     LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
-    if (response.getStatus() == HttpStatus.SC_NOT_FOUND) {
-      throw new InvalidUrlForRequestException();
-    }
-    if (response.getStatus() == HttpStatus.SC_UNAUTHORIZED) {
-      throw new UnauthorizedRequestException();
-    }
-    if (response.getStatus() == HttpStatus.SC_FORBIDDEN) {
-      throw new ForbiddenRequestException();
-    }
-    if (response.getStatus() != exceptedHttpStatus) {
-      throw new UnexpectedHttpStatusException(response.getStatus(), exceptedHttpStatus);
-    }
+
+    int actualHttpStatus = this.getStatus(response);
+    this.assertResponseStatusIsValidWithoutRangeCheck(actualHttpStatus, exceptedHttpStatus);
+  }
+
+  /**
+   * Will assert that the response status is valid within a certain range.
+   * Any HTTP status from <code>HTTP_STATUS_OK_MIN</code> up to <code>HTTP_STATUS_OK_MAX</code> will
+   * count as a valid HTTP OK status.
+   * If there will be an 404 or 401 a business exception will rise.
+   *
+   * @param response The current response.
+   * @param exceptedHttpStatus The expected HTTP status.
+   */
+  default void assertResponseStatusIsValidWithinRange(Response response, int exceptedHttpStatus) {
+    LOGGER.debug("Validating response.");
+    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
+
+    int actualHttpStatus = this.getStatus(response);
+    this.assertResponseStatusIsValidWithRangeCheck(actualHttpStatus);
   }
 
   /**
@@ -50,17 +61,77 @@ public interface ResponseValidator {
   default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus) {
     LOGGER.debug("Validating response.");
     LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
-    if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND) {
+
+    int actualHttpStatus = this.getStatus(response);
+    this.assertResponseStatusIsValidWithoutRangeCheck(actualHttpStatus, exceptedHttpStatus);
+  }
+
+  /**
+   * Will assert that the response status is valid within a certain range.
+   * Any HTTP status from <code>HTTP_STATUS_OK_MIN</code> up to <code>HTTP_STATUS_OK_MAX</code> will
+   * count as a valid HTTP OK status.
+   * If there will be an 404 or 401 a business exception will rise.
+   *
+   * @param response The current response.
+   * @param exceptedHttpStatus The expected HTTP status.
+   */
+  default void assertResponseStatusIsValidWithinRange(WebResponse response, int exceptedHttpStatus) {
+    LOGGER.debug("Validating response.");
+    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
+
+    int actualHttpStatus = this.getStatus(response);
+    this.assertResponseStatusIsValidWithRangeCheck(actualHttpStatus);
+  }
+
+  /**
+   * Helper method to check if response status code is valid.
+   *
+   * @param actualStatus The actual HTTP status of the response
+   * @param expectedStatus The expected HTTP status
+   */
+  default void assertResponseStatusIsValidWithoutRangeCheck(int actualStatus, int expectedStatus) {
+    if (actualStatus == HttpStatus.SC_NOT_FOUND) {
       throw new InvalidUrlForRequestException();
     }
-    if (response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+    if (actualStatus == HttpStatus.SC_UNAUTHORIZED) {
       throw new UnauthorizedRequestException();
     }
-    if (response.getStatusCode() == HttpStatus.SC_FORBIDDEN) {
+    if (actualStatus == HttpStatus.SC_FORBIDDEN) {
       throw new ForbiddenRequestException();
     }
-    if (response.getStatusCode() != exceptedHttpStatus) {
-      throw new UnexpectedHttpStatusException(response.getStatusCode(), exceptedHttpStatus);
+    if (actualStatus != expectedStatus) {
+      throw new UnexpectedHttpStatusException(actualStatus, expectedStatus);
     }
+  }
+
+  /**
+   * Helper method to check if response status code is within the valid range <code>HTTP_STATUS_OK_MIN</code> and
+   * <code>HTTP_STATUS_OK_MAX</code>
+   *
+   * @param actualStatus The actual HTTP status of the response
+   */
+  default void assertResponseStatusIsValidWithRangeCheck(int actualStatus) {
+    if (actualStatus == HttpStatus.SC_NOT_FOUND) {
+      throw new InvalidUrlForRequestException();
+    }
+    if (actualStatus == HttpStatus.SC_UNAUTHORIZED) {
+      throw new UnauthorizedRequestException();
+    }
+    if (actualStatus == HttpStatus.SC_FORBIDDEN) {
+      throw new ForbiddenRequestException();
+    }
+    if (actualStatus < HTTP_STATUS_OK_MIN) {
+      throw new UnexpectedHttpStatusException(actualStatus, HTTP_STATUS_OK_MIN);
+    } else if (actualStatus > HTTP_STATUS_OK_MAX) {
+      throw new UnexpectedHttpStatusException(actualStatus, HTTP_STATUS_OK_MAX);
+    }
+  }
+
+  default int getStatus(WebResponse response) {
+    return response.getStatusCode();
+  }
+
+  default int getStatus(Response response) {
+    return response.getStatus();
   }
 }
