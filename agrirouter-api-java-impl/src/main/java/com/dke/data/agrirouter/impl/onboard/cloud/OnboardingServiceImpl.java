@@ -24,6 +24,8 @@ import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -73,13 +75,13 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
                 CloudVirtualizedAppRegistration.OnboardingResponse onboardingResponse =
                         this.decode(decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
                 onboardingResponse.getOnboardedEndpointsList().forEach(endpointRegistrationDetails -> {
-                    OnboardingResponse response = new OnboardingResponse();
-                    response.setSensorAlternateId(endpointRegistrationDetails.getSensorAlternateId());
-                    response.setCapabilityAlternateId(endpointRegistrationDetails.getCapabilityAlternateId());
-                    response.setDeviceAlternateId(endpointRegistrationDetails.getDeviceAlternateId());
-                    response.setAuthentication(parameters.getOnboardingResponse().getAuthentication());
-                    response.setConnectionCriteria(parameters.getOnboardingResponse().getConnectionCriteria());
-                    responses.add(response);
+                    OnboardingResponse internalOnboardingResponse = new OnboardingResponse();
+                    internalOnboardingResponse.setSensorAlternateId(endpointRegistrationDetails.getSensorAlternateId());
+                    internalOnboardingResponse.setCapabilityAlternateId(endpointRegistrationDetails.getCapabilityAlternateId());
+                    internalOnboardingResponse.setDeviceAlternateId(endpointRegistrationDetails.getDeviceAlternateId());
+                    internalOnboardingResponse.setAuthentication(parameters.getOnboardingResponse().getAuthentication());
+                    internalOnboardingResponse.setConnectionCriteria(parameters.getOnboardingResponse().getConnectionCriteria());
+                    responses.add(internalOnboardingResponse);
                 });
             }
         }
@@ -110,4 +112,8 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
         return new EncodeMessageResponse(applicationMessageID, encodedMessage);
     }
 
+    @Override
+    public CloudVirtualizedAppRegistration.OnboardingResponse unsafeDecode(ByteString message) throws InvalidProtocolBufferException {
+        return CloudVirtualizedAppRegistration.OnboardingResponse.parseFrom(message);
+    }
 }
