@@ -4,6 +4,7 @@ import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT
 import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 
 import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
+import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.Request;
 import agrirouter.response.Response;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
@@ -11,6 +12,7 @@ import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.exception.CouldNotOnboardVirtualCommunicationUnitException;
 import com.dke.data.agrirouter.api.factories.impl.OnboardCloudEndpointMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.OnboardCloudEndpointMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
@@ -68,30 +70,38 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
       DecodeMessageResponse decodedMessageQueryResponse =
           this.decodeMessageService.decode(
               fetchMessageResponses.get().get(0).getCommand().getMessage());
-      if (decodedMessageQueryResponse.getResponseEnvelope().getType()
-              == Response.ResponseEnvelope.ResponseBodyType.CLOUD_REGISTRATIONS
-          && decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
-              == HttpStatus.SC_OK) {
-        CloudVirtualizedAppRegistration.OnboardingResponse onboardingResponse =
-            this.decode(
+      if (decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
+              == HttpStatus.SC_BAD_REQUEST) {
+        MessageOuterClass.Message message =
+            this.decodeMessageService.decode(
                 decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
-        onboardingResponse
-            .getOnboardedEndpointsList()
-            .forEach(
-                endpointRegistrationDetails -> {
-                  OnboardingResponse internalOnboardingResponse = new OnboardingResponse();
-                  internalOnboardingResponse.setSensorAlternateId(
-                      endpointRegistrationDetails.getSensorAlternateId());
-                  internalOnboardingResponse.setCapabilityAlternateId(
-                      endpointRegistrationDetails.getCapabilityAlternateId());
-                  internalOnboardingResponse.setDeviceAlternateId(
-                      endpointRegistrationDetails.getDeviceAlternateId());
-                  internalOnboardingResponse.setAuthentication(
-                      parameters.getOnboardingResponse().getAuthentication());
-                  internalOnboardingResponse.setConnectionCriteria(
-                      parameters.getOnboardingResponse().getConnectionCriteria());
-                  responses.add(internalOnboardingResponse);
-                });
+        throw new CouldNotOnboardVirtualCommunicationUnitException(message.getMessage());
+      } else {
+        if (decodedMessageQueryResponse.getResponseEnvelope().getType()
+                == Response.ResponseEnvelope.ResponseBodyType.CLOUD_REGISTRATIONS
+            && decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
+                == HttpStatus.SC_OK) {
+          CloudVirtualizedAppRegistration.OnboardingResponse onboardingResponse =
+              this.decode(
+                  decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
+          onboardingResponse
+              .getOnboardedEndpointsList()
+              .forEach(
+                  endpointRegistrationDetails -> {
+                    OnboardingResponse internalOnboardingResponse = new OnboardingResponse();
+                    internalOnboardingResponse.setSensorAlternateId(
+                        endpointRegistrationDetails.getSensorAlternateId());
+                    internalOnboardingResponse.setCapabilityAlternateId(
+                        endpointRegistrationDetails.getCapabilityAlternateId());
+                    internalOnboardingResponse.setDeviceAlternateId(
+                        endpointRegistrationDetails.getDeviceAlternateId());
+                    internalOnboardingResponse.setAuthentication(
+                        parameters.getOnboardingResponse().getAuthentication());
+                    internalOnboardingResponse.setConnectionCriteria(
+                        parameters.getOnboardingResponse().getConnectionCriteria());
+                    responses.add(internalOnboardingResponse);
+                  });
+        }
       }
     }
     return responses;
