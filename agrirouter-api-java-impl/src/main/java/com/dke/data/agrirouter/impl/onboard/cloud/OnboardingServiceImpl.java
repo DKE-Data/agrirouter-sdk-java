@@ -12,6 +12,7 @@ import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.exception.CouldNotOffboardVirtualCommunicationUnitException;
 import com.dke.data.agrirouter.api.exception.CouldNotOnboardVirtualCommunicationUnitException;
 import com.dke.data.agrirouter.api.factories.impl.OffboardCloudEndpointMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.OnboardCloudEndpointMessageContentFactory;
@@ -104,8 +105,20 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
     EncodeMessageResponse encodedMessageResponse = this.encodeOffboardingMessage(parameters);
     SendMessageParameters sendMessageParameters =
         createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
-    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        sendMessageAndFetchResponses(sendMessageParameters, parameters.getOnboardingResponse());
+    if (fetchMessageResponses.isPresent()) {
+      DecodeMessageResponse decodedMessageQueryResponse =
+          this.decodeMessageService.decode(
+              fetchMessageResponses.get().get(0).getCommand().getMessage());
+      if (decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
+          == HttpStatus.SC_BAD_REQUEST) {
+        MessageOuterClass.Message message =
+            this.decodeMessageService.decode(
+                decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
+        throw new CouldNotOffboardVirtualCommunicationUnitException(message.getMessage());
+      }
+    }
   }
 
   private Optional<List<FetchMessageResponse>> sendMessageAndFetchResponses(
