@@ -9,8 +9,7 @@ import com.google.protobuf.ByteString;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
-class MessageConfirmationMessageContentFactoryTest
-    extends AbstractMessageContentFactoryTest<MessageConfirmationMessageContentFactory> {
+class MessageConfirmationMessageContentFactoryTest {
 
   @Test
   void givenValidQueryMessagesMessageParametersMessageShouldNotFail() {
@@ -38,7 +37,6 @@ class MessageConfirmationMessageContentFactoryTest
         () -> this.getInstanceToTest().message(parameters));
   }
 
-  @Override
   protected MessageConfirmationMessageContentFactory getInstanceToTest() {
     return new MessageConfirmationMessageContentFactory();
   }

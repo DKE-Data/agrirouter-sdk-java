@@ -10,29 +10,19 @@ import javax.validation.constraints.NotNull
  * Parameters class. Encapsulation for the services.
  */
 @ToString
-class CloudOnboardingParameters : ParameterValidation {
+class CloudOffboardingParameters : ParameterValidation {
 
     @NotNull
     lateinit var onboardingResponse: OnboardingResponse
 
     @NotNull
-    lateinit var endpointDetails: List<EndpointDetailsParameters>
+    lateinit var endpointIds: List<String>
 
     override fun validate() {
         super.validate()
-        if (endpointDetails.isEmpty()) {
-            throw IllegalParameterDefinitionException("There have to be endpoint details to onboard.")
+        if (endpointIds.isEmpty()) {
+            throw IllegalParameterDefinitionException("There have to be endpoint IDs to delete.")
         }
-    }
-
-    class EndpointDetailsParameters {
-
-        @org.jetbrains.annotations.NotNull
-        lateinit var endpointId: String
-
-        @org.jetbrains.annotations.NotNull
-        lateinit var endpointName: String
-
     }
 
 }

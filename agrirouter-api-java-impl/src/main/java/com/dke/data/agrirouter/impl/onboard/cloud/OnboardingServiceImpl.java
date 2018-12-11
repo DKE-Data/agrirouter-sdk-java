@@ -13,16 +13,15 @@ import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.exception.CouldNotOnboardVirtualCommunicationUnitException;
+import com.dke.data.agrirouter.api.factories.impl.OffboardCloudEndpointMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.OnboardCloudEndpointMessageContentFactory;
+import com.dke.data.agrirouter.api.factories.impl.parameters.OffboardCloudEndpointMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.OnboardCloudEndpointMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.onboard.cloud.OnboardingService;
-import com.dke.data.agrirouter.api.service.parameters.CloudOnboardingParameters;
-import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
-import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
-import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
+import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
@@ -51,27 +50,19 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
 
   public List<OnboardingResponse> onboard(CloudOnboardingParameters parameters) {
     parameters.validate();
-
-    EncodeMessageResponse encodedMessageResponse = this.encodeMessage(parameters);
-    SendMessageParameters sendMessageParameters = new SendMessageParameters();
-    sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
-
-    MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
-
+    EncodeMessageResponse encodedMessageResponse = this.encodeOnboardingMessage(parameters);
+    SendMessageParameters sendMessageParameters =
+        createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
-        this.fetchMessageService.fetch(
-            parameters.getOnboardingResponse(), MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
+        sendMessageAndFetchResponses(sendMessageParameters, parameters.getOnboardingResponse());
+
     List<OnboardingResponse> responses = new ArrayList<>();
     if (fetchMessageResponses.isPresent()) {
       DecodeMessageResponse decodedMessageQueryResponse =
           this.decodeMessageService.decode(
               fetchMessageResponses.get().get(0).getCommand().getMessage());
       if (decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
-              == HttpStatus.SC_BAD_REQUEST) {
+          == HttpStatus.SC_BAD_REQUEST) {
         MessageOuterClass.Message message =
             this.decodeMessageService.decode(
                 decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
@@ -80,7 +71,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
         if (decodedMessageQueryResponse.getResponseEnvelope().getType()
                 == Response.ResponseEnvelope.ResponseBodyType.CLOUD_REGISTRATIONS
             && decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
-                == HttpStatus.SC_OK) {
+                == HttpStatus.SC_CREATED) {
           CloudVirtualizedAppRegistration.OnboardingResponse onboardingResponse =
               this.decode(
                   decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
@@ -107,14 +98,26 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
     return responses;
   }
 
-  private EncodeMessageResponse encodeMessage(CloudOnboardingParameters parameters) {
-    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-    final String applicationMessageID = MessageIdService.generateMessageId();
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+  @Override
+  public void offboard(CloudOffboardingParameters parameters) {
+    parameters.validate();
+    EncodeMessageResponse encodedMessageResponse = this.encodeOffboardingMessage(parameters);
+    SendMessageParameters sendMessageParameters =
+        createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
+    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+  }
 
-    messageHeaderParameters.setTechnicalMessageType(
-        TechnicalMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
-    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+  private Optional<List<FetchMessageResponse>> sendMessageAndFetchResponses(
+      SendMessageParameters sendMessageParameters, OnboardingResponse onboardingResponse) {
+    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    return this.fetchMessageService.fetch(
+        onboardingResponse, MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
+  }
+
+  private EncodeMessageResponse encodeOnboardingMessage(CloudOnboardingParameters parameters) {
+    final String applicationMessageID = MessageIdService.generateMessageId();
 
     List<OnboardCloudEndpointMessageParameters> onboardCloudEndpointMessageParameters =
         new ArrayList<>();
@@ -138,11 +141,57 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
         new OnboardCloudEndpointMessageContentFactory()
             .message(
                 onboardCloudEndpointMessageParameters.toArray(
-                    new OnboardCloudEndpointMessageParameters[0])));
+                    new OnboardCloudEndpointMessageParameters
+                        [onboardCloudEndpointMessageParameters.size()])));
 
     String encodedMessage =
-        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+        this.encodeMessageService.encode(
+            this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+  }
+
+  private EncodeMessageResponse encodeOffboardingMessage(CloudOffboardingParameters parameters) {
+    final String applicationMessageID = MessageIdService.generateMessageId();
+
+    OffboardCloudEndpointMessageParameters cloudOffboardingParameters =
+        new OffboardCloudEndpointMessageParameters();
+    cloudOffboardingParameters.setEndpointIds(new ArrayList<>());
+    parameters
+        .getEndpointIds()
+        .forEach(
+            endpointId -> {
+              cloudOffboardingParameters.getEndpointIds().add(endpointId);
+            });
+
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(
+        CloudVirtualizedAppRegistration.OffboardingRequest.getDescriptor().getFullName());
+
+    payloadParameters.setValue(
+        new OffboardCloudEndpointMessageContentFactory().message(cloudOffboardingParameters));
+
+    String encodedMessage =
+        this.encodeMessageService.encode(
+            this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
+    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+  }
+
+  private MessageHeaderParameters createMessageHeaderParameters(String applicationMessageID) {
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    messageHeaderParameters.setTechnicalMessageType(
+        TechnicalMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+    return messageHeaderParameters;
+  }
+
+  private SendMessageParameters createSendMessageParameters(
+      EncodeMessageResponse encodedMessageResponse, OnboardingResponse onboardingResponse) {
+    SendMessageParameters sendMessageParameters = new SendMessageParameters();
+    sendMessageParameters.setOnboardingResponse(onboardingResponse);
+    sendMessageParameters.setEncodedMessages(
+        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+    return sendMessageParameters;
   }
 
   @Override

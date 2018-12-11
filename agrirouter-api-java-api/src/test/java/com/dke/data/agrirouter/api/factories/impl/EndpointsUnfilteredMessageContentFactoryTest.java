@@ -10,8 +10,7 @@ import com.google.protobuf.ByteString;
 import kotlin.UninitializedPropertyAccessException;
 import org.junit.jupiter.api.Test;
 
-class EndpointsUnfilteredMessageContentFactoryTest
-    extends AbstractMessageContentFactoryTest<EndpointsUnfilteredMessageContentFactory> {
+class EndpointsUnfilteredMessageContentFactoryTest {
 
   @Test
   void givenValidEndpointsUnfilteredMessageParametersMessageShouldNotFail() {
@@ -45,8 +44,7 @@ class EndpointsUnfilteredMessageContentFactoryTest
         () -> this.getInstanceToTest().message(endpointsUnfilteredMessageParameters));
   }
 
-  @Override
-  protected EndpointsUnfilteredMessageContentFactory getInstanceToTest() {
+  private EndpointsUnfilteredMessageContentFactory getInstanceToTest() {
     return new EndpointsUnfilteredMessageContentFactory();
   }
 }
