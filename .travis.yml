@@ -11,8 +11,8 @@ after_success:
 - "./cd/deploy.sh"
 language: java
 jdk:
-- oraclejdk10
-- oraclejdk9
-- oraclejdk8
+- openjdk10
+- openjdk9
+- openjdk8
 notifications:
   slack: agrirouter:lcS7DGOgPaZ5cwz5bb6owTF3
