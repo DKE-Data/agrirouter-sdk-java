@@ -53,7 +53,8 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+    sendMessageParameters.setEncodedMessages(
+        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
@@ -81,7 +82,8 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
         new MessageConfirmationMessageContentFactory()
             .message(messageConfirmationMessageParameters));
 
-    String encodedMessage = this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+    String encodedMessage =
+        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
   }
 

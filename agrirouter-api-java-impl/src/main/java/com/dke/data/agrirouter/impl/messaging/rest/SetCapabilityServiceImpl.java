@@ -39,7 +39,8 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     EncodeMessageResponse encodeMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodeMessageResponse.getEncodedMessage()));
+    sendMessageParameters.setEncodedMessages(
+        Collections.singletonList(encodeMessageResponse.getEncodedMessage()));
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
@@ -86,7 +87,8 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     payloadParameters.setValue(
         new CapabilitiesMessageContentFactory().message(capabilitiesMessageParameters));
 
-    String encodedMessage = this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+    String encodedMessage =
+        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
   }
 }
