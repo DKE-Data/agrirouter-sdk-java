@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class SubscriptionMessageContentFactoryTest
-    extends AbstractMessageContentFactoryTest<SubscriptionMessageContentFactory> {
+class SubscriptionMessageContentFactoryTest {
 
   @Test
   void givenValidSubscriptionMessageParametersMessageShouldNotFail() {
@@ -51,8 +50,7 @@ class SubscriptionMessageContentFactoryTest
         () -> this.getInstanceToTest().message(subscriptionMessageParameters));
   }
 
-  @Override
-  protected SubscriptionMessageContentFactory getInstanceToTest() {
+  private SubscriptionMessageContentFactory getInstanceToTest() {
     return new SubscriptionMessageContentFactory();
   }
 }

@@ -11,8 +11,7 @@ import java.util.List;
 import kotlin.UninitializedPropertyAccessException;
 import org.junit.jupiter.api.Test;
 
-class CapabilitiesMessageContentFactoryTest
-    extends AbstractMessageContentFactoryTest<CapabilitiesMessageContentFactory> {
+class CapabilitiesMessageContentFactoryTest {
 
   @Test
   void givenValidCapabilitiesMessageParametersMessageShouldNotFail() {
@@ -49,8 +48,7 @@ class CapabilitiesMessageContentFactoryTest
         () -> this.getInstanceToTest().message(capabilitiesMessageParameters));
   }
 
-  @Override
-  protected CapabilitiesMessageContentFactory getInstanceToTest() {
+  private CapabilitiesMessageContentFactory getInstanceToTest() {
     return new CapabilitiesMessageContentFactory();
   }
 }

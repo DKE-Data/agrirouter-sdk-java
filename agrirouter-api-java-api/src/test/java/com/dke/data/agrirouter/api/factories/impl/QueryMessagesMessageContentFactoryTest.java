@@ -10,8 +10,7 @@ import java.util.List;
 import kotlin.UninitializedPropertyAccessException;
 import org.junit.jupiter.api.Test;
 
-class QueryMessagesMessageContentFactoryTest
-    extends AbstractMessageContentFactoryTest<MessageQueryMessageContentFactory> {
+class QueryMessagesMessageContentFactoryTest {
 
   @Test
   void givenValidQueryMessagesMessageParametersMessageShouldNotFail() {
@@ -48,8 +47,7 @@ class QueryMessagesMessageContentFactoryTest
         () -> this.getInstanceToTest().message(queryMessagesMessageParameters));
   }
 
-  @Override
-  protected MessageQueryMessageContentFactory getInstanceToTest() {
+  private MessageQueryMessageContentFactory getInstanceToTest() {
     return new MessageQueryMessageContentFactory();
   }
 }

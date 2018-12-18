@@ -1,35 +1,29 @@
 package com.dke.data.agrirouter.api.factories.impl
 
 import agrirouter.feed.request.FeedRequests
-import com.dke.data.agrirouter.api.factories.MessageContentFactory
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters
 import com.dke.data.agrirouter.api.util.TimestampUtil
 import com.google.protobuf.ByteString
-import java.util.*
 
 /**
  * Implementation of a message content factory.
  */
-class MessageQueryMessageContentFactory : MessageContentFactory<MessageQueryMessageParameters> {
+class MessageQueryMessageContentFactory {
 
-    override fun message(vararg parameters: MessageQueryMessageParameters): ByteString {
-        parameters.forEach { p -> p.validate() }
+    fun message(parameters: MessageQueryMessageParameters): ByteString {
+        parameters.validate()
         val messageContent = FeedRequests.MessageQuery.newBuilder()
-        val first = Arrays.stream(parameters).findFirst()
-        if (first.isPresent) {
-            val messageParameters = first.get()
-            messageContent.addAllMessageIds(messageParameters.messageIds)
-            messageContent.addAllSenders(messageParameters.senderIds)
-            if (null != messageParameters.sentFromInSeconds || null!=messageParameters.sentToInSeconds) {
-                val validityPeriod = FeedRequests.ValidityPeriod.newBuilder()
-                if (null != messageParameters.sentFromInSeconds) {
-                    validityPeriod.sentFrom = TimestampUtil().seconds(messageParameters.sentFromInSeconds!!)
-                }
-                if (null != messageParameters.sentToInSeconds) {
-                    validityPeriod.sentTo = TimestampUtil().seconds(messageParameters.sentToInSeconds!!)
-                }
-                messageContent.setValidityPeriod(validityPeriod)
+        messageContent.addAllMessageIds(parameters.messageIds)
+        messageContent.addAllSenders(parameters.senderIds)
+        if (null != parameters.sentFromInSeconds || null != parameters.sentToInSeconds) {
+            val validityPeriod = FeedRequests.ValidityPeriod.newBuilder()
+            if (null != parameters.sentFromInSeconds) {
+                validityPeriod.sentFrom = TimestampUtil().seconds(parameters.sentFromInSeconds!!)
             }
+            if (null != parameters.sentToInSeconds) {
+                validityPeriod.sentTo = TimestampUtil().seconds(parameters.sentToInSeconds!!)
+            }
+            messageContent.setValidityPeriod(validityPeriod)
         }
         return messageContent.build().toByteString()
     }

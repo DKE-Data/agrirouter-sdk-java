@@ -9,8 +9,7 @@ import com.google.protobuf.ByteString;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
-class QueryMessageHeadersContentFactoryTest
-    extends AbstractMessageContentFactoryTest<MessageQueryMessageContentFactory> {
+class QueryMessageHeadersContentFactoryTest {
 
   @Test
   void givenValidParametersMessageShouldNotFail() {
@@ -41,8 +40,7 @@ class QueryMessageHeadersContentFactoryTest
         () -> this.getInstanceToTest().message(queryMessagesMessageParameters));
   }
 
-  @Override
-  protected MessageQueryMessageContentFactory getInstanceToTest() {
+  private MessageQueryMessageContentFactory getInstanceToTest() {
     return new MessageQueryMessageContentFactory();
   }
 }
