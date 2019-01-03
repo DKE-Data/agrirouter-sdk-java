@@ -16,18 +16,6 @@ class OnboardingParameters : ParameterValidation {
 
     @NotNull
     @NotEmpty
-    lateinit var clientId: String
-
-    @NotNull
-    @NotEmpty
-    lateinit var clientSecret: String
-
-    @NotNull
-    @NotEmpty
-    lateinit var accountId: String
-
-    @NotNull
-    @NotEmpty
     lateinit var applicationId: String
 
     @NotNull
