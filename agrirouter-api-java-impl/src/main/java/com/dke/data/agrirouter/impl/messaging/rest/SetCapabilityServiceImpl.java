@@ -35,17 +35,19 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
 
   @Override
   public void send(SetCapabilitiesParameters parameters) {
-    parameters.validate();
+    MessageSenderResponse response = sendWithoutValidation(parameters);
+    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+  }
 
+  @Override
+  public MessageSenderResponse sendWithoutValidation(SetCapabilitiesParameters parameters) {
+    parameters.validate();
     EncodeMessageResponse encodeMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
         Collections.singletonList(encodeMessageResponse.getEncodedMessage()));
-
-    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    return this.sendMessage(sendMessageParameters);
   }
 
   private EncodeMessageResponse encodeMessage(SetCapabilitiesParameters parameters) {

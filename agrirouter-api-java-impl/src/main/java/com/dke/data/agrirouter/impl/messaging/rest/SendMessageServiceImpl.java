@@ -7,12 +7,18 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import org.apache.http.HttpStatus;
 
 public class SendMessageServiceImpl
-    implements SendMessageService, ResponseValidator, MessageSender {
+        implements SendMessageService, ResponseValidator, MessageSender {
 
-  @Override
-  public void send(SendMessageParameters parameters) {
-    parameters.validate();
-    MessageSenderResponse response = this.sendMessage(parameters);
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
-  }
+    @Override
+    public void send(SendMessageParameters parameters) {
+        MessageSenderResponse response = this.sendWithoutValidation(parameters);
+        this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    }
+
+    @Override
+    public MessageSenderResponse sendWithoutValidation(SendMessageParameters parameters) {
+        parameters.validate();
+        return this.sendMessage(parameters);
+    }
+
 }

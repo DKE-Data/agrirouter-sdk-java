@@ -16,7 +16,7 @@ class CloudEndpointOnboardingMessageContentFactory {
             val builder = CloudVirtualizedAppRegistration.OnboardingRequest.EndpointRegistrationDetails.newBuilder()
             builder.id = p.endpointId
             builder.name = p.endpointName
-            messageContent.addOnboardingRequests(builder.build());
+            messageContent.addOnboardingRequests(builder.build())
         }
         return messageContent.build().toByteString()
     }

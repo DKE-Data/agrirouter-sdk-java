@@ -16,57 +16,60 @@ import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import java.util.Collections;
-import java.util.Objects;
 import org.apache.http.HttpStatus;
 
+import java.util.Collections;
+import java.util.Objects;
+
 public class DeleteMessageServiceImpl
-    implements DeleteMessageService, MessageSender, ResponseValidator {
+        implements DeleteMessageService, MessageSender, ResponseValidator {
 
-  private final EncodeMessageService encodeMessageService;
+    private final EncodeMessageService encodeMessageService;
 
-  public DeleteMessageServiceImpl() {
-    this.encodeMessageService = new EncodeMessageServiceImpl();
-  }
+    public DeleteMessageServiceImpl() {
+        this.encodeMessageService = new EncodeMessageServiceImpl();
+    }
 
-  @Override
-  public void send(DeleteMessageParameters parameters) {
-    parameters.validate();
+    @Override
+    public void send(DeleteMessageParameters parameters) {
+        MessageSenderResponse response = this.sendWithoutValidation(parameters);
+        this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    }
 
-    EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
-    SendMessageParameters sendMessageParameters = new SendMessageParameters();
-    sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+    @Override
+    public MessageSenderResponse sendWithoutValidation(DeleteMessageParameters parameters) {
+        parameters.validate();
+        EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
+        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+        sendMessageParameters.setEncodedMessages(
+                Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+        return this.sendMessage(sendMessageParameters);
+    }
 
-    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+    private EncodeMessageResponse encodeMessage(DeleteMessageParameters parameters) {
+        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        final String applicationMessageID = MessageIdService.generateMessageId();
+        messageHeaderParameters.setApplicationMessageId(applicationMessageID);
 
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
-  }
+        messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
+        messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-  private EncodeMessageResponse encodeMessage(DeleteMessageParameters parameters) {
-    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-    final String applicationMessageID = MessageIdService.generateMessageId();
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+        DeleteMessageMessageParameters deleteMessageMessageParameters =
+                new DeleteMessageMessageParameters();
+        deleteMessageMessageParameters.setMessageIds(
+                Objects.requireNonNull(parameters.getMessageIds()));
+        deleteMessageMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
+        deleteMessageMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
+        deleteMessageMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
 
-    messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
-    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+        PayloadParameters payloadParameters = new PayloadParameters();
+        payloadParameters.setTypeUrl(FeedRequests.MessageDelete.getDescriptor().getFullName());
+        payloadParameters.setValue(
+                new DeleteMessageMessageContentFactory().message(deleteMessageMessageParameters));
 
-    DeleteMessageMessageParameters deleteMessageMessageParameters =
-        new DeleteMessageMessageParameters();
-    deleteMessageMessageParameters.setMessageIds(
-        Objects.requireNonNull(parameters.getMessageIds()));
-    deleteMessageMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
-    deleteMessageMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
-    deleteMessageMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
-
-    PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(FeedRequests.MessageDelete.getDescriptor().getFullName());
-    payloadParameters.setValue(
-        new DeleteMessageMessageContentFactory().message(deleteMessageMessageParameters));
-
-    String encodedMessage =
-        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
-  }
+        String encodedMessage =
+                this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+        return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    }
 }
