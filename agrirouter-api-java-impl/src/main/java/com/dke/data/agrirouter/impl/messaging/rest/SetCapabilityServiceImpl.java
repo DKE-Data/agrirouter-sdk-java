@@ -7,6 +7,7 @@ import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.factories.impl.CapabilitiesMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.CapabilitiesMessageParameters;
+import com.dke.data.agrirouter.api.service.messaging.MessageSenderResponse;
 import com.dke.data.agrirouter.api.service.messaging.SetCapabilityService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;

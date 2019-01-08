@@ -6,6 +6,7 @@ import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
+import com.dke.data.agrirouter.api.service.messaging.MessageSenderResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
@@ -49,7 +50,7 @@ public class MessageQueryService extends NonEnvironmentalService
         Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
 
     this.getNativeLogger().trace("Send and fetch message response.");
-    MessageSender.MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.getNativeLogger().trace("Validate message response.");
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);

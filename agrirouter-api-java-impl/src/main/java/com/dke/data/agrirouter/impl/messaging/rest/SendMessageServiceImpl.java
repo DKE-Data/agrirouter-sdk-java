@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
+import com.dke.data.agrirouter.api.service.messaging.MessageSenderResponse;
 import com.dke.data.agrirouter.api.service.messaging.SendMessageService;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
