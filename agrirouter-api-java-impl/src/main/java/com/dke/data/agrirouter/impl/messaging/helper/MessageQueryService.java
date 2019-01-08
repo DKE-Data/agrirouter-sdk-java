@@ -34,7 +34,7 @@ public class MessageQueryService extends NonEnvironmentalService
     this.logMethodEnd();
   }
 
-  public String send(MessageQueryParameters parameters) {
+  public void send(MessageQueryParameters parameters) {
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Validate parameters.");
@@ -56,7 +56,6 @@ public class MessageQueryService extends NonEnvironmentalService
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
 
     this.logMethodEnd();
-    return encodedMessageResponse.getApplicationMessageID();
   }
 
   private EncodeMessageResponse encodeMessage(MessageQueryParameters parameters) {

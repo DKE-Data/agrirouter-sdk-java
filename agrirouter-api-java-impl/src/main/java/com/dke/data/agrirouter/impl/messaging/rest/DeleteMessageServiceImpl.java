@@ -30,7 +30,7 @@ public class DeleteMessageServiceImpl
   }
 
   @Override
-  public String send(DeleteMessageParameters parameters) {
+  public void send(DeleteMessageParameters parameters) {
     parameters.validate();
 
     EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
@@ -42,7 +42,6 @@ public class DeleteMessageServiceImpl
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
-    return encodedMessageResponse.getApplicationMessageID();
   }
 
   private EncodeMessageResponse encodeMessage(DeleteMessageParameters parameters) {

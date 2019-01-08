@@ -34,7 +34,7 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public String send(SetCapabilitiesParameters parameters) {
+  public void send(SetCapabilitiesParameters parameters) {
     parameters.validate();
 
     EncodeMessageResponse encodeMessageResponse = encodeMessage(parameters);
@@ -46,7 +46,6 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
-    return encodeMessageResponse.getApplicationMessageID();
   }
 
   private EncodeMessageResponse encodeMessage(SetCapabilitiesParameters parameters) {

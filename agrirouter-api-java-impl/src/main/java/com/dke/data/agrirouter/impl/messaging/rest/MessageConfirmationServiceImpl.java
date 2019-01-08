@@ -51,7 +51,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public String send(MessageConfirmationParameters parameters) {
+  public void send(MessageConfirmationParameters parameters) {
     parameters.validate();
 
     EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
@@ -63,7 +63,6 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
-    return encodedMessageResponse.getApplicationMessageID();
   }
 
   private EncodeMessageResponse encodeMessage(MessageConfirmationParameters parameters) {
