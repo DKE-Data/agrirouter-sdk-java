@@ -24,6 +24,7 @@ import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.*;
@@ -39,23 +40,23 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
   private static final String TOKEN_KEY = "token";
   private static final String ERROR_KEY = "error";
 
-  private final CookieResolverService cookieResolverService;
+  private CookieResolverService cookieResolverService;
   private final OnboardingService onboardingService;
 
   public RegistrationRequestServiceImpl(Environment environment) {
     super(environment);
-    this.cookieResolverService = new CookieResolverService(environment);
     this.onboardingService = new OnboardingServiceImpl(environment);
   }
 
-  @Override
-  public RegistrationRequestResponse getRegistrationCode(
+  /**
+   * This function returns a full URL to send to a browser as Redirect or Link to forward a user to
+   * the Authorization process
+   *
+   * @param securedRegistrationRequestParameters Parameters to build URL from
+   * @return The RegistrationURL
+   */
+  public String getRegistrationRequestURL(
       SecuredRegistrationRequestParameters securedRegistrationRequestParameters) {
-    securedRegistrationRequestParameters.validate();
-    Set<Cookie> cookies =
-        this.cookieResolverService.cookies(
-            this.environment.getAgrirouterLoginUsername(),
-            this.environment.getAgrirouterLoginPassword());
 
     AuthenticationUrlParameters authenticationUrlParameters = new AuthenticationUrlParameters();
     authenticationUrlParameters.setApplicationId(
@@ -63,7 +64,34 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
     authenticationUrlParameters.setRedirectUri(
         securedRegistrationRequestParameters.getRedirectUri());
     authenticationUrlParameters.setResponseType(SecuredOnboardingResponseType.ONBOARD);
-    authenticationUrlParameters.setState(StateIdService.generateState());
+    if (securedRegistrationRequestParameters.getState().equals("")) {
+      securedRegistrationRequestParameters.setState(StateIdService.generateState());
+    }
+    authenticationUrlParameters.setState(securedRegistrationRequestParameters.getState());
+
+    return this.onboardingService.generateAuthenticationUrl(authenticationUrlParameters);
+  }
+
+  /**
+   * This function creates a full request to do the authorization without user interaction. This
+   * function is usable for automated testing, it should NOT be used for final implementations!
+   *
+   * @param securedRegistrationRequestParameters Parameters to build URL from
+   * @return The RegistrationURL
+   */
+  @Override
+  public RegistrationRequestResponse getRegistrationCode(
+      SecuredRegistrationRequestParameters securedRegistrationRequestParameters) {
+    securedRegistrationRequestParameters.validate();
+
+    if (this.cookieResolverService == null) {
+      this.cookieResolverService = new CookieResolverService(environment);
+    }
+
+    Set<Cookie> cookies =
+        this.cookieResolverService.cookies(
+            this.environment.getAgrirouterLoginUsername(),
+            this.environment.getAgrirouterLoginPassword());
 
     try (final WebClient webClient = new WebClient()) {
       webClient.setAjaxController(new NicelyResynchronizingAjaxController());
@@ -72,8 +100,8 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
 
       cookies.forEach(c -> webClient.getCookieManager().addCookie(c));
 
-      final String url =
-          this.onboardingService.generateAuthenticationUrl(authenticationUrlParameters);
+      final String url = getRegistrationRequestURL(securedRegistrationRequestParameters);
+
       final HtmlPage page = webClient.getPage(url);
 
       HtmlAnchor anchorByHref = page.getAnchorByHref("javascript:{}");
@@ -91,14 +119,14 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public RegistrationRequestToken decode(String token) {
+  public RegistrationRequestToken decodeToken(String token) {
     byte[] decodedBytes = Base64.getDecoder().decode(token);
     String decodedToken = new String(decodedBytes);
     return new Gson().fromJson(decodedToken, RegistrationRequestToken.class);
   }
 
   @NotNull
-  private RegistrationRequestResponse extractAuthenticationResults(URL redirectPageUrl) {
+  public RegistrationRequestResponse extractAuthenticationResults(URL redirectPageUrl) {
     String[] queryParams = redirectPageUrl.getQuery().split("&");
     Map<String, String> authenticationResults = new HashMap<>();
     Arrays.stream(queryParams)
@@ -118,5 +146,12 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
     registrationRequestResponse.setToken(authenticationResults.get(TOKEN_KEY));
     registrationRequestResponse.setError(authenticationResults.get(ERROR_KEY));
     return registrationRequestResponse;
+  }
+
+  public RegistrationRequestResponse extractAuthenticationResults(String redirectPageUrl)
+      throws MalformedURLException {
+    URL url = new URL(redirectPageUrl);
+
+    return extractAuthenticationResults(url);
   }
 }
