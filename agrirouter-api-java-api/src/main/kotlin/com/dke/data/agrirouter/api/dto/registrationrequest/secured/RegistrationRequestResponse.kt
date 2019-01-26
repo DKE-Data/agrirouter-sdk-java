@@ -12,4 +12,7 @@ class RegistrationRequestResponse {
     lateinit var token: String
     var error: String? = null
 
+    fun hasError():Boolean{
+        return error.equals("")
+    }
 }
