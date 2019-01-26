@@ -13,5 +13,5 @@ class SecuredRegistrationRequestParameters : ParameterValidation {
 
     lateinit var redirectUri: String
 
-    lateinit var state: String
+    var state: String = ""
 }
