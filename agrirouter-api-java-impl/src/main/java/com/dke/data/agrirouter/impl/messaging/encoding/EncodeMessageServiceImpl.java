@@ -61,6 +61,9 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     if (!parameters.getRecipients().isEmpty()) {
       messageHeader.addAllRecipients(parameters.getRecipients());
     }
+    if (parameters.getChunkInfo() != null) {
+      messageHeader.setChunkInfo(parameters.getChunkInfo());
+    }
     messageHeader.setTimestamp(new TimestampUtil().current());
 
     this.getNativeLogger().trace("Build message envelope.");
