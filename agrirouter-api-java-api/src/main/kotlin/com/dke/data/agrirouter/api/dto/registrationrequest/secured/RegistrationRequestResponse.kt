@@ -16,6 +16,6 @@ class RegistrationRequestResponse {
      * Returns true, if an error accoured while generating token serverside
      */
     fun hasError():Boolean{
-        return error.equals("")
+        return error.isNullOrBlank()
     }
 }

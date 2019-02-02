@@ -2,7 +2,6 @@ package com.dke.data.agrirouter.impl.onboard.secured;
 
 import com.dke.data.agrirouter.api.dto.registrationrequest.secured.RegistrationRequestResponse;
 import com.dke.data.agrirouter.api.dto.registrationrequest.secured.RegistrationRequestToken;
-import com.dke.data.agrirouter.api.enums.SecuredOnboardingResponseType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotGetRegistrationCodeException;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
@@ -63,8 +62,9 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
         securedRegistrationRequestParameters.getApplicationId());
     authenticationUrlParameters.setRedirectUri(
         securedRegistrationRequestParameters.getRedirectUri());
-    authenticationUrlParameters.setResponseType(SecuredOnboardingResponseType.ONBOARD);
-    if (securedRegistrationRequestParameters.getState().equals("")) {
+    authenticationUrlParameters.setResponseType(
+        securedRegistrationRequestParameters.getResponseType());
+    if (securedRegistrationRequestParameters.getState() == null) {
       securedRegistrationRequestParameters.setState(StateIdService.generateState());
     }
     authenticationUrlParameters.setState(securedRegistrationRequestParameters.getState());
