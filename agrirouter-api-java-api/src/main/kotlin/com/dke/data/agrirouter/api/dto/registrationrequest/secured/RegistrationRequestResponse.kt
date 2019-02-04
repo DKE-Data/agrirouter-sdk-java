@@ -12,4 +12,10 @@ class RegistrationRequestResponse {
     lateinit var token: String
     var error: String? = null
 
+    /**
+     * Returns true, if an error accoured while generating token serverside
+     */
+    fun hasError():Boolean{
+        return error.isNullOrBlank()
+    }
 }
