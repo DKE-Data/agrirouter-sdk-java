@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,7 +65,7 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
         securedRegistrationRequestParameters.getRedirectUri());
     authenticationUrlParameters.setResponseType(
         securedRegistrationRequestParameters.getResponseType());
-    if (securedRegistrationRequestParameters.getState() == null) {
+    if (StringUtils.isBlank(securedRegistrationRequestParameters.getState())) {
       securedRegistrationRequestParameters.setState(StateIdService.generateState());
     }
     authenticationUrlParameters.setState(securedRegistrationRequestParameters.getState());

@@ -14,7 +14,7 @@ class SecuredRegistrationRequestParameters : ParameterValidation {
 
     var redirectUri: String = ""
 
-    lateinit var state: String
+    var state: String = ""
 
     var responseType: SecuredOnboardingResponseType = SecuredOnboardingResponseType.ONBOARD
 }
