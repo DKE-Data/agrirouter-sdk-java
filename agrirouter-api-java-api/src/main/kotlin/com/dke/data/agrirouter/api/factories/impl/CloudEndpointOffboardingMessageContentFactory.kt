@@ -12,7 +12,7 @@ class CloudEndpointOffboardingMessageContentFactory {
     fun message(parameters: CloudEndpointOffboardingMessageParameters): ByteString {
         parameters.validate()
         val messageContent = CloudVirtualizedAppRegistration.OffboardingRequest.newBuilder()
-        messageContent.addAllEndpoints(parameters.endpointIds);
+        messageContent.addAllEndpoints(parameters.endpointIds)
         return messageContent.build().toByteString()
     }
 
