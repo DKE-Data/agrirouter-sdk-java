@@ -28,7 +28,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
 
 /** Internal service implementation. */
@@ -107,7 +106,7 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
 
       HtmlAnchor anchorByHref = page.getAnchorByHref("javascript:{}");
       final Page redirectPage = anchorByHref.click();
-      assertResponseStatusIsValid(redirectPage.getWebResponse(), HttpStatus.SC_OK);
+      this.assertStatusCodeIsOk(redirectPage.getWebResponse().getStatusCode());
 
       URL redirectPageUrl = redirectPage.getUrl();
       return this.extractAuthenticationResults(redirectPageUrl);

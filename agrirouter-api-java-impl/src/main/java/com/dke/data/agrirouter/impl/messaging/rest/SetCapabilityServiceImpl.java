@@ -20,7 +20,6 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.http.HttpStatus;
 
 public class SetCapabilityServiceImpl extends EnvironmentalService
     implements SetCapabilityService, MessageSender, ResponseValidator {
@@ -44,7 +43,7 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
     return encodeMessageResponse.getApplicationMessageID();
   }
 

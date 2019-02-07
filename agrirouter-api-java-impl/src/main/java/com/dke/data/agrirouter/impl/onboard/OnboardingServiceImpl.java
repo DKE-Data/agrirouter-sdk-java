@@ -10,7 +10,6 @@ import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
-import org.apache.http.HttpStatus;
 
 /** Internal service implementation. */
 public class OnboardingServiceImpl extends AbstractOnboardingService
@@ -53,7 +52,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     Response response =
         RequestFactory.bearerTokenRequest(this.environment.getOnboardUrl(), registrationCode)
             .post(Entity.json(onboardingRequest));
-    this.assertResponseStatusIsValid(response, HttpStatus.SC_CREATED);
+    this.assertStatusCodeIsCreated(response.getStatus());
     OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
 
     this.getNativeLogger()

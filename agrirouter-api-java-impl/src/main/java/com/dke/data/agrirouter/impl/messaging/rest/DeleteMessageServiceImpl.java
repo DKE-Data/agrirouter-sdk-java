@@ -17,7 +17,6 @@ import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 import java.util.Objects;
-import org.apache.http.HttpStatus;
 
 public class DeleteMessageServiceImpl
     implements DeleteMessageService, MessageSender, ResponseValidator {
@@ -40,7 +39,7 @@ public class DeleteMessageServiceImpl
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
     return encodedMessageResponse.getApplicationMessageID();
   }
 

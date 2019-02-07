@@ -7,7 +7,6 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpStatus;
 
 public interface MessageFetcher extends ResponseValidator {
 
@@ -28,7 +27,7 @@ public interface MessageFetcher extends ResponseValidator {
                   CertificationType.valueOf(
                       parameters.getOnboardingResponse().getAuthentication().getType()))
               .get();
-      this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+      this.assertStatusCodeIsOk(response.getStatus());
       String entityContent = response.readEntity(String.class);
       if (!StringUtils.equalsIgnoreCase(entityContent, EMPTY_CONTENT)) {
         return Optional.of(entityContent);

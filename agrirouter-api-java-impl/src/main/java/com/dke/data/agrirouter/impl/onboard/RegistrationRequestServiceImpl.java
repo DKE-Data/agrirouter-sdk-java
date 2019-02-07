@@ -11,7 +11,6 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import java.util.Set;
 import javax.ws.rs.core.Response;
-import org.apache.http.HttpStatus;
 
 /** Internal service implementation. */
 public class RegistrationRequestServiceImpl extends EnvironmentalService
@@ -43,7 +42,7 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
     Response response = RequestFactory.request(url, cookies).get();
 
     this.getNativeLogger().debug("Validating response | {}.", response);
-    this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+    this.assertStatusCodeIsOk(response.getStatus());
 
     this.getNativeLogger()
         .info("END | Fetching registration code from agrirouter | '{}'.", parameters);

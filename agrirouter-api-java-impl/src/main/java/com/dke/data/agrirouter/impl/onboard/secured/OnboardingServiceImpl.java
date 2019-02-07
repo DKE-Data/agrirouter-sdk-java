@@ -25,7 +25,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.http.HttpStatus;
 
 /** Internal service implementation. */
 public class OnboardingServiceImpl extends AbstractOnboardingService
@@ -74,7 +73,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
                 securedOnboardingParameters.getApplicationId(),
                 encodedSignature)
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
-    this.assertResponseStatusIsValid(response, HttpStatus.SC_CREATED);
+    this.assertStatusCodeIsCreated(response.getStatus());
     return response.readEntity(OnboardingResponse.class);
   }
 
@@ -95,7 +94,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
                 encodedSignature)
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
     try {
-      this.assertResponseStatusIsValid(response, HttpStatus.SC_OK);
+      this.assertStatusCodeIsOk(response.getStatus());
     } catch (UnexpectedHttpStatusException e) {
       throw new CouldNotVerifySecuredOnboardingRequestException(e);
     }
