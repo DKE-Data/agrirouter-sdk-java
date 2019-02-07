@@ -1,13 +1,13 @@
 package com.dke.data.agrirouter.impl.validation;
 
-import com.dke.data.agrirouter.api.exception.*;
-import com.gargoylesoftware.htmlunit.WebResponse;
+import com.dke.data.agrirouter.api.exception.ForbiddenRequestException;
+import com.dke.data.agrirouter.api.exception.InvalidHttpStatusException;
+import com.dke.data.agrirouter.api.exception.InvalidUrlForRequestException;
+import com.dke.data.agrirouter.api.exception.UnauthorizedRequestException;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.ObjectArrayMessage;
-
-import javax.ws.rs.core.Response;
 
 /** Validation of the response, encapsulated using an interface. */
 public interface ResponseValidator {

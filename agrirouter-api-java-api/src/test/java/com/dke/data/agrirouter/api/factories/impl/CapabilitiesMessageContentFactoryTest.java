@@ -1,15 +1,16 @@
 package com.dke.data.agrirouter.api.factories.impl;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.factories.impl.parameters.CapabilitiesMessageParameters;
 import com.google.protobuf.ByteString;
-import java.util.ArrayList;
-import java.util.List;
 import kotlin.UninitializedPropertyAccessException;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CapabilitiesMessageContentFactoryTest {
 

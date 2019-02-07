@@ -1,13 +1,14 @@
 package com.dke.data.agrirouter.api.factories.impl;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmationMessageParameters;
 import com.google.protobuf.ByteString;
-import java.util.Collections;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MessageConfirmationMessageContentFactoryTest {
 

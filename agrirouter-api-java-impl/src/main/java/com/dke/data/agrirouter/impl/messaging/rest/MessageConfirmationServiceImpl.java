@@ -1,8 +1,5 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
-
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.feed.response.FeedResponse;
 import agrirouter.request.Request;
@@ -12,7 +9,6 @@ import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
 import com.dke.data.agrirouter.api.factories.impl.MessageConfirmationMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmationMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
@@ -27,8 +23,14 @@ import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import java.util.*;
-import org.apache.http.HttpStatus;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 
 public class MessageConfirmationServiceImpl extends EnvironmentalService
     implements MessageConfirmationService, MessageSender, ResponseValidator {

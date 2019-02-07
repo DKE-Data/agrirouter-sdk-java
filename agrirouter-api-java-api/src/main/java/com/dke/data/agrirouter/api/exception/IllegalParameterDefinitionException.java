@@ -1,10 +1,11 @@
 package com.dke.data.agrirouter.api.exception;
 
 import com.dke.data.agrirouter.api.service.ParameterValidation;
+
+import javax.validation.ConstraintViolation;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.validation.ConstraintViolation;
 
 /** Will be thrown if any kind of parameter attribute is invalid due to the given metrics. */
 public class IllegalParameterDefinitionException extends RuntimeException {

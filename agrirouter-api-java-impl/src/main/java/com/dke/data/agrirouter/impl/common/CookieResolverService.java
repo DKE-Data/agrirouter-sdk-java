@@ -9,13 +9,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.util.Cookie;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
 
 /** Resolve the cookies after login to use them for further requests. */
 public class CookieResolverService extends EnvironmentalService {

@@ -4,10 +4,10 @@ import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import java.util.Optional;
-import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpStatus;
+
+import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 public interface MessageFetcher extends ResponseValidator {
 

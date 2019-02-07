@@ -1,7 +1,5 @@
 package com.dke.data.agrirouter.impl.messaging;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.dto.onboard.inner.Authentication;
 import com.dke.data.agrirouter.api.dto.onboard.inner.ConnectionCriteria;
@@ -10,8 +8,11 @@ import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreExcept
 import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.rest.SendMessageServiceImpl;
-import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SendMessageServiceImplTest {
 

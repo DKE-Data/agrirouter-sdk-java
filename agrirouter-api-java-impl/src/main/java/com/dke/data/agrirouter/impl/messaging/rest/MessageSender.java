@@ -8,10 +8,11 @@ import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.gson.MessageTypeAdapter;
 import com.google.gson.GsonBuilder;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface MessageSender {
 

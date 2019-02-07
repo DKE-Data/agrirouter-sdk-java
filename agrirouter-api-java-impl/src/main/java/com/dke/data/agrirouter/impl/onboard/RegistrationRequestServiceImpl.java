@@ -9,9 +9,9 @@ import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.CookieResolverService;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.gargoylesoftware.htmlunit.util.Cookie;
-import java.util.Set;
+
 import javax.ws.rs.core.Response;
-import org.apache.http.HttpStatus;
+import java.util.Set;
 
 /** Internal service implementation. */
 public class RegistrationRequestServiceImpl extends EnvironmentalService

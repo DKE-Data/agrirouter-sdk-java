@@ -7,10 +7,11 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageServi
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Base64;
-import org.apache.commons.lang3.StringUtils;
 
 /** Internal service implementation. */
 public class DecodeMessageServiceImpl extends NonEnvironmentalService
