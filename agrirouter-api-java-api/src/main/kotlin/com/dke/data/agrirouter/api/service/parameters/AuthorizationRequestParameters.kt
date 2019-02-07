@@ -8,14 +8,13 @@ import lombok.ToString
  * Parameters class. Encapsulation for the services.
  */
 @ToString
-class AuthenticationUrlParameters : ParameterValidation {
+class AuthorizationRequestParameters : ParameterValidation {
 
     lateinit var applicationId : String
 
-    lateinit var responseType: SecuredOnboardingResponseType
+    var redirectUri: String = ""
 
-    lateinit var state: String
+    var state: String = ""
 
-    lateinit var redirectUri: String
-
+    var responseType: SecuredOnboardingResponseType = SecuredOnboardingResponseType.ONBOARD
 }

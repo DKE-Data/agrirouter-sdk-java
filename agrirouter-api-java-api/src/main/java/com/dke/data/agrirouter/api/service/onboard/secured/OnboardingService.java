@@ -1,7 +1,7 @@
 package com.dke.data.agrirouter.api.service.onboard.secured;
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
-import com.dke.data.agrirouter.api.service.parameters.AuthenticationUrlParameters;
+import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
 import com.dke.data.agrirouter.api.service.parameters.SecuredOnboardingParameters;
 
 /** Service for the onboarding process. */
@@ -23,10 +23,10 @@ public interface OnboardingService {
   void verify(SecuredOnboardingParameters parameters);
 
   /**
-   * Generating the authentication URL.
+   * Generating the authorization URL.
    *
    * @param parameters -
    * @return -
    */
-  String generateAuthenticationUrl(AuthenticationUrlParameters parameters);
+  String generateAuthorizationUrl(AuthorizationRequestParameters parameters);
 }

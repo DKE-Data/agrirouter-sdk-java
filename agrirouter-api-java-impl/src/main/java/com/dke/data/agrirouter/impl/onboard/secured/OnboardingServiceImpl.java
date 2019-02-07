@@ -9,7 +9,7 @@ import com.dke.data.agrirouter.api.exception.CouldNotVerifySecuredOnboardingRequ
 import com.dke.data.agrirouter.api.exception.InvalidSignatureException;
 import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
 import com.dke.data.agrirouter.api.service.onboard.secured.OnboardingService;
-import com.dke.data.agrirouter.api.service.parameters.AuthenticationUrlParameters;
+import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
 import com.dke.data.agrirouter.api.service.parameters.SecuredOnboardingParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.signing.SecurityKeyCreationService;
@@ -145,8 +145,8 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   @Override
-  public String generateAuthenticationUrl(AuthenticationUrlParameters parameters) {
-    return this.environment.getSecuredOnboardingAuthenticationUrl(
+  public String generateAuthorizationUrl(AuthorizationRequestParameters parameters) {
+    return this.environment.getSecuredOnboardingAuthorizationUrl(
         parameters.getApplicationId(),
         parameters.getResponseType(),
         parameters.getState(),
