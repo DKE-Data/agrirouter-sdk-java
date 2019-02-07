@@ -1,9 +1,6 @@
 package com.dke.data.agrirouter.impl.validation;
 
-import com.dke.data.agrirouter.api.exception.ForbiddenRequestException;
-import com.dke.data.agrirouter.api.exception.InvalidUrlForRequestException;
-import com.dke.data.agrirouter.api.exception.UnauthorizedRequestException;
-import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
+import com.dke.data.agrirouter.api.exception.*;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import javax.ws.rs.core.Response;
 import org.apache.http.HttpStatus;
@@ -17,8 +14,47 @@ public interface ResponseValidator {
   Logger LOGGER = LogManager.getLogger();
 
   /**
-   * Will assert, that the response status is valid. If there will be an 404 or 401 a business
-   * exception will rise.
+   * Will check if the status code is an error. If there will an error a business exception will
+   * rise.
+   *
+   * @param statusCode The current response.
+   */
+  default void checkIfStatusCodeIsError(int statusCode) {
+    LOGGER.debug("Checking if the response is an error.");
+    if (statusCode == HttpStatus.SC_NOT_FOUND) {
+      throw new InvalidUrlForRequestException();
+    }
+    if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+      throw new UnauthorizedRequestException();
+    }
+    if (statusCode == HttpStatus.SC_FORBIDDEN) {
+      throw new ForbiddenRequestException();
+    }
+  }
+
+  /**
+   * Asserting that the status code is valid. A valid status is in between 200 and 207 (defined by
+   * HTTP).
+   *
+   * @param statusCode The current status code.
+   */
+  default void assertResponseStatusIsValid(int statusCode) {
+    LOGGER.debug("Validating status code.");
+    LOGGER.trace(new ObjectArrayMessage(statusCode));
+    if (statusCode != HttpStatus.SC_OK
+        && statusCode != HttpStatus.SC_CREATED
+        && statusCode != HttpStatus.SC_ACCEPTED
+        && statusCode != HttpStatus.SC_NON_AUTHORITATIVE_INFORMATION
+        && statusCode != HttpStatus.SC_NO_CONTENT
+        && statusCode != HttpStatus.SC_RESET_CONTENT
+        && statusCode != HttpStatus.SC_PARTIAL_CONTENT
+        && statusCode != HttpStatus.SC_MULTI_STATUS)
+      throw new InvalidHttpStatusException(statusCode);
+  }
+
+  /**
+   * Will assert, that the response status is valid. If there will an error a business exception
+   * will rise.
    *
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
@@ -26,23 +62,15 @@ public interface ResponseValidator {
   default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus) {
     LOGGER.debug("Validating response.");
     LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
-    if (response.getStatus() == HttpStatus.SC_NOT_FOUND) {
-      throw new InvalidUrlForRequestException();
-    }
-    if (response.getStatus() == HttpStatus.SC_UNAUTHORIZED) {
-      throw new UnauthorizedRequestException();
-    }
-    if (response.getStatus() == HttpStatus.SC_FORBIDDEN) {
-      throw new ForbiddenRequestException();
-    }
+    this.checkIfStatusCodeIsError(response.getStatus());
     if (response.getStatus() != exceptedHttpStatus) {
       throw new UnexpectedHttpStatusException(response.getStatus(), exceptedHttpStatus);
     }
   }
 
   /**
-   * Will assert, that the response status is valid. If there will be an 404 or 401 a business
-   * exception will rise.
+   * Will assert, that the response status is valid. If there will an error a business exception
+   * will rise.
    *
    * @param response The current response.
    * @param exceptedHttpStatus The expected HTTP status.
@@ -50,17 +78,33 @@ public interface ResponseValidator {
   default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus) {
     LOGGER.debug("Validating response.");
     LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
-    if (response.getStatusCode() == HttpStatus.SC_NOT_FOUND) {
-      throw new InvalidUrlForRequestException();
-    }
-    if (response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-      throw new UnauthorizedRequestException();
-    }
-    if (response.getStatusCode() == HttpStatus.SC_FORBIDDEN) {
-      throw new ForbiddenRequestException();
-    }
+    this.checkIfStatusCodeIsError(response.getStatusCode());
     if (response.getStatusCode() != exceptedHttpStatus) {
       throw new UnexpectedHttpStatusException(response.getStatusCode(), exceptedHttpStatus);
     }
+  }
+
+  /**
+   * Will assert, that the response status is valid. If there will an error a business exception
+   * will rise.
+   *
+   * @param response The current response.
+   */
+  default void assertResponseStatusIsValid(Response response) {
+    LOGGER.debug("Validating response.");
+    LOGGER.trace(new ObjectArrayMessage(response));
+    this.assertResponseStatusIsValid(response.getStatus());
+  }
+
+  /**
+   * Will assert, that the response status is valid. If there will an error a business exception
+   * will rise.
+   *
+   * @param response The current response.
+   */
+  default void assertResponseStatusIsValid(WebResponse response) {
+    LOGGER.debug("Validating response.");
+    LOGGER.trace(new ObjectArrayMessage(response));
+    this.assertResponseStatusIsValid(response.getStatusCode());
   }
 }
