@@ -122,8 +122,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
       DecodeMessageResponse decodedMessageQueryResponse =
           this.decodeMessageService.decode(
               fetchMessageResponses.get().get(0).getCommand().getMessage());
-      if (decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
-          == HttpStatus.SC_BAD_REQUEST) {
+      if (this.assertStatusCodeIsBadRequest(decodedMessageQueryResponse.getResponseEnvelope().getResponseCode())) {
         MessageOuterClass.Message message =
             this.decodeMessageService.decode(
                 decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
