@@ -134,10 +134,10 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
               this.decodeMessageService.decode(
                   fetchMessageResponses.get().get(0).getCommand().getMessage());
           if (decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
-              != HttpStatus.SC_CREATED) {
+              != HttpStatus.SC_OK) {
             throw new UnexpectedHttpStatusException(
                 decodedMessageQueryResponse.getResponseEnvelope().getResponseCode(),
-                HttpStatus.SC_CREATED);
+                HttpStatus.SC_OK);
           }
         }
       }
