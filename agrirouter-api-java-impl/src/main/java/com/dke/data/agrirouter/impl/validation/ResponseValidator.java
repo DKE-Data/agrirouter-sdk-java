@@ -2,16 +2,81 @@ package com.dke.data.agrirouter.impl.validation;
 
 import com.dke.data.agrirouter.api.exception.*;
 import com.gargoylesoftware.htmlunit.WebResponse;
-import javax.ws.rs.core.Response;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.ObjectArrayMessage;
 
+import javax.ws.rs.core.Response;
+
 /** Validation of the response, encapsulated using an interface. */
 public interface ResponseValidator {
 
   Logger LOGGER = LogManager.getLogger();
+
+  /**
+   * Asserting that the status code is valid. A valid status is in between 200 and 207 (defined by
+   * HTTP).
+   *
+   * @param statusCode The current status code.
+   */
+  default boolean assertStatusCodeIsValid(int statusCode) {
+    LOGGER.debug("Validating status code.");
+    LOGGER.trace(new ObjectArrayMessage(statusCode));
+    if (statusCode != HttpStatus.SC_OK
+        && statusCode != HttpStatus.SC_CREATED
+        && statusCode != HttpStatus.SC_ACCEPTED
+        && statusCode != HttpStatus.SC_NON_AUTHORITATIVE_INFORMATION
+        && statusCode != HttpStatus.SC_NO_CONTENT
+        && statusCode != HttpStatus.SC_RESET_CONTENT
+        && statusCode != HttpStatus.SC_PARTIAL_CONTENT
+        && statusCode != HttpStatus.SC_MULTI_STATUS) {
+      throw new InvalidHttpStatusException(statusCode);
+    }
+    return true;
+  }
+
+  /**
+   * Asserting that the status code is HTTP OK.
+   *
+   * @param statusCode The current status code.
+   */
+  default boolean assertStatusCodeIsOk(int statusCode) {
+    LOGGER.debug("Validating status code.");
+    LOGGER.trace(new ObjectArrayMessage(statusCode));
+    if (statusCode != HttpStatus.SC_OK) {
+      throw new InvalidHttpStatusException(statusCode);
+    }
+    return true;
+  }
+
+  /**
+   * Asserting that the status code is HTTP CREATED.
+   *
+   * @param statusCode The current status code.
+   */
+  default boolean assertStatusCodeIsCreated(int statusCode) {
+    LOGGER.debug("Validating status code.");
+    LOGGER.trace(new ObjectArrayMessage(statusCode));
+    if (statusCode != HttpStatus.SC_CREATED) {
+      throw new InvalidHttpStatusException(statusCode);
+    }
+    return true;
+  }
+
+  /**
+   * Asserting that the status code is HTTP BAD REQUEST.
+   *
+   * @param statusCode The current status code.
+   */
+  default boolean assertStatusCodeIsBadRequest(int statusCode) {
+    LOGGER.debug("Validating status code.");
+    LOGGER.trace(new ObjectArrayMessage(statusCode));
+    if (statusCode != HttpStatus.SC_BAD_REQUEST) {
+      throw new InvalidHttpStatusException(statusCode);
+    }
+    return true;
+  }
 
   /**
    * Will check if the status code is an error. If there will an error a business exception will
@@ -32,79 +97,4 @@ public interface ResponseValidator {
     }
   }
 
-  /**
-   * Asserting that the status code is valid. A valid status is in between 200 and 207 (defined by
-   * HTTP).
-   *
-   * @param statusCode The current status code.
-   */
-  default void assertResponseStatusIsValid(int statusCode) {
-    LOGGER.debug("Validating status code.");
-    LOGGER.trace(new ObjectArrayMessage(statusCode));
-    if (statusCode != HttpStatus.SC_OK
-        && statusCode != HttpStatus.SC_CREATED
-        && statusCode != HttpStatus.SC_ACCEPTED
-        && statusCode != HttpStatus.SC_NON_AUTHORITATIVE_INFORMATION
-        && statusCode != HttpStatus.SC_NO_CONTENT
-        && statusCode != HttpStatus.SC_RESET_CONTENT
-        && statusCode != HttpStatus.SC_PARTIAL_CONTENT
-        && statusCode != HttpStatus.SC_MULTI_STATUS)
-      throw new InvalidHttpStatusException(statusCode);
-  }
-
-  /**
-   * Will assert, that the response status is valid. If there will an error a business exception
-   * will rise.
-   *
-   * @param response The current response.
-   * @param exceptedHttpStatus The expected HTTP status.
-   */
-  default void assertResponseStatusIsValid(Response response, int exceptedHttpStatus) {
-    LOGGER.debug("Validating response.");
-    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
-    this.checkIfStatusCodeIsError(response.getStatus());
-    if (response.getStatus() != exceptedHttpStatus) {
-      throw new UnexpectedHttpStatusException(response.getStatus(), exceptedHttpStatus);
-    }
-  }
-
-  /**
-   * Will assert, that the response status is valid. If there will an error a business exception
-   * will rise.
-   *
-   * @param response The current response.
-   * @param exceptedHttpStatus The expected HTTP status.
-   */
-  default void assertResponseStatusIsValid(WebResponse response, int exceptedHttpStatus) {
-    LOGGER.debug("Validating response.");
-    LOGGER.trace(new ObjectArrayMessage(response, exceptedHttpStatus));
-    this.checkIfStatusCodeIsError(response.getStatusCode());
-    if (response.getStatusCode() != exceptedHttpStatus) {
-      throw new UnexpectedHttpStatusException(response.getStatusCode(), exceptedHttpStatus);
-    }
-  }
-
-  /**
-   * Will assert, that the response status is valid. If there will an error a business exception
-   * will rise.
-   *
-   * @param response The current response.
-   */
-  default void assertResponseStatusIsValid(Response response) {
-    LOGGER.debug("Validating response.");
-    LOGGER.trace(new ObjectArrayMessage(response));
-    this.assertResponseStatusIsValid(response.getStatus());
-  }
-
-  /**
-   * Will assert, that the response status is valid. If there will an error a business exception
-   * will rise.
-   *
-   * @param response The current response.
-   */
-  default void assertResponseStatusIsValid(WebResponse response) {
-    LOGGER.debug("Validating response.");
-    LOGGER.trace(new ObjectArrayMessage(response));
-    this.assertResponseStatusIsValid(response.getStatusCode());
-  }
 }

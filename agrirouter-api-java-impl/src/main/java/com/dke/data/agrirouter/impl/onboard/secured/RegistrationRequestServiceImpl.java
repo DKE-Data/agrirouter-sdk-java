@@ -107,7 +107,7 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
 
       HtmlAnchor anchorByHref = page.getAnchorByHref("javascript:{}");
       final Page redirectPage = anchorByHref.click();
-      assertResponseStatusIsValid(redirectPage.getWebResponse(), HttpStatus.SC_OK);
+      this.assertStatusCodeIsOk(redirectPage.getWebResponse().getStatusCode());
 
       URL redirectPageUrl = redirectPage.getUrl();
       return this.extractAuthenticationResults(redirectPageUrl);

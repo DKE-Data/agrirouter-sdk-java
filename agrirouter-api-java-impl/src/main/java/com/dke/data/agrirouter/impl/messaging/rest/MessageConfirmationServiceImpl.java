@@ -58,7 +58,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
-    this.assertResponseStatusIsValid(response.getNativeResponse(), HttpStatus.SC_OK);
+    this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
     return encodedMessageResponse.getApplicationMessageID();
   }
 
@@ -120,8 +120,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
               fetchMessageResponses.get().get(0).getCommand().getMessage());
       if (decodedMessageQueryResponse.getResponseEnvelope().getType()
               == Response.ResponseEnvelope.ResponseBodyType.ACK_FOR_FEED_MESSAGE
-          && decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
-              == HttpStatus.SC_OK) {
+          && this.assertStatusCodeIsValid(decodedMessageQueryResponse.getResponseEnvelope().getResponseCode())) {
         FeedResponse.MessageQueryResponse messageQueryResponse =
             this.messageQueryService.decode(
                 decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
@@ -154,10 +153,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
       decodedMessageQueryResponse =
           this.decodeMessageService.decode(
               fetchMessageResponses.get().get(0).getCommand().getMessage());
-      if (decodedMessageQueryResponse.getResponseEnvelope().getResponseCode() != HttpStatus.SC_OK) {
-        throw new UnexpectedHttpStatusException(
-            decodedMessageQueryResponse.getResponseEnvelope().getResponseCode(), HttpStatus.SC_OK);
-      }
+      this.assertStatusCodeIsValid(decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
     }
   }
 }
