@@ -88,8 +88,19 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
   }
 
   @Override
+  public void confirmAllPendingMessagesWithValidation(
+      MessageConfirmationForAllPendingMessagesParameters parameters) {
+    this.confirmAllPendingMessages(parameters, true);
+  }
+
+  @Override
   public void confirmAllPendingMessages(
       MessageConfirmationForAllPendingMessagesParameters parameters) {
+    this.confirmAllPendingMessages(parameters, false);
+  }
+
+  private void confirmAllPendingMessages(
+      MessageConfirmationForAllPendingMessagesParameters parameters, boolean enableValidation) {
     MessageQueryParameters messageQueryParameters = new MessageQueryParameters();
     messageQueryParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     messageQueryParameters.setMessageIds(Collections.emptyList());
@@ -126,20 +137,26 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
         messageConfirmationParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         messageConfirmationParameters.setMessageIds(messageIds);
         this.send(messageConfirmationParameters);
-        fetchMessageResponses =
-            this.fetchMessageService.fetch(
-                parameters.getOnboardingResponse(), MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
-        if (fetchMessageResponses.isPresent()) {
-          decodedMessageQueryResponse =
-              this.decodeMessageService.decode(
-                  fetchMessageResponses.get().get(0).getCommand().getMessage());
-          if (decodedMessageQueryResponse.getResponseEnvelope().getResponseCode()
-              != HttpStatus.SC_OK) {
-            throw new UnexpectedHttpStatusException(
-                decodedMessageQueryResponse.getResponseEnvelope().getResponseCode(),
-                HttpStatus.SC_OK);
-          }
+        if (enableValidation) {
+          this.validateReponse(parameters);
         }
+      }
+    }
+  }
+
+  private void validateReponse(MessageConfirmationForAllPendingMessagesParameters parameters) {
+    Optional<List<FetchMessageResponse>> fetchMessageResponses;
+    DecodeMessageResponse decodedMessageQueryResponse;
+    fetchMessageResponses =
+        this.fetchMessageService.fetch(
+            parameters.getOnboardingResponse(), MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
+    if (fetchMessageResponses.isPresent()) {
+      decodedMessageQueryResponse =
+          this.decodeMessageService.decode(
+              fetchMessageResponses.get().get(0).getCommand().getMessage());
+      if (decodedMessageQueryResponse.getResponseEnvelope().getResponseCode() != HttpStatus.SC_OK) {
+        throw new UnexpectedHttpStatusException(
+            decodedMessageQueryResponse.getResponseEnvelope().getResponseCode(), HttpStatus.SC_OK);
       }
     }
   }
