@@ -1,5 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.encoding;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import agrirouter.request.Request;
 import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
@@ -11,8 +13,6 @@ import com.google.protobuf.ByteString;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EncodeMessageServiceImplTest {
 

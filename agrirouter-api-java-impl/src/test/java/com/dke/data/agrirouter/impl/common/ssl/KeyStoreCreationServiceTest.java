@@ -1,14 +1,13 @@
 package com.dke.data.agrirouter.impl.common.ssl;
 
-import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
 
 class KeyStoreCreationServiceTest {
 

@@ -5,7 +5,6 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.parameters.CloudOffboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.CloudOnboardingParameters;
-
 import java.util.List;
 
 public interface OnboardingService

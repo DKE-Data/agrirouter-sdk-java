@@ -96,5 +96,4 @@ public interface ResponseValidator {
       throw new ForbiddenRequestException();
     }
   }
-
 }

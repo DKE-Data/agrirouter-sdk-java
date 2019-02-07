@@ -1,5 +1,7 @@
 package com.dke.data.agrirouter.impl.onboard.secured;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingRequest;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
@@ -14,18 +16,15 @@ import com.dke.data.agrirouter.impl.common.signing.SecurityKeyCreationService;
 import com.dke.data.agrirouter.impl.onboard.AbstractOnboardingService;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.gson.Gson;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 
 /** Internal service implementation. */
 public class OnboardingServiceImpl extends AbstractOnboardingService

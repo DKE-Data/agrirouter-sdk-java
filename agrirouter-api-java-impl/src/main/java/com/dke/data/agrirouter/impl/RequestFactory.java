@@ -5,17 +5,16 @@ import com.dke.data.agrirouter.api.exception.CertificationTypeNotSupportedExcept
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
 import com.dke.data.agrirouter.impl.common.ssl.KeyStoreCreationService;
 import com.gargoylesoftware.htmlunit.util.Cookie;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.logging.LoggingFeature;
-
+import java.security.KeyStore;
+import java.util.Set;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import java.security.KeyStore;
-import java.util.Set;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.logging.LoggingFeature;
 
 /** Factory to encapsulate the requests against the agrirouter */
 public final class RequestFactory {

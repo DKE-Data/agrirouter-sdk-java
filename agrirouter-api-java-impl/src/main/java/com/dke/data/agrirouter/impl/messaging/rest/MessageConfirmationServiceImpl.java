@@ -1,5 +1,8 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
+
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.feed.response.FeedResponse;
 import agrirouter.request.Request;
@@ -23,14 +26,10 @@ import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 
 public class MessageConfirmationServiceImpl extends EnvironmentalService
     implements MessageConfirmationService, MessageSender, ResponseValidator {
@@ -122,7 +121,8 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
               fetchMessageResponses.get().get(0).getCommand().getMessage());
       if (decodedMessageQueryResponse.getResponseEnvelope().getType()
               == Response.ResponseEnvelope.ResponseBodyType.ACK_FOR_FEED_MESSAGE
-          && this.assertStatusCodeIsValid(decodedMessageQueryResponse.getResponseEnvelope().getResponseCode())) {
+          && this.assertStatusCodeIsValid(
+              decodedMessageQueryResponse.getResponseEnvelope().getResponseCode())) {
         FeedResponse.MessageQueryResponse messageQueryResponse =
             this.messageQueryService.decode(
                 decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
@@ -155,7 +155,8 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
       decodedMessageQueryResponse =
           this.decodeMessageService.decode(
               fetchMessageResponses.get().get(0).getCommand().getMessage());
-      this.assertStatusCodeIsValid(decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
+      this.assertStatusCodeIsValid(
+          decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
     }
   }
 }

@@ -4,9 +4,8 @@ import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import org.apache.commons.lang3.NotImplementedException;
-
 import java.io.IOException;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class MessageTypeAdapter extends TypeAdapter<Message> {
 

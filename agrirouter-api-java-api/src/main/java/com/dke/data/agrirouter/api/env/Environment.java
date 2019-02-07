@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.api.env;
 
 import com.dke.data.agrirouter.api.enums.SecuredOnboardingResponseType;
-
 import java.util.List;
 
 /** Common Environment, holds some default methods pointing to the QA. */
