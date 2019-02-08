@@ -14,7 +14,6 @@ public interface AuthorizationRequestService {
 
   String getAuthorizationRequestURL(AuthorizationRequestParameters authorizationRequestParameters);
 
-  // Analyse Result from different possible sources
   AuthorizationResponse extractAuthorizationResponseFromQuery(String query);
 
   AuthorizationResponse extractAuthorizationResponse(URL redirectPageUrl);
