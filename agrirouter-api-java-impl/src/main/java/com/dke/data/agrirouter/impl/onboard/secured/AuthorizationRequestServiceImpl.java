@@ -1,13 +1,12 @@
 package com.dke.data.agrirouter.impl.onboard.secured;
 
-import com.dke.data.agrirouter.api.dto.registrationrequest.secured.RegistrationRequestResponse;
-import com.dke.data.agrirouter.api.dto.registrationrequest.secured.RegistrationRequestToken;
+import com.dke.data.agrirouter.api.dto.registrationrequest.secured.AuthorizationResponse;
+import com.dke.data.agrirouter.api.dto.registrationrequest.secured.AuthorizationResponseToken;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotGetRegistrationCodeException;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
-import com.dke.data.agrirouter.api.service.onboard.secured.RegistrationRequestService;
-import com.dke.data.agrirouter.api.service.parameters.AuthenticationUrlParameters;
-import com.dke.data.agrirouter.api.service.parameters.SecuredRegistrationRequestParameters;
+import com.dke.data.agrirouter.api.service.onboard.secured.AuthorizationRequestService;
+import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.CookieResolverService;
 import com.dke.data.agrirouter.impl.common.StateIdService;
@@ -31,8 +30,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /** Internal service implementation. */
-public class RegistrationRequestServiceImpl extends EnvironmentalService
-    implements RegistrationRequestService, ResponseValidator {
+public class AuthorizationRequestServiceImpl extends EnvironmentalService
+    implements AuthorizationRequestService, ResponseValidator {
 
   private static final String SIGNATURE_KEY = "signature";
   private static final String STATE_KEY = "state";
@@ -42,7 +41,7 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
   private CookieResolverService cookieResolverService;
   private final OnboardingService onboardingService;
 
-  public RegistrationRequestServiceImpl(Environment environment) {
+  public AuthorizationRequestServiceImpl(Environment environment) {
     super(environment);
     this.onboardingService = new OnboardingServiceImpl(environment);
   }
@@ -51,38 +50,30 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
    * This function returns a full URL to send to a browser as Redirect or Link to forward a user to
    * the Authorization process
    *
-   * @param securedRegistrationRequestParameters Parameters to build URL from
+   * @param authorizationRequestParameters Parameters to build URL from
    * @return The RegistrationURL
    */
-  public String getRegistrationRequestURL(
-      SecuredRegistrationRequestParameters securedRegistrationRequestParameters) {
-
-    AuthenticationUrlParameters authenticationUrlParameters = new AuthenticationUrlParameters();
-    authenticationUrlParameters.setApplicationId(
-        securedRegistrationRequestParameters.getApplicationId());
-    authenticationUrlParameters.setRedirectUri(
-        securedRegistrationRequestParameters.getRedirectUri());
-    authenticationUrlParameters.setResponseType(
-        securedRegistrationRequestParameters.getResponseType());
-    if (StringUtils.isBlank(securedRegistrationRequestParameters.getState())) {
-      securedRegistrationRequestParameters.setState(StateIdService.generateState());
+  public String getAuthorizationRequestURL(
+      AuthorizationRequestParameters authorizationRequestParameters) {
+    if (StringUtils.isBlank(authorizationRequestParameters.getState())) {
+      authorizationRequestParameters.setState(StateIdService.generateState());
     }
-    authenticationUrlParameters.setState(securedRegistrationRequestParameters.getState());
+    authorizationRequestParameters.setState(authorizationRequestParameters.getState());
 
-    return this.onboardingService.generateAuthenticationUrl(authenticationUrlParameters);
+    return this.onboardingService.generateAuthorizationUrl(authorizationRequestParameters);
   }
 
   /**
    * This function creates a full request to do the authorization without user interaction. This
    * function is usable for automated testing, it should NOT be used for final implementations!
    *
-   * @param securedRegistrationRequestParameters Parameters to build URL from
+   * @param authorizationRequestParameters Parameters to build URL from
    * @return The RegistrationURL
    */
   @Override
-  public RegistrationRequestResponse getRegistrationCode(
-      SecuredRegistrationRequestParameters securedRegistrationRequestParameters) {
-    securedRegistrationRequestParameters.validate();
+  public AuthorizationResponse callForAuthorizationResponse(
+      AuthorizationRequestParameters authorizationRequestParameters) {
+    authorizationRequestParameters.validate();
 
     if (this.cookieResolverService == null) {
       this.cookieResolverService = new CookieResolverService(environment);
@@ -100,7 +91,7 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
 
       cookies.forEach(c -> webClient.getCookieManager().addCookie(c));
 
-      final String url = getRegistrationRequestURL(securedRegistrationRequestParameters);
+      final String url = getAuthorizationRequestURL(authorizationRequestParameters);
 
       final HtmlPage page = webClient.getPage(url);
 
@@ -109,7 +100,7 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
       this.assertStatusCodeIsOk(redirectPage.getWebResponse().getStatusCode());
 
       URL redirectPageUrl = redirectPage.getUrl();
-      return this.extractAuthenticationResults(redirectPageUrl);
+      return this.extractAuthorizationResponse(redirectPageUrl);
     } catch (IOException e) {
       throw new CouldNotGetRegistrationCodeException(e);
     } catch (FailingHttpStatusCodeException e) {
@@ -118,40 +109,51 @@ public class RegistrationRequestServiceImpl extends EnvironmentalService
     }
   }
 
+  /**
+   * Decode the Base64-encoded Token and Create a TokenObject with RegCode and AccountId
+   *
+   * @param token
+   * @return
+   */
   @Override
-  public RegistrationRequestToken decodeToken(String token) {
+  public AuthorizationResponseToken decodeToken(String token) {
     byte[] decodedBytes = Base64.getDecoder().decode(token);
     String decodedToken = new String(decodedBytes);
-    return new Gson().fromJson(decodedToken, RegistrationRequestToken.class);
+    return new Gson().fromJson(decodedToken, AuthorizationResponseToken.class);
   }
 
   @NotNull
-  public RegistrationRequestResponse extractAuthenticationResults(URL redirectPageUrl) {
-    String[] queryParams = redirectPageUrl.getQuery().split("&");
-    Map<String, String> authenticationResults = new HashMap<>();
+  public AuthorizationResponse extractAuthorizationResponseFromQuery(String query) {
+    String[] queryParams = query.split("&");
+    Map<String, String> authorizationResults = new HashMap<>();
     Arrays.stream(queryParams)
         .forEach(
             s -> {
               String[] keyValuePair = s.split("=");
               try {
-                authenticationResults.put(
+                authorizationResults.put(
                     keyValuePair[0], URLDecoder.decode(keyValuePair[1], "UTF-8"));
               } catch (UnsupportedEncodingException e) {
                 // NOP
               }
             });
-    RegistrationRequestResponse registrationRequestResponse = new RegistrationRequestResponse();
-    registrationRequestResponse.setSignature(authenticationResults.get(SIGNATURE_KEY));
-    registrationRequestResponse.setState(authenticationResults.get(STATE_KEY));
-    registrationRequestResponse.setToken(authenticationResults.get(TOKEN_KEY));
-    registrationRequestResponse.setError(authenticationResults.get(ERROR_KEY));
-    return registrationRequestResponse;
+    AuthorizationResponse authorizationResponse = new AuthorizationResponse();
+    authorizationResponse.setSignature(authorizationResults.get(SIGNATURE_KEY));
+    authorizationResponse.setState(authorizationResults.get(STATE_KEY));
+    authorizationResponse.setToken(authorizationResults.get(TOKEN_KEY));
+    authorizationResponse.setError(authorizationResults.get(ERROR_KEY));
+    return authorizationResponse;
   }
 
-  public RegistrationRequestResponse extractAuthenticationResults(String redirectPageUrl)
+  @NotNull
+  public AuthorizationResponse extractAuthorizationResponse(URL redirectPageUrl) {
+    return extractAuthorizationResponseFromQuery(redirectPageUrl.getQuery());
+  }
+
+  public AuthorizationResponse extractAuthorizationResults(String redirectPageUrl)
       throws MalformedURLException {
     URL url = new URL(redirectPageUrl);
 
-    return extractAuthenticationResults(url);
+    return extractAuthorizationResponse(url);
   }
 }

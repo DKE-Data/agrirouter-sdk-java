@@ -4,7 +4,7 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingRequest;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
-import com.dke.data.agrirouter.api.service.parameters.AuthenticationUrlParameters;
+import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
@@ -61,15 +61,15 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   @Override
-  public String generateAuthenticationUrl(AuthenticationUrlParameters parameters) {
-    this.getNativeLogger().info("BEGIN | Generating authentication URL. | '{}'.", parameters);
-    String securedOnboardingAuthenticationUrl =
-        this.environment.getSecuredOnboardingAuthenticationUrl(
+  public String generateAuthorizationUrl(AuthorizationRequestParameters parameters) {
+    this.getNativeLogger().info("BEGIN | Generating authorization URL. | '{}'.", parameters);
+    String securedOnboardingAuthorizationUrl =
+        this.environment.getSecuredOnboardingAuthorizationUrl(
             parameters.getApplicationId(),
             parameters.getResponseType(),
             parameters.getState(),
             parameters.getRedirectUri());
-    this.getNativeLogger().info("END | Generating authentication URL. | '{}'.", parameters);
-    return securedOnboardingAuthenticationUrl;
+    this.getNativeLogger().info("END | Generating authorization URL. | '{}'.", parameters);
+    return securedOnboardingAuthorizationUrl;
   }
 }

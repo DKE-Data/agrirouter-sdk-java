@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull
  * Parameters class. Encapsulation for the services.
  */
 @ToString
-class RegistrationRequestParameters : ParameterValidation {
+class RegistrationCodeRequestParameters : ParameterValidation {
 
     @NotNull
     @NotEmpty

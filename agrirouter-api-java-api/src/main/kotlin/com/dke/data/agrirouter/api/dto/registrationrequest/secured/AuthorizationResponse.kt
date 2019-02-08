@@ -3,7 +3,7 @@ package com.dke.data.agrirouter.api.dto.registrationrequest.secured
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class RegistrationRequestResponse {
+class AuthorizationResponse {
 
     lateinit var signature : String
     lateinit var state: String
@@ -14,6 +14,6 @@ class RegistrationRequestResponse {
      * Returns true, if an error accoured while generating token serverside
      */
     fun hasError():Boolean{
-        return error.isNullOrBlank()
+        return !error.isNullOrBlank()
     }
 }
