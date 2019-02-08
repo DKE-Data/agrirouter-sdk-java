@@ -23,6 +23,7 @@ public interface ResponseValidator {
   default boolean assertStatusCodeIsValid(int statusCode) {
     LOGGER.debug("Validating status code.");
     LOGGER.trace(new ObjectArrayMessage(statusCode));
+    this.checkIfStatusCodeIsError(statusCode);
     if (statusCode != HttpStatus.SC_OK
         && statusCode != HttpStatus.SC_CREATED
         && statusCode != HttpStatus.SC_ACCEPTED
@@ -44,6 +45,7 @@ public interface ResponseValidator {
   default boolean assertStatusCodeIsOk(int statusCode) {
     LOGGER.debug("Validating status code.");
     LOGGER.trace(new ObjectArrayMessage(statusCode));
+    this.checkIfStatusCodeIsError(statusCode);
     if (statusCode != HttpStatus.SC_OK) {
       throw new InvalidHttpStatusException(statusCode);
     }
@@ -58,6 +60,7 @@ public interface ResponseValidator {
   default boolean assertStatusCodeIsCreated(int statusCode) {
     LOGGER.debug("Validating status code.");
     LOGGER.trace(new ObjectArrayMessage(statusCode));
+    this.checkIfStatusCodeIsError(statusCode);
     if (statusCode != HttpStatus.SC_CREATED) {
       throw new InvalidHttpStatusException(statusCode);
     }
@@ -72,6 +75,7 @@ public interface ResponseValidator {
   default boolean assertStatusCodeIsBadRequest(int statusCode) {
     LOGGER.debug("Validating status code.");
     LOGGER.trace(new ObjectArrayMessage(statusCode));
+    this.checkIfStatusCodeIsError(statusCode);
     if (statusCode != HttpStatus.SC_BAD_REQUEST) {
       throw new InvalidHttpStatusException(statusCode);
     }
