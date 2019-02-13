@@ -10,10 +10,10 @@ import com.google.protobuf.ByteString;
 import kotlin.UninitializedPropertyAccessException;
 import org.junit.jupiter.api.Test;
 
-class EndpointsFilteredMessageContentFactoryTest {
+class EndpointsListMessageContentFactoryTest {
 
   @Test
-  void givenValidEndpointsFilteredParametersMessageShouldNotFail() {
+  void givenValidEndpointsUnfilteredMessageParametersMessageShouldNotFail() {
     EndpointsListParameters endpointsListParameters = new EndpointsListParameters();
     endpointsListParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND;
     endpointsListParameters.technicalMessageType = TechnicalMessageType.ISO_11783_TASKDATA_ZIP;
@@ -22,7 +22,7 @@ class EndpointsFilteredMessageContentFactoryTest {
   }
 
   @Test
-  void givenEmptyEndpointsFilteredParametersMessageShouldNotFail() {
+  void givenEmptyEndpointsUnfilteredMessageParametersMessageShouldThrowException() {
     EndpointsListParameters endpointsListParameters = new EndpointsListParameters();
     assertThrows(
         UninitializedPropertyAccessException.class,
@@ -31,7 +31,7 @@ class EndpointsFilteredMessageContentFactoryTest {
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void givenEndpointsFilteredParametersWithNullValuesMessageShouldThrowException() {
+  void givenEndpointsUnfilteredMessageParametersWithNullValuesMessageShouldThrowException() {
     EndpointsListParameters endpointsListParameters = new EndpointsListParameters();
     endpointsListParameters.direction = null;
     endpointsListParameters.technicalMessageType = null;

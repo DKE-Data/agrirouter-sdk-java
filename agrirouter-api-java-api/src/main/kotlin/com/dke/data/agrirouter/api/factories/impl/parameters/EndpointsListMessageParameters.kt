@@ -4,7 +4,7 @@ import com.dke.data.agrirouter.api.enums.TechnicalMessageType
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import javax.validation.constraints.NotNull
 
-class EndpointsFilteredMessageParameters : ParameterValidation {
+class EndpointsListMessageParameters : ParameterValidation {
 
     @NotNull
     lateinit var technicalMessageType: TechnicalMessageType
