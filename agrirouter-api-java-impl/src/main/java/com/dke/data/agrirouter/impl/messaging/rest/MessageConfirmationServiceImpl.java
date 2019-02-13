@@ -132,9 +132,6 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
             .forEach(feedMessage -> messageIds.add(feedMessage.getHeader().getMessageId()));
         MessageConfirmationParameters messageConfirmationParameters =
             new MessageConfirmationParameters();
-        messageConfirmationParameters.setApplicationId(parameters.getApplicationId());
-        messageConfirmationParameters.setCertificationVersionId(
-            parameters.getCertificationVersionId());
         messageConfirmationParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         messageConfirmationParameters.setMessageIds(messageIds);
         this.send(messageConfirmationParameters);
