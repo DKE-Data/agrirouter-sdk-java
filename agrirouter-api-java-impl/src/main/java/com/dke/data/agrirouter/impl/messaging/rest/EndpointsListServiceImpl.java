@@ -23,10 +23,8 @@ import org.apache.logging.log4j.Logger;
 
 public class EndpointsListServiceImpl extends EnvironmentalService
     implements EndpointsListService, MessageSender, ResponseValidator {
-  private Logger LOGGER = LogManager.getLogger();
 
   private EncodeMessageService encodeMessageService;
-  // private Logger logger;
   public EndpointsListServiceImpl(Environment environment) {
     super(environment);
     encodeMessageService = new EncodeMessageServiceImpl();
@@ -35,7 +33,6 @@ public class EndpointsListServiceImpl extends EnvironmentalService
   @Override
   public String send(EndpointsListParameters parameters) {
 
-    TechnicalMessageType technicalMessageType = parameters.technicalMessageType;
     // there is no validation required
     // parameters.validate();
 
@@ -59,7 +56,7 @@ public class EndpointsListServiceImpl extends EnvironmentalService
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
     messageHeaderParameters.setApplicationMessageSeqNo(1);
-    if (parameters.getUnFilteredList() == true) {
+    if (parameters.getUnFilteredList()) {
       messageHeaderParameters.technicalMessageType =
           TechnicalMessageType.DKE_LIST_ENDPOINTS_UNFILTERED;
 
