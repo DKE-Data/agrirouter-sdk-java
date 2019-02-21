@@ -16,4 +16,11 @@ class MessageConfirmationForAllPendingMessagesParameters : ParameterValidation {
     lateinit var onboardingResponse: OnboardingResponse
 
 
+    @NotNull
+    @NotBlank
+    lateinit var applicationId: String
+
+    @NotNull
+    @NotBlank
+    lateinit var certificationVersionId: String
 }

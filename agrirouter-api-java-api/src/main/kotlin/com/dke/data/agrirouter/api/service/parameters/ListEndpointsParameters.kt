@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull
  * Parameters class. Encapsulation for the services.
  */
 @ToString
-class EndpointsListParameters : ParameterValidation {
+class ListEndpointsParameters : ParameterValidation {
 
 
     @NotNull

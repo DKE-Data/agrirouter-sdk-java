@@ -17,4 +17,11 @@ class MessageConfirmationParameters : ParameterValidation {
     @NotNull
     lateinit var messageIds: List<String>
 
+    @NotNull
+    @NotBlank
+    lateinit var applicationId: String
+
+    @NotNull
+    @NotBlank
+    lateinit var certificationVersionId: String
 }

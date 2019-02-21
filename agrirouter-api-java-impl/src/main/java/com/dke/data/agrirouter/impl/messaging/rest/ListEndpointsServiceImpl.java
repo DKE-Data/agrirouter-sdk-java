@@ -6,35 +6,31 @@ import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.factories.impl.EndpointsListMessageContentFactory;
-import com.dke.data.agrirouter.api.service.messaging.EndpointsListService;
+import com.dke.data.agrirouter.api.factories.impl.ListEndpointsMessageContentFactory;
+import com.dke.data.agrirouter.api.service.messaging.ListEndpointsService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
-import com.dke.data.agrirouter.api.service.parameters.EndpointsListParameters;
+import com.dke.data.agrirouter.api.service.parameters.ListEndpointsParameters;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
+import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
-import java.util.UUID;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-public class EndpointsListServiceImpl extends EnvironmentalService
-    implements EndpointsListService, MessageSender, ResponseValidator {
+public class ListEndpointsServiceImpl extends EnvironmentalService
+    implements ListEndpointsService, MessageSender, ResponseValidator {
 
   private EncodeMessageService encodeMessageService;
-  public EndpointsListServiceImpl(Environment environment) {
+
+  public ListEndpointsServiceImpl(Environment environment) {
     super(environment);
     encodeMessageService = new EncodeMessageServiceImpl();
   }
 
   @Override
-  public String send(EndpointsListParameters parameters) {
-
-    // there is no validation required
-    // parameters.validate();
+  public String send(ListEndpointsParameters parameters) {
 
     EncodeMessageResponse encodedMessage = encodeMessage(parameters);
 
@@ -42,16 +38,15 @@ public class EndpointsListServiceImpl extends EnvironmentalService
     sendMessageParameters.onboardingResponse = parameters.onboardingResponse;
     sendMessageParameters.setEncodedMessages(
         Collections.singletonList(encodedMessage.getEncodedMessage()));
-    
 
     sendMessage(sendMessageParameters);
 
     return encodedMessage.getApplicationMessageID();
   }
 
-  private EncodeMessageResponse encodeMessage(EndpointsListParameters parameters) {
+  private EncodeMessageResponse encodeMessage(ListEndpointsParameters parameters) {
 
-    String applicationMessageID = UUID.randomUUID().toString();
+    String applicationMessageID = MessageIdService.generateMessageId();
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
@@ -59,7 +54,6 @@ public class EndpointsListServiceImpl extends EnvironmentalService
     if (parameters.getUnFilteredList()) {
       messageHeaderParameters.technicalMessageType =
           TechnicalMessageType.DKE_LIST_ENDPOINTS_UNFILTERED;
-
     } else {
       messageHeaderParameters.technicalMessageType = TechnicalMessageType.DKE_LIST_ENDPOINTS;
     }
@@ -67,7 +61,7 @@ public class EndpointsListServiceImpl extends EnvironmentalService
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(Endpoints.ListEndpointsQuery.getDescriptor().getFullName());
-    payloadParameters.value = new EndpointsListMessageContentFactory().message(parameters);
+    payloadParameters.value = new ListEndpointsMessageContentFactory().message(parameters);
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
@@ -75,25 +69,23 @@ public class EndpointsListServiceImpl extends EnvironmentalService
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
   }
 
-  public String requestFullListFiltered(OnboardingResponse onboardingResponse) {
-    EndpointsListParameters endpointsListParameters = new EndpointsListParameters();
-    endpointsListParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    //null marks, that there shall be no filtering for a specific message type
-    endpointsListParameters.technicalMessageType = null;
-    endpointsListParameters.onboardingResponse = onboardingResponse;
-    endpointsListParameters.setUnFilteredList(false);
+  public String requestFullListFilteredByAppliedRoutings(OnboardingResponse onboardingResponse) {
+    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+    listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
+    listEndpointsParameters.technicalMessageType = TechnicalMessageType.NONE;
+    listEndpointsParameters.onboardingResponse = onboardingResponse;
+    listEndpointsParameters.setUnFilteredList(false);
 
-    return this.send(endpointsListParameters);
+    return this.send(listEndpointsParameters);
   }
 
-  public String requestFullListUnFiltered(OnboardingResponse onboardingResponse) {
-    EndpointsListParameters endpointsListParameters = new EndpointsListParameters();
-    endpointsListParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    //null marks, that there shall be no filtering for a specific message type
-    endpointsListParameters.technicalMessageType = null;
-    endpointsListParameters.onboardingResponse = onboardingResponse;
-    endpointsListParameters.setUnFilteredList(true);
+  public String requestFullList(OnboardingResponse onboardingResponse) {
+    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+    listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
+    listEndpointsParameters.technicalMessageType = TechnicalMessageType.NONE;
+    listEndpointsParameters.onboardingResponse = onboardingResponse;
+    listEndpointsParameters.setUnFilteredList(true);
 
-    return this.send(endpointsListParameters);
+    return this.send(listEndpointsParameters);
   }
 }
