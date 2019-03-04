@@ -15,20 +15,35 @@ import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.api.service.parameters.SetCapabilitiesParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
-import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
+import com.dke.data.agrirouter.impl.messaging.encoding.json.EncodeMessageServiceJSONImpl;
+import com.dke.data.agrirouter.impl.messaging.rest.json.MessageSenderJSONImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class SetCapabilityServiceImpl extends EnvironmentalService
-    implements SetCapabilityService, MessageSender, ResponseValidator {
+public class SetCapabilityServiceImpl<SenderType> extends EnvironmentalService
+    implements SetCapabilityService, MessageSender<SenderType>, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
+  private final MessageSender messageSender;
 
+  /**
+   * @param environment
+   * @deprecated As the interface offers JSON and Protobuf, the used format has to be defined Use
+   *     SetCapabilityServiceJSONImpl or SetCapabilityServiceProtobufImpl instead
+   */
+  @Deprecated
   public SetCapabilityServiceImpl(Environment environment) {
+    this(environment, new EncodeMessageServiceJSONImpl(), new MessageSenderJSONImpl());
+  }
+
+  public SetCapabilityServiceImpl(
+      Environment environment,
+      EncodeMessageService encodeMessageService,
+      MessageSender messageSender) {
     super(environment);
-    this.encodeMessageService = new EncodeMessageServiceImpl();
+    this.encodeMessageService = encodeMessageService;
+    this.messageSender = messageSender;
   }
 
   @Override
@@ -38,8 +53,7 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     EncodeMessageResponse encodeMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodeMessageResponse.getEncodedMessage()));
+    sendMessageParameters.setEncodeMessageResponse(encodeMessageResponse);
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
@@ -86,8 +100,16 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     payloadParameters.setValue(
         new CapabilitiesMessageContentFactory().message(capabilitiesMessageParameters));
 
-    String encodedMessage =
-        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+  }
+
+  @Override
+  public SenderType createSendMessageRequest(SendMessageParameters parameters) {
+    return (SenderType) this.messageSender.createSendMessageRequest(parameters);
+  }
+
+  @Override
+  public MessageSenderResponse sendMessage(SendMessageParameters parameters) {
+    return this.messageSender.sendMessage(parameters);
   }
 }

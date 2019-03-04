@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "CommandResponse.proto";
+
+package gateway;
+
+option java_package = "com.sap.iotservices.common.protobuf.gateway";
+option java_outer_classname = "CommandResponseListProtos";
+
+message CommandResponseList {
+    repeated CommandResponse commands = 1;
+}

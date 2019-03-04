@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.api.service.messaging.encoding;
 
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 
@@ -13,6 +14,6 @@ public interface EncodeMessageService {
    * @param payloadParameters -
    * @return -
    */
-  String encode(
+  EncodeMessageResponse encode(
       MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters);
 }

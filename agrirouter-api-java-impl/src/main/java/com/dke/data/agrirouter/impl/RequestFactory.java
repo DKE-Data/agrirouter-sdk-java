@@ -19,28 +19,69 @@ import org.glassfish.jersey.logging.LoggingFeature;
 /** Factory to encapsulate the requests against the agrirouter */
 public final class RequestFactory {
 
+  public static final int DIRECTION_INBOX = 1;
+  public static final int DIRECTION_OUTBOX = 2;
+
+  public static final MediaType MEDIA_TYPE_PROTOBUF = new MediaType("application", "x-protobuf");
+
   /** Hidden constructor. */
   private RequestFactory() {
     // NOP
   }
 
   /**
-   * Creating a request with SSL configuration using the PEM and KEY files from the agrirouter.
+   * Creating a request with SSL configuration using the PEM and KEY files from the agrirouter. Used
+   * for communication of onboarded AppInstances
    *
    * @param url -
    * @param certificate -
    * @param password -
    * @return Builder -
    */
-  public static Invocation.Builder securedRequest(
+  public static Invocation.Builder securedJSONRequest(
       String url, String certificate, String password, CertificationType certificationType) {
+    MediaType mediaType = MediaType.APPLICATION_JSON_TYPE;
+    KeyStore keyStore = createKeyStore(certificate, password, certificationType);
     ClientConfig clientConfig = new ClientConfig();
+    Client client = createClient(clientConfig, keyStore, password, certificationType);
+    client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+
+    WebTarget target = client.target(url);
+    Invocation.Builder request = target.request(mediaType);
+    request.accept(mediaType);
+    return request;
+  }
+
+  /**
+   * Creating a request with SSL configuration using the PEM and KEY files from the agrirouter. Used
+   * for communication of onboarded AppInstances
+   *
+   * @param url -
+   * @param certificate -
+   * @param password -
+   * @return Builder -
+   */
+  public static Invocation.Builder securedNativeProtobufRequest(
+      String url,
+      String certificate,
+      String password,
+      CertificationType certificationType,
+      int direction) {
+    MediaType mediaType = MEDIA_TYPE_PROTOBUF;
+    ClientConfig clientConfig = new ClientConfig();
+    clientConfig.register(ProtobufEntityRequestWriter.class);
+    clientConfig.register(ProtobufEntityRequestReader.class);
     KeyStore keyStore = createKeyStore(certificate, password, certificationType);
     Client client = createClient(clientConfig, keyStore, password, certificationType);
     client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+
     WebTarget target = client.target(url);
-    Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
-    request.accept(MediaType.APPLICATION_JSON_TYPE);
+    Invocation.Builder request = target.request(mediaType);
+    if (direction == DIRECTION_INBOX) {
+      request.accept(MediaType.APPLICATION_JSON_TYPE);
+    } else {
+      request.accept(mediaType);
+    }
     return request;
   }
 
@@ -87,7 +128,7 @@ public final class RequestFactory {
   }
 
   /**
-   * Setting the 'reg_access_token' within the header.
+   * Setting the 'reg_access_token' within the header. Used for onboarding CUs
    *
    * @param url -
    * @param accessToken -
@@ -105,7 +146,7 @@ public final class RequestFactory {
   }
 
   /**
-   * Setting the 'reg_access_token' within the header.
+   * Setting the 'reg_access_token' within the header. Used for Farming Software and Telemetry
    *
    * @param url -
    * @param accessToken -
@@ -130,7 +171,7 @@ public final class RequestFactory {
   }
 
   /**
-   * Setting the cookies for the request.
+   * Setting the cookies for the request. Used for communication with agrirouter UI
    *
    * @param url -
    * @return Builder -

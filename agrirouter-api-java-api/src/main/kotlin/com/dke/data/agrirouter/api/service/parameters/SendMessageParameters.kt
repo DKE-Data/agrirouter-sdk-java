@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.api.service.parameters
 
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import lombok.ToString
@@ -15,6 +16,6 @@ open class SendMessageParameters : ParameterValidation {
     lateinit var onboardingResponse: OnboardingResponse
 
     @NotNull
-    lateinit var encodedMessages: List<String>
+    lateinit var encodeMessageResponse: EncodeMessageResponse
 
 }

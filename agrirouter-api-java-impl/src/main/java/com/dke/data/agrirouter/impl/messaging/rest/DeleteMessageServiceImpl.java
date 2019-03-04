@@ -13,18 +13,30 @@ import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
-import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
+import com.dke.data.agrirouter.impl.messaging.encoding.json.EncodeMessageServiceJSONImpl;
+import com.dke.data.agrirouter.impl.messaging.rest.json.MessageSenderJSONImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import java.util.Collections;
 import java.util.Objects;
 
-public class DeleteMessageServiceImpl
-    implements DeleteMessageService, MessageSender, ResponseValidator {
+public abstract class DeleteMessageServiceImpl implements DeleteMessageService, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
+  private final MessageSender messageSender;
 
+  /**
+   * @param -
+   * @deprecated As the interface offers JSON and Protobuf, the used format has to be defined Use
+   *     DeleteMessageServiceJSONImpl or DeleteMessageServiceProtobufImpl instead
+   */
+  @Deprecated
   public DeleteMessageServiceImpl() {
-    this.encodeMessageService = new EncodeMessageServiceImpl();
+    this(new MessageSenderJSONImpl(), new EncodeMessageServiceJSONImpl());
+  }
+
+  public DeleteMessageServiceImpl(
+      MessageSender messageSender, EncodeMessageService encodeMessageService) {
+    this.encodeMessageService = encodeMessageService;
+    this.messageSender = messageSender;
   }
 
   @Override
@@ -34,10 +46,10 @@ public class DeleteMessageServiceImpl
     EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+    sendMessageParameters.setEncodeMessageResponse(encodedMessageResponse);
 
-    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+    MessageSender.MessageSenderResponse response =
+        this.messageSender.sendMessage(sendMessageParameters);
 
     this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
     return encodedMessageResponse.getApplicationMessageID();
@@ -64,8 +76,6 @@ public class DeleteMessageServiceImpl
     payloadParameters.setValue(
         new DeleteMessageMessageContentFactory().message(deleteMessageMessageParameters));
 
-    String encodedMessage =
-        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
   }
 }

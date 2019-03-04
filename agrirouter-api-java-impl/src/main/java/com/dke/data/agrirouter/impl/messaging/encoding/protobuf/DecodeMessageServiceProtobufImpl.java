@@ -1,41 +1,49 @@
-package com.dke.data.agrirouter.impl.messaging.encoding;
+package com.dke.data.agrirouter.impl.messaging.encoding.protobuf;
 
 import agrirouter.commons.MessageOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotDecodeMessageException;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
+import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.sap.iotservices.common.protobuf.gateway.CommandResponseProtos;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Base64;
-import org.apache.commons.lang3.StringUtils;
 
 /** Internal service implementation. */
-public class DecodeMessageServiceImpl extends NonEnvironmentalService
-    implements DecodeMessageService {
+public class DecodeMessageServiceProtobufImpl extends NonEnvironmentalService
+    implements DecodeMessageService<String> {
 
   @Override
-  public DecodeMessageResponse decode(String encodedResponse) {
+  public DecodeMessageResponse decode(
+      String encodedResponse) {
     this.logMethodBegin(encodedResponse);
 
-    if (StringUtils.isBlank(encodedResponse)) {
+    if (encodedResponse == null) {
       throw new IllegalArgumentException("Please provide a valid encoded response.");
     }
     try {
-
-      this.getNativeLogger().trace("Decoding byte array.");
-      byte[] decodedBytes = Base64.getDecoder().decode(encodedResponse);
-      ByteArrayInputStream inputStream = new ByteArrayInputStream(decodedBytes);
-
       this.getNativeLogger().trace("Parse response envelope.");
+      byte[] decodedBytes = Base64.getDecoder().decode(encodedResponse);
+      /*for (Any entry : encodedResponseProtobuf.getValuesList()) {
+        System.out.println("Type: " + entry.getTypeUrl());
+        System.out.println("Value: " + Base64.encode(entry.getValue().toByteArray()));
+      }*/
+
+      InputStream inputStream =
+          new ByteArrayInputStream(decodedBytes);
+
       agrirouter.response.Response.ResponseEnvelope responseEnvelope =
           agrirouter.response.Response.ResponseEnvelope.parseDelimitedFrom(inputStream);
 
       this.getNativeLogger().trace("Parse response payload wrapper.");
       agrirouter.response.Response.ResponsePayloadWrapper responsePayloadWrapper =
           agrirouter.response.Response.ResponsePayloadWrapper.parseDelimitedFrom(inputStream);
+
       DecodeMessageResponse decodeMessageResponse = new DecodeMessageResponse();
       decodeMessageResponse.setResponseEnvelope(responseEnvelope);
       decodeMessageResponse.setResponsePayloadWrapper(responsePayloadWrapper);

@@ -1,6 +1,7 @@
-package com.dke.data.agrirouter.impl.messaging.encoding;
+package com.dke.data.agrirouter.impl.messaging.encoding.protobuf;
 
 import agrirouter.request.Request;
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotEncodeMessageException;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
@@ -8,16 +9,17 @@ import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.google.protobuf.Any;
+import com.google.protobuf.ByteString;
+import com.sap.iotservices.common.protobuf.gateway.MeasureRequestMessageProtos;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
 
 /** Internal service implementation. */
-public class EncodeMessageServiceImpl extends NonEnvironmentalService
+public class EncodeMessageServiceProtobufImpl extends NonEnvironmentalService
     implements EncodeMessageService {
 
-  public String encode(
+  public EncodeMessageResponse encode(
       MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
     this.logMethodBegin(messageHeaderParameters, payloadParameters);
 
@@ -36,10 +38,17 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
       this.payload(payloadParameters).writeDelimitedTo(streamedMessage);
 
       this.getNativeLogger().trace("Encoding message.");
-      String encodedMessage = Base64.getEncoder().encodeToString(streamedMessage.toByteArray());
+      byte[] encodedByteArray = streamedMessage.toByteArray();
 
-      this.logMethodEnd(encodedMessage);
-      return encodedMessage;
+      MeasureRequestMessageProtos.MeasureRequestMessage.Builder measureRequestBuilder =
+          MeasureRequestMessageProtos.MeasureRequestMessage.newBuilder();
+
+      measureRequestBuilder.setMessage(ByteString.copyFrom(encodedByteArray));
+      MeasureRequestMessageProtos.MeasureRequestMessage measureMessageProtobuf;
+      measureMessageProtobuf = measureRequestBuilder.build();
+
+      return new EncodeMessageResponse(
+          messageHeaderParameters.applicationMessageId, null, measureMessageProtobuf);
     } catch (IOException e) {
       throw new CouldNotEncodeMessageException(e);
     }
@@ -49,8 +58,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Create message header.");
-    agrirouter.request.Request.RequestEnvelope.Builder messageHeader =
-        Request.RequestEnvelope.newBuilder();
+    Request.RequestEnvelope.Builder messageHeader = Request.RequestEnvelope.newBuilder();
     messageHeader.setApplicationMessageId(parameters.getApplicationMessageId());
     messageHeader.setApplicationMessageSeqNo(parameters.getApplicationMessageSeqNo());
     messageHeader.setTechnicalMessageType(parameters.getTechnicalMessageType().getKey());

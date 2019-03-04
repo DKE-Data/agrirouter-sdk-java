@@ -1,7 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
+import static com.dke.data.agrirouter.api.service.messaging.FetchMessageService.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.api.service.messaging.FetchMessageService.MAX_TRIES_BEFORE_FAILURE;
 
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.feed.response.FeedResponse;
@@ -23,28 +23,55 @@ import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
-import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
-import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
+import com.dke.data.agrirouter.impl.messaging.encoding.json.DecodeMessageServiceJSONImpl;
+import com.dke.data.agrirouter.impl.messaging.encoding.json.EncodeMessageServiceJSONImpl;
+import com.dke.data.agrirouter.impl.messaging.rest.json.FetchMessageServiceJSONImpl;
+import com.dke.data.agrirouter.impl.messaging.rest.json.MessageQueryServiceJSONImpl;
+import com.dke.data.agrirouter.impl.messaging.rest.json.MessageSenderJSONImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class MessageConfirmationServiceImpl extends EnvironmentalService
-    implements MessageConfirmationService, MessageSender, ResponseValidator {
+public class MessageConfirmationServiceImpl<SenderType> extends EnvironmentalService
+    implements MessageSender<SenderType>, MessageConfirmationService, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
+  private final MessageSender messageSender;
   private final MessageQueryService messageQueryService;
   private final FetchMessageService fetchMessageService;
   private final DecodeMessageService decodeMessageService;
 
+  /**
+   * @param -
+   * @deprecated As the interface offers JSON and Protobuf, the used format has to be defined Use
+   *     DeleteMessageServiceJSONImpl or DeleteMessageServiceProtobufImpl instead
+   */
+  @Deprecated
   public MessageConfirmationServiceImpl(Environment environment) {
+    this(
+        environment,
+        new EncodeMessageServiceJSONImpl(),
+        new DecodeMessageServiceJSONImpl(),
+        new MessageSenderJSONImpl(),
+        new MessageQueryServiceJSONImpl(environment),
+        new FetchMessageServiceJSONImpl());
+  }
+
+  public MessageConfirmationServiceImpl(
+      Environment environment,
+      EncodeMessageService encodeMessageService,
+      DecodeMessageService decodeMessageService,
+      MessageSender messageSender,
+      MessageQueryService messageQueryService,
+      FetchMessageService fetchMessageService) {
     super(environment);
-    this.encodeMessageService = new EncodeMessageServiceImpl();
-    this.messageQueryService = new MessageQueryServiceImpl(environment);
-    this.fetchMessageService = new FetchMessageServiceImpl();
-    this.decodeMessageService = new DecodeMessageServiceImpl();
+    this.encodeMessageService = encodeMessageService;
+    this.messageQueryService = messageQueryService;
+    this.fetchMessageService = fetchMessageService;
+    this.decodeMessageService = decodeMessageService;
+    this.messageSender = messageSender;
   }
 
   @Override
@@ -54,8 +81,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+    sendMessageParameters.setEncodeMessageResponse(encodedMessageResponse);
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
@@ -83,9 +109,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
         new MessageConfirmationMessageContentFactory()
             .message(messageConfirmationMessageParameters));
 
-    String encodedMessage =
-        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
   }
 
   @Override
@@ -119,6 +143,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
       DecodeMessageResponse decodedMessageQueryResponse =
           this.decodeMessageService.decode(
               fetchMessageResponses.get().get(0).getCommand().getMessage());
+
       if (decodedMessageQueryResponse.getResponseEnvelope().getType()
               == Response.ResponseEnvelope.ResponseBodyType.ACK_FOR_FEED_MESSAGE
           && this.assertStatusCodeIsValid(
@@ -126,6 +151,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
         FeedResponse.MessageQueryResponse messageQueryResponse =
             this.messageQueryService.decode(
                 decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
+
         List<String> messageIds = new ArrayList<>();
         messageQueryResponse
             .getMessagesList()
@@ -155,5 +181,15 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
       this.assertStatusCodeIsValid(
           decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
     }
+  }
+
+  @Override
+  public SenderType createSendMessageRequest(SendMessageParameters parameters) {
+    return (SenderType) this.messageSender.createSendMessageRequest(parameters);
+  }
+
+  @Override
+  public MessageSenderResponse sendMessage(SendMessageParameters parameters) {
+    return this.messageSender.sendMessage(parameters);
   }
 }

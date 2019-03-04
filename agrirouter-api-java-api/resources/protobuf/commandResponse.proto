@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package gateway;
+
+option java_package = "com.sap.iotservices.common.protobuf.gateway";
+option java_outer_classname = "CommandResponseProtos";
+
+message CommandResponse {
+    string capabilityAlternateId = 1;
+    string sensorAlternateId = 2;
+    Command command = 3;
+
+    message Command {
+        repeated google.protobuf.Any values = 1;
+
+    }
+}

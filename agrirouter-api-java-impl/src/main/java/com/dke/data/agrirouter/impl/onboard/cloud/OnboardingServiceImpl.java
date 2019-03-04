@@ -1,8 +1,5 @@
 package com.dke.data.agrirouter.impl.onboard.cloud;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
-
 import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
 import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.Request;
@@ -24,15 +21,14 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageServi
 import com.dke.data.agrirouter.api.service.onboard.cloud.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
-import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
-import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
+import com.dke.data.agrirouter.impl.messaging.encoding.json.DecodeMessageServiceJSONImpl;
+import com.dke.data.agrirouter.impl.messaging.encoding.json.EncodeMessageServiceJSONImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,10 +38,26 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
   private final FetchMessageService fetchMessageService;
   private final DecodeMessageService decodeMessageService;
 
+  /**
+   * @param
+   * @deprecated As the interface offers JSON and Protobuf, the used format has to be defined Use
+   *     OnboardingServiceJSONImpl or OnboardingServiceProtobufImpl instead
+   */
+  @Deprecated
   public OnboardingServiceImpl() {
-    this.encodeMessageService = new EncodeMessageServiceImpl();
-    this.fetchMessageService = new FetchMessageServiceImpl();
-    this.decodeMessageService = new DecodeMessageServiceImpl();
+    this(
+        new EncodeMessageServiceJSONImpl(),
+        new FetchMessageServiceImpl(),
+        new DecodeMessageServiceJSONImpl());
+  }
+
+  public OnboardingServiceImpl(
+      EncodeMessageService encodeMessageService,
+      FetchMessageService fetchMessageService,
+      DecodeMessageService decodeMessageService) {
+    this.encodeMessageService = encodeMessageService;
+    this.fetchMessageService = fetchMessageService;
+    this.decodeMessageService = decodeMessageService;
   }
 
   /**
@@ -169,10 +181,8 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
                     new CloudEndpointOnboardingMessageParameters
                         [onboardCloudEndpointMessageParameters.size()])));
 
-    String encodedMessage =
-        this.encodeMessageService.encode(
-            this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return this.encodeMessageService.encode(
+        this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
   }
 
   private EncodeMessageResponse encodeOffboardingMessage(CloudOffboardingParameters parameters) {
@@ -195,10 +205,8 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
     payloadParameters.setValue(
         new CloudEndpointOffboardingMessageContentFactory().message(cloudOffboardingParameters));
 
-    String encodedMessage =
-        this.encodeMessageService.encode(
-            this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return this.encodeMessageService.encode(
+        this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
   }
 
   private MessageHeaderParameters createMessageHeaderParameters(String applicationMessageID) {
@@ -214,8 +222,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
       EncodeMessageResponse encodedMessageResponse, OnboardingResponse onboardingResponse) {
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(onboardingResponse);
-    sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+    sendMessageParameters.setEncodeMessageResponse(encodedMessageResponse);
     return sendMessageParameters;
   }
 
@@ -223,5 +230,15 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
   public CloudVirtualizedAppRegistration.OnboardingResponse unsafeDecode(ByteString message)
       throws InvalidProtocolBufferException {
     return CloudVirtualizedAppRegistration.OnboardingResponse.parseFrom(message);
+  }
+
+  @Override
+  public Object createSendMessageRequest(SendMessageParameters parameters) {
+    return null;
+  }
+
+  @Override
+  public MessageSenderResponse sendMessage(SendMessageParameters parameters) {
+    return null;
   }
 }

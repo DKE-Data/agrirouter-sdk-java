@@ -1,0 +1,2 @@
+SET mypath=%~dp0
+protoc --proto_path=%mypath%/agrirouter-api-java-api/resources/protobuf --java_out=%mypath%/agrirouter-api-java-api/src/main/java/ CommandResponse.proto CommandResponseList.proto MeasureRequest.proto CommandResponseMessage.proto MeasureRequestMessage.proto

@@ -3,31 +3,49 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 import agrirouter.feed.response.FeedResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
+import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
+import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
-import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
-import com.dke.data.agrirouter.impl.messaging.helper.MessageQueryService;
+import com.dke.data.agrirouter.impl.messaging.encoding.json.EncodeMessageServiceJSONImpl;
+import com.dke.data.agrirouter.impl.messaging.helper.MessageQueryHelper;
+import com.dke.data.agrirouter.impl.messaging.rest.json.MessageSenderJSONImpl;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-public class MessageQueryServiceImpl extends EnvironmentalService
+public class MessageQueryServiceImpl<SenderType> extends EnvironmentalService
     implements com.dke.data.agrirouter.api.service.messaging.MessageQueryService,
-        MessageSender,
-        MessageDecoder<FeedResponse.MessageQueryResponse> {
+        MessageSender<SenderType> {
 
-  private final MessageQueryService messageQueryService;
+  private final MessageSender<SenderType> messageSender;
+  private final EncodeMessageService encodeMessageService;
+  private final MessageQueryHelper<SenderType> messageQueryHelper;
 
+  /**
+   * @param -
+   * @deprecated As the interface offers JSON and Protobuf, the used format has to be defined Use
+   *     MessageQueryServiceJSONImpl or MessageQueryServiceProtobufImpl instead
+   */
+  @Deprecated
   public MessageQueryServiceImpl(Environment environment) {
+
+    this(environment, new MessageSenderJSONImpl(), new EncodeMessageServiceJSONImpl());
+  }
+
+  public MessageQueryServiceImpl(Environment environment, MessageSender messageSender, EncodeMessageService encodeMessageService) {
     super(environment);
-    this.messageQueryService =
-        new MessageQueryService(
-            new EncodeMessageServiceImpl(), TechnicalMessageType.DKE_FEED_MESSAGE_QUERY);
+    this.messageSender = messageSender;
+    this.encodeMessageService = encodeMessageService;
+    this.messageQueryHelper = new MessageQueryHelper<SenderType>(
+      this.encodeMessageService,
+      this.messageSender,
+      TechnicalMessageType.DKE_FEED_MESSAGE_QUERY
+    );
   }
 
   @Override
   public String send(MessageQueryParameters parameters) {
-    String applicationMessageID = this.messageQueryService.send(parameters);
+    String applicationMessageID = this.messageQueryHelper.send(parameters);
     return applicationMessageID;
   }
 
@@ -35,5 +53,15 @@ public class MessageQueryServiceImpl extends EnvironmentalService
   public FeedResponse.MessageQueryResponse unsafeDecode(ByteString message)
       throws InvalidProtocolBufferException {
     return FeedResponse.MessageQueryResponse.parseFrom(message);
+  }
+
+  @Override
+  public SenderType createSendMessageRequest(SendMessageParameters parameters) {
+    return (SenderType) this.messageSender.sendMessage(parameters);
+  }
+
+  @Override
+  public MessageSenderResponse sendMessage(SendMessageParameters parameters) {
+    return this.messageQueryHelper.sendMessage(parameters);
   }
 }

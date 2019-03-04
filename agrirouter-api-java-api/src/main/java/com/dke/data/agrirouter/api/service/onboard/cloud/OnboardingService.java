@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface OnboardingService
     extends MessageDecoder<CloudVirtualizedAppRegistration.OnboardingResponse> {
+  int MAX_TRIES_BEFORE_FAILURE = 10;
+  long DEFAULT_INTERVAL = 500;
 
   List<OnboardingResponse> onboard(CloudOnboardingParameters parameters);
 

@@ -8,6 +8,8 @@ import java.util.Optional;
 
 /** Service for fetching messages for the given endpoint. */
 public interface FetchMessageService {
+  int MAX_TRIES_BEFORE_FAILURE = 10;
+  long DEFAULT_INTERVAL = 500;
 
   /**
    * Fetch messages using the given onboarding response using the number of tries and the given
@@ -31,6 +33,4 @@ public interface FetchMessageService {
    */
   Optional<List<FetchMessageResponse>> fetch(
       FetchMessageParameters parameters, int maxTries, long interval);
-
-  FetchMessageResponse parseJson(byte[] json);
 }
