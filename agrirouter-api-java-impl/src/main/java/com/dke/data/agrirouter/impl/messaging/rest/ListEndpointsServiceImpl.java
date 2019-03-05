@@ -26,20 +26,20 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
 
   public ListEndpointsServiceImpl(Environment environment) {
     super(environment);
-    encodeMessageService = new EncodeMessageServiceImpl();
+    this.encodeMessageService = new EncodeMessageServiceImpl();
   }
 
   @Override
   public String send(ListEndpointsParameters parameters) {
 
-    EncodeMessageResponse encodedMessage = encodeMessage(parameters);
+    EncodeMessageResponse encodedMessage = this.encodeMessage(parameters);
 
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
-    sendMessageParameters.onboardingResponse = parameters.onboardingResponse;
+    sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
         Collections.singletonList(encodedMessage.getEncodedMessage()));
 
-    sendMessage(sendMessageParameters);
+    this.sendMessage(sendMessageParameters);
 
     return encodedMessage.getApplicationMessageID();
   }
@@ -51,17 +51,16 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
     messageHeaderParameters.setApplicationMessageSeqNo(1);
-    if (parameters.getUnFilteredList()) {
-      messageHeaderParameters.technicalMessageType =
-          TechnicalMessageType.DKE_LIST_ENDPOINTS_UNFILTERED;
+    if (parameters.getUnfilteredList()) {
+      messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_LIST_ENDPOINTS_UNFILTERED);
     } else {
-      messageHeaderParameters.technicalMessageType = TechnicalMessageType.DKE_LIST_ENDPOINTS;
+      messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_LIST_ENDPOINTS);
     }
-    messageHeaderParameters.mode = Request.RequestEnvelope.Mode.DIRECT;
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(Endpoints.ListEndpointsQuery.getDescriptor().getFullName());
-    payloadParameters.value = new ListEndpointsMessageContentFactory().message(parameters);
+    payloadParameters.setValue( new ListEndpointsMessageContentFactory().message(parameters));
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
@@ -72,9 +71,9 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   public String requestFullListFilteredByAppliedRoutings(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    listEndpointsParameters.technicalMessageType = TechnicalMessageType.NONE;
+    listEndpointsParameters.technicalMessageType = TechnicalMessageType.EMPTY;
     listEndpointsParameters.onboardingResponse = onboardingResponse;
-    listEndpointsParameters.setUnFilteredList(false);
+    listEndpointsParameters.setUnfilteredList(false);
 
     return this.send(listEndpointsParameters);
   }
@@ -82,9 +81,9 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   public String requestFullList(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    listEndpointsParameters.technicalMessageType = TechnicalMessageType.NONE;
+    listEndpointsParameters.technicalMessageType = TechnicalMessageType.EMPTY;
     listEndpointsParameters.onboardingResponse = onboardingResponse;
-    listEndpointsParameters.setUnFilteredList(true);
+    listEndpointsParameters.setUnfilteredList(true);
 
     return this.send(listEndpointsParameters);
   }
