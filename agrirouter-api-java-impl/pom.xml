@@ -12,6 +12,10 @@
     <name>AGRIROUTER API JAVA - IMPL</name>
     <artifactId>agrirouter-api-java-impl</artifactId>
 
+    <properties>
+        <javax.el.version>3.0.1-b08</javax.el.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.agrirouter.proto</groupId>
@@ -25,6 +29,11 @@
         <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>javax.ws.rs-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>${javax.el.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
