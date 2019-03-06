@@ -22,5 +22,5 @@ class ListEndpointsParameters : ParameterValidation {
     @NotNull
     lateinit var direction: agrirouter.request.payload.account.Endpoints.ListEndpointsQuery.Direction
 
-    var unFilteredList: Boolean = false
+    var unfilteredList: Boolean = false
 }
