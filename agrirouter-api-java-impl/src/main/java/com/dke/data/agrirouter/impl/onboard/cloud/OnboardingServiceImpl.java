@@ -25,6 +25,7 @@ import com.dke.data.agrirouter.impl.messaging.encoding.json.DecodeMessageService
 import com.dke.data.agrirouter.impl.messaging.encoding.json.EncodeMessageServiceJSONImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
+import com.dke.data.agrirouter.impl.messaging.rest.json.MessageSenderJSONImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -32,32 +33,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class OnboardingServiceImpl implements OnboardingService, MessageSender, ResponseValidator {
+public class OnboardingServiceImpl<SenderType> implements OnboardingService, MessageSender<SenderType>, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
+  private final MessageSender<SenderType> messageSender;
   private final FetchMessageService fetchMessageService;
   private final DecodeMessageService decodeMessageService;
 
   /**
    * @param
-   * @deprecated As the interface offers JSON and Protobuf, the used format has to be defined Use
-   *     OnboardingServiceJSONImpl or OnboardingServiceProtobufImpl instead
+   * @deprecated As the interface offers JSON and Protobuf, the used format has to be defined
+   *     Use OnboardingServiceJSONImpl or OnboardingServiceProtobufImpl instead
    */
   @Deprecated
   public OnboardingServiceImpl() {
     this(
         new EncodeMessageServiceJSONImpl(),
+        new MessageSenderJSONImpl(),
         new FetchMessageServiceImpl(),
         new DecodeMessageServiceJSONImpl());
   }
 
   public OnboardingServiceImpl(
       EncodeMessageService encodeMessageService,
+      MessageSender messageSender,
       FetchMessageService fetchMessageService,
-      DecodeMessageService decodeMessageService) {
+      DecodeMessageService decodeMessageService)
+  {
     this.encodeMessageService = encodeMessageService;
     this.fetchMessageService = fetchMessageService;
     this.decodeMessageService = decodeMessageService;
+    this.messageSender = messageSender;
   }
 
   /**
@@ -233,12 +239,12 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
   }
 
   @Override
-  public Object createSendMessageRequest(SendMessageParameters parameters) {
-    return null;
+  public SenderType createSendMessageRequest(SendMessageParameters parameters) {
+    return this.messageSender.createSendMessageRequest(parameters);
   }
 
   @Override
   public MessageSenderResponse sendMessage(SendMessageParameters parameters) {
-    return null;
+    return this.messageSender.sendMessage(parameters);
   }
 }
