@@ -57,13 +57,13 @@ After adding the snapshot repository feel free to add the Maven dependencies:
 
 ```xml
 <dependency>
-    <groupId>om.agrirouter.api.lmis</groupId>
+    <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-api</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk10</classifier>
 </dependency>
 <dependency>
-    <groupId>om.agrirouter.api.lmis</groupId>
+    <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-impl</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk10</classifier>
@@ -78,13 +78,13 @@ After adding the snapshot repository feel free to add the following Maven depend
 
 ```xml
 <dependency>
-    <groupId>om.agrirouter.api.lmis</groupId>
+    <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-api</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk8</classifier>
 </dependency>
 <dependency>
-    <groupId>om.agrirouter.api.lmis</groupId>
+    <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-impl</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk8</classifier>
@@ -96,13 +96,13 @@ After adding the snapshot repository feel free to add the following Maven depend
 
 ```xml
 <dependency>
-    <groupId>om.agrirouter.api.lmis</groupId>
+    <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-api</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk9</classifier>
 </dependency>
 <dependency>
-    <groupId>om.agrirouter.api.lmis</groupId>
+    <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-impl</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk9</classifier>
@@ -114,13 +114,13 @@ After adding the snapshot repository feel free to add the following Maven depend
 
 ```xml
 <dependency>
-    <groupId>om.agrirouter.api.lmis</groupId>
+    <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-api</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk10</classifier>
 </dependency>
 <dependency>
-    <groupId>om.agrirouter.api.lmis</groupId>
+    <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-impl</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk10</classifier>
