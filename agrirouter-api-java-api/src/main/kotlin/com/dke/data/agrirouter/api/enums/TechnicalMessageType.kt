@@ -1,7 +1,7 @@
 package com.dke.data.agrirouter.api.enums
 
 enum class TechnicalMessageType(val key: String) {
-
+    EMPTY(""),
     DKE_CLOUD_ONBOARD_ENDPOINTS("dke:cloud_onboard_endpoints"),
     DKE_CLOUD_OFFBOARD_ENDPOINTS("dke:cloud_offboard_endpoints"),
     DKE_CAPABILITIES("dke:capabilities"),

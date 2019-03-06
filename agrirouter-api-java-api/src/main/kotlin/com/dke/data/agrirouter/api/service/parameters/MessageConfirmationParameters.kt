@@ -14,6 +14,7 @@ class MessageConfirmationParameters : ParameterValidation {
 
     @NotNull
     lateinit var onboardingResponse: OnboardingResponse
+
     @NotNull
     lateinit var messageIds: List<String>
 
