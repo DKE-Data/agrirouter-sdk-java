@@ -6,6 +6,7 @@ import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequest;
 import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequestProtobuf;
 import com.dke.data.agrirouter.api.enums.CertificationType;
+import com.dke.data.agrirouter.api.exception.WrongFormatForMessageException;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
@@ -28,7 +29,8 @@ public class MessageSenderProtobufImpl implements MessageSender {
           (EncodeMessageResponse.EncodeMessageResponseProtobuf)
               sendMessageParameters.getEncodeMessageResponse();
     } else {
-      // TODO Throw error
+      throw new WrongFormatForMessageException("Trying to pass JSON Message to Protobuf MessageSender");
+
     }
 
     MeasureProtos.MeasureRequest.Builder measureMessageBuilder =

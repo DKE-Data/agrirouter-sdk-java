@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.onboard.secured;
 import com.dke.data.agrirouter.api.dto.registrationrequest.secured.AuthorizationResponse;
 import com.dke.data.agrirouter.api.dto.registrationrequest.secured.AuthorizationResponseToken;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.exception.CouldNotDecodeAuthorizationURIException;
 import com.dke.data.agrirouter.api.exception.CouldNotGetRegistrationCodeException;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.onboard.secured.AuthorizationRequestService;
@@ -131,8 +132,12 @@ public class AuthorizationRequestServiceImpl extends EnvironmentalService
         .forEach(
             s -> {
               String[] keyValuePair = s.split("=");
-              authorizationResults.put(
-                  keyValuePair[0], URLDecoder.decode(keyValuePair[1], StandardCharsets.UTF_8));
+              try {
+                authorizationResults.put(
+                    keyValuePair[0], URLDecoder.decode(keyValuePair[1], "utf-8"));
+              } catch (UnsupportedEncodingException e) {
+                throw new CouldNotDecodeAuthorizationURIException(keyValuePair[1]);
+              }
             });
     AuthorizationResponse authorizationResponse = new AuthorizationResponse();
     authorizationResponse.setSignature(authorizationResults.get(SIGNATURE_KEY));
