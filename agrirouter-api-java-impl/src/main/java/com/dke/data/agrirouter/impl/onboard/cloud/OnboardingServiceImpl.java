@@ -68,75 +68,48 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
       DecodeMessageResponse decodedMessageQueryResponse =
           this.decodeMessageService.decode(
               fetchMessageResponses.get().get(0).getCommand().getMessage());
-      if (this.assertStatusCodeIsBadRequest(
-          decodedMessageQueryResponse.getResponseEnvelope().getResponseCode())) {
+      try {
+        this.assertStatusCodeIsValid(
+          decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
+      } catch (Exception e) {
         MessageOuterClass.Message message =
-            this.decodeMessageService.decode(
-                decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
+          this.decodeMessageService.decode(
+            decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
         throw new CouldNotOnboardVirtualCommunicationUnitException(message.getMessage());
-      } else {
-        if (decodedMessageQueryResponse.getResponseEnvelope().getType()
-                == Response.ResponseEnvelope.ResponseBodyType.CLOUD_REGISTRATIONS
-            && this.assertStatusCodeIsCreated(
-                decodedMessageQueryResponse.getResponseEnvelope().getResponseCode())) {
-          CloudVirtualizedAppRegistration.OnboardingResponse onboardingResponse =
-              this.decode(
-                  decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
-          onboardingResponse
-              .getOnboardedEndpointsList()
-              .forEach(
-                  endpointRegistrationDetails -> {
-                    OnboardingResponse internalOnboardingResponse = new OnboardingResponse();
-                    internalOnboardingResponse.setSensorAlternateId(
-                        endpointRegistrationDetails.getSensorAlternateId());
-                    internalOnboardingResponse.setCapabilityAlternateId(
-                        endpointRegistrationDetails.getCapabilityAlternateId());
-                    internalOnboardingResponse.setDeviceAlternateId(
-                        endpointRegistrationDetails.getDeviceAlternateId());
-                    internalOnboardingResponse.setAuthentication(
-                        parameters.getOnboardingResponse().getAuthentication());
-                    internalOnboardingResponse.setConnectionCriteria(
-                        parameters.getOnboardingResponse().getConnectionCriteria());
-                    responses.add(internalOnboardingResponse);
-                  });
-        }
+      }
+      if (decodedMessageQueryResponse.getResponseEnvelope().getType()
+              == Response.ResponseEnvelope.ResponseBodyType.CLOUD_REGISTRATIONS
+          && this.assertStatusCodeIsCreated(
+              decodedMessageQueryResponse.getResponseEnvelope().getResponseCode())) {
+        CloudVirtualizedAppRegistration.OnboardingResponse onboardingResponse =
+            this.decode(
+                decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
+        onboardingResponse
+            .getOnboardedEndpointsList()
+            .forEach(
+                endpointRegistrationDetails -> {
+                  OnboardingResponse internalOnboardingResponse = new OnboardingResponse();
+                  internalOnboardingResponse.setSensorAlternateId(
+                      endpointRegistrationDetails.getSensorAlternateId());
+                  internalOnboardingResponse.setCapabilityAlternateId(
+                      endpointRegistrationDetails.getCapabilityAlternateId());
+                  internalOnboardingResponse.setDeviceAlternateId(
+                      endpointRegistrationDetails.getDeviceAlternateId());
+                  internalOnboardingResponse.setAuthentication(
+                      parameters.getOnboardingResponse().getAuthentication());
+                  internalOnboardingResponse.setConnectionCriteria(
+                      parameters.getOnboardingResponse().getConnectionCriteria());
+                  responses.add(internalOnboardingResponse);
+                });
       }
     }
     return responses;
   }
 
-  /**
-   * Offboarding a virtual CU. Will deliver no result if the action was successful, if there's any
-   * error an exception will be thrown.
-   *
-   * @param parameters Parameters for offboarding.
-   */
-  @Override
-  public void offboard(CloudOffboardingParameters parameters) {
-    parameters.validate();
-    EncodeMessageResponse encodedMessageResponse = this.encodeOffboardingMessage(parameters);
-    SendMessageParameters sendMessageParameters =
-        createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
-    Optional<List<FetchMessageResponse>> fetchMessageResponses =
-        sendMessageAndFetchResponses(sendMessageParameters, parameters.getOnboardingResponse());
-    if (fetchMessageResponses.isPresent()) {
-      DecodeMessageResponse decodedMessageQueryResponse =
-          this.decodeMessageService.decode(
-              fetchMessageResponses.get().get(0).getCommand().getMessage());
-      if (this.assertStatusCodeIsBadRequest(
-          decodedMessageQueryResponse.getResponseEnvelope().getResponseCode())) {
-        MessageOuterClass.Message message =
-            this.decodeMessageService.decode(
-                decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
-        throw new CouldNotOffboardVirtualCommunicationUnitException(message.getMessage());
-      }
-    }
-  }
-
   private Optional<List<FetchMessageResponse>> sendMessageAndFetchResponses(
       SendMessageParameters sendMessageParameters, OnboardingResponse onboardingResponse) {
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-    this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
+    this.assertStatusCodeIsValid(response.getNativeResponse().getStatus());
     return this.fetchMessageService.fetch(
         onboardingResponse, MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
   }
