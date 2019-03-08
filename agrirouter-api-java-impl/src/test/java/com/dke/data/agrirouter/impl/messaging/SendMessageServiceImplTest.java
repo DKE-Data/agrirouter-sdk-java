@@ -11,6 +11,8 @@ import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreExcept
 import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.rest.SendMessageServiceImpl;
+import com.dke.data.agrirouter.impl.messaging.rest.json.SendMessageServiceJSONImpl;
+import com.dke.data.agrirouter.impl.messaging.rest.protobuf.SendMessageServiceProtobufImpl;
 import com.sap.iotservices.common.protobuf.gateway.MeasureRequestMessageProtos;
 import org.junit.jupiter.api.Test;
 
@@ -81,14 +83,20 @@ class SendMessageServiceImplTest {
   private static final String PASSWORD = "NbEJai3BwcOXLi77";
 
   @Test
-  void rq43givenNullParamsSendShouldThrowException() {
-    SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
+  void rq43givenNullParamsSendJSONShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceJSONImpl();
     assertThrows(NullPointerException.class, () -> sendMessageService.send(null));
   }
 
   @Test
-  void rq43givenEmptyParamsSendShouldThrowException() {
-    SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
+  void rq43givenNullParamsSendProtobufShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceProtobufImpl();
+    assertThrows(NullPointerException.class, () -> sendMessageService.send(null));
+  }
+
+  @Test
+  void rq43givenEmptyParamsSendJSONShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceJSONImpl();
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     assertThrows(
         IllegalParameterDefinitionException.class,
@@ -96,9 +104,28 @@ class SendMessageServiceImplTest {
   }
 
   @Test
-  void rq43givenEmptyCertificateSendShouldThrowException() {
-    SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
-    SendMessageParameters sendMessageParameters = this.createDefaultParameters();
+  void rq43givenEmptyParamsSendProtobufShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceProtobufImpl();
+    SendMessageParameters sendMessageParameters = new SendMessageParameters();
+    assertThrows(
+        IllegalParameterDefinitionException.class,
+        () -> sendMessageService.send(sendMessageParameters));
+  }
+
+  @Test
+  void rq43givenEmptyCertificateSendJSONShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceJSONImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersJSON();
+    sendMessageParameters.getOnboardingResponse().getAuthentication().setCertificate("");
+    assertThrows(
+        CouldNotCreateDynamicKeyStoreException.class,
+        () -> sendMessageService.send(sendMessageParameters));
+  }
+
+  @Test
+  void rq43givenEmptyCertificateSendProtobufShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceProtobufImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersProtobuf();
     sendMessageParameters.getOnboardingResponse().getAuthentication().setCertificate("");
     assertThrows(
         CouldNotCreateDynamicKeyStoreException.class,
@@ -107,9 +134,9 @@ class SendMessageServiceImplTest {
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void rq43givenNullCertificateSendShouldThrowException() {
-    SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
-    SendMessageParameters sendMessageParameters = this.createDefaultParameters();
+  void rq43givenNullCertificateSendJSONShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceJSONImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersJSON();
     sendMessageParameters.getOnboardingResponse().getAuthentication().setCertificate(null);
     assertThrows(
         IllegalParameterDefinitionException.class,
@@ -117,9 +144,20 @@ class SendMessageServiceImplTest {
   }
 
   @Test
-  void rq43givenCertificateWithMissingPrivateKeySendShouldThrowException() {
-    SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
-    SendMessageParameters sendMessageParameters = this.createDefaultParameters();
+  @SuppressWarnings("ConstantConditions")
+  void rq43givenNullCertificateSendProtobufShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceProtobufImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersProtobuf();
+    sendMessageParameters.getOnboardingResponse().getAuthentication().setCertificate(null);
+    assertThrows(
+        IllegalParameterDefinitionException.class,
+        () -> sendMessageService.send(sendMessageParameters));
+  }
+
+  @Test
+  void rq43givenCertificateWithMissingPrivateKeySendJSONShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceJSONImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersJSON();
     sendMessageParameters
         .getOnboardingResponse()
         .getAuthentication()
@@ -130,9 +168,22 @@ class SendMessageServiceImplTest {
   }
 
   @Test
-  void rq43givenCertificateOnlyPrivateKeySendShouldThrowException() {
-    SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
-    SendMessageParameters sendMessageParameters = this.createDefaultParameters();
+  void rq43givenCertificateWithMissingPrivateKeySendProtobufShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceProtobufImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersProtobuf();
+    sendMessageParameters
+        .getOnboardingResponse()
+        .getAuthentication()
+        .setCertificate(CERTIFICATE_CERTIFICATE);
+    assertThrows(
+        CouldNotCreateDynamicKeyStoreException.class,
+        () -> sendMessageService.send(sendMessageParameters));
+  }
+
+  @Test
+  void rq43givenCertificateOnlyPrivateKeySendJSONShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceJSONImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersJSON();
     sendMessageParameters
         .getOnboardingResponse()
         .getAuthentication()
@@ -143,9 +194,22 @@ class SendMessageServiceImplTest {
   }
 
   @Test
-  void rq43givenWrongCertificationTypeSendShouldThrowException() {
-    SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
-    SendMessageParameters sendMessageParameters = this.createDefaultParameters();
+  void rq43givenCertificateOnlyPrivateKeySendProtobufShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceProtobufImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersProtobuf();
+    sendMessageParameters
+        .getOnboardingResponse()
+        .getAuthentication()
+        .setCertificate(CERTIFICATE_PRIVATEKEY);
+    assertThrows(
+        CouldNotCreateDynamicKeyStoreException.class,
+        () -> sendMessageService.send(sendMessageParameters));
+  }
+
+  @Test
+  void rq43givenWrongCertificationTypeSendJSONShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceJSONImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersJSON();
     sendMessageParameters
         .getOnboardingResponse()
         .getAuthentication()
@@ -155,7 +219,20 @@ class SendMessageServiceImplTest {
         () -> sendMessageService.send(sendMessageParameters));
   }
 
-  private SendMessageParameters createDefaultParameters() {
+  @Test
+  void rq43givenWrongCertificationTypeSendProtobufShouldThrowException() {
+    SendMessageServiceImpl sendMessageService = new SendMessageServiceProtobufImpl();
+    SendMessageParameters sendMessageParameters = this.createDefaultParametersProtobuf();
+    sendMessageParameters
+        .getOnboardingResponse()
+        .getAuthentication()
+        .setType(CertificationType.P12.getKey());
+    assertThrows(
+        CouldNotCreateDynamicKeyStoreException.class,
+        () -> sendMessageService.send(sendMessageParameters));
+  }
+
+  private SendMessageParameters createDefaultParametersProtobuf() {
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     OnboardingResponse onboardingResponse = new OnboardingResponse();
 
@@ -178,7 +255,34 @@ class SendMessageServiceImplTest {
     MeasureRequestMessageProtos.MeasureRequestMessage measureRequestMessage =
         MeasureRequestMessageProtos.MeasureRequestMessage.getDefaultInstance();
     sendMessageParameters.setEncodeMessageResponse(
-        new EncodeMessageResponse("", "", measureRequestMessage));
+        new EncodeMessageResponse.EncodeMessageResponseProtobuf("", measureRequestMessage));
+    return sendMessageParameters;
+  }
+
+  private SendMessageParameters createDefaultParametersJSON() {
+    SendMessageParameters sendMessageParameters = new SendMessageParameters();
+    OnboardingResponse onboardingResponse = new OnboardingResponse();
+
+    Authentication authentication = new Authentication();
+    authentication.setCertificate(
+        SendMessageServiceImplTest.CERTIFICATE_PRIVATEKEY
+            + SendMessageServiceImplTest.CERTIFICATE_CERTIFICATE);
+    authentication.setSecret(SendMessageServiceImplTest.PASSWORD);
+    authentication.setType(CertificationType.PEM.getKey());
+
+    ConnectionCriteria connectionCriteria = new ConnectionCriteria();
+    connectionCriteria.setMeasures(SendMessageServiceImplTest.MEASURES);
+
+    onboardingResponse.setAuthentication(authentication);
+    onboardingResponse.setConnectionCriteria(connectionCriteria);
+    onboardingResponse.setSensorAlternateId(SendMessageServiceImplTest.SENSORALTERNATE_ID);
+    onboardingResponse.setCapabilityAlternateId(SendMessageServiceImplTest.CAPABILITYALTERNATE_ID);
+
+    sendMessageParameters.setOnboardingResponse(onboardingResponse);
+    MeasureRequestMessageProtos.MeasureRequestMessage measureRequestMessage =
+        MeasureRequestMessageProtos.MeasureRequestMessage.getDefaultInstance();
+    sendMessageParameters.setEncodeMessageResponse(
+        new EncodeMessageResponse.EncodeMessageResponseJSON("", ""));
     return sendMessageParameters;
   }
 }

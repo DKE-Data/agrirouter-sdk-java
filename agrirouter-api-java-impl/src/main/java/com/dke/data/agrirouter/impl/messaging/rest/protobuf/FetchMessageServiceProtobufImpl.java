@@ -14,10 +14,8 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.sap.iotservices.common.protobuf.gateway.CommandResponseListProtos;
 import com.sap.iotservices.common.protobuf.gateway.CommandResponseMessageProtos;
 import com.sap.iotservices.common.protobuf.gateway.CommandResponseProtos;
-
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
@@ -54,10 +52,12 @@ public class FetchMessageServiceProtobufImpl extends MessageFetcher implements F
             fetchMessageResponse.setSensorAlternateId(commandResponse.getSensorAlternateId());
             fetchMessageResponse.setCapabilityAlternateId(
                 commandResponse.getCapabilityAlternateId());
-            CommandResponseProtos.CommandResponse.Command protobufMessage = commandResponse.getCommand();
+            CommandResponseProtos.CommandResponse.Command protobufMessage =
+                commandResponse.getCommand();
             Any messageBuffer = Any.parseFrom(protobufMessage.getValues(0).toByteArray());
             CommandResponseMessageProtos.CommandResponseMessage commandResponseMessage =
-              CommandResponseMessageProtos.CommandResponseMessage.parseFrom(messageBuffer.getValue().toByteArray());
+                CommandResponseMessageProtos.CommandResponseMessage.parseFrom(
+                    messageBuffer.getValue().toByteArray());
             Message message = new Message();
             byte[] binaryMessage = commandResponseMessage.getMessage().toByteArray();
             message.setMessage(Base64.encodeBytes(binaryMessage));

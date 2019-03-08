@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.feed.response.FeedResponse;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequest;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
@@ -13,13 +14,12 @@ import com.dke.data.agrirouter.impl.messaging.rest.json.MessageSenderJSONImpl;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-public class MessageQueryServiceImpl<SenderType> extends EnvironmentalService
-    implements com.dke.data.agrirouter.api.service.messaging.MessageQueryService,
-        MessageSender<SenderType> {
+public class MessageQueryServiceImpl extends EnvironmentalService
+    implements com.dke.data.agrirouter.api.service.messaging.MessageQueryService, MessageSender {
 
-  private final MessageSender<SenderType> messageSender;
+  private final MessageSender messageSender;
   private final EncodeMessageService encodeMessageService;
-  private final MessageQueryHelper<SenderType> messageQueryHelper;
+  private final MessageQueryHelper messageQueryHelper;
 
   /**
    * @param -
@@ -32,15 +32,18 @@ public class MessageQueryServiceImpl<SenderType> extends EnvironmentalService
     this(environment, new MessageSenderJSONImpl(), new EncodeMessageServiceJSONImpl());
   }
 
-  public MessageQueryServiceImpl(Environment environment, MessageSender messageSender, EncodeMessageService encodeMessageService) {
+  public MessageQueryServiceImpl(
+      Environment environment,
+      MessageSender messageSender,
+      EncodeMessageService encodeMessageService) {
     super(environment);
     this.messageSender = messageSender;
     this.encodeMessageService = encodeMessageService;
-    this.messageQueryHelper = new MessageQueryHelper<SenderType>(
-      this.encodeMessageService,
-      this.messageSender,
-      TechnicalMessageType.DKE_FEED_MESSAGE_QUERY
-    );
+    this.messageQueryHelper =
+        new MessageQueryHelper(
+            this.encodeMessageService,
+            this.messageSender,
+            TechnicalMessageType.DKE_FEED_MESSAGE_QUERY);
   }
 
   @Override
@@ -56,8 +59,8 @@ public class MessageQueryServiceImpl<SenderType> extends EnvironmentalService
   }
 
   @Override
-  public SenderType createSendMessageRequest(SendMessageParameters parameters) {
-    return (SenderType) this.messageSender.sendMessage(parameters);
+  public MessageRequest createSendMessageRequest(SendMessageParameters parameters) {
+    return this.messageSender.createSendMessageRequest(parameters);
   }
 
   @Override

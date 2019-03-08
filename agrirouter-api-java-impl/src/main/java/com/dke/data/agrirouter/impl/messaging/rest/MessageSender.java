@@ -1,11 +1,12 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequest;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import javax.ws.rs.core.Response;
 
-public interface MessageSender<T> {
+public interface MessageSender {
 
-  T createSendMessageRequest(SendMessageParameters parameters);
+  MessageRequest createSendMessageRequest(SendMessageParameters parameters);
 
   MessageSenderResponse sendMessage(SendMessageParameters parameters);
 

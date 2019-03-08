@@ -4,11 +4,11 @@ import com.dke.data.agrirouter.impl.messaging.encoding.protobuf.DecodeMessageSer
 import com.dke.data.agrirouter.impl.messaging.encoding.protobuf.EncodeMessageServiceProtobufImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.protobuf.FetchMessageServiceProtobufImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.protobuf.MessageSenderProtobufImpl;
-import com.dke.data.agrirouter.impl.onboard.cloud.OnboardingServiceImpl;
+import com.dke.data.agrirouter.impl.onboard.cloud.OffboardingServiceImpl;
 
-public class OnboardingServiceProtobufImpl extends OnboardingServiceImpl {
+public class OffboardingServiceProtobufImpl extends OffboardingServiceImpl {
 
-  public OnboardingServiceProtobufImpl() {
+  public OffboardingServiceProtobufImpl() {
     super(
         new EncodeMessageServiceProtobufImpl(),
         new MessageSenderProtobufImpl(),

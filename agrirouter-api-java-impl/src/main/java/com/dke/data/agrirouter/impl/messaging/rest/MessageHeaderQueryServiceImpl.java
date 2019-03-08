@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.feed.response.FeedResponse;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequest;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.service.messaging.MessageHeaderQueryService;
@@ -32,15 +33,16 @@ public class MessageHeaderQueryServiceImpl extends EnvironmentalService
     this(environment, new MessageSenderJSONImpl(), new EncodeMessageServiceJSONImpl());
   }
 
-  public MessageHeaderQueryServiceImpl(Environment environment, MessageSender messageSender, EncodeMessageService encodeMessageService) {
+  public MessageHeaderQueryServiceImpl(
+      Environment environment,
+      MessageSender messageSender,
+      EncodeMessageService encodeMessageService) {
     super(environment);
     this.messageSender = messageSender;
     this.encodeMessageService = encodeMessageService;
     messageQueryHelper =
         new MessageQueryHelper(
-            encodeMessageService,
-            messageSender,
-            TechnicalMessageType.DKE_FEED_HEADER_QUERY);
+            encodeMessageService, messageSender, TechnicalMessageType.DKE_FEED_HEADER_QUERY);
   }
 
   @Override
@@ -56,7 +58,7 @@ public class MessageHeaderQueryServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public Object createSendMessageRequest(SendMessageParameters parameters) {
+  public MessageRequest createSendMessageRequest(SendMessageParameters parameters) {
     return messageSender.createSendMessageRequest(parameters);
   }
 

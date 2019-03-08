@@ -10,6 +10,7 @@ import agrirouter.response.Response;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequest;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.factories.impl.MessageConfirmationMessageContentFactory;
@@ -34,8 +35,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class MessageConfirmationServiceImpl<SenderType> extends EnvironmentalService
-    implements MessageSender<SenderType>, MessageConfirmationService, ResponseValidator {
+public class MessageConfirmationServiceImpl extends EnvironmentalService
+    implements MessageSender, MessageConfirmationService, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
   private final MessageSender messageSender;
@@ -184,8 +185,8 @@ public class MessageConfirmationServiceImpl<SenderType> extends EnvironmentalSer
   }
 
   @Override
-  public SenderType createSendMessageRequest(SendMessageParameters parameters) {
-    return (SenderType) this.messageSender.createSendMessageRequest(parameters);
+  public MessageRequest createSendMessageRequest(SendMessageParameters parameters) {
+    return this.messageSender.createSendMessageRequest(parameters);
   }
 
   @Override

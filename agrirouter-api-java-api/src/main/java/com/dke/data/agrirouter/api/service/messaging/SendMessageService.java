@@ -10,5 +10,5 @@ public interface SendMessageService {
    *
    * @param sendMessageParameters -
    */
-  String send(SendMessageParameters sendMessageParameters);
+  void send(SendMessageParameters sendMessageParameters);
 }

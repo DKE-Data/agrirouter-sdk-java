@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.helper;
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
 import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequest;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
@@ -17,8 +18,8 @@ import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Objects;
 
-public class MessageQueryHelper<SenderType> extends NonEnvironmentalService
-    implements MessageSender<SenderType>, ResponseValidator {
+public class MessageQueryHelper extends NonEnvironmentalService
+    implements MessageSender, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
   private final MessageSender messageSender;
@@ -92,8 +93,8 @@ public class MessageQueryHelper<SenderType> extends NonEnvironmentalService
   }
 
   @Override
-  public SenderType createSendMessageRequest(SendMessageParameters parameters) {
-    return (SenderType) messageSender.createSendMessageRequest(parameters);
+  public MessageRequest createSendMessageRequest(SendMessageParameters parameters) {
+    return messageSender.createSendMessageRequest(parameters);
   }
 
   @Override

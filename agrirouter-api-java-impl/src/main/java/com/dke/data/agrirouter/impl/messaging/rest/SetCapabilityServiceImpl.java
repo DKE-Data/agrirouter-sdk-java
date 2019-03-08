@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 import agrirouter.request.Request;
 import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequest;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.factories.impl.CapabilitiesMessageContentFactory;
@@ -21,8 +22,8 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetCapabilityServiceImpl<SenderType> extends EnvironmentalService
-    implements SetCapabilityService, MessageSender<SenderType>, ResponseValidator {
+public class SetCapabilityServiceImpl extends EnvironmentalService
+    implements SetCapabilityService, MessageSender, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
   private final MessageSender messageSender;
@@ -104,8 +105,8 @@ public class SetCapabilityServiceImpl<SenderType> extends EnvironmentalService
   }
 
   @Override
-  public SenderType createSendMessageRequest(SendMessageParameters parameters) {
-    return (SenderType) this.messageSender.createSendMessageRequest(parameters);
+  public MessageRequest createSendMessageRequest(SendMessageParameters parameters) {
+    return this.messageSender.createSendMessageRequest(parameters);
   }
 
   @Override

@@ -9,8 +9,11 @@ import com.sap.iotservices.common.protobuf.gateway.MeasureRequestMessageProtos
  * @param encodedMessage the encoded message
  *
  */
-data class EncodeMessageResponse(
-        val applicationMessageID: String,
-        val encodedMessageBase64 : String? = null,
-        val encodedMessageProtobuf : MeasureRequestMessageProtos.MeasureRequestMessage? = null
-)
+sealed class EncodeMessageResponse(val applicationMessageID: String){
+    data class EncodeMessageResponseJSON(val applicationMessageID_Parent: String,
+                                         val encodedMessageBase64 : String):
+            EncodeMessageResponse(applicationMessageID_Parent)
+    data class EncodeMessageResponseProtobuf(val applicationMessageID_Parent: String,
+                                             val encodedMessageProtobuf : MeasureRequestMessageProtos.MeasureRequestMessage):
+            EncodeMessageResponse(applicationMessageID_Parent)
+}

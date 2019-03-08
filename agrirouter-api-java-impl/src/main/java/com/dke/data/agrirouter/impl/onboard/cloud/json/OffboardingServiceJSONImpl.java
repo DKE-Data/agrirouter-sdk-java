@@ -4,10 +4,11 @@ import com.dke.data.agrirouter.impl.messaging.encoding.json.DecodeMessageService
 import com.dke.data.agrirouter.impl.messaging.encoding.json.EncodeMessageServiceJSONImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.json.FetchMessageServiceJSONImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.json.MessageSenderJSONImpl;
-import com.dke.data.agrirouter.impl.onboard.cloud.OnboardingServiceImpl;
+import com.dke.data.agrirouter.impl.onboard.cloud.OffboardingServiceImpl;
 
-public class OnboardingServiceJSONImpl extends OnboardingServiceImpl {
-  public OnboardingServiceJSONImpl() {
+public class OffboardingServiceJSONImpl extends OffboardingServiceImpl {
+
+  public OffboardingServiceJSONImpl() {
     super(
         new EncodeMessageServiceJSONImpl(),
         new MessageSenderJSONImpl(),

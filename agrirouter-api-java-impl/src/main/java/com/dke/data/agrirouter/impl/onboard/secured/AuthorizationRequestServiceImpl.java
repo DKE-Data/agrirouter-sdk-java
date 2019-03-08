@@ -25,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -130,12 +131,8 @@ public class AuthorizationRequestServiceImpl extends EnvironmentalService
         .forEach(
             s -> {
               String[] keyValuePair = s.split("=");
-              try {
-                authorizationResults.put(
-                    keyValuePair[0], URLDecoder.decode(keyValuePair[1], "UTF-8"));
-              } catch (UnsupportedEncodingException e) {
-                // NOP
-              }
+              authorizationResults.put(
+                  keyValuePair[0], URLDecoder.decode(keyValuePair[1], StandardCharsets.UTF_8));
             });
     AuthorizationResponse authorizationResponse = new AuthorizationResponse();
     authorizationResponse.setSignature(authorizationResults.get(SIGNATURE_KEY));

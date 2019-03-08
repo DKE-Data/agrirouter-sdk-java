@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 public class EncodeMessageServiceJSONImpl extends NonEnvironmentalService
     implements EncodeMessageService {
 
-  public EncodeMessageResponse encode(
+  public EncodeMessageResponse.EncodeMessageResponseJSON encode(
       MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
     this.logMethodBegin(messageHeaderParameters, payloadParameters);
 
@@ -41,8 +41,8 @@ public class EncodeMessageServiceJSONImpl extends NonEnvironmentalService
 
       this.logMethodEnd(encodedMessage);
 
-      return new EncodeMessageResponse(
-          messageHeaderParameters.applicationMessageId, encodedMessage, null);
+      return new EncodeMessageResponse.EncodeMessageResponseJSON(
+          messageHeaderParameters.applicationMessageId, encodedMessage);
 
     } catch (IOException e) {
       throw new CouldNotEncodeMessageException(e);

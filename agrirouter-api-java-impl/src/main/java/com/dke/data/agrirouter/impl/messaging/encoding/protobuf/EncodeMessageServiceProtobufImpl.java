@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 public class EncodeMessageServiceProtobufImpl extends NonEnvironmentalService
     implements EncodeMessageService {
 
-  public EncodeMessageResponse encode(
+  public EncodeMessageResponse.EncodeMessageResponseProtobuf encode(
       MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
     this.logMethodBegin(messageHeaderParameters, payloadParameters);
 
@@ -47,8 +47,8 @@ public class EncodeMessageServiceProtobufImpl extends NonEnvironmentalService
       MeasureRequestMessageProtos.MeasureRequestMessage measureMessageProtobuf;
       measureMessageProtobuf = measureRequestBuilder.build();
 
-      return new EncodeMessageResponse(
-          messageHeaderParameters.applicationMessageId, null, measureMessageProtobuf);
+      return new EncodeMessageResponse.EncodeMessageResponseProtobuf(
+          messageHeaderParameters.applicationMessageId, measureMessageProtobuf);
     } catch (IOException e) {
       throw new CouldNotEncodeMessageException(e);
     }

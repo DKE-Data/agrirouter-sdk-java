@@ -27,5 +27,5 @@ public abstract class MessageFetcher implements ResponseValidator {
       FetchMessageParameters parameters, int maxTries, long interval) {
     // Has to be implemented in
     return null;
-  };
+  }
 }

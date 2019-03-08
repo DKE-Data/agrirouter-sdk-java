@@ -1,7 +1,9 @@
 package com.dke.data.agrirouter.impl.messaging.rest.json;
 
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.SendMessageRequest;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequestJSON;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
@@ -13,32 +15,40 @@ import java.util.List;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
-public class MessageSenderJSONImpl implements MessageSender<SendMessageRequest> {
+public class MessageSenderJSONImpl implements MessageSender {
 
-  public SendMessageRequest createSendMessageRequest(SendMessageParameters parameters) {
+  public MessageRequestJSON createSendMessageRequest(SendMessageParameters parameters) {
     parameters.validate();
+    EncodeMessageResponse.EncodeMessageResponseJSON encodeMessageResponseJSON = null;
+    if (parameters.getEncodeMessageResponse()
+        instanceof EncodeMessageResponse.EncodeMessageResponseJSON) {
+      encodeMessageResponseJSON =
+          (EncodeMessageResponse.EncodeMessageResponseJSON) parameters.getEncodeMessageResponse();
+    } else {
+      // TODO Throw error
+    }
+
     SendMessageRequest sendMessageRequest = new SendMessageRequest();
     sendMessageRequest.setSensorAlternateId(
         parameters.getOnboardingResponse().getSensorAlternateId());
     sendMessageRequest.setCapabilityAlternateId(
         parameters.getOnboardingResponse().getCapabilityAlternateId());
     List<Message> messages = new ArrayList<>();
-    Collections.singletonList(parameters.getEncodeMessageResponse().getEncodedMessageBase64())
+    Collections.singletonList(encodeMessageResponseJSON)
         .forEach(
             messageToSend -> {
               Message message = new Message();
-              message.setMessage(messageToSend);
+              message.setMessage(messageToSend.getEncodedMessageBase64());
               message.setTimestamp("" + UtcTimeService.now().toEpochSecond());
               messages.add(message);
             });
     sendMessageRequest.setMessages(messages);
-    return sendMessageRequest;
+    return new MessageRequestJSON(sendMessageRequest);
   }
 
   public MessageSender.MessageSenderResponse sendMessage(SendMessageParameters parameters) {
-    Entity<SendMessageRequest> entity = Entity.json(
-      this.createSendMessageRequest(parameters)
-    );
+    MessageRequestJSON messageRequest = this.createSendMessageRequest(parameters);
+    Entity<SendMessageRequest> entity = Entity.json(messageRequest.getSendMessageRequest());
 
     Response response =
         RequestFactory.securedJSONRequest(

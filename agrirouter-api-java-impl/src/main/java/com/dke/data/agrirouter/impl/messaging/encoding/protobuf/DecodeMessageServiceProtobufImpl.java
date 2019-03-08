@@ -5,10 +5,8 @@ import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotDecodeMessageException;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
-import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.sap.iotservices.common.protobuf.gateway.CommandResponseProtos;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,8 +17,7 @@ public class DecodeMessageServiceProtobufImpl extends NonEnvironmentalService
     implements DecodeMessageService<String> {
 
   @Override
-  public DecodeMessageResponse decode(
-      String encodedResponse) {
+  public DecodeMessageResponse decode(String encodedResponse) {
     this.logMethodBegin(encodedResponse);
 
     if (encodedResponse == null) {
@@ -34,8 +31,7 @@ public class DecodeMessageServiceProtobufImpl extends NonEnvironmentalService
         System.out.println("Value: " + Base64.encode(entry.getValue().toByteArray()));
       }*/
 
-      InputStream inputStream =
-          new ByteArrayInputStream(decodedBytes);
+      InputStream inputStream = new ByteArrayInputStream(decodedBytes);
 
       agrirouter.response.Response.ResponseEnvelope responseEnvelope =
           agrirouter.response.Response.ResponseEnvelope.parseDelimitedFrom(inputStream);

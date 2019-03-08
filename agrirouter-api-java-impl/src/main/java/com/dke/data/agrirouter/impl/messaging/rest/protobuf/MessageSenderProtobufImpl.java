@@ -2,6 +2,9 @@ package com.dke.data.agrirouter.impl.messaging.rest.protobuf;
 
 import static com.dke.data.agrirouter.impl.RequestFactory.MEDIA_TYPE_PROTOBUF;
 
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequest;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageRequestProtobuf;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
@@ -13,11 +16,20 @@ import com.sap.iotservices.common.protobuf.gateway.MeasureRequestMessageProtos;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
-public class MessageSenderProtobufImpl implements MessageSender<MeasureProtos.MeasureRequest> {
+public class MessageSenderProtobufImpl implements MessageSender {
 
-  public MeasureProtos.MeasureRequest createSendMessageRequest(
+  public MessageRequestProtobuf createSendMessageRequest(
       SendMessageParameters sendMessageParameters) {
     sendMessageParameters.validate();
+    EncodeMessageResponse.EncodeMessageResponseProtobuf encodeMessageResponseProtobuf = null;
+    if (sendMessageParameters.getEncodeMessageResponse()
+        instanceof EncodeMessageResponse.EncodeMessageResponseProtobuf) {
+      encodeMessageResponseProtobuf =
+          (EncodeMessageResponse.EncodeMessageResponseProtobuf)
+              sendMessageParameters.getEncodeMessageResponse();
+    } else {
+      // TODO Throw error
+    }
 
     MeasureProtos.MeasureRequest.Builder measureMessageBuilder =
         MeasureProtos.MeasureRequest.newBuilder()
@@ -28,7 +40,7 @@ public class MessageSenderProtobufImpl implements MessageSender<MeasureProtos.Me
             .setSensorTypeAlternateId("");
 
     MeasureRequestMessageProtos.MeasureRequestMessage measureMessage =
-        sendMessageParameters.getEncodeMessageResponse().getEncodedMessageProtobuf();
+        encodeMessageResponseProtobuf.getEncodedMessageProtobuf();
 
     MeasureProtos.MeasureRequest.Measure.Builder measureBuilder =
         MeasureProtos.MeasureRequest.Measure.newBuilder();
@@ -52,11 +64,13 @@ public class MessageSenderProtobufImpl implements MessageSender<MeasureProtos.Me
 
     MeasureProtos.MeasureRequest sendMessageProtobufRequest = measureMessageBuilder.build();
 
-    return sendMessageProtobufRequest;
+    return new MessageRequestProtobuf(sendMessageProtobufRequest);
   }
 
   public MessageSender.MessageSenderResponse sendMessage(SendMessageParameters parameters) {
-    MeasureProtos.MeasureRequest data = this.createSendMessageRequest(parameters);
+    MessageRequest messageRequest = this.createSendMessageRequest(parameters);
+    MeasureProtos.MeasureRequest data =
+        ((MessageRequestProtobuf) messageRequest).getSendMeasureRequest();
 
     Entity<MeasureProtos.MeasureRequest> protobufContent = Entity.entity(data, MEDIA_TYPE_PROTOBUF);
     Response response =

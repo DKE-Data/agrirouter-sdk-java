@@ -27,8 +27,9 @@ class EncodeMessageServiceJSONImplTest {
     MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
-    EncodeMessageResponse encodedMessage =
-        encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+    EncodeMessageResponse.EncodeMessageResponseJSON encodedMessage =
+        (EncodeMessageResponse.EncodeMessageResponseJSON)
+            encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     DecodeMessageServiceJSONImpl decodeMessageService = new DecodeMessageServiceJSONImpl();
     DecodeMessageResponse response =
         decodeMessageService.decode(encodedMessage.getEncodedMessageBase64());
@@ -45,8 +46,9 @@ class EncodeMessageServiceJSONImplTest {
     MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
-    EncodeMessageResponse encodedMessage =
-        encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+    EncodeMessageResponse.EncodeMessageResponseJSON encodedMessage =
+        (EncodeMessageResponse.EncodeMessageResponseJSON)
+            encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     DecodeMessageServiceJSONImpl decodeMessageService = new DecodeMessageServiceJSONImpl();
     DecodeMessageResponse response =
         decodeMessageService.decode(encodedMessage.getEncodedMessageBase64());
