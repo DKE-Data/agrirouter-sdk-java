@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.impl.messaging.encoding;
 
 import agrirouter.request.Request;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotEncodeMessageException;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
@@ -9,16 +8,15 @@ import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.google.protobuf.Any;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Base64;
+import org.apache.commons.lang3.StringUtils;
 
-public abstract class EncodeMessageServiceImpl extends NonEnvironmentalService implements EncodeMessageService {
+public abstract class EncodeMessageServiceImpl extends NonEnvironmentalService
+    implements EncodeMessageService {
 
   protected byte[] encodeStreamedMessage(
-    MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
+      MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
     this.logMethodBegin(messageHeaderParameters, payloadParameters);
 
     if (null == messageHeaderParameters || null == payloadParameters) {
@@ -38,19 +36,16 @@ public abstract class EncodeMessageServiceImpl extends NonEnvironmentalService i
       this.getNativeLogger().trace("Encoding message.");
       return streamedMessage.toByteArray();
 
-    } catch (IOException e){
+    } catch (IOException e) {
       throw new CouldNotEncodeMessageException(e);
     }
-
   }
-
 
   private Request.RequestEnvelope header(MessageHeaderParameters parameters) {
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Create message header.");
-    Request.RequestEnvelope.Builder messageHeader =
-      Request.RequestEnvelope.newBuilder();
+    Request.RequestEnvelope.Builder messageHeader = Request.RequestEnvelope.newBuilder();
     messageHeader.setApplicationMessageId(parameters.getApplicationMessageId());
     messageHeader.setApplicationMessageSeqNo(parameters.getApplicationMessageSeqNo());
     messageHeader.setTechnicalMessageType(parameters.getTechnicalMessageType().getKey());
@@ -78,7 +73,7 @@ public abstract class EncodeMessageServiceImpl extends NonEnvironmentalService i
 
     this.getNativeLogger().trace("Create message payload.");
     Request.RequestPayloadWrapper.Builder messagePayload =
-      Request.RequestPayloadWrapper.newBuilder();
+        Request.RequestPayloadWrapper.newBuilder();
     Any.Builder builder = Any.newBuilder();
     builder.setTypeUrl(parameters.getTypeUrl());
     builder.setValue(parameters.getValue());
@@ -90,6 +85,4 @@ public abstract class EncodeMessageServiceImpl extends NonEnvironmentalService i
     this.logMethodEnd(requestPayloadWrapper);
     return requestPayloadWrapper;
   }
-
-
 }

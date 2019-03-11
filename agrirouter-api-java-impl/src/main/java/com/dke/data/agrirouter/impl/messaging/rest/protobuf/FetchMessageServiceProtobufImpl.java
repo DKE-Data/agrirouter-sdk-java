@@ -1,7 +1,5 @@
 package com.dke.data.agrirouter.impl.messaging.rest.protobuf;
 
-import static java.util.Optional.empty;
-
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.dke.data.agrirouter.api.dto.messaging.inner.MessageResponse;
@@ -15,12 +13,13 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.sap.iotservices.common.protobuf.gateway.CommandResponseListProtos;
 import com.sap.iotservices.common.protobuf.gateway.CommandResponseMessageProtos;
 import com.sap.iotservices.common.protobuf.gateway.CommandResponseProtos;
-import java.awt.*;
+
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.ws.rs.core.Response;
-import org.eclipse.paho.client.mqttv3.internal.websocket.Base64;
+
+import static java.util.Optional.empty;
 
 public class FetchMessageServiceProtobufImpl extends MessageFetcher implements FetchMessageService {
 

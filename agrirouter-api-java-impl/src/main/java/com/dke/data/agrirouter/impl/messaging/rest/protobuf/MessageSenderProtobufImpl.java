@@ -29,8 +29,8 @@ public class MessageSenderProtobufImpl implements MessageSender {
           (EncodeMessageResponse.EncodeMessageResponseProtobuf)
               sendMessageParameters.getEncodeMessageResponse();
     } else {
-      throw new WrongFormatForMessageException("Trying to pass JSON Message to Protobuf MessageSender");
-
+      throw new WrongFormatForMessageException(
+          "Trying to pass JSON Message to Protobuf MessageSender");
     }
 
     MeasureProtos.MeasureRequest.Builder measureMessageBuilder =

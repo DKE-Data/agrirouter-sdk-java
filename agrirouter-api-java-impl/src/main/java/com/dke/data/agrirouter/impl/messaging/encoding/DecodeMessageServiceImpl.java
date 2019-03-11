@@ -7,14 +7,11 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageServi
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Base64;
 
-public class DecodeMessageServiceImpl extends NonEnvironmentalService implements DecodeMessageService {
-
+public class DecodeMessageServiceImpl extends NonEnvironmentalService
+    implements DecodeMessageService {
 
   @Override
   public DecodeMessageResponse decode(byte[] decodedBytes) {
@@ -23,11 +20,11 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService implements
 
       this.getNativeLogger().trace("Parse response envelope.");
       agrirouter.response.Response.ResponseEnvelope responseEnvelope =
-        agrirouter.response.Response.ResponseEnvelope.parseDelimitedFrom(inputStream);
+          agrirouter.response.Response.ResponseEnvelope.parseDelimitedFrom(inputStream);
 
       this.getNativeLogger().trace("Parse response payload wrapper.");
       agrirouter.response.Response.ResponsePayloadWrapper responsePayloadWrapper =
-        agrirouter.response.Response.ResponsePayloadWrapper.parseDelimitedFrom(inputStream);
+          agrirouter.response.Response.ResponsePayloadWrapper.parseDelimitedFrom(inputStream);
       DecodeMessageResponse decodeMessageResponse = new DecodeMessageResponse();
       decodeMessageResponse.setResponseEnvelope(responseEnvelope);
       decodeMessageResponse.setResponsePayloadWrapper(responsePayloadWrapper);
@@ -37,10 +34,7 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService implements
     } catch (IOException e) {
       throw new CouldNotDecodeMessageException(e);
     }
-
-
   }
-
 
   @Override
   public MessageOuterClass.Message decode(ByteString message) {

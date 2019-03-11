@@ -1,9 +1,6 @@
 package com.dke.data.agrirouter.impl.messaging.encoding;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
-import com.dke.data.agrirouter.api.dto.messaging.inner.MessageResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.impl.messaging.encoding.json.DecodeMessageServiceJSONImpl;
 import org.apache.xerces.impl.dv.util.Base64;
@@ -29,7 +26,7 @@ class DecodeMessageServiceJSONImplTest {
   @Test
   void givenWhitespaceMessageDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceJSONImpl();
-    byte[] message = new byte[]{};
+    byte[] message = new byte[] {};
     Assertions.assertThrows(
         IllegalArgumentException.class, () -> decodeMessageService.decode(message));
   }
@@ -38,8 +35,7 @@ class DecodeMessageServiceJSONImplTest {
   void givenValidEncodedPasswordDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceJSONImpl();
     byte[] decodedMessageBytes = Base64.decode(DecodeMessageServiceJSONImplTest.ENCODED_MESSAGE);
-    DecodeMessageResponse decodedMessage =
-        decodeMessageService.decode(decodedMessageBytes);
+    DecodeMessageResponse decodedMessage = decodeMessageService.decode(decodedMessageBytes);
     Assertions.assertEquals(
         decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),
         "secretMessage");
@@ -49,8 +45,7 @@ class DecodeMessageServiceJSONImplTest {
   void givenNullEnvironmentDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceJSONImpl();
     byte[] decodedMessageBytes = Base64.decode(DecodeMessageServiceJSONImplTest.ENCODED_MESSAGE);
-    DecodeMessageResponse decodedMessage =
-        decodeMessageService.decode(decodedMessageBytes);
+    DecodeMessageResponse decodedMessage = decodeMessageService.decode(decodedMessageBytes);
     Assertions.assertEquals(
         decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),
         "secretMessage");

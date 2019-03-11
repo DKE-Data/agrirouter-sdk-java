@@ -54,6 +54,7 @@
     <modules>
         <module>agrirouter-api-java-api</module>
         <module>agrirouter-api-java-impl</module>
+        <module>agrirouter-test</module>
     </modules>
 
     <properties>

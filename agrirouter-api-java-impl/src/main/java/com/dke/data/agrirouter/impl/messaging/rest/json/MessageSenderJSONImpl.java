@@ -26,7 +26,8 @@ public class MessageSenderJSONImpl implements MessageSender {
       encodeMessageResponseJSON =
           (EncodeMessageResponse.EncodeMessageResponseJSON) parameters.getEncodeMessageResponse();
     } else {
-      throw new WrongFormatForMessageException("Trying to pass Protobuf Message to JSON MessageSender");
+      throw new WrongFormatForMessageException(
+          "Trying to pass Protobuf Message to JSON MessageSender");
     }
 
     SendMessageRequest sendMessageRequest = new SendMessageRequest();

@@ -4,7 +4,6 @@ import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.impl.messaging.encoding.protobuf.EncodeMessageServiceProtobufImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageHeaderQueryServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
-import com.dke.data.agrirouter.impl.messaging.rest.json.MessageSenderJSONImpl;
 
 public class MessageHeaderQueryServiceProtobufImpl extends MessageHeaderQueryServiceImpl {
 
