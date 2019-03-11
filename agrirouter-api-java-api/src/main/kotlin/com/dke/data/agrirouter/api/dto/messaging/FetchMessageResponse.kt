@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.api.dto.messaging
 
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageResponse
 
 class FetchMessageResponse {
 
@@ -8,5 +9,5 @@ class FetchMessageResponse {
 
     lateinit var capabilityAlternateId:String
 
-    lateinit var command:Message
+    lateinit var command: MessageResponse
 }

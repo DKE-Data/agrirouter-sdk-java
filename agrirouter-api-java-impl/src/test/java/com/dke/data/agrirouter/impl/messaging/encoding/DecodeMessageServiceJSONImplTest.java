@@ -3,8 +3,10 @@ package com.dke.data.agrirouter.impl.messaging.encoding;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.impl.messaging.encoding.json.DecodeMessageServiceJSONImpl;
+import org.apache.xerces.impl.dv.util.Base64;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,47 +21,36 @@ class DecodeMessageServiceJSONImplTest {
   @SuppressWarnings("ConstantConditions")
   void givenNullDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceJSONImpl();
-    String message = null;
+    byte[] message = null;
     Assertions.assertThrows(
         IllegalArgumentException.class, () -> decodeMessageService.decode(message));
   }
 
   @Test
-  void givenEmptyMessageDecodeShouldNotFail() {
-    DecodeMessageService decodeMessageService = new DecodeMessageServiceJSONImpl();
-    Assertions.assertThrows(IllegalArgumentException.class, () -> decodeMessageService.decode(""));
-  }
-
-  @Test
   void givenWhitespaceMessageDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceJSONImpl();
+    byte[] message = new byte[]{};
     Assertions.assertThrows(
-        IllegalArgumentException.class, () -> decodeMessageService.decode("   "));
+        IllegalArgumentException.class, () -> decodeMessageService.decode(message));
   }
 
   @Test
   void givenValidEncodedPasswordDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceJSONImpl();
+    byte[] decodedMessageBytes = Base64.decode(DecodeMessageServiceJSONImplTest.ENCODED_MESSAGE);
     DecodeMessageResponse decodedMessage =
-        decodeMessageService.decode(DecodeMessageServiceJSONImplTest.ENCODED_MESSAGE);
+        decodeMessageService.decode(decodedMessageBytes);
     Assertions.assertEquals(
         decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),
         "secretMessage");
   }
 
   @Test
-  void givenWrongEncodedPasswordDecodeShouldThrowException() {
-    DecodeMessageService decodeMessageService = new DecodeMessageServiceJSONImpl();
-    String wrongEncodedMessage = "Wrong Message";
-    assertThrows(
-        IllegalArgumentException.class, () -> decodeMessageService.decode(wrongEncodedMessage));
-  }
-
-  @Test
   void givenNullEnvironmentDecodeShouldNotFail() {
     DecodeMessageService decodeMessageService = new DecodeMessageServiceJSONImpl();
+    byte[] decodedMessageBytes = Base64.decode(DecodeMessageServiceJSONImplTest.ENCODED_MESSAGE);
     DecodeMessageResponse decodedMessage =
-        decodeMessageService.decode(DecodeMessageServiceJSONImplTest.ENCODED_MESSAGE);
+        decodeMessageService.decode(decodedMessageBytes);
     Assertions.assertEquals(
         decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),
         "secretMessage");

@@ -4,6 +4,7 @@ import static java.util.Optional.empty;
 
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
+import com.dke.data.agrirouter.api.dto.messaging.inner.MessageResponse;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
@@ -60,8 +61,7 @@ public class FetchMessageServiceProtobufImpl extends MessageFetcher implements F
                     messageBuffer.getValue().toByteArray());
             Message message = new Message();
             byte[] binaryMessage = commandResponseMessage.getMessage().toByteArray();
-            message.setMessage(Base64.encodeBytes(binaryMessage));
-            fetchMessageResponse.setCommand(message);
+            fetchMessageResponse.setCommand(new MessageResponse(binaryMessage));
             fetchMessageResponseList.add(fetchMessageResponse);
           }
           return Optional.of(fetchMessageResponseList);

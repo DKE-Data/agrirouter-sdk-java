@@ -5,7 +5,7 @@ import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.google.protobuf.ByteString;
 
 /** Decoding of messages. */
-public interface DecodeMessageService<T> {
+public interface DecodeMessageService {
 
   /**
    * Decode a given message using the internal protobuf implementation.
@@ -13,7 +13,7 @@ public interface DecodeMessageService<T> {
    * @param encodedResponse -
    * @return -
    */
-  DecodeMessageResponse decode(T encodedResponse);
+  DecodeMessageResponse decode(byte[] encodedResponse);
 
   /**
    * Decoding a given message using the internal protobuf implementation.

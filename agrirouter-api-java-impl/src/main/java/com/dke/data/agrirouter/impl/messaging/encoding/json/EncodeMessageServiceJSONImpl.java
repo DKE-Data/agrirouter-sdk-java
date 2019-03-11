@@ -8,6 +8,7 @@ import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
+import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.google.protobuf.Any;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,9 +16,9 @@ import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
 
 /** Internal service implementation. */
-public class EncodeMessageServiceJSONImpl extends NonEnvironmentalService
-    implements EncodeMessageService {
+public class EncodeMessageServiceJSONImpl extends EncodeMessageServiceImpl {
 
+  @Override
   public EncodeMessageResponse.EncodeMessageResponseJSON encode(
       MessageHeaderParameters messageHeaderParameters, PayloadParameters payloadParameters) {
     this.logMethodBegin(messageHeaderParameters, payloadParameters);
@@ -28,70 +29,13 @@ public class EncodeMessageServiceJSONImpl extends NonEnvironmentalService
     messageHeaderParameters.validate();
     payloadParameters.validate();
 
-    try (ByteArrayOutputStream streamedMessage = new ByteArrayOutputStream()) {
+    byte[] messageBuffer = encodeStreamedMessage(messageHeaderParameters, payloadParameters);
+    String encodedMessage = Base64.getEncoder().encodeToString(messageBuffer);
 
-      this.getNativeLogger().trace("Encode header.");
-      this.header(messageHeaderParameters).writeDelimitedTo(streamedMessage);
+    this.logMethodEnd(encodedMessage);
 
-      this.getNativeLogger().trace("Encode payload.");
-      this.payload(payloadParameters).writeDelimitedTo(streamedMessage);
+    return new EncodeMessageResponse.EncodeMessageResponseJSON(
+        messageHeaderParameters.applicationMessageId, encodedMessage);
 
-      this.getNativeLogger().trace("Encoding message.");
-      String encodedMessage = Base64.getEncoder().encodeToString(streamedMessage.toByteArray());
-
-      this.logMethodEnd(encodedMessage);
-
-      return new EncodeMessageResponse.EncodeMessageResponseJSON(
-          messageHeaderParameters.applicationMessageId, encodedMessage);
-
-    } catch (IOException e) {
-      throw new CouldNotEncodeMessageException(e);
-    }
-  }
-
-  private Request.RequestEnvelope header(MessageHeaderParameters parameters) {
-    this.logMethodBegin(parameters);
-
-    this.getNativeLogger().trace("Create message header.");
-    agrirouter.request.Request.RequestEnvelope.Builder messageHeader =
-        Request.RequestEnvelope.newBuilder();
-    messageHeader.setApplicationMessageId(parameters.getApplicationMessageId());
-    messageHeader.setApplicationMessageSeqNo(parameters.getApplicationMessageSeqNo());
-    messageHeader.setTechnicalMessageType(parameters.getTechnicalMessageType().getKey());
-    messageHeader.setMode(parameters.getMode());
-    if (StringUtils.isNotBlank(parameters.getTeamSetContextId())) {
-      messageHeader.setTeamSetContextId(parameters.getTeamSetContextId());
-    }
-    if (!parameters.getRecipients().isEmpty()) {
-      messageHeader.addAllRecipients(parameters.getRecipients());
-    }
-    if (parameters.getChunkInfo() != null) {
-      messageHeader.setChunkInfo(parameters.getChunkInfo());
-    }
-    messageHeader.setTimestamp(new TimestampUtil().current());
-
-    this.getNativeLogger().trace("Build message envelope.");
-    Request.RequestEnvelope requestEnvelope = messageHeader.build();
-
-    this.logMethodEnd(requestEnvelope);
-    return requestEnvelope;
-  }
-
-  private Request.RequestPayloadWrapper payload(PayloadParameters parameters) {
-    this.logMethodBegin(parameters);
-
-    this.getNativeLogger().trace("Create message payload.");
-    Request.RequestPayloadWrapper.Builder messagePayload =
-        Request.RequestPayloadWrapper.newBuilder();
-    Any.Builder builder = Any.newBuilder();
-    builder.setTypeUrl(parameters.getTypeUrl());
-    builder.setValue(parameters.getValue());
-    messagePayload.setDetails(builder.build());
-
-    this.getNativeLogger().trace("Message message payload wrapper.");
-    Request.RequestPayloadWrapper requestPayloadWrapper = messagePayload.build();
-
-    this.logMethodEnd(requestPayloadWrapper);
-    return requestPayloadWrapper;
   }
 }
