@@ -18,7 +18,7 @@ import com.dke.data.agrirouter.impl.messaging.rest.json.MessageSenderJSONImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Objects;
 
-public abstract class DeleteMessageServiceImpl implements DeleteMessageService, ResponseValidator {
+public class DeleteMessageServiceImpl implements DeleteMessageService, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
   private final MessageSender messageSender;
