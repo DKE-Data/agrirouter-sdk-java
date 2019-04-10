@@ -17,6 +17,7 @@ class CapabilitiesMessageContentFactory {
         }
         messageContent.appCertificationId = parameters.appCertificationId
         messageContent.appCertificationVersionId = parameters.appCertificationVersionId
+        messageContent.enablePushNotifications = parameters.enablePushNotifications
         return messageContent.build().toByteString()
     }
 
