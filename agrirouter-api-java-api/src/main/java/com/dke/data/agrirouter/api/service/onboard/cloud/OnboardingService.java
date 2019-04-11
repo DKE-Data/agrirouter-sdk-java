@@ -11,6 +11,4 @@ public interface OnboardingService
     extends MessageDecoder<CloudVirtualizedAppRegistration.OnboardingResponse> {
 
   List<OnboardingResponse> onboard(CloudOnboardingParameters parameters);
-
-  void offboard(CloudOffboardingParameters parameters);
 }
