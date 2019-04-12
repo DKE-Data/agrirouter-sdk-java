@@ -14,4 +14,6 @@ class CapabilitiesMessageParameters : ParameterValidation {
 
     @NotNull
     lateinit var appCertificationVersionId: String
+
+    var enablePushNotifications: Capabilities.CapabilitySpecification.PushNotification = Capabilities.CapabilitySpecification.PushNotification.DISABLED
 }
