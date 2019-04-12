@@ -5,6 +5,7 @@ import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotDecodeMessageException;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
+import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import java.io.ByteArrayInputStream;
@@ -57,6 +58,19 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
 
       this.logMethodEnd(decodedMessage);
       return decodedMessage;
+    } catch (InvalidProtocolBufferException e) {
+      throw new CouldNotDecodeMessageException(e);
+    }
+  }
+
+  @Override
+  public MessageOuterClass.Messages decode(Any any) {
+    try {
+      this.logMethodBegin(any);
+      MessageOuterClass.Messages messages =
+          any.unpack(agrirouter.commons.MessageOuterClass.Messages.class);
+      this.logMethodEnd();
+      return messages;
     } catch (InvalidProtocolBufferException e) {
       throw new CouldNotDecodeMessageException(e);
     }
