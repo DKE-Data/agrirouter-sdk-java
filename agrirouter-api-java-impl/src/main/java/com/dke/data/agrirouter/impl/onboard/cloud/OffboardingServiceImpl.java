@@ -1,5 +1,8 @@
 package com.dke.data.agrirouter.impl.onboard.cloud;
 
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
+
 import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
 import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.Request;
@@ -22,109 +25,103 @@ import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
+public class OffboardingServiceImpl
+    implements OffboardingService, MessageSender, ResponseValidator {
 
-public class OffboardingServiceImpl implements OffboardingService, MessageSender, ResponseValidator {
+  private final EncodeMessageService encodeMessageService;
+  private final FetchMessageService fetchMessageService;
+  private final DecodeMessageService decodeMessageService;
 
-    private final EncodeMessageService encodeMessageService;
-    private final FetchMessageService fetchMessageService;
-    private final DecodeMessageService decodeMessageService;
+  public OffboardingServiceImpl() {
+    this.encodeMessageService = new EncodeMessageServiceImpl();
+    this.fetchMessageService = new FetchMessageServiceImpl();
+    this.decodeMessageService = new DecodeMessageServiceImpl();
+  }
 
-    public OffboardingServiceImpl() {
-      this.encodeMessageService = new EncodeMessageServiceImpl();
-      this.fetchMessageService = new FetchMessageServiceImpl();
-      this.decodeMessageService = new DecodeMessageServiceImpl();
-    }
-
-
-    /**
-     * Offboarding a virtual CU. Will deliver no result if the action was successful, if there's any
-     * error an exception will be thrown.
-     *
-     * @param parameters Parameters for offboarding.
-     */
-    @Override
-    public void offboard(CloudOffboardingParameters parameters) {
-      parameters.validate();
-      EncodeMessageResponse encodedMessageResponse = this.encodeOffboardingMessage(parameters);
-      SendMessageParameters sendMessageParameters =
+  /**
+   * Offboarding a virtual CU. Will deliver no result if the action was successful, if there's any
+   * error an exception will be thrown.
+   *
+   * @param parameters Parameters for offboarding.
+   */
+  @Override
+  public void offboard(CloudOffboardingParameters parameters) {
+    parameters.validate();
+    EncodeMessageResponse encodedMessageResponse = this.encodeOffboardingMessage(parameters);
+    SendMessageParameters sendMessageParameters =
         createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
-      Optional<List<FetchMessageResponse>> fetchMessageResponses =
+    Optional<List<FetchMessageResponse>> fetchMessageResponses =
         sendMessageAndFetchResponses(sendMessageParameters, parameters.getOnboardingResponse());
-      if (fetchMessageResponses.isPresent()) {
-        DecodeMessageResponse decodedMessageQueryResponse =
+    if (fetchMessageResponses.isPresent()) {
+      DecodeMessageResponse decodedMessageQueryResponse =
           this.decodeMessageService.decode(
-            fetchMessageResponses.get().get(0).getCommand().getMessage());
-        try {
-          this.assertStatusCodeIsValid(
+              fetchMessageResponses.get().get(0).getCommand().getMessage());
+      try {
+        this.assertStatusCodeIsValid(
             decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
-        } catch (Exception e) {
-          MessageOuterClass.Message message =
+      } catch (Exception e) {
+        MessageOuterClass.Message message =
             this.decodeMessageService.decode(
-              decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
-          throw new CouldNotOffboardVirtualCommunicationUnitException(message.getMessage());
-        }
+                decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
+        throw new CouldNotOffboardVirtualCommunicationUnitException(message.getMessage());
       }
     }
+  }
 
-    private Optional<List<FetchMessageResponse>> sendMessageAndFetchResponses(
+  private Optional<List<FetchMessageResponse>> sendMessageAndFetchResponses(
       SendMessageParameters sendMessageParameters, OnboardingResponse onboardingResponse) {
-      MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-      this.assertStatusCodeIsValid(response.getNativeResponse().getStatus());
-      return this.fetchMessageService.fetch(
+    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+    this.assertStatusCodeIsValid(response.getNativeResponse().getStatus());
+    return this.fetchMessageService.fetch(
         onboardingResponse, MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
-    }
+  }
 
+  private EncodeMessageResponse encodeOffboardingMessage(CloudOffboardingParameters parameters) {
+    final String applicationMessageID = MessageIdService.generateMessageId();
 
-    private EncodeMessageResponse encodeOffboardingMessage(CloudOffboardingParameters parameters) {
-      final String applicationMessageID = MessageIdService.generateMessageId();
-
-      CloudEndpointOffboardingMessageParameters cloudOffboardingParameters =
+    CloudEndpointOffboardingMessageParameters cloudOffboardingParameters =
         new CloudEndpointOffboardingMessageParameters();
-      cloudOffboardingParameters.setEndpointIds(new ArrayList<>());
-      parameters
+    cloudOffboardingParameters.setEndpointIds(new ArrayList<>());
+    parameters
         .getEndpointIds()
         .forEach(
-          endpointId -> {
-            cloudOffboardingParameters.getEndpointIds().add(endpointId);
-          });
+            endpointId -> {
+              cloudOffboardingParameters.getEndpointIds().add(endpointId);
+            });
 
-      PayloadParameters payloadParameters = new PayloadParameters();
-      payloadParameters.setTypeUrl(
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(
         CloudVirtualizedAppRegistration.OffboardingRequest.getDescriptor().getFullName());
 
-      payloadParameters.setValue(
+    payloadParameters.setValue(
         new CloudEndpointOffboardingMessageContentFactory().message(cloudOffboardingParameters));
 
-      String encodedMessage =
+    String encodedMessage =
         this.encodeMessageService.encode(
-          this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
-      return new EncodeMessageResponse(applicationMessageID, encodedMessage);
-    }
+            this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
+    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+  }
 
-    private MessageHeaderParameters createMessageHeaderParameters(String applicationMessageID) {
-      MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-      messageHeaderParameters.setApplicationMessageId(applicationMessageID);
-      messageHeaderParameters.setTechnicalMessageType(
+  private MessageHeaderParameters createMessageHeaderParameters(String applicationMessageID) {
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    messageHeaderParameters.setTechnicalMessageType(
         TechnicalMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS);
-      messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
-      return messageHeaderParameters;
-    }
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+    return messageHeaderParameters;
+  }
 
-    private SendMessageParameters createSendMessageParameters(
+  private SendMessageParameters createSendMessageParameters(
       EncodeMessageResponse encodedMessageResponse, OnboardingResponse onboardingResponse) {
-      SendMessageParameters sendMessageParameters = new SendMessageParameters();
-      sendMessageParameters.setOnboardingResponse(onboardingResponse);
-      sendMessageParameters.setEncodedMessages(
+    SendMessageParameters sendMessageParameters = new SendMessageParameters();
+    sendMessageParameters.setOnboardingResponse(onboardingResponse);
+    sendMessageParameters.setEncodedMessages(
         Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
-      return sendMessageParameters;
-    }
-
+    return sendMessageParameters;
+  }
 }
