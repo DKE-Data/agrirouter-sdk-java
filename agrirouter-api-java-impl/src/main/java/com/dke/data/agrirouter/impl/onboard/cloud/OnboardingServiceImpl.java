@@ -20,7 +20,7 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageServi
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.onboard.cloud.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.*;
-import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesStore;
+import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
@@ -198,8 +198,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
     cloudOffboardingParameters.setEndpointIds(new ArrayList<>());
     parameters
         .getEndpointIds()
-        .forEach(
-            endpointId -> cloudOffboardingParameters.getEndpointIds().add(endpointId));
+        .forEach(endpointId -> cloudOffboardingParameters.getEndpointIds().add(endpointId));
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
@@ -214,7 +213,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
   }
 
   private MessageHeaderParameters createMessageHeaderParameters(
-      DynamicAttributesStore parameters, TechnicalMessageType technicalMessageType) {
+      AbstractParameterBase parameters, TechnicalMessageType technicalMessageType) {
     final String applicationMessageID =
         parameters.getApplicationMessageId() == null
             ? MessageIdService.generateMessageId()
