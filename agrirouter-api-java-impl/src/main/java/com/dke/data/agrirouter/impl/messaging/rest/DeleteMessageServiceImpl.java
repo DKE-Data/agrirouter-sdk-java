@@ -45,7 +45,11 @@ public class DeleteMessageServiceImpl
 
   private EncodeMessageResponse encodeMessage(DeleteMessageParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-    final String applicationMessageID = MessageIdService.generateMessageId();
+
+    final String applicationMessageID =
+        parameters.getApplicationMessageID().isEmpty()
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageID();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
 
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);

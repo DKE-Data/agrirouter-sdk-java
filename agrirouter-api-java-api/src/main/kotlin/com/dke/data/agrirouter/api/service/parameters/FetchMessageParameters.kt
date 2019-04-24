@@ -14,4 +14,6 @@ open class FetchMessageParameters : ParameterValidation {
     @NotNull
     lateinit var onboardingResponse: OnboardingResponse
 
+    var applicationMessageID: String = ""
+
 }

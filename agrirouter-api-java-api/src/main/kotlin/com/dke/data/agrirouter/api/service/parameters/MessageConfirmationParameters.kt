@@ -18,4 +18,6 @@ class MessageConfirmationParameters : ParameterValidation {
     @NotNull
     lateinit var messageIds: List<String>
 
+    var applicationMessageID: String = ""
+
 }

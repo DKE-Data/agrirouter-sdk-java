@@ -23,4 +23,7 @@ class ListEndpointsParameters : ParameterValidation {
     lateinit var direction: agrirouter.request.payload.account.Endpoints.ListEndpointsQuery.Direction
 
     var unfilteredList: Boolean = false
+
+    var applicationMessageID: String = ""
+
 }

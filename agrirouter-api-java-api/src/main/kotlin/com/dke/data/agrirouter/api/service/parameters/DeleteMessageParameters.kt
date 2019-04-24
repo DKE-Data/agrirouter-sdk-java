@@ -23,6 +23,9 @@ class DeleteMessageParameters : ParameterValidation {
 
     var sentToInSeconds: Long? = null
 
+    var applicationMessageID: String = ""
+
+
     override fun validate() {
         super.validate()
         if (null == messageIds && null == senderIds && null == sentFromInSeconds && null == sentToInSeconds) {

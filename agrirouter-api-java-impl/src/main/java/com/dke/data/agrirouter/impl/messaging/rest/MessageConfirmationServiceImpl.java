@@ -66,7 +66,11 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
   private EncodeMessageResponse encodeMessage(MessageConfirmationParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
-    final String applicationMessageID = MessageIdService.generateMessageId();
+    final String applicationMessageID =
+        parameters.getApplicationMessageID().isEmpty()
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageID();
+
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
 
     messageHeaderParameters.setApplicationMessageSeqNo(1);

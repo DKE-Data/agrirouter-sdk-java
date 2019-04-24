@@ -27,6 +27,8 @@ class SetCapabilitiesParameters : ParameterValidation {
 
     lateinit var capabilitiesParameters: List<CapabilityParameters>
 
+    var applicationMessageID: String = ""
+
     class CapabilityParameters : ParameterValidation {
 
         @NotNull

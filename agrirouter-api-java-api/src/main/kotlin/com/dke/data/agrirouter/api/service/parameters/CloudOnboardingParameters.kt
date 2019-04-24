@@ -18,6 +18,8 @@ class CloudOnboardingParameters : ParameterValidation {
     @NotNull
     lateinit var endpointDetails: List<EndpointDetailsParameters>
 
+    var applicationMessageID: String = ""
+
     override fun validate() {
         super.validate()
         if (endpointDetails.isEmpty()) {

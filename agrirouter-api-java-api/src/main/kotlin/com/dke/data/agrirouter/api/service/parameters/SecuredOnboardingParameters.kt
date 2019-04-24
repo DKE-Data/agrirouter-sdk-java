@@ -45,4 +45,6 @@ class SecuredOnboardingParameters : ParameterValidation {
     @NotBlank
     lateinit var registrationCode: String
 
+    var applicationMessageID: String = ""
+
 }

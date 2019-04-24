@@ -18,6 +18,8 @@ class CloudOffboardingParameters : ParameterValidation {
     @NotNull
     lateinit var endpointIds: List<String>
 
+    var applicationMessageID: String = ""
+
     override fun validate() {
         super.validate()
         if (endpointIds.isEmpty()) {

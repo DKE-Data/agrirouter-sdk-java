@@ -15,4 +15,6 @@ class RegistrationCodeRequestParameters : ParameterValidation {
     @NotEmpty
     lateinit var applicationId: String
 
+    var applicationMessageID: String = ""
+
 }

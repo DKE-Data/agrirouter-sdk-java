@@ -17,4 +17,6 @@ class AuthorizationRequestParameters : ParameterValidation {
     var state: String = ""
 
     var responseType: SecuredOnboardingResponseType = SecuredOnboardingResponseType.ONBOARD
+
+    var applicationMessageID: String = ""
 }

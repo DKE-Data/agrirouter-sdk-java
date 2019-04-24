@@ -40,4 +40,7 @@ class OnboardingParameters : ParameterValidation {
     @NotBlank
     lateinit var registrationCode: String
 
+
+    var applicationMessageID: String = ""
+
 }

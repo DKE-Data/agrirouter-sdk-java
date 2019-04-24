@@ -46,13 +46,17 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
 
   private EncodeMessageResponse encodeMessage(ListEndpointsParameters parameters) {
 
-    String applicationMessageID = MessageIdService.generateMessageId();
+    final String applicationMessageID =
+        parameters.getApplicationMessageID().isEmpty()
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageID();
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
     messageHeaderParameters.setApplicationMessageSeqNo(1);
     if (parameters.getUnfilteredList()) {
-      messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_LIST_ENDPOINTS_UNFILTERED);
+      messageHeaderParameters.setTechnicalMessageType(
+          TechnicalMessageType.DKE_LIST_ENDPOINTS_UNFILTERED);
     } else {
       messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_LIST_ENDPOINTS);
     }
@@ -60,7 +64,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(Endpoints.ListEndpointsQuery.getDescriptor().getFullName());
-    payloadParameters.setValue( new ListEndpointsMessageContentFactory().message(parameters));
+    payloadParameters.setValue(new ListEndpointsMessageContentFactory().message(parameters));
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);

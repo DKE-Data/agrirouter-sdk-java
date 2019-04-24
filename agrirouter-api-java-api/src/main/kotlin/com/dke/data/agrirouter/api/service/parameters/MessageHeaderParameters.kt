@@ -31,4 +31,6 @@ class MessageHeaderParameters : ParameterValidation {
 
     var chunkInfo: Chunk.ChunkComponent? = null
 
+    var applicationMessageID: String = ""
+
 }
