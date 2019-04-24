@@ -52,9 +52,9 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-            parameters.fetchApplicationMessageId() == null
-                    ? MessageIdService.generateMessageId()
-                    : parameters.fetchApplicationMessageId();
+        parameters.fetchApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.fetchApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 

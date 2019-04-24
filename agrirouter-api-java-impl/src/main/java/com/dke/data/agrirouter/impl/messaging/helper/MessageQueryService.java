@@ -64,9 +64,9 @@ public class MessageQueryService extends NonEnvironmentalService
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-            parameters.fetchApplicationMessageId() == null
-                    ? MessageIdService.generateMessageId()
-                    : parameters.fetchApplicationMessageId();
+        parameters.fetchApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.fetchApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
