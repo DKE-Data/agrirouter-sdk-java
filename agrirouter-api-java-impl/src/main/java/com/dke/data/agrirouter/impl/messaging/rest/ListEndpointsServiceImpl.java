@@ -18,6 +18,7 @@ import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
+import java.util.Objects;
 
 public class ListEndpointsServiceImpl extends EnvironmentalService
     implements ListEndpointsService, MessageSender, ResponseValidator {
@@ -47,12 +48,12 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   private EncodeMessageResponse encodeMessage(ListEndpointsParameters parameters) {
 
     final String applicationMessageID =
-        parameters.getApplicationMessageID().isEmpty()
-            ? MessageIdService.generateMessageId()
-            : parameters.getApplicationMessageID();
+            parameters.fetchApplicationMessageId() == null
+                    ? MessageIdService.generateMessageId()
+                    : parameters.fetchApplicationMessageId();
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
     messageHeaderParameters.setApplicationMessageSeqNo(1);
     if (parameters.getUnfilteredList()) {
       messageHeaderParameters.setTechnicalMessageType(

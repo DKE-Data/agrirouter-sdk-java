@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.api.service.parameters
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
 import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException
 import com.dke.data.agrirouter.api.service.ParameterValidation
+import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesContainer
 import lombok.ToString
 import javax.validation.constraints.NotNull
 
@@ -10,15 +11,13 @@ import javax.validation.constraints.NotNull
  * Parameters class. Encapsulation for the services.
  */
 @ToString
-class CloudOffboardingParameters : ParameterValidation {
+class CloudOffboardingParameters : DynamicAttributesContainer(), ParameterValidation {
 
     @NotNull
     lateinit var onboardingResponse: OnboardingResponse
 
     @NotNull
     lateinit var endpointIds: List<String>
-
-    var applicationMessageID: String = ""
 
     override fun validate() {
         super.validate()

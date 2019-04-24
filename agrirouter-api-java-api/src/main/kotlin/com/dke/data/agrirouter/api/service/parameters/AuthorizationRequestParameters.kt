@@ -2,13 +2,14 @@ package com.dke.data.agrirouter.api.service.parameters
 
 import com.dke.data.agrirouter.api.enums.SecuredOnboardingResponseType
 import com.dke.data.agrirouter.api.service.ParameterValidation
+import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesContainer
 import lombok.ToString
 
 /**
  * Parameters class. Encapsulation for the services.
  */
 @ToString
-class AuthorizationRequestParameters : ParameterValidation {
+class AuthorizationRequestParameters : DynamicAttributesContainer(), ParameterValidation {
 
     lateinit var applicationId : String
 
@@ -18,5 +19,4 @@ class AuthorizationRequestParameters : ParameterValidation {
 
     var responseType: SecuredOnboardingResponseType = SecuredOnboardingResponseType.ONBOARD
 
-    var applicationMessageID: String = ""
 }

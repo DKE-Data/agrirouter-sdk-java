@@ -47,10 +47,11 @@ public class DeleteMessageServiceImpl
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-        parameters.getApplicationMessageID().isEmpty()
-            ? MessageIdService.generateMessageId()
-            : parameters.getApplicationMessageID();
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+            parameters.fetchApplicationMessageId() == null
+                    ? MessageIdService.generateMessageId()
+                    : parameters.fetchApplicationMessageId();
+
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);

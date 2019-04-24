@@ -4,6 +4,7 @@ import agrirouter.commons.Chunk
 import agrirouter.request.Request
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType
 import com.dke.data.agrirouter.api.service.ParameterValidation
+import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesContainer
 import lombok.ToString
 import java.util.*
 import javax.validation.constraints.NotNull
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull
  * Parameters class. Encapsulation for the services.
  */
 @ToString
-class MessageHeaderParameters : ParameterValidation {
+class MessageHeaderParameters : DynamicAttributesContainer(), ParameterValidation {
 
     @NotNull
     lateinit var applicationMessageId: String
@@ -30,7 +31,5 @@ class MessageHeaderParameters : ParameterValidation {
     var recipients: List<String> = Collections.emptyList()
 
     var chunkInfo: Chunk.ChunkComponent? = null
-
-    var applicationMessageID: String = ""
 
 }

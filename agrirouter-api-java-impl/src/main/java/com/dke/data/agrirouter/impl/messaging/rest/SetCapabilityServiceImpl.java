@@ -20,6 +20,7 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class SetCapabilityServiceImpl extends EnvironmentalService
     implements SetCapabilityService, MessageSender, ResponseValidator {
@@ -51,11 +52,11 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-        parameters.getApplicationMessageID().isEmpty()
-            ? MessageIdService.generateMessageId()
-            : parameters.getApplicationMessageID();
+            parameters.fetchApplicationMessageId() == null
+                    ? MessageIdService.generateMessageId()
+                    : parameters.fetchApplicationMessageId();
 
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
     messageHeaderParameters.setApplicationMessageSeqNo(1);
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);

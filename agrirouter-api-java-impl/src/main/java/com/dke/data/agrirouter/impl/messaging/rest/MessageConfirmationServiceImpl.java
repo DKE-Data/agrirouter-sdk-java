@@ -26,10 +26,8 @@ import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 
 public class MessageConfirmationServiceImpl extends EnvironmentalService
     implements MessageConfirmationService, MessageSender, ResponseValidator {
@@ -67,11 +65,11 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-        parameters.getApplicationMessageID().isEmpty()
+        parameters.fetchApplicationMessageId() == null
             ? MessageIdService.generateMessageId()
-            : parameters.getApplicationMessageID();
+            : parameters.fetchApplicationMessageId();
 
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
     messageHeaderParameters.setApplicationMessageSeqNo(1);
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_CONFIRM);
