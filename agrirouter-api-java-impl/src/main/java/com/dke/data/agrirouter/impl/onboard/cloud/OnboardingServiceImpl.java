@@ -12,7 +12,6 @@ import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
-import com.dke.data.agrirouter.api.exception.CouldNotOffboardVirtualCommunicationUnitException;
 import com.dke.data.agrirouter.api.exception.CouldNotOnboardVirtualCommunicationUnitException;
 import com.dke.data.agrirouter.api.factories.impl.CloudEndpointOffboardingMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.CloudEndpointOnboardingMessageContentFactory;
@@ -70,11 +69,11 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
               fetchMessageResponses.get().get(0).getCommand().getMessage());
       try {
         this.assertStatusCodeIsValid(
-          decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
+            decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
       } catch (Exception e) {
         MessageOuterClass.Message message =
-          this.decodeMessageService.decode(
-            decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
+            this.decodeMessageService.decode(
+                decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
         throw new CouldNotOnboardVirtualCommunicationUnitException(message.getMessage());
       }
       if (decodedMessageQueryResponse.getResponseEnvelope().getType()
