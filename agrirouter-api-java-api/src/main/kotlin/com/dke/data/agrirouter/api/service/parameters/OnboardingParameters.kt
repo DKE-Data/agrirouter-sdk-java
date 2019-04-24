@@ -3,7 +3,7 @@ package com.dke.data.agrirouter.api.service.parameters
 import com.dke.data.agrirouter.api.enums.ApplicationType
 import com.dke.data.agrirouter.api.enums.CertificationType
 import com.dke.data.agrirouter.api.service.ParameterValidation
-import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesContainer
+import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesStore
 import lombok.ToString
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull
  * Parameters class. Encapsulation for the services.
  */
 @ToString
-class OnboardingParameters : DynamicAttributesContainer(), ParameterValidation {
+class OnboardingParameters : DynamicAttributesStore(), ParameterValidation {
 
     @NotNull
     @NotEmpty

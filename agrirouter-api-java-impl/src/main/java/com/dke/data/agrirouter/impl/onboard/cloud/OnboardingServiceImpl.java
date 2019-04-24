@@ -1,8 +1,5 @@
 package com.dke.data.agrirouter.impl.onboard.cloud;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
-
 import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
 import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.Request;
@@ -23,7 +20,7 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageServi
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.onboard.cloud.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.*;
-import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesContainer;
+import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesStore;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
@@ -32,7 +29,14 @@ import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 
 public class OnboardingServiceImpl implements OnboardingService, MessageSender, ResponseValidator {
 
@@ -195,9 +199,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
     parameters
         .getEndpointIds()
         .forEach(
-            endpointId -> {
-              cloudOffboardingParameters.getEndpointIds().add(endpointId);
-            });
+            endpointId -> cloudOffboardingParameters.getEndpointIds().add(endpointId));
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
@@ -212,7 +214,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
   }
 
   private MessageHeaderParameters createMessageHeaderParameters(
-      DynamicAttributesContainer parameters, TechnicalMessageType technicalMessageType) {
+      DynamicAttributesStore parameters, TechnicalMessageType technicalMessageType) {
     final String applicationMessageID =
         parameters.getApplicationMessageId() == null
             ? MessageIdService.generateMessageId()

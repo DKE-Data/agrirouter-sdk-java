@@ -4,7 +4,6 @@ import agrirouter.commons.Chunk
 import agrirouter.request.Request
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType
 import com.dke.data.agrirouter.api.service.ParameterValidation
-import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesContainer
 import lombok.ToString
 import java.util.*
 import javax.validation.constraints.NotNull
