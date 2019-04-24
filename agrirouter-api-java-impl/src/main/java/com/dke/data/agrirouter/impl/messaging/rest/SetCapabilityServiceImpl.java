@@ -58,7 +58,11 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
-    messageHeaderParameters.setApplicationMessageSeqNo(1);
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 

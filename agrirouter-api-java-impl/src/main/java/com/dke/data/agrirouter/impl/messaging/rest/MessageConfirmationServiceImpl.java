@@ -70,7 +70,11 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
-    messageHeaderParameters.setApplicationMessageSeqNo(1);
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_CONFIRM);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 

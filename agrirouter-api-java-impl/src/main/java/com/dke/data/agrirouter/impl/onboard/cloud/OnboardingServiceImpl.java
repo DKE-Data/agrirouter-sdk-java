@@ -23,6 +23,7 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageServi
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.onboard.cloud.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.*;
+import com.dke.data.agrirouter.api.service.parameters.container.DynamicAttributesContainer;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
@@ -31,10 +32,7 @@ import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class OnboardingServiceImpl implements OnboardingService, MessageSender, ResponseValidator {
 
@@ -142,7 +140,14 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
   }
 
   private EncodeMessageResponse encodeOnboardingMessage(CloudOnboardingParameters parameters) {
-    final String applicationMessageID = MessageIdService.generateMessageId();
+    final String applicationMessageID =
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
+
+    MessageHeaderParameters messageHeaderParameters =
+        this.createMessageHeaderParameters(
+            parameters, TechnicalMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
 
     List<CloudEndpointOnboardingMessageParameters> onboardCloudEndpointMessageParameters =
         new ArrayList<>();
@@ -170,13 +175,19 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
                         [onboardCloudEndpointMessageParameters.size()])));
 
     String encodedMessage =
-        this.encodeMessageService.encode(
-            this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
+        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
   }
 
   private EncodeMessageResponse encodeOffboardingMessage(CloudOffboardingParameters parameters) {
-    final String applicationMessageID = MessageIdService.generateMessageId();
+    final String applicationMessageID =
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
+
+    MessageHeaderParameters messageHeaderParameters =
+        this.createMessageHeaderParameters(
+            parameters, TechnicalMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS);
 
     CloudEndpointOffboardingMessageParameters cloudOffboardingParameters =
         new CloudEndpointOffboardingMessageParameters();
@@ -196,16 +207,27 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
         new CloudEndpointOffboardingMessageContentFactory().message(cloudOffboardingParameters));
 
     String encodedMessage =
-        this.encodeMessageService.encode(
-            this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
+        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
     return new EncodeMessageResponse(applicationMessageID, encodedMessage);
   }
 
-  private MessageHeaderParameters createMessageHeaderParameters(String applicationMessageID) {
+  private MessageHeaderParameters createMessageHeaderParameters(
+      DynamicAttributesContainer parameters, TechnicalMessageType technicalMessageType) {
+    final String applicationMessageID =
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
+
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+
+    int sequenceNumber = parameters.getSequenceNumber();
+
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
-    messageHeaderParameters.setTechnicalMessageType(
-        TechnicalMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
+    messageHeaderParameters.setTeamSetContextId(teamsetContextId);
+    messageHeaderParameters.setApplicationMessageSeqNo(sequenceNumber);
+    messageHeaderParameters.setTechnicalMessageType(technicalMessageType);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
     return messageHeaderParameters;
   }

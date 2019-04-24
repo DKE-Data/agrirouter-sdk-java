@@ -47,14 +47,20 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
 
   private EncodeMessageResponse encodeMessage(ListEndpointsParameters parameters) {
 
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+
     final String applicationMessageID =
         parameters.getApplicationMessageId() == null
             ? MessageIdService.generateMessageId()
             : parameters.getApplicationMessageId();
-
-    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
-    messageHeaderParameters.setApplicationMessageSeqNo(1);
+
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+
     if (parameters.getUnfilteredList()) {
       messageHeaderParameters.setTechnicalMessageType(
           TechnicalMessageType.DKE_LIST_ENDPOINTS_UNFILTERED);

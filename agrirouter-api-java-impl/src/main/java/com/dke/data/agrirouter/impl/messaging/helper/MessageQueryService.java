@@ -70,7 +70,10 @@ public class MessageQueryService extends NonEnvironmentalService
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
-    messageHeaderParameters.setApplicationMessageSeqNo(1);
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
     messageHeaderParameters.setTechnicalMessageType(this.technicalMessageType);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
