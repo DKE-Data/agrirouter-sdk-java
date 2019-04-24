@@ -15,11 +15,11 @@ open class DynamicAttributesContainer {
         return attributes[key]
     }
 
-    fun storeApplicationMessageId(applicationMessageId:String){
+    fun setApplicationMessageId(applicationMessageId:String){
         this.attributes.put(APPLICATION_MESSAGE_ID, applicationMessageId)
     }
 
-    fun fetchApplicationMessageId() : String? {
+    fun getApplicationMessageId() : String? {
         return this.attributes.get(APPLICATION_MESSAGE_ID) as String?
     }
 

@@ -48,9 +48,9 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   private EncodeMessageResponse encodeMessage(ListEndpointsParameters parameters) {
 
     final String applicationMessageID =
-        parameters.fetchApplicationMessageId() == null
+        parameters.getApplicationMessageId() == null
             ? MessageIdService.generateMessageId()
-            : parameters.fetchApplicationMessageId();
+            : parameters.getApplicationMessageId();
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));

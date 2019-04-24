@@ -64,9 +64,9 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-        parameters.fetchApplicationMessageId() == null
+        parameters.getApplicationMessageId() == null
             ? MessageIdService.generateMessageId()
-            : parameters.fetchApplicationMessageId();
+            : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
