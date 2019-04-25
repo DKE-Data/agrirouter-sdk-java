@@ -45,8 +45,18 @@ public class DeleteMessageServiceImpl
 
   private EncodeMessageResponse encodeMessage(DeleteMessageParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-    final String applicationMessageID = MessageIdService.generateMessageId();
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+
+    final String applicationMessageID =
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
 
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);

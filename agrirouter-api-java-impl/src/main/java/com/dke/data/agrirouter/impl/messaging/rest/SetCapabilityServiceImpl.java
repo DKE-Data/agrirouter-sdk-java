@@ -20,6 +20,7 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class SetCapabilityServiceImpl extends EnvironmentalService
     implements SetCapabilityService, MessageSender, ResponseValidator {
@@ -50,10 +51,18 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
   private EncodeMessageResponse encodeMessage(SetCapabilitiesParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
-    final String applicationMessageID = MessageIdService.generateMessageId();
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    final String applicationMessageID =
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
 
-    messageHeaderParameters.setApplicationMessageSeqNo(1);
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 

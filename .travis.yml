@@ -1,3 +1,4 @@
+
 install:
 - mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -P !snapshot -B -V
 script:
@@ -11,6 +12,7 @@ after_success:
 - "./cd/deploy.sh"
 language: java
 jdk:
+- openjdk11
 - openjdk10
 - openjdk9
 - openjdk8

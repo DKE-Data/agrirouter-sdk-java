@@ -63,10 +63,17 @@ public class MessageQueryService extends NonEnvironmentalService
     this.getNativeLogger().trace("Build message header parameters.");
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
-    final String applicationMessageID = MessageIdService.generateMessageId();
-    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    final String applicationMessageID =
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
 
-    messageHeaderParameters.setApplicationMessageSeqNo(1);
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
     messageHeaderParameters.setTechnicalMessageType(this.technicalMessageType);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 

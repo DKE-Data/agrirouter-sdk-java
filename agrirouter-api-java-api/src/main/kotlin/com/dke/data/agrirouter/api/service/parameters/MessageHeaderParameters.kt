@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull
  * Parameters class. Encapsulation for the services.
  */
 @ToString
-class MessageHeaderParameters : ParameterValidation {
+class MessageHeaderParameters :  ParameterValidation {
 
     @NotNull
     lateinit var applicationMessageId: String
