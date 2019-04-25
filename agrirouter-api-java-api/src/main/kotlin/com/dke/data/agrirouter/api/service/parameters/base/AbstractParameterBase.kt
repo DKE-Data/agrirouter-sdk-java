@@ -1,6 +1,6 @@
 package com.dke.data.agrirouter.api.service.parameters.base
 
-open class AbstractParameterBase : DynamicAttributesStore() {
+open class AbstractParameterBase : DynamicAttributesStorage() {
 
     var applicationMessageId : String? = null
 

@@ -3,7 +3,7 @@ package com.dke.data.agrirouter.api.service.parameters.base
 /**
  * Possibility to store additional parameters for custom reasons if needed.
  */
-open class DynamicAttributesStore {
+open class DynamicAttributesStorage {
 
     private var attributes: HashMap<String, Any> = HashMap()
 
