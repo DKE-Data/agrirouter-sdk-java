@@ -68,7 +68,6 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
 
     List<Capabilities.CapabilitySpecification.Capability> capabilities = new ArrayList<>();
 
-    parameters.getCapabilitiesParameters();
     parameters
         .getCapabilitiesParameters()
         .forEach(
