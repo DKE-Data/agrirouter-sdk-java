@@ -13,9 +13,10 @@ class SubscriptionMessageContentFactory {
     fun message(parameters: SubscriptionMessageParameters): ByteString {
         parameters.validate()
         val messageContent = SubscriptionOuterClass.Subscription.newBuilder()
+
         for ( entry in parameters.list){
             val technicalMessageType = SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.newBuilder()
-            technicalMessageType.technicalMessageType = entry.technicalMessageType.key
+            technicalMessageType.setTechnicalMessageType(entry.technicalMessageType.key)
             technicalMessageType.addAllDdis(entry.ddis)
             technicalMessageType.position = entry.position
             messageContent.addTechnicalMessageTypes(technicalMessageType)

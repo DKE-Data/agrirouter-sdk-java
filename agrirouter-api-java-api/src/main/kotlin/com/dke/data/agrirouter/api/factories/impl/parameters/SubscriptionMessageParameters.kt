@@ -9,12 +9,10 @@ class SubscriptionMessageParameters : ParameterValidation {
         @NotNull
         lateinit var technicalMessageType: TechnicalMessageType
 
-        @NotNull
-        lateinit var ddis: List<Int>
+        var ddis: List<Int> = ArrayList()
 
         var position: Boolean = false
     }
 
-    @NotNull
-    lateinit var list : List<SubscriptionMessageEntry>
+    var list : List<SubscriptionMessageEntry> = ArrayList()
 }

@@ -24,12 +24,12 @@ class SetSubscriptionParameters : AbstractParameterBase(), ParameterValidation {
         @NotNull
         lateinit var technicalMessageType: TechnicalMessageType
 
-        @NotNull
-        lateinit var ddis: List<Int>
+
+        var ddis: List<Int> = ArrayList();
 
         var position: Boolean = false
     }
 
-    lateinit var subscriptionParameters: List<Subscription>
+    var subscriptionParameters: List<Subscription> = ArrayList()
 
 }

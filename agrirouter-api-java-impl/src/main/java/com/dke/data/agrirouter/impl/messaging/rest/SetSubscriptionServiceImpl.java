@@ -1,7 +1,5 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
-import static agrirouter.request.payload.endpoint.SubscriptionOuterClass.Subscription.*;
-
 import agrirouter.request.Request;
 import agrirouter.request.payload.endpoint.SubscriptionOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
@@ -19,6 +17,7 @@ import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
@@ -53,14 +52,14 @@ public class SetSubscriptionServiceImpl extends EnvironmentalService
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-      parameters.getApplicationMessageId() == null
-        ? MessageIdService.generateMessageId()
-        : parameters.getApplicationMessageId();
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
     final String teamsetContextId =
-      parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
     messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
@@ -71,17 +70,19 @@ public class SetSubscriptionServiceImpl extends EnvironmentalService
     subscriptionList.setList(new ArrayList<>());
 
     for (SetSubscriptionParameters.Subscription entry : parameters.getSubscriptionParameters()) {
-      SubscriptionMessageParameters.SubscriptionMessageEntry messageTypeSubscriptionItem = new SubscriptionMessageParameters.SubscriptionMessageEntry();
+      SubscriptionMessageParameters.SubscriptionMessageEntry messageTypeSubscriptionItem =
+          new SubscriptionMessageParameters.SubscriptionMessageEntry();
       messageTypeSubscriptionItem.setTechnicalMessageType(entry.getTechnicalMessageType());
-      messageTypeSubscriptionItem.setDdis(entry.ddis);
+      messageTypeSubscriptionItem.setDdis(entry.getDdis());
       messageTypeSubscriptionItem.setPosition(entry.getPosition());
       subscriptionList.getList().add(messageTypeSubscriptionItem);
     }
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(SubscriptionOuterClass.getDescriptor().getFullName());
+    payloadParameters.setTypeUrl(SubscriptionOuterClass.Subscription.getDescriptor().getFullName());
 
-    payloadParameters.setValue(new SubscriptionMessageContentFactory().message(subscriptionList));
+    ByteString messageValue = new SubscriptionMessageContentFactory().message(subscriptionList);
+    payloadParameters.setValue(messageValue);
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
