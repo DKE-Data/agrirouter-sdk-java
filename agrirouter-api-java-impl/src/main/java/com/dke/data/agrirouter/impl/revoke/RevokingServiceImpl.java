@@ -18,7 +18,7 @@ import org.apache.commons.codec.binary.Hex;
 public class RevokingServiceImpl extends EnvironmentalService
     implements RevokingService, SignatureService {
 
-  protected RevokingServiceImpl(Environment environment) {
+  public RevokingServiceImpl(Environment environment) {
     super(environment);
   }
 
