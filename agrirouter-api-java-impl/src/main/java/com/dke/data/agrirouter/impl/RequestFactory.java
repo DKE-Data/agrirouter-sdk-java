@@ -105,6 +105,27 @@ public final class RequestFactory {
   }
 
   /**
+   * Setting applicationID and Signature within the header.
+   *
+   * @param url -
+   * @param applicationId -
+   * @param signature -
+   * @return Builder -
+   */
+  public static Invocation.Builder signedDeleteRequest(
+      String url, String applicationId, String signature) {
+    Client client = ClientBuilder.newClient();
+    client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+    WebTarget target = client.target(url);
+    Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
+    request.accept(MediaType.APPLICATION_JSON_TYPE);
+    request.header(AgrirouterHttpHeader.APPLICATION_ID, applicationId);
+    request.header(AgrirouterHttpHeader.SIGNATURE, signature);
+
+    return request;
+  }
+
+  /**
    * Setting the 'reg_access_token' within the header.
    *
    * @param url -

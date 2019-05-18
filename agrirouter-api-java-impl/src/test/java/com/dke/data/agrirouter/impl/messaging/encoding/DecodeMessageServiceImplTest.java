@@ -1,8 +1,10 @@
 package com.dke.data.agrirouter.impl.messaging.encoding;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
+import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
