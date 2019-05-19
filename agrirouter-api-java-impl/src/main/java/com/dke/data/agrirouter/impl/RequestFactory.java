@@ -14,6 +14,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.logging.LoggingFeature;
 
 /** Factory to encapsulate the requests against the agrirouter */
@@ -115,6 +116,7 @@ public final class RequestFactory {
   public static Invocation.Builder signedDeleteRequest(
       String url, String applicationId, String signature) {
     Client client = ClientBuilder.newClient();
+    client.property(ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, true);
     client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
     WebTarget target = client.target(url);
     Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
