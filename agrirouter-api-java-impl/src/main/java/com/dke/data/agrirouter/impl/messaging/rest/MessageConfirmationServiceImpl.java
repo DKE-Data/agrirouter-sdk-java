@@ -141,13 +141,13 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
         messageConfirmationParameters.setMessageIds(messageIds);
         this.send(messageConfirmationParameters);
         if (enableValidation) {
-          this.validateReponse(parameters);
+          this.validateResponse(parameters);
         }
       }
     }
   }
 
-  private void validateReponse(MessageConfirmationForAllPendingMessagesParameters parameters) {
+  private void validateResponse(MessageConfirmationForAllPendingMessagesParameters parameters) {
     Optional<List<FetchMessageResponse>> fetchMessageResponses;
     DecodeMessageResponse decodedMessageQueryResponse;
     fetchMessageResponses =
