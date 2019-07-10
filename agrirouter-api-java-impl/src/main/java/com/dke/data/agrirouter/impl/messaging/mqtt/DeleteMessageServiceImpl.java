@@ -14,18 +14,18 @@ import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
+import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
+import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
-import com.dke.data.agrirouter.impl.messaging.MessageSender;
-
-import java.util.Collections;
-import java.util.Objects;
-
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.util.Collections;
+import java.util.Objects;
+
 public class DeleteMessageServiceImpl extends MqttService
-        implements DeleteMessageService, MessageSender {
+        implements DeleteMessageService, MessageBodyCreator {
 
     private final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
@@ -37,18 +37,18 @@ public class DeleteMessageServiceImpl extends MqttService
     public String send(DeleteMessageParameters parameters) {
         parameters.validate();
         try {
-            EncodeMessage encodedMessageResponse = this.encodeMessage(parameters);
+            EncodeMessage encodeMessage = this.encodeMessage(parameters);
             SendMessageParameters sendMessageParameters = new SendMessageParameters();
             sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
             sendMessageParameters.setEncodedMessages(
-                    Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+                    Collections.singletonList(encodeMessage.getEncodedMessage()));
             String messageAsJson = this.createMessageBody(sendMessageParameters);
             byte[] payload = messageAsJson.getBytes();
             this.getMqttClient()
                     .publish(
                             parameters.getOnboardingResponse().getConnectionCriteria().getMeasures(),
                             new MqttMessage(payload));
-            return encodedMessageResponse.getApplicationMessageID();
+            return encodeMessage.getApplicationMessageID();
         } catch (MqttException e) {
             throw new CouldNotSendMqttMessageException(e);
         }
@@ -60,15 +60,19 @@ public class DeleteMessageServiceImpl extends MqttService
         messageHeaderParameters.setApplicationMessageId(applicationMessageID);
         messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
         messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
-        DeleteMessageMessageParameters deleteMessageMessageParameters = new DeleteMessageMessageParameters();
-        deleteMessageMessageParameters.setMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
+        DeleteMessageMessageParameters deleteMessageMessageParameters =
+                new DeleteMessageMessageParameters();
+        deleteMessageMessageParameters.setMessageIds(
+                Objects.requireNonNull(parameters.getMessageIds()));
         deleteMessageMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
         deleteMessageMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
         deleteMessageMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
         PayloadParameters payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(FeedRequests.MessageDelete.getDescriptor().getFullName());
-        payloadParameters.setValue((new DeleteMessageMessageContentFactory()).message(deleteMessageMessageParameters));
-        String encodedMessage = this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+        payloadParameters.setValue(
+                (new DeleteMessageMessageContentFactory()).message(deleteMessageMessageParameters));
+        String encodedMessage =
+                this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
         return new EncodeMessage(applicationMessageID, encodedMessage);
     }
 }
