@@ -16,7 +16,6 @@ import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmation
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -130,14 +129,14 @@ public interface MessageEncoder {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-            parameters.getApplicationMessageId() == null
-                    ? MessageIdService.generateMessageId()
-                    : parameters.getApplicationMessageId();
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
     final String teamsetContextId =
-            parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
     messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
@@ -148,33 +147,33 @@ public interface MessageEncoder {
 
     parameters.getCapabilitiesParameters();
     parameters
-            .getCapabilitiesParameters()
-            .forEach(
-                    p -> {
-                      Capabilities.CapabilitySpecification.Capability.Builder capabilityBuilder =
-                              Capabilities.CapabilitySpecification.Capability.newBuilder();
-                      capabilityBuilder.setTechnicalMessageType(p.technicalMessageType.getKey());
-                      capabilityBuilder.setDirection(p.direction);
-                      Capabilities.CapabilitySpecification.Capability capability =
-                              capabilityBuilder.build();
-                      capabilities.add(capability);
-                    });
+        .getCapabilitiesParameters()
+        .forEach(
+            p -> {
+              Capabilities.CapabilitySpecification.Capability.Builder capabilityBuilder =
+                  Capabilities.CapabilitySpecification.Capability.newBuilder();
+              capabilityBuilder.setTechnicalMessageType(p.technicalMessageType.getKey());
+              capabilityBuilder.setDirection(p.direction);
+              Capabilities.CapabilitySpecification.Capability capability =
+                  capabilityBuilder.build();
+              capabilities.add(capability);
+            });
 
     CapabilitiesMessageParameters capabilitiesMessageParameters =
-            new CapabilitiesMessageParameters();
+        new CapabilitiesMessageParameters();
     capabilitiesMessageParameters.setCapabilities(capabilities);
     capabilitiesMessageParameters.setAppCertificationId(parameters.getApplicationId());
     capabilitiesMessageParameters.setAppCertificationVersionId(
-            parameters.getCertificationVersionId());
+        parameters.getCertificationVersionId());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
-            Capabilities.CapabilitySpecification.getDescriptor().getFullName());
+        Capabilities.CapabilitySpecification.getDescriptor().getFullName());
     payloadParameters.setValue(
-            new CapabilitiesMessageContentFactory().message(capabilitiesMessageParameters));
+        new CapabilitiesMessageContentFactory().message(capabilitiesMessageParameters));
 
     String encodedMessage =
-            this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+        this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 

@@ -32,13 +32,13 @@ public class ListEndpointsServiceImpl extends MqttService
   public String send(ListEndpointsParameters parameters) {
     parameters.validate();
     try {
-    EncodedMessage encodedMessage = this.encode(parameters);
-    SendMessageParameters sendMessageParameters = new SendMessageParameters();
-    sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessage.getEncodedMessage()));
-    String messageAsJson = this.createMessageBody(sendMessageParameters);
-    byte[] payload = messageAsJson.getBytes();
+      EncodedMessage encodedMessage = this.encode(parameters);
+      SendMessageParameters sendMessageParameters = new SendMessageParameters();
+      sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+      sendMessageParameters.setEncodedMessages(
+          Collections.singletonList(encodedMessage.getEncodedMessage()));
+      String messageAsJson = this.createMessageBody(sendMessageParameters);
+      byte[] payload = messageAsJson.getBytes();
       this.getMqttClient()
           .publish(
               parameters.getOnboardingResponse().getConnectionCriteria().getMeasures(),
