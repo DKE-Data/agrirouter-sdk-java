@@ -1,9 +1,10 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
-import com.dke.data.agrirouter.api.service.messaging.async.SendMessageService;
+import com.dke.data.agrirouter.api.service.messaging.SendMessageService;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
-import com.dke.data.agrirouter.impl.messaging.MessageSender;
+import com.dke.data.agrirouter.impl.messaging.MqttService;
+import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;

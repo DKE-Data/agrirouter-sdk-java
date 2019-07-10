@@ -1,8 +1,9 @@
-package com.dke.data.agrirouter.impl.messaging;
+package com.dke.data.agrirouter.impl.messaging.rest;
 
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
+import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 

@@ -1,4 +1,4 @@
-package com.dke.data.agrirouter.impl.messaging;
+package com.dke.data.agrirouter.impl.messaging.rest;
 
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;

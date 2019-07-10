@@ -1,7 +1,7 @@
 package com.dke.data.agrirouter.impl.onboard.cloud;
 
-import static com.dke.data.agrirouter.impl.messaging.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 
 import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
 import agrirouter.commons.MessageOuterClass;
@@ -24,10 +24,10 @@ import com.dke.data.agrirouter.api.service.onboard.cloud.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
-import com.dke.data.agrirouter.impl.messaging.MessageSender;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
+import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -205,7 +205,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
   }
 
   private SendMessageParameters createSendMessageParameters(
-          EncodedMessage encodedMessageResponse, OnboardingResponse onboardingResponse) {
+      EncodedMessage encodedMessageResponse, OnboardingResponse onboardingResponse) {
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(onboardingResponse);
     sendMessageParameters.setEncodedMessages(

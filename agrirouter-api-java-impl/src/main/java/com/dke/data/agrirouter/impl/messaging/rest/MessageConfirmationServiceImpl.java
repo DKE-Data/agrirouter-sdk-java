@@ -1,7 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
-import static com.dke.data.agrirouter.impl.messaging.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.feed.response.FeedResponse;
@@ -23,7 +23,6 @@ import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
-import com.dke.data.agrirouter.impl.messaging.MessageSender;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
