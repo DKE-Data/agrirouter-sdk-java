@@ -25,7 +25,11 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.*;
 
 public class MessageConfirmationServiceImpl extends EnvironmentalService
-    implements MessageConfirmationService, MessageConfirmationFunctionsService, MessageSender, MessageEncoder, ResponseValidator {
+    implements MessageConfirmationService,
+        MessageConfirmationFunctionsService,
+        MessageSender,
+        MessageEncoder,
+        ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
   private final MessageQueryService messageQueryService;

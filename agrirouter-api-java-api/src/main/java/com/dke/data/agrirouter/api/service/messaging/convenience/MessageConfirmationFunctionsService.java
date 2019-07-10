@@ -5,7 +5,7 @@ import com.dke.data.agrirouter.api.service.parameters.MessageConfirmationForAllP
 public interface MessageConfirmationFunctionsService {
 
   void confirmAllPendingMessagesWithValidation(
-          MessageConfirmationForAllPendingMessagesParameters parameters);
+      MessageConfirmationForAllPendingMessagesParameters parameters);
 
   void confirmAllPendingMessages(MessageConfirmationForAllPendingMessagesParameters parameters);
 }

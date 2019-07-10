@@ -91,14 +91,14 @@ public interface MessageEncoder {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-            parameters.getApplicationMessageId() == null
-                    ? MessageIdService.generateMessageId()
-                    : parameters.getApplicationMessageId();
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
     final String teamsetContextId =
-            parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
     messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
@@ -106,17 +106,17 @@ public interface MessageEncoder {
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     MessageConfirmationMessageParameters messageConfirmationMessageParameters =
-            new MessageConfirmationMessageParameters();
+        new MessageConfirmationMessageParameters();
     messageConfirmationMessageParameters.setMessageIds(parameters.getMessageIds());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(FeedRequests.MessageConfirm.getDescriptor().getFullName());
     payloadParameters.setValue(
-            new MessageConfirmationMessageContentFactory()
-                    .message(messageConfirmationMessageParameters));
+        new MessageConfirmationMessageContentFactory()
+            .message(messageConfirmationMessageParameters));
 
     String encodedMessage =
-            this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+        this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
