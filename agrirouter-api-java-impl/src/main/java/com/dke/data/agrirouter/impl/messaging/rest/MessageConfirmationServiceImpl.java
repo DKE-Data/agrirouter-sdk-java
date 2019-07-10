@@ -17,19 +17,21 @@ import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmation
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
 import com.dke.data.agrirouter.api.service.messaging.MessageConfirmationService;
 import com.dke.data.agrirouter.api.service.messaging.MessageQueryService;
+import com.dke.data.agrirouter.api.service.messaging.convinience.MessageConfirmationFunctionsService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
+import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.*;
 
 public class MessageConfirmationServiceImpl extends EnvironmentalService
-    implements MessageConfirmationService, MessageSender, ResponseValidator {
+    implements MessageConfirmationService, MessageConfirmationFunctionsService, MessageSender, MessageEncoder, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
   private final MessageQueryService messageQueryService;
@@ -47,50 +49,14 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
   @Override
   public String send(MessageConfirmationParameters parameters) {
     parameters.validate();
-
-    EncodedMessage encodedMessageResponse = encodeMessage(parameters);
+    EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
-
+        Collections.singletonList(encodedMessage.getEncodedMessage()));
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-
     this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
-    return encodedMessageResponse.getApplicationMessageID();
-  }
-
-  private EncodedMessage encodeMessage(MessageConfirmationParameters parameters) {
-    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-
-    final String applicationMessageID =
-        parameters.getApplicationMessageId() == null
-            ? MessageIdService.generateMessageId()
-            : parameters.getApplicationMessageId();
-
-    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
-
-    final String teamsetContextId =
-        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
-    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
-
-    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
-    messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_CONFIRM);
-    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
-
-    MessageConfirmationMessageParameters messageConfirmationMessageParameters =
-        new MessageConfirmationMessageParameters();
-    messageConfirmationMessageParameters.setMessageIds(parameters.getMessageIds());
-
-    PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(FeedRequests.MessageConfirm.getDescriptor().getFullName());
-    payloadParameters.setValue(
-        new MessageConfirmationMessageContentFactory()
-            .message(messageConfirmationMessageParameters));
-
-    String encodedMessage =
-        this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodedMessage(applicationMessageID, encodedMessage);
+    return encodedMessage.getApplicationMessageID();
   }
 
   @Override
@@ -160,5 +126,10 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
       this.assertStatusCodeIsValid(
           decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
     }
+  }
+
+  @Override
+  public EncodeMessageService getEncodeMessageService() {
+    return this.encodeMessageService;
   }
 }
