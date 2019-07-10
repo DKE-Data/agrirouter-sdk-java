@@ -1,34 +1,36 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
+import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
-import com.dke.data.agrirouter.api.service.messaging.MessageConfirmationService;
+import com.dke.data.agrirouter.api.service.messaging.SetCapabilityService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
-import com.dke.data.agrirouter.api.service.parameters.MessageConfirmationParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
+import com.dke.data.agrirouter.api.service.parameters.SetCapabilitiesParameters;
+import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
-
-import java.util.Collections;
-
+import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class MessageConfirmationServiceImpl extends MqttService
-        implements MessageConfirmationService, MessageSender, MessageEncoder {
+import java.util.Collections;
+
+public class SetCapabilityServiceImpl extends MqttService
+        implements SetCapabilityService, MessageSender, MessageEncoder, ResponseValidator {
 
     private final EncodeMessageService encodeMessageService;
 
-    public MessageConfirmationServiceImpl(MqttClient mqttClient) {
+    public SetCapabilityServiceImpl(MqttClient mqttClient) {
         super(mqttClient);
         this.encodeMessageService = new EncodeMessageServiceImpl();
     }
 
     @Override
-    public String send(MessageConfirmationParameters parameters) {
+    public String send(SetCapabilitiesParameters parameters) {
         parameters.validate();
         try {
             EncodedMessage encodedMessage = this.encode(parameters);
@@ -50,6 +52,6 @@ public class MessageConfirmationServiceImpl extends MqttService
 
     @Override
     public EncodeMessageService getEncodeMessageService() {
-        return this.encodeMessageService;
+        return encodeMessageService;
     }
 }

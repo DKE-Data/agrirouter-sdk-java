@@ -3,16 +3,22 @@ package com.dke.data.agrirouter.impl.messaging;
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
 import agrirouter.request.payload.account.Endpoints;
+import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.factories.impl.CapabilitiesMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.DeleteMessageMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.ListEndpointsMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.MessageConfirmationMessageContentFactory;
+import com.dke.data.agrirouter.api.factories.impl.parameters.CapabilitiesMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.DeleteMessageMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmationMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public interface MessageEncoder {
@@ -117,6 +123,58 @@ public interface MessageEncoder {
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
+  }
+
+  default EncodedMessage encode(SetCapabilitiesParameters parameters) {
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+
+    final String applicationMessageID =
+            parameters.getApplicationMessageId() == null
+                    ? MessageIdService.generateMessageId()
+                    : parameters.getApplicationMessageId();
+
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+
+    final String teamsetContextId =
+            parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+
+    List<Capabilities.CapabilitySpecification.Capability> capabilities = new ArrayList<>();
+
+    parameters.getCapabilitiesParameters();
+    parameters
+            .getCapabilitiesParameters()
+            .forEach(
+                    p -> {
+                      Capabilities.CapabilitySpecification.Capability.Builder capabilityBuilder =
+                              Capabilities.CapabilitySpecification.Capability.newBuilder();
+                      capabilityBuilder.setTechnicalMessageType(p.technicalMessageType.getKey());
+                      capabilityBuilder.setDirection(p.direction);
+                      Capabilities.CapabilitySpecification.Capability capability =
+                              capabilityBuilder.build();
+                      capabilities.add(capability);
+                    });
+
+    CapabilitiesMessageParameters capabilitiesMessageParameters =
+            new CapabilitiesMessageParameters();
+    capabilitiesMessageParameters.setCapabilities(capabilities);
+    capabilitiesMessageParameters.setAppCertificationId(parameters.getApplicationId());
+    capabilitiesMessageParameters.setAppCertificationVersionId(
+            parameters.getCertificationVersionId());
+
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(
+            Capabilities.CapabilitySpecification.getDescriptor().getFullName());
+    payloadParameters.setValue(
+            new CapabilitiesMessageContentFactory().message(capabilitiesMessageParameters));
+
+    String encodedMessage =
+            this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
