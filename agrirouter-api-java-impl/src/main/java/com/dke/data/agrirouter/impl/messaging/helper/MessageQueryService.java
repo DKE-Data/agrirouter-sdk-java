@@ -2,7 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.helper;
 
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
@@ -13,7 +13,7 @@ import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
-import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
+import com.dke.data.agrirouter.impl.messaging.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 import java.util.Objects;
@@ -39,7 +39,7 @@ public class MessageQueryService extends NonEnvironmentalService
     parameters.validate();
 
     this.getNativeLogger().trace("Encode message.");
-    EncodeMessageResponse encodedMessageResponse = this.encodeMessage(parameters);
+    EncodeMessage encodedMessageResponse = this.encodeMessage(parameters);
 
     this.getNativeLogger().trace("Build message parameters.");
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
@@ -57,7 +57,7 @@ public class MessageQueryService extends NonEnvironmentalService
     return encodedMessageResponse.getApplicationMessageID();
   }
 
-  private EncodeMessageResponse encodeMessage(MessageQueryParameters parameters) {
+  private EncodeMessage encodeMessage(MessageQueryParameters parameters) {
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Build message header parameters.");
@@ -96,6 +96,6 @@ public class MessageQueryService extends NonEnvironmentalService
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
 
     this.logMethodEnd(encodedMessage);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return new EncodeMessage(applicationMessageID, encodedMessage);
   }
 }

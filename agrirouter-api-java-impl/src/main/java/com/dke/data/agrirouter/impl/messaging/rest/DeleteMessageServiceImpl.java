@@ -2,7 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.factories.impl.DeleteMessageMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.DeleteMessageMessageParameters;
@@ -13,6 +13,7 @@ import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
+import com.dke.data.agrirouter.impl.messaging.MessageSender;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
@@ -31,7 +32,7 @@ public class DeleteMessageServiceImpl
   public String send(DeleteMessageParameters parameters) {
     parameters.validate();
 
-    EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
+    EncodeMessage encodedMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
@@ -43,7 +44,7 @@ public class DeleteMessageServiceImpl
     return encodedMessageResponse.getApplicationMessageID();
   }
 
-  private EncodeMessageResponse encodeMessage(DeleteMessageParameters parameters) {
+  private EncodeMessage encodeMessage(DeleteMessageParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
@@ -76,6 +77,6 @@ public class DeleteMessageServiceImpl
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return new EncodeMessage(applicationMessageID, encodedMessage);
   }
 }

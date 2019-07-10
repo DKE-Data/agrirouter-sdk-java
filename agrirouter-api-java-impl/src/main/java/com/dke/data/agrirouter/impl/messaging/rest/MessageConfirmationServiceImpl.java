@@ -1,14 +1,14 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
+import static com.dke.data.agrirouter.impl.messaging.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.feed.response.FeedResponse;
 import agrirouter.request.Request;
 import agrirouter.response.Response;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessage;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
@@ -23,6 +23,7 @@ import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
+import com.dke.data.agrirouter.impl.messaging.MessageSender;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
@@ -48,7 +49,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
   public String send(MessageConfirmationParameters parameters) {
     parameters.validate();
 
-    EncodeMessageResponse encodedMessageResponse = encodeMessage(parameters);
+    EncodeMessage encodedMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
@@ -60,7 +61,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     return encodedMessageResponse.getApplicationMessageID();
   }
 
-  private EncodeMessageResponse encodeMessage(MessageConfirmationParameters parameters) {
+  private EncodeMessage encodeMessage(MessageConfirmationParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
@@ -90,7 +91,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return new EncodeMessage(applicationMessageID, encodedMessage);
   }
 
   @Override

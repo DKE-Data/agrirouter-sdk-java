@@ -2,7 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.request.Request;
 import agrirouter.request.payload.account.Endpoints;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessage;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
@@ -15,6 +15,7 @@ import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
+import com.dke.data.agrirouter.impl.messaging.MessageSender;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
@@ -33,7 +34,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   @Override
   public String send(ListEndpointsParameters parameters) {
 
-    EncodeMessageResponse encodedMessage = this.encodeMessage(parameters);
+    EncodeMessage encodedMessage = this.encodeMessage(parameters);
 
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
@@ -45,7 +46,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     return encodedMessage.getApplicationMessageID();
   }
 
-  private EncodeMessageResponse encodeMessage(ListEndpointsParameters parameters) {
+  private EncodeMessage encodeMessage(ListEndpointsParameters parameters) {
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
@@ -76,7 +77,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
 
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return new EncodeMessage(applicationMessageID, encodedMessage);
   }
 
   public String requestFullListFilteredByAppliedRoutings(OnboardingResponse onboardingResponse) {

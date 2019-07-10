@@ -1,13 +1,13 @@
 package com.dke.data.agrirouter.impl.onboard.cloud;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
+import static com.dke.data.agrirouter.impl.messaging.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 
 import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
 import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.Request;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.encoding.EncodeMessage;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
@@ -23,7 +23,7 @@ import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
-import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
+import com.dke.data.agrirouter.impl.messaging.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +52,7 @@ public class OffboardingServiceImpl
   @Override
   public void offboard(CloudOffboardingParameters parameters) {
     parameters.validate();
-    EncodeMessageResponse encodedMessageResponse = this.encodeOffboardingMessage(parameters);
+    EncodeMessage encodedMessageResponse = this.encodeOffboardingMessage(parameters);
     SendMessageParameters sendMessageParameters =
         createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
@@ -81,7 +81,7 @@ public class OffboardingServiceImpl
         onboardingResponse, MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
   }
 
-  private EncodeMessageResponse encodeOffboardingMessage(CloudOffboardingParameters parameters) {
+  private EncodeMessage encodeOffboardingMessage(CloudOffboardingParameters parameters) {
     final String applicationMessageID = MessageIdService.generateMessageId();
 
     CloudEndpointOffboardingMessageParameters cloudOffboardingParameters =
@@ -104,7 +104,7 @@ public class OffboardingServiceImpl
     String encodedMessage =
         this.encodeMessageService.encode(
             this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return new EncodeMessage(applicationMessageID, encodedMessage);
   }
 
   private MessageHeaderParameters createMessageHeaderParameters(String applicationMessageID) {
@@ -117,7 +117,7 @@ public class OffboardingServiceImpl
   }
 
   private SendMessageParameters createSendMessageParameters(
-      EncodeMessageResponse encodedMessageResponse, OnboardingResponse onboardingResponse) {
+          EncodeMessage encodedMessageResponse, OnboardingResponse onboardingResponse) {
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(onboardingResponse);
     sendMessageParameters.setEncodedMessages(
