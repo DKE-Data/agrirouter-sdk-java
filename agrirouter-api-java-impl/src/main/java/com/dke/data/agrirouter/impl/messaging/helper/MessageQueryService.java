@@ -2,7 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.helper;
 
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessage;
+import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
@@ -39,7 +39,7 @@ public class MessageQueryService extends NonEnvironmentalService
     parameters.validate();
 
     this.getNativeLogger().trace("Encode message.");
-    EncodeMessage encodedMessageResponse = this.encodeMessage(parameters);
+    EncodedMessage encodedMessageResponse = this.encodeMessage(parameters);
 
     this.getNativeLogger().trace("Build message parameters.");
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
@@ -57,7 +57,7 @@ public class MessageQueryService extends NonEnvironmentalService
     return encodedMessageResponse.getApplicationMessageID();
   }
 
-  private EncodeMessage encodeMessage(MessageQueryParameters parameters) {
+  private EncodedMessage encodeMessage(MessageQueryParameters parameters) {
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Build message header parameters.");
@@ -96,6 +96,6 @@ public class MessageQueryService extends NonEnvironmentalService
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
 
     this.logMethodEnd(encodedMessage);
-    return new EncodeMessage(applicationMessageID, encodedMessage);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 }

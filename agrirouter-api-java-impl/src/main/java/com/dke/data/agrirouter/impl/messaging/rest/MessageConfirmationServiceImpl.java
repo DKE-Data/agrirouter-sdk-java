@@ -8,7 +8,7 @@ import agrirouter.feed.response.FeedResponse;
 import agrirouter.request.Request;
 import agrirouter.response.Response;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessage;
+import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
@@ -49,7 +49,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
   public String send(MessageConfirmationParameters parameters) {
     parameters.validate();
 
-    EncodeMessage encodedMessageResponse = encodeMessage(parameters);
+    EncodedMessage encodedMessageResponse = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
@@ -61,7 +61,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     return encodedMessageResponse.getApplicationMessageID();
   }
 
-  private EncodeMessage encodeMessage(MessageConfirmationParameters parameters) {
+  private EncodedMessage encodeMessage(MessageConfirmationParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
@@ -91,7 +91,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessage(applicationMessageID, encodedMessage);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
   @Override

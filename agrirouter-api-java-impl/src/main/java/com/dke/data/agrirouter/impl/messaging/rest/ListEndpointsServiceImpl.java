@@ -2,7 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.request.Request;
 import agrirouter.request.payload.account.Endpoints;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessage;
+import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
@@ -34,7 +34,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   @Override
   public String send(ListEndpointsParameters parameters) {
 
-    EncodeMessage encodedMessage = this.encodeMessage(parameters);
+    EncodedMessage encodedMessage = this.encodeMessage(parameters);
 
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
@@ -46,7 +46,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     return encodedMessage.getApplicationMessageID();
   }
 
-  private EncodeMessage encodeMessage(ListEndpointsParameters parameters) {
+  private EncodedMessage encodeMessage(ListEndpointsParameters parameters) {
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
@@ -77,7 +77,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
 
-    return new EncodeMessage(applicationMessageID, encodedMessage);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
   public String requestFullListFilteredByAppliedRoutings(OnboardingResponse onboardingResponse) {

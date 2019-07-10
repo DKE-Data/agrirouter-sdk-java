@@ -2,7 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.request.Request;
 import agrirouter.request.payload.endpoint.Capabilities;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessage;
+import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.factories.impl.CapabilitiesMessageContentFactory;
@@ -37,19 +37,19 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
   public String send(SetCapabilitiesParameters parameters) {
     parameters.validate();
 
-    EncodeMessage encodeMessage = encodeMessage(parameters);
+    EncodedMessage encodedMessage = encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodeMessage.getEncodedMessage()));
+        Collections.singletonList(encodedMessage.getEncodedMessage()));
 
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
 
     this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
-    return encodeMessage.getApplicationMessageID();
+    return encodedMessage.getApplicationMessageID();
   }
 
-  private EncodeMessage encodeMessage(SetCapabilitiesParameters parameters) {
+  private EncodedMessage encodeMessage(SetCapabilitiesParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
@@ -98,6 +98,6 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessage(applicationMessageID, encodedMessage);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 }
