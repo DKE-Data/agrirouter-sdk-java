@@ -11,7 +11,7 @@ public class MqttService {
     this.mqttClient = mqttClient;
   }
 
-  public IMqttClient getMqttClient() {
+  protected IMqttClient getMqttClient() {
     return mqttClient;
   }
 }

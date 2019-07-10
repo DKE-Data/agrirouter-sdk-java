@@ -6,21 +6,21 @@ import agrirouter.request.payload.account.Endpoints;
 import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
-import com.dke.data.agrirouter.api.factories.impl.CapabilitiesMessageContentFactory;
-import com.dke.data.agrirouter.api.factories.impl.DeleteMessageMessageContentFactory;
-import com.dke.data.agrirouter.api.factories.impl.ListEndpointsMessageContentFactory;
-import com.dke.data.agrirouter.api.factories.impl.MessageConfirmationMessageContentFactory;
+import com.dke.data.agrirouter.api.factories.impl.*;
 import com.dke.data.agrirouter.api.factories.impl.parameters.CapabilitiesMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.DeleteMessageMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmationMessageParameters;
+import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
+import com.dke.data.agrirouter.api.service.LoggingEnabledService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public interface MessageEncoder {
+public interface MessageEncoder extends LoggingEnabledService {
 
   default EncodedMessage encode(DeleteMessageParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
@@ -174,6 +174,48 @@ public interface MessageEncoder {
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
+  }
+
+  default EncodedMessage encode(TechnicalMessageType technicalMessageType, MessageQueryParameters parameters) {
+    this.logMethodBegin(parameters);
+
+    this.getNativeLogger().trace("Build message header parameters.");
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+
+    final String applicationMessageID =
+            parameters.getApplicationMessageId() == null
+                    ? MessageIdService.generateMessageId()
+                    : parameters.getApplicationMessageId();
+
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+
+    final String teamsetContextId =
+            parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setTechnicalMessageType(technicalMessageType);
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+
+    this.getNativeLogger().trace("Build message query parameters.");
+    MessageQueryMessageParameters messageQueryMessageParameters =
+            new MessageQueryMessageParameters();
+    messageQueryMessageParameters.setMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
+    messageQueryMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
+    messageQueryMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
+    messageQueryMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
+
+    this.getNativeLogger().trace("Build message payload parameters.");
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(FeedRequests.MessageQuery.getDescriptor().getFullName());
+    payloadParameters.setValue(
+            new MessageQueryMessageContentFactory().message(messageQueryMessageParameters));
+
+    this.getNativeLogger().trace("Encode message.");
+    String encodedMessage =
+            this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+
+    this.logMethodEnd(encodedMessage);
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
