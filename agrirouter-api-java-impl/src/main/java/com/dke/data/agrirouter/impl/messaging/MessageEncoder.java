@@ -2,12 +2,15 @@ package com.dke.data.agrirouter.impl.messaging;
 
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
+import agrirouter.request.payload.account.Endpoints;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.factories.impl.DeleteMessageMessageContentFactory;
+import com.dke.data.agrirouter.api.factories.impl.ListEndpointsMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.DeleteMessageMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.DeleteMessageParameters;
+import com.dke.data.agrirouter.api.service.parameters.ListEndpointsParameters;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
@@ -48,6 +51,40 @@ public interface MessageEncoder {
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
+  }
+
+  default EncodedMessage encode(ListEndpointsParameters parameters) {
+
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+
+    final String applicationMessageID =
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+
+    if (parameters.getUnfilteredList()) {
+      messageHeaderParameters.setTechnicalMessageType(
+          TechnicalMessageType.DKE_LIST_ENDPOINTS_UNFILTERED);
+    } else {
+      messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_LIST_ENDPOINTS);
+    }
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(Endpoints.ListEndpointsQuery.getDescriptor().getFullName());
+    payloadParameters.setValue(new ListEndpointsMessageContentFactory().message(parameters));
+
+    String encodedMessage =
+        this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
