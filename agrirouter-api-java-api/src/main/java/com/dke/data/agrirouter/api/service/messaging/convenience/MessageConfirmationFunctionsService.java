@@ -1,7 +1,6 @@
-package com.dke.data.agrirouter.api.service.messaging.convinience;
+package com.dke.data.agrirouter.api.service.messaging.convenience;
 
 import com.dke.data.agrirouter.api.service.parameters.MessageConfirmationForAllPendingMessagesParameters;
-import com.dke.data.agrirouter.api.service.parameters.MessageConfirmationParameters;
 
 public interface MessageConfirmationFunctionsService {
 
