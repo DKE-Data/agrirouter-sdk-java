@@ -9,7 +9,6 @@ import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-
 import java.util.Collections;
 
 public class MessageQueryService extends NonEnvironmentalService

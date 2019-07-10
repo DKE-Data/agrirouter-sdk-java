@@ -20,8 +20,8 @@ public class MessageHeaderQueryServiceImpl extends MqttService
   public MessageHeaderQueryServiceImpl(MqttClient mqttClient) {
     super(mqttClient);
     messageQueryService =
-        new MessageQueryService(mqttClient,
-            new EncodeMessageServiceImpl(), TechnicalMessageType.DKE_FEED_HEADER_QUERY);
+        new MessageQueryService(
+            mqttClient, new EncodeMessageServiceImpl(), TechnicalMessageType.DKE_FEED_HEADER_QUERY);
   }
 
   @Override

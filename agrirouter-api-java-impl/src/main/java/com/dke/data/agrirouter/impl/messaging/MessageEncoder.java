@@ -15,7 +15,6 @@ import com.dke.data.agrirouter.api.service.LoggingEnabledService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -177,21 +176,22 @@ public interface MessageEncoder extends LoggingEnabledService {
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
-  default EncodedMessage encode(TechnicalMessageType technicalMessageType, MessageQueryParameters parameters) {
+  default EncodedMessage encode(
+      TechnicalMessageType technicalMessageType, MessageQueryParameters parameters) {
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Build message header parameters.");
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-            parameters.getApplicationMessageId() == null
-                    ? MessageIdService.generateMessageId()
-                    : parameters.getApplicationMessageId();
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
     final String teamsetContextId =
-            parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
     messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
     messageHeaderParameters.setTechnicalMessageType(technicalMessageType);
@@ -199,7 +199,7 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     this.getNativeLogger().trace("Build message query parameters.");
     MessageQueryMessageParameters messageQueryMessageParameters =
-            new MessageQueryMessageParameters();
+        new MessageQueryMessageParameters();
     messageQueryMessageParameters.setMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
     messageQueryMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
     messageQueryMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
@@ -209,11 +209,11 @@ public interface MessageEncoder extends LoggingEnabledService {
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(FeedRequests.MessageQuery.getDescriptor().getFullName());
     payloadParameters.setValue(
-            new MessageQueryMessageContentFactory().message(messageQueryMessageParameters));
+        new MessageQueryMessageContentFactory().message(messageQueryMessageParameters));
 
     this.getNativeLogger().trace("Encode message.");
     String encodedMessage =
-            this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+        this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
 
     this.logMethodEnd(encodedMessage);
     return new EncodedMessage(applicationMessageID, encodedMessage);
