@@ -8,7 +8,7 @@ import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.Request;
 import agrirouter.response.Response;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
@@ -57,7 +57,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
   @Override
   public List<OnboardingResponse> onboard(CloudOnboardingParameters parameters) {
     parameters.validate();
-    EncodeMessageResponse encodedMessageResponse = this.encodeOnboardingMessage(parameters);
+    EncodedMessage encodedMessageResponse = this.encodeOnboardingMessage(parameters);
     SendMessageParameters sendMessageParameters =
         createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
@@ -114,7 +114,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
         onboardingResponse, MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
   }
 
-  private EncodeMessageResponse encodeOnboardingMessage(CloudOnboardingParameters parameters) {
+  private EncodedMessage encodeOnboardingMessage(CloudOnboardingParameters parameters) {
     final String applicationMessageID =
         parameters.getApplicationMessageId() == null
             ? MessageIdService.generateMessageId()
@@ -151,10 +151,10 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
-  private EncodeMessageResponse encodeOffboardingMessage(CloudOffboardingParameters parameters) {
+  private EncodedMessage encodeOffboardingMessage(CloudOffboardingParameters parameters) {
     final String applicationMessageID =
         parameters.getApplicationMessageId() == null
             ? MessageIdService.generateMessageId()
@@ -180,7 +180,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
 
     String encodedMessage =
         this.encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
   private MessageHeaderParameters createMessageHeaderParameters(
@@ -205,7 +205,7 @@ public class OnboardingServiceImpl implements OnboardingService, MessageSender, 
   }
 
   private SendMessageParameters createSendMessageParameters(
-      EncodeMessageResponse encodedMessageResponse, OnboardingResponse onboardingResponse) {
+      EncodedMessage encodedMessageResponse, OnboardingResponse onboardingResponse) {
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(onboardingResponse);
     sendMessageParameters.setEncodedMessages(

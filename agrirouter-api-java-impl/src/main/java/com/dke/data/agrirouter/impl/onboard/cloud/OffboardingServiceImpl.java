@@ -7,7 +7,7 @@ import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
 import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.Request;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
-import com.dke.data.agrirouter.api.dto.encoding.EncodeMessageResponse;
+import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
@@ -52,7 +52,7 @@ public class OffboardingServiceImpl
   @Override
   public void offboard(CloudOffboardingParameters parameters) {
     parameters.validate();
-    EncodeMessageResponse encodedMessageResponse = this.encodeOffboardingMessage(parameters);
+    EncodedMessage encodedMessageResponse = this.encodeOffboardingMessage(parameters);
     SendMessageParameters sendMessageParameters =
         createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
@@ -81,7 +81,7 @@ public class OffboardingServiceImpl
         onboardingResponse, MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
   }
 
-  private EncodeMessageResponse encodeOffboardingMessage(CloudOffboardingParameters parameters) {
+  private EncodedMessage encodeOffboardingMessage(CloudOffboardingParameters parameters) {
     final String applicationMessageID = MessageIdService.generateMessageId();
 
     CloudEndpointOffboardingMessageParameters cloudOffboardingParameters =
@@ -104,7 +104,7 @@ public class OffboardingServiceImpl
     String encodedMessage =
         this.encodeMessageService.encode(
             this.createMessageHeaderParameters(applicationMessageID), payloadParameters);
-    return new EncodeMessageResponse(applicationMessageID, encodedMessage);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
   private MessageHeaderParameters createMessageHeaderParameters(String applicationMessageID) {
@@ -117,7 +117,7 @@ public class OffboardingServiceImpl
   }
 
   private SendMessageParameters createSendMessageParameters(
-      EncodeMessageResponse encodedMessageResponse, OnboardingResponse onboardingResponse) {
+      EncodedMessage encodedMessageResponse, OnboardingResponse onboardingResponse) {
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(onboardingResponse);
     sendMessageParameters.setEncodedMessages(
