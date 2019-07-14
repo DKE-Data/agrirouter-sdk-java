@@ -19,11 +19,9 @@ class SetSubscriptionParameters : AbstractParameterBase(), ParameterValidation {
     @NotNull
     lateinit var onboardingResponse: OnboardingResponse
 
-
     class Subscription : ParameterValidation {
         @NotNull
         lateinit var technicalMessageType: TechnicalMessageType
-
 
         var ddis: List<Int> = ArrayList();
 
