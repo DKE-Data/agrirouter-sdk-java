@@ -30,7 +30,6 @@ class SetCapabilitiesParameters : AbstractParameterBase(), ParameterValidation {
 
     var enablePushNotifications: Capabilities.CapabilitySpecification.PushNotification = Capabilities.CapabilitySpecification.PushNotification.DISABLED
 
-
     class CapabilityParameters : ParameterValidation {
 
         @NotNull

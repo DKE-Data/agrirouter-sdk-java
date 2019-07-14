@@ -7,4 +7,4 @@ package com.dke.data.agrirouter.api.dto.encoding
  * @param encodedMessage the encoded message
  *
  */
-data class EncodeMessageResponse(val applicationMessageID: String, val encodedMessage: String)
+data class EncodedMessage(val applicationMessageID: String, val encodedMessage: String)
