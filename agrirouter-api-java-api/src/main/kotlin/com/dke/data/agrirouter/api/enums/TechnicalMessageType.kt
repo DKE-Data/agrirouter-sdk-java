@@ -18,6 +18,7 @@ enum class TechnicalMessageType(val key: String) {
     ISO_11783_DEVICE_DESCRIPTION("iso:11783:-10:device_description:protobuf"),
     ISO_11783_TIME_LOG("iso:11783:-10:time_log:protobuf"),
     SHP_SHAPE_ZIP("shp:shape:zip"),
+    DOC_PDF("doc:pdf"),
     IMG_JPEG("img:jpeg"),
     IMG_PNG("img:png"),
     IMG_BMP("img:bmp"),
