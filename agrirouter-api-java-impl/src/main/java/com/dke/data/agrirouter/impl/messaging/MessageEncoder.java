@@ -4,17 +4,17 @@ import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
 import agrirouter.request.payload.account.Endpoints;
 import agrirouter.request.payload.endpoint.Capabilities;
+import agrirouter.request.payload.endpoint.SubscriptionOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.factories.impl.*;
-import com.dke.data.agrirouter.api.factories.impl.parameters.CapabilitiesMessageParameters;
-import com.dke.data.agrirouter.api.factories.impl.parameters.DeleteMessageMessageParameters;
-import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmationMessageParameters;
-import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
+import com.dke.data.agrirouter.api.factories.impl.parameters.*;
 import com.dke.data.agrirouter.api.service.LoggingEnabledService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
+import com.google.protobuf.ByteString;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -177,6 +177,48 @@ public interface MessageEncoder extends LoggingEnabledService {
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
+
+  default EncodedMessage encodeMessage(SetSubscriptionParameters parameters) {
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+
+    final String applicationMessageID =
+      parameters.getApplicationMessageId() == null
+        ? MessageIdService.generateMessageId()
+        : parameters.getApplicationMessageId();
+
+    messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+
+    final String teamsetContextId =
+      parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+    messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
+
+    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_SUBSCRIPTION);
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+
+    SubscriptionMessageParameters subscriptionList = new SubscriptionMessageParameters();
+    subscriptionList.setList(new ArrayList<>());
+
+    for (SetSubscriptionParameters.Subscription entry : parameters.getSubscriptionParameters()) {
+      SubscriptionMessageParameters.SubscriptionMessageEntry messageTypeSubscriptionItem =
+        new SubscriptionMessageParameters.SubscriptionMessageEntry();
+      messageTypeSubscriptionItem.setTechnicalMessageType(entry.getTechnicalMessageType());
+      messageTypeSubscriptionItem.setDdis(entry.getDdis());
+      messageTypeSubscriptionItem.setPosition(entry.getPosition());
+      subscriptionList.getList().add(messageTypeSubscriptionItem);
+    }
+
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(SubscriptionOuterClass.Subscription.getDescriptor().getFullName());
+
+    ByteString messageValue = new SubscriptionMessageContentFactory().message(subscriptionList);
+    payloadParameters.setValue(messageValue);
+
+    String encodedMessage =
+      this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
+  }
+
 
   default EncodedMessage encode(
       TechnicalMessageType technicalMessageType, MessageQueryParameters parameters) {
