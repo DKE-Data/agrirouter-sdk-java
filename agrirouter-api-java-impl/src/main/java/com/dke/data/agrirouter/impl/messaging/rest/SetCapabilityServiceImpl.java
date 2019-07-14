@@ -88,6 +88,8 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     capabilitiesMessageParameters.setAppCertificationId(parameters.getApplicationId());
     capabilitiesMessageParameters.setAppCertificationVersionId(
         parameters.getCertificationVersionId());
+    capabilitiesMessageParameters.setEnablePushNotifications(
+        parameters.getEnablePushNotifications());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
