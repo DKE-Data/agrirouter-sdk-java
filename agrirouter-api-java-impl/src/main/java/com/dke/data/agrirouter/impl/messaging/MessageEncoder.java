@@ -14,7 +14,6 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageServi
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.google.protobuf.ByteString;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -165,7 +164,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     capabilitiesMessageParameters.setAppCertificationVersionId(
         parameters.getCertificationVersionId());
     capabilitiesMessageParameters.setEnablePushNotifications(
-      parameters.getEnablePushNotifications());
+        parameters.getEnablePushNotifications());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
@@ -182,14 +181,14 @@ public interface MessageEncoder extends LoggingEnabledService {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
-      parameters.getApplicationMessageId() == null
-        ? MessageIdService.generateMessageId()
-        : parameters.getApplicationMessageId();
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
     final String teamsetContextId =
-      parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
     messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
@@ -201,7 +200,7 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     for (SetSubscriptionParameters.Subscription entry : parameters.getSubscriptionParameters()) {
       SubscriptionMessageParameters.SubscriptionMessageEntry messageTypeSubscriptionItem =
-        new SubscriptionMessageParameters.SubscriptionMessageEntry();
+          new SubscriptionMessageParameters.SubscriptionMessageEntry();
       messageTypeSubscriptionItem.setTechnicalMessageType(entry.getTechnicalMessageType());
       messageTypeSubscriptionItem.setDdis(entry.getDdis());
       messageTypeSubscriptionItem.setPosition(entry.getPosition());
@@ -215,10 +214,9 @@ public interface MessageEncoder extends LoggingEnabledService {
     payloadParameters.setValue(messageValue);
 
     String encodedMessage =
-      this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+        this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
-
 
   default EncodedMessage encode(
       TechnicalMessageType technicalMessageType, MessageQueryParameters parameters) {

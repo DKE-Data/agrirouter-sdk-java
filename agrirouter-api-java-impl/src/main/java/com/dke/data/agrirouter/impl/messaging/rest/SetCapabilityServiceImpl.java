@@ -35,7 +35,6 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     return encodedMessage.getApplicationMessageID();
   }
 
-
   @Override
   public EncodeMessageService getEncodeMessageService() {
     return encodeMessageService;

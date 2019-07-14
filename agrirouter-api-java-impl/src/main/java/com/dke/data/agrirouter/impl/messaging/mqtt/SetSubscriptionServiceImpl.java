@@ -11,14 +11,13 @@ import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import java.util.Collections;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.util.Collections;
-
 public class SetSubscriptionServiceImpl extends MqttService
-  implements SetSubscriptionService, MessageSender, MessageEncoder, ResponseValidator {
+    implements SetSubscriptionService, MessageSender, MessageEncoder, ResponseValidator {
   private final EncodeMessageService encodeMessageService;
 
   public SetSubscriptionServiceImpl(MqttClient mqttClient) {
@@ -34,13 +33,13 @@ public class SetSubscriptionServiceImpl extends MqttService
       SendMessageParameters sendMessageParameters = new SendMessageParameters();
       sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
       sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessage.getEncodedMessage()));
+          Collections.singletonList(encodedMessage.getEncodedMessage()));
       String messageAsJson = this.createMessageBody(sendMessageParameters);
       byte[] payload = messageAsJson.getBytes();
       this.getMqttClient()
-        .publish(
-          parameters.getOnboardingResponse().getConnectionCriteria().getMeasures(),
-          new MqttMessage(payload));
+          .publish(
+              parameters.getOnboardingResponse().getConnectionCriteria().getMeasures(),
+              new MqttMessage(payload));
       return encodedMessage.getApplicationMessageID();
     } catch (MqttException e) {
       throw new CouldNotSendMqttMessageException(e);
