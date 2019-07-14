@@ -6,7 +6,7 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
-import com.dke.data.agrirouter.impl.messaging.helper.mqtt.MessageQueryService;
+import com.dke.data.agrirouter.impl.messaging.helper.mqtt.MessageQueryHelperService;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -17,12 +17,12 @@ public class MessageQueryServiceImpl extends MqttService
         MessageSender,
         MessageDecoder<FeedResponse.MessageQueryResponse> {
 
-  private final MessageQueryService messageQueryService;
+  private final MessageQueryHelperService messageQueryHelperService;
 
   public MessageQueryServiceImpl(MqttClient mqttClient) {
     super(mqttClient);
-    this.messageQueryService =
-        new MessageQueryService(
+    this.messageQueryHelperService =
+        new MessageQueryHelperService(
             mqttClient,
             new EncodeMessageServiceImpl(),
             TechnicalMessageType.DKE_FEED_MESSAGE_QUERY);
@@ -30,7 +30,7 @@ public class MessageQueryServiceImpl extends MqttService
 
   @Override
   public String send(MessageQueryParameters parameters) {
-    return this.messageQueryService.send(parameters);
+    return this.messageQueryHelperService.send(parameters);
   }
 
   @Override
