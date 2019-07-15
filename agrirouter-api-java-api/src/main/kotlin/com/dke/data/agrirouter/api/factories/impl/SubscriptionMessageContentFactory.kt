@@ -14,11 +14,11 @@ class SubscriptionMessageContentFactory {
         parameters.validate()
         val messageContent = SubscriptionOuterClass.Subscription.newBuilder()
 
-        parameters.list.forEach{ entry ->
+        parameters.list.forEach{ parameter ->
             val technicalMessageType = SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.newBuilder()
-            technicalMessageType.setTechnicalMessageType(entry.technicalMessageType.key)
-            technicalMessageType.addAllDdis(entry.ddis)
-            technicalMessageType.position = entry.position
+            technicalMessageType.setTechnicalMessageType(parameter.technicalMessageType.key)
+            technicalMessageType.addAllDdis(parameter.ddis)
+            technicalMessageType.position = parameter.position
             messageContent.addTechnicalMessageTypes(technicalMessageType)
         }
         return messageContent.build().toByteString()
