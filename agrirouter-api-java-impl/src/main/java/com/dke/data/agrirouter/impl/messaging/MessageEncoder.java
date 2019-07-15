@@ -20,6 +20,12 @@ import java.util.Objects;
 
 public interface MessageEncoder extends LoggingEnabledService {
 
+  /**
+   * Encode a message to delete messages.
+   *
+   * @param parameters -
+   * @return -
+   */
   default EncodedMessage encode(DeleteMessageParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
@@ -56,6 +62,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
+  /**
+   * Encode a message to list endpoints.
+   *
+   * @param parameters -
+   * @return -
+   */
   default EncodedMessage encode(ListEndpointsParameters parameters) {
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
@@ -90,6 +102,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
+  /**
+   * Encode a message to send a message confirmation.
+   *
+   * @param parameters -
+   * @return -
+   */
   default EncodedMessage encode(MessageConfirmationParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
@@ -123,6 +141,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
+  /**
+   * Encode a message to set capabilities.
+   *
+   * @param parameters -
+   * @return -
+   */
   default EncodedMessage encode(SetCapabilitiesParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
@@ -177,6 +201,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
+  /**
+   * Encode a message to set a subscription.
+   *
+   * @param parameters -
+   * @return -
+   */
   default EncodedMessage encodeMessage(SetSubscriptionParameters parameters) {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
@@ -218,6 +248,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
+  /**
+   * Encode a message to query messages.
+   *
+   * @param parameters -
+   * @return -
+   */
   default EncodedMessage encode(
       TechnicalMessageType technicalMessageType, MessageQueryParameters parameters) {
     this.logMethodBegin(parameters);
@@ -261,5 +297,9 @@ public interface MessageEncoder extends LoggingEnabledService {
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
+  /**
+   * Get the service to encode messages.
+   * @return -
+   */
   EncodeMessageService getEncodeMessageService();
 }
