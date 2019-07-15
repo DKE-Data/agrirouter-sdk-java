@@ -77,6 +77,15 @@ public interface Environment {
   }
 
   /**
+   * URL for revoking requests.
+   *
+   * @return -
+   */
+  default String getRevokeUrl() {
+    return getRegistrationServiceUrl() + getApiPrefix() + "/registration/onboard/revoke";
+  }
+
+  /**
    * Returning the URL for the ui service to generate registration / TAN codes.
    *
    * @return -

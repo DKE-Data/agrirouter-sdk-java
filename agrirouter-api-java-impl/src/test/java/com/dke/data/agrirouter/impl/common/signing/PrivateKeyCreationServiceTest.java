@@ -1,6 +1,9 @@
 package com.dke.data.agrirouter.impl.common.signing;
 
+import com.dke.data.agrirouter.api.dto.revoke.RevokeRequest;
 import com.dke.data.agrirouter.api.exception.CouldNotCreatePrivateKeyException;
+import com.dke.data.agrirouter.impl.SignatureService;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,5 +25,38 @@ class PrivateKeyCreationServiceTest {
     Assertions.assertThrows(
         CouldNotCreatePrivateKeyException.class,
         () -> privateKeyCreationService.createPrivateKey(invalidPrivateKey));
+  }
+
+  @Test
+  void checkSignatureCanBeVerified() {
+    String privateKey =
+        "-----BEGIN PRIVATE KEY-----MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDMIkcJfcjTUm1wLwbXBcGoEn8vhOA6ew5fsJ+CNgo21BeNTgvOXzhZrwMZYuiAXFpmV4kukWjyLchFE5jKk6yPkmsPQXVnOWqYMQO6d/sutHBMtjQ55vOCwqDTR4rm2dHrs/Qg/PTBoH3Dcr6WKQNNUYMZNXzED2AC/CRkXjME0oMq7YzgkVxdwhftIrgmUUUCRgHngM2PPyNsmZckvXngkqWOr9eUCsbg2NzTet3shHE8eW5yEBXVeAvT3On1WoQvISOe1ULWFOZ6qZ1NDbwwEmZWwUr5Q33fGplaZCnohvPf+5IfEi+M4/pjnOVFC4oSSZCFF5Q7++bHKxsx18LXAgMBAAECggEADdLMaLIh5V2Rl6U3m1wCbzVBc6BV5t/qa0R0qMasDmZyadk9J25/TGNznEZ8ZCTc4k1PNt4V80BybWsUT7OMXfSWV2QhZSoYM9It5HS3h8QkTq2P/9PJ7bLsXSJdH6DkfEelYo5+rJYHrjKZAWYpmRTKAe0DU+uOnuUgOcO/RLY1mp5S15lJuCy2jwQml8g043/A4Hcjql5co2jT2Pxv+t9o6Y2wVbRUNGXgz63wGcny08AUmiGuH3fhB4RDHrOC/TKnJVovxF6nmcoxduC37VLywFRIt5Kgy4sweN9ezHrlRRnxekG6XcRfTzfhbXet0mE1i9nU5FlFZ4bm2Kpa8QKBgQD8dEXFKsZnUCaJNaLzFZpXihr+fmgIPAk558Qm+1dxDqKolfY204ZkuZduHrkSH2MWOD69+Ej1UoygQH6Dzn1MCMxEUQadpY/F8wCkq+30tMVvzsOH647tBSVLGdIpae6GaNOksyLKnzipCX7GCHIh9ej9iXGoph/G1bDPiVTRJQKBgQDPAEOOm5jP0g2dCbcNopupiPl/w4s1JPJdPtYsViUG5gvrYVQcdfOaS5dtO1jwnoThyGqpbRI3Zzs5xZgpTDTqlP1J5ys4e0DyW3x7gm0HZIXVsXa4y0qjL1S2p/LQZR3sBgarEurb5rRepJOHVeqNBmXipAE/j/d7JxsYk1R5SwKBgQC2jt5lViljTHKRhlfvsQ+LfjNHFeHlEoUZeqA+EEOLXioB/2+s9gmZjRwUZeMvV8Mvrjyw43re7HME756NciTpdvM/89f06GSvoKo2ap4I9zBPShXblFwmyjHNvT5c9F2olOV3lJL0M2+lzVf/nNvr8wgpT9sBOiCAiMbzTTwogQKBgGsFTOg/A9t2Uzl8m1p+VpJpUe0/UQqR5ohVA2/6vbv6VfFE6bKpPN/p8wkzZMFKg5MkBhlAXemtAo7U3N2FG9qoWufJj6vs9WAX8pz8ipgG3bbkwGe8GwORZe/llwEtNjIfz3TFHA3DEj/YQLn4roJo62Yoush9C0ttpXGoQkVPAoGBAN3EGJSmnb6vm3Vt6PyL8FfcBWM4m5YiUJxPIH+sVVNfNr3TSGqX3oOIoLTVShMq+guqtnTnLO8Cnmz9h8EkVMTNeHXJyY2WxHysnYaTbJu+pZSJQhuXs9ILFLFXsJnOZWFkrhTmytikNYFfBcBgybYoeGp12DaLiZkKOaKrxCMy-----END PRIVATE KEY-----";
+    String publicKey =
+        "-----BEGIN PUBLIC KEY-----\n"
+            + "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzCJHCX3I01JtcC8G1wXB\n"
+            + "qBJ/L4TgOnsOX7CfgjYKNtQXjU4Lzl84Wa8DGWLogFxaZleJLpFo8i3IRROYypOs\n"
+            + "j5JrD0F1ZzlqmDEDunf7LrRwTLY0OebzgsKg00eK5tnR67P0IPz0waB9w3K+likD\n"
+            + "TVGDGTV8xA9gAvwkZF4zBNKDKu2M4JFcXcIX7SK4JlFFAkYB54DNjz8jbJmXJL15\n"
+            + "4JKljq/XlArG4Njc03rd7IRxPHluchAV1XgL09zp9VqELyEjntVC1hTmeqmdTQ28\n"
+            + "MBJmVsFK+UN93xqZWmQp6Ibz3/uSHxIvjOP6Y5zlRQuKEkmQhReUO/vmxysbMdfC\n"
+            + "1wIDAQAB\n"
+            + "-----END PUBLIC KEY-----";
+
+    RevokeRequest revokeRequest = new RevokeRequest();
+    revokeRequest.setAccountId("dflakjfafd");
+    revokeRequest.setEndpointIds(new String[] {"adkfjlaf", "afdlakfdlakdfl"});
+    revokeRequest.setTimeZone("UTC+5");
+    revokeRequest.setUTCTimestamp("2019-05-18T23:03:21");
+
+    Gson gson = new Gson();
+    String input = gson.toJson(revokeRequest);
+
+    class SignatureTester implements SignatureService {}
+
+    SignatureTester signatureTester = new SignatureTester();
+
+    byte[] signature = signatureTester.createSignature(input, privateKey);
+
+    signatureTester.verifySignature(input, signature, publicKey);
   }
 }
