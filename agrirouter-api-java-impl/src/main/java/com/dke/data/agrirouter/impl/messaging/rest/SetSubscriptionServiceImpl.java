@@ -31,9 +31,7 @@ public class SetSubscriptionServiceImpl extends EnvironmentalService
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
         Collections.singletonList(encodeMessageResponse.getEncodedMessage()));
-
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-
     this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
     return encodeMessageResponse.getApplicationMessageID();
   }
