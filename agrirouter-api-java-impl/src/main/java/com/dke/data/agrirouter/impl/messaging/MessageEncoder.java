@@ -198,7 +198,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     SubscriptionMessageParameters subscriptionList = new SubscriptionMessageParameters();
     subscriptionList.setList(new ArrayList<>());
 
-    for (SetSubscriptionParameters.Subscription entry : parameters.getSubscriptionParameters()) {
+    for (SetSubscriptionParameters.Subscription entry : parameters.getSubscriptions()) {
       SubscriptionMessageParameters.SubscriptionMessageEntry messageTypeSubscriptionItem =
           new SubscriptionMessageParameters.SubscriptionMessageEntry();
       messageTypeSubscriptionItem.setTechnicalMessageType(entry.getTechnicalMessageType());
