@@ -7,25 +7,25 @@ import com.dke.data.agrirouter.api.service.messaging.MessageHeaderQueryService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
-import com.dke.data.agrirouter.impl.messaging.helper.MessageQueryService;
+import com.dke.data.agrirouter.impl.messaging.helper.MessageQueryHelperService;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class MessageHeaderQueryServiceImpl extends EnvironmentalService
     implements MessageHeaderQueryService, MessageSender {
 
-  private final MessageQueryService messageQueryService;
+  private final MessageQueryHelperService messageQueryHelperService;
 
   public MessageHeaderQueryServiceImpl(Environment environment) {
     super(environment);
-    messageQueryService =
-        new MessageQueryService(
+    messageQueryHelperService =
+        new MessageQueryHelperService(
             new EncodeMessageServiceImpl(), TechnicalMessageType.DKE_FEED_HEADER_QUERY);
   }
 
   @Override
   public String send(MessageQueryParameters parameters) {
-    String applicationMessageID = this.messageQueryService.send(parameters);
+    String applicationMessageID = this.messageQueryHelperService.send(parameters);
     return applicationMessageID;
   }
 

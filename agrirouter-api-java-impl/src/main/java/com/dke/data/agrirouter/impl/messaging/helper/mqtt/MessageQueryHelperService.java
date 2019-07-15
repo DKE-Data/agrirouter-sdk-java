@@ -14,12 +14,13 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class MessageQueryService extends MqttService implements MessageSender, MessageEncoder {
+public class MessageQueryHelperService extends MqttService
+    implements MessageSender, MessageEncoder {
 
   private final EncodeMessageService encodeMessageService;
   private final TechnicalMessageType technicalMessageType;
 
-  public MessageQueryService(
+  public MessageQueryHelperService(
       MqttClient mqttClient,
       EncodeMessageService encodeMessageService,
       TechnicalMessageType technicalMessageType) {

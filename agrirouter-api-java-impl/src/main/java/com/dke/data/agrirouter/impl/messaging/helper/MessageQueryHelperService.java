@@ -11,13 +11,13 @@ import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 
-public class MessageQueryService extends NonEnvironmentalService
+public class MessageQueryHelperService extends NonEnvironmentalService
     implements MessageSender, MessageEncoder, ResponseValidator {
 
   private final EncodeMessageService encodeMessageService;
   private final TechnicalMessageType technicalMessageType;
 
-  public MessageQueryService(
+  public MessageQueryHelperService(
       EncodeMessageService encodeMessageService, TechnicalMessageType technicalMessageType) {
     this.logMethodBegin();
     this.encodeMessageService = encodeMessageService;
