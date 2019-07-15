@@ -10,14 +10,15 @@ import java.util.*
  */
 class SubscriptionMessageContentFactory {
 
-    fun message(vararg parameters: SubscriptionMessageParameters): ByteString {
-        parameters.forEach { p -> p.validate() }
+    fun message(parameters: SubscriptionMessageParameters): ByteString {
+        parameters.validate()
         val messageContent = SubscriptionOuterClass.Subscription.newBuilder()
-        Arrays.stream(parameters).forEach { p ->
+
+        parameters.list.forEach{ parameter ->
             val technicalMessageType = SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.newBuilder()
-            technicalMessageType.technicalMessageType = p.technicalMessageType.key
-            technicalMessageType.addAllDdis(p.ddis)
-            technicalMessageType.position = p.position
+            technicalMessageType.setTechnicalMessageType(parameter.technicalMessageType.key)
+            technicalMessageType.addAllDdis(parameter.ddis)
+            technicalMessageType.position = parameter.position
             messageContent.addTechnicalMessageTypes(technicalMessageType)
         }
         return messageContent.build().toByteString()

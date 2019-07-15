@@ -5,13 +5,14 @@ import com.dke.data.agrirouter.api.service.ParameterValidation
 import javax.validation.constraints.NotNull
 
 class SubscriptionMessageParameters : ParameterValidation {
+    class SubscriptionMessageEntry {
+        @NotNull
+        lateinit var technicalMessageType: TechnicalMessageType
 
-    @NotNull
-    lateinit var technicalMessageType: TechnicalMessageType
+        var ddis: List<Int> = ArrayList()
 
-    @NotNull
-    lateinit var ddis: List<Int>
+        var position: Boolean = false
+    }
 
-    var position: Boolean = false
-
+    var list : List<SubscriptionMessageEntry> = ArrayList()
 }

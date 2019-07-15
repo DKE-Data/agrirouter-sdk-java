@@ -15,14 +15,18 @@ class SubscriptionMessageContentFactoryTest {
 
   @Test
   void givenValidSubscriptionMessageParametersMessageShouldNotFail() {
-    SubscriptionMessageParameters subscriptionMessageParameters =
-        new SubscriptionMessageParameters();
+    SubscriptionMessageParameters.SubscriptionMessageEntry subscriptionMessageEntry =
+        new SubscriptionMessageParameters.SubscriptionMessageEntry();
     List<Integer> ddis = new ArrayList<>();
     ddis.add(1);
-    subscriptionMessageParameters.ddis = ddis;
-    subscriptionMessageParameters.technicalMessageType =
-        TechnicalMessageType.ISO_11783_TASKDATA_ZIP;
-    subscriptionMessageParameters.setPosition(true);
+    subscriptionMessageEntry.setDdis(ddis);
+    subscriptionMessageEntry.technicalMessageType = TechnicalMessageType.ISO_11783_TASKDATA_ZIP;
+    subscriptionMessageEntry.setPosition(true);
+
+    SubscriptionMessageParameters subscriptionMessageParameters =
+        new SubscriptionMessageParameters();
+    subscriptionMessageParameters.getList().add(subscriptionMessageEntry);
+
     ByteString message = this.getInstanceToTest().message(subscriptionMessageParameters);
     assertFalse(message.isEmpty());
   }
@@ -39,12 +43,17 @@ class SubscriptionMessageContentFactoryTest {
   @Test
   @SuppressWarnings("ConstantConditions")
   void givenSubscriptionMessageParametersWithNullValuesMessageShouldNotFail() {
-    SubscriptionMessageParameters subscriptionMessageParameters =
-        new SubscriptionMessageParameters();
+    SubscriptionMessageParameters.SubscriptionMessageEntry subscriptionMessageParametersEntry =
+        new SubscriptionMessageParameters.SubscriptionMessageEntry();
     List<Integer> ddis = new ArrayList<>();
     ddis.add(1);
-    subscriptionMessageParameters.ddis = null;
-    subscriptionMessageParameters.technicalMessageType = null;
+    subscriptionMessageParametersEntry.technicalMessageType = null;
+
+    SubscriptionMessageParameters subscriptionMessageParameters =
+        new SubscriptionMessageParameters();
+
+    subscriptionMessageParameters.getList().add(subscriptionMessageParametersEntry);
+
     assertThrows(
         IllegalParameterDefinitionException.class,
         () -> this.getInstanceToTest().message(subscriptionMessageParameters));
