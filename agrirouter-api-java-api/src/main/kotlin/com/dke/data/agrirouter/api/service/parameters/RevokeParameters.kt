@@ -14,8 +14,6 @@ import javax.validation.constraints.NotNull
 @ToString
 class RevokeParameters : ParameterValidation {
 
-
-
     @NotNull
     @NotEmpty
     lateinit var applicationId: String
@@ -31,7 +29,6 @@ class RevokeParameters : ParameterValidation {
     @NotNull
     @NotEmpty
     lateinit var privateKey: String
-
 
     @NotNull
     @NotEmpty

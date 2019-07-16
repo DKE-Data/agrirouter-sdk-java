@@ -2,6 +2,9 @@ package com.dke.data.agrirouter.impl;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.dke.data.agrirouter.api.exception.CouldNotCreateSignatureException;
+import com.dke.data.agrirouter.api.exception.CouldNotDecodeHexException;
+import com.dke.data.agrirouter.api.exception.CouldNotVerifySignatureException;
 import com.dke.data.agrirouter.api.exception.InvalidSignatureException;
 import com.dke.data.agrirouter.impl.common.signing.SecurityKeyCreationService;
 import java.security.InvalidKeyException;
@@ -22,7 +25,7 @@ public interface SignatureService {
       signature.update(requestBody.getBytes(UTF_8));
       return signature.sign();
     } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-      throw new RuntimeException(e);
+      throw new CouldNotCreateSignatureException(e);
     }
   }
 
@@ -36,7 +39,7 @@ public interface SignatureService {
         throw new InvalidSignatureException();
       }
     } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-      throw new RuntimeException(e);
+      throw new CouldNotVerifySignatureException(e);
     }
   }
 
@@ -44,7 +47,7 @@ public interface SignatureService {
     try {
       return Hex.decodeHex(encodedSignature.toCharArray());
     } catch (DecoderException e) {
-      throw new RuntimeException(e);
+      throw new CouldNotDecodeHexException(e);
     }
   }
 }

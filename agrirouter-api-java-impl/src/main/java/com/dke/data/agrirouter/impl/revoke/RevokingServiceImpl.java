@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.revoke;
 import com.dke.data.agrirouter.api.dto.revoke.RevokeRequest;
 import com.dke.data.agrirouter.api.enums.RevokeResponse;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
 import com.dke.data.agrirouter.api.service.onboard.RevokingService;
 import com.dke.data.agrirouter.api.service.parameters.RevokeParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
@@ -38,14 +39,12 @@ public class RevokingServiceImpl extends EnvironmentalService
             .build("DELETE", Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE))
             .invoke();
 
-    if (response.getStatus() == RevokeResponse.SUCCESS.getKey()) {
-      return RevokeResponse.SUCCESS;
-    } else if (response.getStatus() == RevokeResponse.UNAUTHORIZED.getKey()) {
-      return RevokeResponse.UNAUTHORIZED;
-    } else if (response.getStatus() == RevokeResponse.VALIDATION_ERROR.getKey()) {
-      return RevokeResponse.VALIDATION_ERROR;
+    RevokeResponse result = RevokeResponse.Filter.valueOf(response.getStatus());
+    if (result != null) {
+      return result;
     } else {
-      return null;
+      throw new UnexpectedHttpStatusException(
+          response.getStatus(), RevokeResponse.SUCCESS.getKey());
     }
   }
 
