@@ -165,7 +165,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     capabilitiesMessageParameters.setAppCertificationVersionId(
         parameters.getCertificationVersionId());
     capabilitiesMessageParameters.setEnablePushNotifications(
-      parameters.getEnablePushNotifications());
+        parameters.getEnablePushNotifications());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
