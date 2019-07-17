@@ -4,6 +4,7 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.ssl.KeyStoreCreationService;
+import de.dev4agriculture.dto.RouterDevice;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 public class MqttOptionService extends EnvironmentalService {
@@ -28,4 +29,20 @@ public class MqttOptionService extends EnvironmentalService {
     options.setCleanSession(true);
     return options;
   }
+
+  public MqttConnectOptions createMqttConnectOptions(RouterDevice routerDevice)
+    throws Exception {
+    MqttConnectOptions options = new MqttConnectOptions();
+    options.setSocketFactory(
+      this.keyStoreCreationService.getSocketFactory(
+        this.environment.getRootCertificates(),
+        routerDevice.getAuthentication().getCertificate(),
+        routerDevice.getAuthentication().getSecret()));
+    options.setKeepAliveInterval(60);
+    options.setAutomaticReconnect(true);
+    options.setCleanSession(true);
+    return options;
+  }
+
+
 }
