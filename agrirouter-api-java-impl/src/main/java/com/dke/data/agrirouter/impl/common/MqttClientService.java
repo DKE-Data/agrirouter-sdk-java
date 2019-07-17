@@ -1,10 +1,10 @@
 package com.dke.data.agrirouter.impl.common;
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
+import com.dke.data.agrirouter.api.dto.onboard.RouterDevice;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateMqttClientException;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
-import de.dev4agriculture.dto.RouterDevice;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -54,7 +54,7 @@ public class MqttClientService extends EnvironmentalService {
     }
   }
 
-  public void addEndpoint(IMqttClient mqttClient, OnboardingResponse onboardingResponse)
+  public void subscribeEndpoint(IMqttClient mqttClient, OnboardingResponse onboardingResponse)
       throws MqttException {
     mqttClient.subscribe(onboardingResponse.getConnectionCriteria().getCommands());
   }
