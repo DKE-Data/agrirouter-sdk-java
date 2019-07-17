@@ -46,7 +46,7 @@ class PrivateKeyCreationServiceTest {
     revokeRequest.setAccountId("dflakjfafd");
     revokeRequest.setEndpointIds(new String[] {"adkfjlaf", "afdlakfdlakdfl"});
     revokeRequest.setTimeZone("UTC+5");
-    revokeRequest.setUTCTimestamp("2019-05-18T23:03:21");
+    revokeRequest.setUtcTimestamp("2019-05-18T23:03:21");
 
     Gson gson = new Gson();
     String input = gson.toJson(revokeRequest);
