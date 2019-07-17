@@ -59,7 +59,7 @@ public class RevokingServiceImpl extends EnvironmentalService
     RevokeRequest revokeRequest = new RevokeRequest();
     revokeRequest.setAccountId(parameters.getAccountId());
     revokeRequest.setEndpointIds(parameters.getEndpointIds().toArray(new String[] {}));
-    revokeRequest.setUtcTimestamp(UtcTimeService.inThePast(10).toString());
+    revokeRequest.setUTCTimestamp(UtcTimeService.inThePast(10).toString());
     revokeRequest.setTimeZone(UtcTimeService.offset());
     this.getNativeLogger().info("END | Create revoking request. | '{}'.", parameters);
     return revokeRequest;
