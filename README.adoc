@@ -30,11 +30,25 @@ Feel free to get in touch by visiting our https://www.lmis.de[website] or contac
 
 This project contains the API for the communication with the agrirouter. Everything you need for the onboarding process, secure communication and much more.
 
+== Modules
+
+=== `api` Module
+
+The `api` module contains interfaces, common helper classes and DTOs as well as exceptions.
+
+=== `impl` Module
+
+The `impl` module contains the implementation of the given API defined by the `api` module.
+
+=== `convenience` Module
+
+The `convenience` module contains common implementations for different problems which are not located within the API. Those could be capability setting, MQTT client creation or other common problems that are normally not part of the API.
+
 == Project status
 image::https://travis-ci.com/DKE-Data/agrirouter-api-java.svg?branch=develop[Build status]
 image:https://api.codacy.com/project/badge/Grade/d8fde962e7814c96badd43e65aa84815["Codacy code quality", link="https://www.codacy.com/app/cf4thqgxcnxaovouxtnv/agrirouter-api-java?utm_source=github.com&utm_medium=referral&utm_content=DKE-Data/agrirouter-api-java&utm_campaign=Badge_Grade"]
 
-=== Java
+=== Maven integration
 
 If you want to add a Maven dependency feel free to fetch the latest snapshot from Maven Central. Just add the following repository:
 
@@ -68,6 +82,12 @@ After adding the snapshot repository feel free to add the Maven dependencies:
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk10</classifier>
 </dependency>
+<dependency>
+    <groupId>com.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-convenience</artifactId>
+    <version>${agrirouter-api-java-convenience.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
 ```
 
 Currently we are supporting JDK 8, JDK 9 and JDK 10 by using classifiers.
@@ -89,6 +109,12 @@ After adding the snapshot repository feel free to add the following Maven depend
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk8</classifier>
 </dependency>
+<dependency>
+    <groupId>com.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-convenience</artifactId>
+    <version>${agrirouter-api-java-convenience.version}</version>
+    <classifier>jdk8</classifier>
+</dependency>
 ```
 ==== JDK 9
 
@@ -107,6 +133,12 @@ After adding the snapshot repository feel free to add the following Maven depend
     <version>${agrirouter-api-java-api.version}</version>
     <classifier>jdk9</classifier>
 </dependency>
+<dependency>
+    <groupId>com.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-convenience</artifactId>
+    <version>${agrirouter-api-java-convenience.version}</version>
+    <classifier>jdk9</classifier>
+</dependency>
 ```
 ==== JDK 10
 
@@ -123,6 +155,12 @@ After adding the snapshot repository feel free to add the following Maven depend
     <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-impl</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk10</classifier>
+</dependency>
+<dependency>
+    <groupId>com.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-convenience</artifactId>
+    <version>${agrirouter-api-java-convenience.version}</version>
     <classifier>jdk10</classifier>
 </dependency>
 ```
