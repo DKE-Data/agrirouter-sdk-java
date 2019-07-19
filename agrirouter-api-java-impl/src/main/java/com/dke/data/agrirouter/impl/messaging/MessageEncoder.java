@@ -299,6 +299,7 @@ public interface MessageEncoder extends LoggingEnabledService {
 
   /**
    * Get the service to encode messages.
+   *
    * @return -
    */
   EncodeMessageService getEncodeMessageService();

@@ -10,7 +10,7 @@ import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import java.util.Collections;
-import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
@@ -21,7 +21,7 @@ public class MessageQueryHelperService extends MqttService
   private final TechnicalMessageType technicalMessageType;
 
   public MessageQueryHelperService(
-      MqttClient mqttClient,
+      IMqttClient mqttClient,
       EncodeMessageService encodeMessageService,
       TechnicalMessageType technicalMessageType) {
     super(mqttClient);
