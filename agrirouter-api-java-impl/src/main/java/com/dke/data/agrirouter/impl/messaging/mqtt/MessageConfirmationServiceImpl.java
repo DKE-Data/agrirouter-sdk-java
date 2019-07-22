@@ -11,7 +11,7 @@ import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import java.util.Collections;
-import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
@@ -20,7 +20,7 @@ public class MessageConfirmationServiceImpl extends MqttService
 
   private final EncodeMessageService encodeMessageService;
 
-  public MessageConfirmationServiceImpl(MqttClient mqttClient) {
+  public MessageConfirmationServiceImpl(IMqttClient mqttClient) {
     super(mqttClient);
     this.encodeMessageService = new EncodeMessageServiceImpl();
   }
