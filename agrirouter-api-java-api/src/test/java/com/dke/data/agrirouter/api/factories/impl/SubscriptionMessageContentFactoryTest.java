@@ -25,7 +25,7 @@ class SubscriptionMessageContentFactoryTest {
 
     SubscriptionMessageParameters subscriptionMessageParameters =
         new SubscriptionMessageParameters();
-    subscriptionMessageParameters.getList().add(subscriptionMessageEntry);
+    subscriptionMessageParameters.getSubscriptionMessageEntries().add(subscriptionMessageEntry);
 
     ByteString message = this.getInstanceToTest().message(subscriptionMessageParameters);
     assertFalse(message.isEmpty());
@@ -52,7 +52,7 @@ class SubscriptionMessageContentFactoryTest {
     SubscriptionMessageParameters subscriptionMessageParameters =
         new SubscriptionMessageParameters();
 
-    subscriptionMessageParameters.getList().add(subscriptionMessageParametersEntry);
+    subscriptionMessageParameters.getSubscriptionMessageEntries().add(subscriptionMessageParametersEntry);
 
     assertThrows(
         IllegalParameterDefinitionException.class,

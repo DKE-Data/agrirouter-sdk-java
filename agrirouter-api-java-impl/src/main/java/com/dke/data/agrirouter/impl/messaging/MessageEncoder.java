@@ -226,7 +226,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     SubscriptionMessageParameters subscriptionList = new SubscriptionMessageParameters();
-    subscriptionList.setList(new ArrayList<>());
+    subscriptionList.setSubscriptionMessageEntries(new ArrayList<>());
 
     for (SetSubscriptionParameters.Subscription entry : parameters.getSubscriptions()) {
       SubscriptionMessageParameters.SubscriptionMessageEntry messageTypeSubscriptionItem =
@@ -234,7 +234,7 @@ public interface MessageEncoder extends LoggingEnabledService {
       messageTypeSubscriptionItem.setTechnicalMessageType(entry.getTechnicalMessageType());
       messageTypeSubscriptionItem.setDdis(entry.getDdis());
       messageTypeSubscriptionItem.setPosition(entry.getPosition());
-      subscriptionList.getList().add(messageTypeSubscriptionItem);
+      subscriptionList.getSubscriptionMessageEntries().add(messageTypeSubscriptionItem);
     }
 
     PayloadParameters payloadParameters = new PayloadParameters();
