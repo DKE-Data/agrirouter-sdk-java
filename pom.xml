@@ -530,6 +530,26 @@
             </build>
         </profile>
         <profile>
+            <id>jdk11</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <jdk>11</jdk>
+            </activation>
+            <properties>
+                <jdk.dependent.jar.classifier>jdk11</jdk.dependent.jar.classifier>
+            </properties>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.agrirouter.proto</groupId>
+                        <artifactId>definitions</artifactId>
+                        <version>${definitions.version}</version>
+                        <classifier>jdk11</classifier>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        </profile>
+        <profile>
             <id>jdk10</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
