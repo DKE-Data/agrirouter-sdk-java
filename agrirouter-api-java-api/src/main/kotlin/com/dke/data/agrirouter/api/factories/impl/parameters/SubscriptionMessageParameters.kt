@@ -14,5 +14,5 @@ class SubscriptionMessageParameters : ParameterValidation {
         var position: Boolean = false
     }
 
-    var subscriptionMessageEntries : List<SubscriptionMessageEntry> = ArrayList()
+    var subscriptions : List<SubscriptionMessageEntry> = ArrayList()
 }

@@ -13,7 +13,7 @@ class SubscriptionMessageContentFactory {
         parameters.validate()
         val messageContent = SubscriptionOuterClass.Subscription.newBuilder()
 
-        parameters.subscriptionMessageEntries.forEach{ parameter ->
+        parameters.subscriptions.forEach{ parameter ->
             val technicalMessageType = SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.newBuilder()
             technicalMessageType.setTechnicalMessageType(parameter.technicalMessageType.key)
             technicalMessageType.addAllDdis(parameter.ddis)
