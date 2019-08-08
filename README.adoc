@@ -164,6 +164,30 @@ After adding the snapshot repository feel free to add the following Maven depend
     <classifier>jdk10</classifier>
 </dependency>
 ```
+==== JDK 11
+
+After adding the snapshot repository feel free to add the following Maven dependencies:
+
+```xml
+<dependency>
+    <groupId>com.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-api</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk11</classifier>
+</dependency>
+<dependency>
+    <groupId>com.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-impl</artifactId>
+    <version>${agrirouter-api-java-api.version}</version>
+    <classifier>jdk11</classifier>
+</dependency>
+<dependency>
+    <groupId>com.agrirouter.api.lmis</groupId>
+    <artifactId>agrirouter-api-java-convenience</artifactId>
+    <version>${agrirouter-api-java-convenience.version}</version>
+    <classifier>jdk11</classifier>
+</dependency>
+```
 
 == External resources
 
