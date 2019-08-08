@@ -16,4 +16,7 @@ public interface OnboardingService {
   OnboardingResponse onboard(OnboardingParameters parameters);
 
   String generateAuthorizationUrl(AuthorizationRequestParameters parameters);
+
+  /** @return The last error, if the last onboarding failed */
+  String getLastError();
 }

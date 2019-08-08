@@ -29,4 +29,7 @@ public interface OnboardingService {
    * @return -
    */
   String generateAuthorizationUrl(AuthorizationRequestParameters parameters);
+
+  /** @return The last error, if the last onboarding failed */
+  String getLastError();
 }

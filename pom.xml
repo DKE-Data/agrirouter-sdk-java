@@ -144,14 +144,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- PROTOBUF API -->
-            <dependency>
-                <groupId>com.agrirouter.proto</groupId>
-                <artifactId>definitions</artifactId>
-                <version>${definitions.version}</version>
-                <classifier>jdk8</classifier>
-            </dependency>
-
             <!-- REST-ASSURED -->
             <dependency>
                 <groupId>io.rest-assured</groupId>

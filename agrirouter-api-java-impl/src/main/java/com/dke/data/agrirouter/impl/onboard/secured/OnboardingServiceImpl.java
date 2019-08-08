@@ -31,6 +31,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     implements OnboardingService, ResponseValidator {
 
   private static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
+  private String lastError;
 
   public OnboardingServiceImpl(Environment environment) {
     super(environment);
@@ -62,6 +63,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   private OnboardingResponse onboard(
       SecuredOnboardingParameters securedOnboardingParameters,
       OnboardingRequest onboardingRequest) {
+    this.lastError = "";
     String jsonBody = new Gson().toJson(onboardingRequest).replace("\n", "");
     String encodedSignature = this.createSignature(securedOnboardingParameters, jsonBody);
     this.verifySignature(
@@ -73,7 +75,10 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
                 securedOnboardingParameters.getApplicationId(),
                 encodedSignature)
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
+
+    this.lastError = response.readEntity(String.class);
     this.assertStatusCodeIsCreated(response.getStatus());
+    this.lastError = "";
     return response.readEntity(OnboardingResponse.class);
   }
 
@@ -151,5 +156,10 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
         parameters.getResponseType(),
         parameters.getState(),
         parameters.getRedirectUri());
+  }
+
+  @Override
+  public String getLastError() {
+    return this.lastError;
   }
 }

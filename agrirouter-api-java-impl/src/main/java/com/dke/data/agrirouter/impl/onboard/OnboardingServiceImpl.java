@@ -15,6 +15,8 @@ import javax.ws.rs.core.Response;
 public class OnboardingServiceImpl extends AbstractOnboardingService
     implements OnboardingService, ResponseValidator {
 
+  private String lastError;
+
   public OnboardingServiceImpl(Environment environment) {
     super(environment);
   }
@@ -49,10 +51,13 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   private OnboardingResponse onboard(String registrationCode, OnboardingRequest onboardingRequest) {
     this.getNativeLogger()
         .info("BEGIN | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
+    this.lastError = "";
     Response response =
         RequestFactory.bearerTokenRequest(this.environment.getOnboardUrl(), registrationCode)
             .post(Entity.json(onboardingRequest));
+    this.lastError = response.readEntity(String.class);
     this.assertStatusCodeIsCreated(response.getStatus());
+    this.lastError = "";
     OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
 
     this.getNativeLogger()
@@ -71,5 +76,10 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
             parameters.getRedirectUri());
     this.getNativeLogger().info("END | Generating authorization URL. | '{}'.", parameters);
     return securedOnboardingAuthorizationUrl;
+  }
+
+  @Override
+  public String getLastError() {
+    return this.lastError;
   }
 }
