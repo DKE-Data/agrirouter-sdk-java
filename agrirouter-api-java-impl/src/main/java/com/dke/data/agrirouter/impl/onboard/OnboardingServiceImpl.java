@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.impl.onboard;
 
+import com.dke.data.agrirouter.api.dto.onboard.OnboardingError;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingRequest;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
@@ -8,6 +9,8 @@ import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParame
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import com.google.gson.Gson;
+import java.util.Optional;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
@@ -55,14 +58,19 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     Response response =
         RequestFactory.bearerTokenRequest(this.environment.getOnboardUrl(), registrationCode)
             .post(Entity.json(onboardingRequest));
-    this.lastError = response.readEntity(String.class);
-    this.assertStatusCodeIsCreated(response.getStatus());
-    this.lastError = "";
-    OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
+    try {
+      response.bufferEntity();
+      this.lastError = response.readEntity(String.class);
+      this.assertStatusCodeIsCreated(response.getStatus());
+      this.lastError = "";
+      OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
 
-    this.getNativeLogger()
-        .info("END | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
-    return onboardingResponse;
+      this.getNativeLogger()
+          .info("END | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
+      return onboardingResponse;
+    } finally {
+      response.close();
+    }
   }
 
   @Override
@@ -79,7 +87,18 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   @Override
-  public String getLastError() {
+  public String getLastErrorAsString() {
     return this.lastError;
+  }
+
+  @Override
+  public Optional<OnboardingError> getLastError() {
+    if (this.lastError == null || this.lastError.equals("")) {
+      return Optional.empty();
+
+    } else {
+      Gson gson = new Gson();
+      return Optional.of(gson.fromJson(this.lastError, OnboardingError.class));
+    }
   }
 }

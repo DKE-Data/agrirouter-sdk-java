@@ -1,8 +1,10 @@
 package com.dke.data.agrirouter.api.service.onboard.secured;
 
+import com.dke.data.agrirouter.api.dto.onboard.OnboardingError;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
 import com.dke.data.agrirouter.api.service.parameters.SecuredOnboardingParameters;
+import java.util.Optional;
 
 /** Service for the onboarding process. */
 public interface OnboardingService {
@@ -31,5 +33,8 @@ public interface OnboardingService {
   String generateAuthorizationUrl(AuthorizationRequestParameters parameters);
 
   /** @return The last error, if the last onboarding failed */
-  String getLastError();
+  String getLastErrorAsString();
+
+  /** @return The last error, if the last onboarding failed as object read from the JSON String */
+  Optional<OnboardingError> getLastError();
 }

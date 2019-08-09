@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.impl.onboard.secured;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.dke.data.agrirouter.api.dto.onboard.OnboardingError;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingRequest;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
@@ -20,6 +21,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.Optional;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -75,11 +77,15 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
                 securedOnboardingParameters.getApplicationId(),
                 encodedSignature)
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
-
-    this.lastError = response.readEntity(String.class);
-    this.assertStatusCodeIsCreated(response.getStatus());
-    this.lastError = "";
-    return response.readEntity(OnboardingResponse.class);
+    try {
+      response.bufferEntity();
+      this.lastError = response.readEntity(String.class);
+      this.assertStatusCodeIsCreated(response.getStatus());
+      this.lastError = "";
+      return response.readEntity(OnboardingResponse.class);
+    } finally {
+      response.close();
+    }
   }
 
   private void verify(
@@ -159,7 +165,18 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   @Override
-  public String getLastError() {
+  public String getLastErrorAsString() {
     return this.lastError;
+  }
+
+  @Override
+  public Optional<OnboardingError> getLastError() {
+    if (this.lastError == null || this.lastError.equals("")) {
+      return Optional.empty();
+
+    } else {
+      Gson gson = new Gson();
+      return Optional.of(gson.fromJson(this.lastError, OnboardingError.class));
+    }
   }
 }
