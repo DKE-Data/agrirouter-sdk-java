@@ -31,29 +31,35 @@ public class RevokingServiceImpl extends EnvironmentalService
   public RevokeResponse revoke(RevokeParameters revokeParameters) {
     revokeParameters.validate();
     this.lastError = "";
-
+    Response response = null;
     RevokeRequest revokeRequest = createRevokeRequestBody(revokeParameters);
     Gson gson = new Gson();
     String jsonBody = gson.toJson(revokeRequest).replace("\n", "");
     String encodedSignature = this.createSignature(revokeParameters, jsonBody);
     this.verifySignature(jsonBody, decodeHex(encodedSignature), revokeParameters.getPublicKey());
 
-    Response response =
-        RequestFactory.signedDeleteRequest(
-                environment.getRevokeUrl(), revokeParameters.getApplicationId(), encodedSignature)
-            .build("DELETE", Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE))
-            .invoke();
+    try {
+      response =
+          RequestFactory.signedDeleteRequest(
+                  environment.getRevokeUrl(), revokeParameters.getApplicationId(), encodedSignature)
+              .build("DELETE", Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE))
+              .invoke();
 
-    response.bufferEntity();
-    this.lastError = response.readEntity(String.class);
+      response.bufferEntity();
+      this.lastError = response.readEntity(String.class);
 
-    RevokeResponse result = RevokeResponse.Filter.valueOf(response.getStatus());
-    if (result.getKey() == RevokeResponse.SUCCESS.getKey()) {
-      this.lastError = "";
-      return result;
-    } else {
-      throw new UnexpectedHttpStatusException(
-          response.getStatus(), RevokeResponse.SUCCESS.getKey());
+      RevokeResponse result = RevokeResponse.Filter.valueOf(response.getStatus());
+      if (result.getKey() == RevokeResponse.SUCCESS.getKey()) {
+        this.lastError = "";
+        return result;
+      } else {
+        throw new UnexpectedHttpStatusException(
+            response.getStatus(), RevokeResponse.SUCCESS.getKey());
+      }
+    } finally {
+      if (response != null) {
+        response.close();
+      }
     }
   }
 
