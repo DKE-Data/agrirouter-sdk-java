@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.convenience.mqtt.client;
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
+import com.dke.data.agrirouter.api.dto.onboard.RouterDevice;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateMqttOptionException;
@@ -52,6 +53,28 @@ public class MqttOptionService extends EnvironmentalService {
   }
 
   /**
+   * Create default MQTT connect options using the given router device. The MQTT options contain a
+   * socket factory which uses the personal certificate of the endpoint.
+   *
+   * @param routerDevice -
+   * @return -
+   */
+  public MqttConnectOptions createMqttConnectOptions(RouterDevice routerDevice) {
+    MqttConnectOptions options = new MqttConnectOptions();
+    CertificationType certificationType =
+        CertificationType.valueOf(routerDevice.getAuthentication().getType());
+    options.setSocketFactory(
+        this.getSocketFactory(
+            routerDevice.getAuthentication().getCertificate(),
+            routerDevice.getAuthentication().getSecret(),
+            certificationType));
+    options.setKeepAliveInterval(60);
+    options.setAutomaticReconnect(true);
+    options.setCleanSession(true);
+    return options;
+  }
+
+  /**
    * Creating the socket factory for the MQTT options.
    *
    * @param certificate Certificate of the endpoint.
@@ -62,7 +85,8 @@ public class MqttOptionService extends EnvironmentalService {
   private SocketFactory getSocketFactory(
       String certificate, String password, CertificationType certificationType) {
     try {
-      KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+      KeyManagerFactory kmf =
+          KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
       if (certificationType == CertificationType.PEM) {
         kmf.init(
             this.keyStoreCreationService.createAndReturnKeystoreFromPEM(certificate, password),
