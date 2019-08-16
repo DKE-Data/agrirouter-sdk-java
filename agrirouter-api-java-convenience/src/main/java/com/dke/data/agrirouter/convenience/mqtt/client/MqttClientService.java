@@ -64,7 +64,7 @@ public class MqttClientService extends EnvironmentalService {
       if (StringUtils.isAnyBlank(
           routerDevice.getConnectionCriteria().getHost(),
           String.valueOf(routerDevice.getConnectionCriteria().getPort()),
-          routerDevice.getConnectionCriteria().getClientId())) {
+          routerDevice.getDeviceAlternateId())) {
         throw new CouldNotCreateMqttClientException(
             "Currently there are parameters missing. Did you onboard correctly - host, port or client id are missing.");
       } else {
