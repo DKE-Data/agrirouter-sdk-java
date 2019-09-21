@@ -97,7 +97,7 @@
         <activation.version>1.1.1</activation.version>
         <kotlin.version>1.2.61</kotlin.version>
         <log4j-api.version>2.11.1</log4j-api.version>
-        <org.eclipse.paho.client.mqttv3.version>1.2.0</org.eclipse.paho.client.mqttv3.version>
+        <org.eclipse.paho.client.mqttv3.version>1.2.1</org.eclipse.paho.client.mqttv3.version>
         <commons-codec.version>1.11</commons-codec.version>
         <javax.ws.rs-api.version>2.1</javax.ws.rs-api.version>
         <annotations.version>13.0</annotations.version>
