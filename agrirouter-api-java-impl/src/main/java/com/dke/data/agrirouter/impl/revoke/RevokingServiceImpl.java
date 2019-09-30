@@ -5,7 +5,7 @@ import com.dke.data.agrirouter.api.dto.revoke.RevokingError;
 import com.dke.data.agrirouter.api.enums.RevokeResponse;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
-import com.dke.data.agrirouter.api.service.onboard.RevokingService;
+import com.dke.data.agrirouter.api.service.RevokingService;
 import com.dke.data.agrirouter.api.service.parameters.RevokeParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.RequestFactory;
@@ -80,11 +80,11 @@ public class RevokingServiceImpl extends EnvironmentalService
     return revokeRequest;
   }
 
-  public String getLastErrorAsString() {
+  public String getLastError() {
     return this.lastError;
   }
 
-  public Optional<RevokingError> getLastError() {
+  public Optional<RevokingError> getLastRevokingError() {
     Gson gson = new Gson();
     if (this.lastError.equals("")) {
       return Optional.empty();

@@ -165,12 +165,12 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   @Override
-  public String getLastErrorAsString() {
+  public String getLastError() {
     return this.lastError;
   }
 
   @Override
-  public Optional<OnboardingError> getLastError() {
+  public Optional<OnboardingError> getLastOnboardingError() {
     if (this.lastError == null || this.lastError.equals("")) {
       return Optional.empty();
 

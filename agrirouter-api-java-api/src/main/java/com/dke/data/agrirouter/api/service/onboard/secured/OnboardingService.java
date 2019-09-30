@@ -32,9 +32,18 @@ public interface OnboardingService {
    */
   String generateAuthorizationUrl(AuthorizationRequestParameters parameters);
 
-  /** @return The last error, if the last onboarding failed */
-  String getLastErrorAsString();
+  /**
+   * The last error, if the last onboarding failed as a String
+   *
+   * @return The last error as a string or a blank string
+   */
+  String getLastError();
 
-  /** @return The last error, if the last onboarding failed as object read from the JSON String */
-  Optional<OnboardingError> getLastError();
+  /**
+   * The last error as OnboardingError-Object, if the last onboarding failed as object read from the
+   * JSON String
+   *
+   * @return The last error as OnboardingError-Object
+   */
+  Optional<OnboardingError> getLastOnboardingError();
 }

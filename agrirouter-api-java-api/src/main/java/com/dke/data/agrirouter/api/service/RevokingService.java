@@ -1,4 +1,4 @@
-package com.dke.data.agrirouter.api.service.onboard;
+package com.dke.data.agrirouter.api.service;
 
 import com.dke.data.agrirouter.api.dto.revoke.RevokingError;
 import com.dke.data.agrirouter.api.enums.RevokeResponse;
@@ -9,7 +9,18 @@ public interface RevokingService {
 
   RevokeResponse revoke(RevokeParameters revokeParameters);
 
-  String getLastErrorAsString();
+  /**
+   * The last error, if the last revoking failed as a String
+   *
+   * @return The last error as a string or a blank string
+   */
+  String getLastError();
 
-  Optional<RevokingError> getLastError();
+  /**
+   * The last error as RevokingError-Object, if the last revoking failed as object read from the
+   * JSON String
+   *
+   * @return The last error as RevokingError-Object
+   */
+  Optional<RevokingError> getLastRevokingError();
 }
