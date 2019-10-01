@@ -10,17 +10,10 @@ public interface RevokingService {
   RevokeResponse revoke(RevokeParameters revokeParameters);
 
   /**
-   * The last error, if the last revoking failed as a String
-   *
-   * @return The last error as a string or a blank string
-   */
-  String getLastError();
-
-  /**
    * The last error as RevokingError-Object, if the last revoking failed as object read from the
    * JSON String
    *
    * @return The last error as RevokingError-Object
    */
-  Optional<RevokingError> getLastRevokingError();
+  Optional<RevokingError> getLastRevokingError(String errorResponse);
 }

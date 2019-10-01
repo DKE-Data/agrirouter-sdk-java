@@ -4,7 +4,7 @@ import com.dke.data.agrirouter.api.dto.revoke.RevokeRequest;
 import com.dke.data.agrirouter.api.dto.revoke.RevokingError;
 import com.dke.data.agrirouter.api.enums.RevokeResponse;
 import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
+import com.dke.data.agrirouter.api.exception.RevokingException;
 import com.dke.data.agrirouter.api.service.RevokingService;
 import com.dke.data.agrirouter.api.service.parameters.RevokeParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
@@ -22,8 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 public class RevokingServiceImpl extends EnvironmentalService
     implements RevokingService, SignatureService {
 
-  private String lastError;
-
   public RevokingServiceImpl(Environment environment) {
     super(environment);
   }
@@ -31,7 +29,6 @@ public class RevokingServiceImpl extends EnvironmentalService
   @Override
   public RevokeResponse revoke(RevokeParameters revokeParameters) {
     revokeParameters.validate();
-    this.lastError = "";
     Response response = null;
     RevokeRequest revokeRequest = createRevokeRequestBody(revokeParameters);
     Gson gson = new Gson();
@@ -49,12 +46,10 @@ public class RevokingServiceImpl extends EnvironmentalService
       response.bufferEntity();
       RevokeResponse result = RevokeResponse.Filter.valueOf(response.getStatus());
       if (result.getKey() == RevokeResponse.SUCCESS.getKey()) {
-        this.lastError = "";
         return result;
       } else {
-        this.lastError = response.readEntity(String.class);
-        throw new UnexpectedHttpStatusException(
-            response.getStatus(), RevokeResponse.SUCCESS.getKey());
+        String lastError = response.readEntity(String.class);
+        throw new RevokingException(lastError);
       }
     } finally {
       if (response != null) {
@@ -80,16 +75,10 @@ public class RevokingServiceImpl extends EnvironmentalService
     return revokeRequest;
   }
 
-  public String getLastError() {
-    return this.lastError;
-  }
-
-  public Optional<RevokingError> getLastRevokingError() {
+  public Optional<RevokingError> getLastRevokingError(String errorResponse) {
     Gson gson = new Gson();
-    if (StringUtils.isBlank(this.lastError)) {
-      return Optional.empty();
-    } else {
-      return Optional.of(gson.fromJson(this.lastError, RevokingError.class));
-    }
+    return StringUtils.isBlank(errorResponse)
+        ? Optional.empty()
+        : Optional.of(gson.fromJson(errorResponse, RevokingError.class));
   }
 }
