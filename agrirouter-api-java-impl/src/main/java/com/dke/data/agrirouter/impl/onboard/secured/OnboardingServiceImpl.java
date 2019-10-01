@@ -8,6 +8,7 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotVerifySecuredOnboardingRequestException;
 import com.dke.data.agrirouter.api.exception.InvalidSignatureException;
+import com.dke.data.agrirouter.api.exception.OnboardingException;
 import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
 import com.dke.data.agrirouter.api.service.onboard.secured.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
@@ -34,7 +35,6 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     implements OnboardingService, ResponseValidator {
 
   private static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
-  private String lastError;
 
   public OnboardingServiceImpl(Environment environment) {
     super(environment);
@@ -66,7 +66,6 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   private OnboardingResponse onboard(
       SecuredOnboardingParameters securedOnboardingParameters,
       OnboardingRequest onboardingRequest) {
-    this.lastError = "";
     String jsonBody = new Gson().toJson(onboardingRequest).replace("\n", "");
     String encodedSignature = this.createSignature(securedOnboardingParameters, jsonBody);
     this.verifySignature(
@@ -81,11 +80,10 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     try {
       response.bufferEntity();
       this.assertStatusCodeIsCreated(response.getStatus());
-      this.lastError = "";
       return response.readEntity(OnboardingResponse.class);
     } catch (Exception e) {
-      this.lastError = response.readEntity(String.class);
-      throw e;
+      String lastError = response.readEntity(String.class);
+      throw new OnboardingException(lastError);
     } finally {
       response.close();
     }
@@ -168,18 +166,13 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   @Override
-  public String getLastError() {
-    return this.lastError;
-  }
-
-  @Override
-  public Optional<OnboardingError> getLastOnboardingError() {
-    if (this.lastError == null || StringUtils.isBlank(this.lastError)) {
+  public Optional<OnboardingError> getLastOnboardingError(String errorResponse) {
+    if (errorResponse == null || StringUtils.isBlank(errorResponse)) {
       return Optional.empty();
 
     } else {
       Gson gson = new Gson();
-      return Optional.of(gson.fromJson(this.lastError, OnboardingError.class));
+      return Optional.of(gson.fromJson(errorResponse, OnboardingError.class));
     }
   }
 }

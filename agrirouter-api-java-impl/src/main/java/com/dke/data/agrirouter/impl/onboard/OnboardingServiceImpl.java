@@ -4,6 +4,7 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingError;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingRequest;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.exception.OnboardingException;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
@@ -18,8 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 /** Internal service implementation. */
 public class OnboardingServiceImpl extends AbstractOnboardingService
     implements OnboardingService, ResponseValidator {
-
-  private String lastError;
 
   public OnboardingServiceImpl(Environment environment) {
     super(environment);
@@ -55,22 +54,20 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   private OnboardingResponse onboard(String registrationCode, OnboardingRequest onboardingRequest) {
     this.getNativeLogger()
         .info("BEGIN | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
-    this.lastError = "";
     Response response =
         RequestFactory.bearerTokenRequest(this.environment.getOnboardUrl(), registrationCode)
             .post(Entity.json(onboardingRequest));
     try {
       response.bufferEntity();
       this.assertStatusCodeIsCreated(response.getStatus());
-      this.lastError = "";
       OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
 
       this.getNativeLogger()
           .info("END | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
       return onboardingResponse;
     } catch (Exception e) {
-      this.lastError = response.readEntity(String.class);
-      throw e;
+      String lastError = response.readEntity(String.class);
+      throw new OnboardingException(lastError);
     } finally {
       response.close();
     }
@@ -90,18 +87,13 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   }
 
   @Override
-  public String getLastError() {
-    return this.lastError;
-  }
-
-  @Override
-  public Optional<OnboardingError> getLastOnboardingError() {
-    if (this.lastError == null || StringUtils.isBlank(this.lastError)) {
+  public Optional<OnboardingError> getLastOnboardingError(String errorResponse) {
+    if (errorResponse == null || StringUtils.isBlank(errorResponse)) {
       return Optional.empty();
 
     } else {
       Gson gson = new Gson();
-      return Optional.of(gson.fromJson(this.lastError, OnboardingError.class));
+      return Optional.of(gson.fromJson(errorResponse, OnboardingError.class));
     }
   }
 }
