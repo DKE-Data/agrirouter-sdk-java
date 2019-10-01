@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import java.util.Optional;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import org.apache.commons.lang3.StringUtils;
 
 /** Internal service implementation. */
 public class OnboardingServiceImpl extends AbstractOnboardingService
@@ -60,7 +61,6 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
             .post(Entity.json(onboardingRequest));
     try {
       response.bufferEntity();
-      this.lastError = response.readEntity(String.class);
       this.assertStatusCodeIsCreated(response.getStatus());
       this.lastError = "";
       OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
@@ -68,6 +68,9 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
       this.getNativeLogger()
           .info("END | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
       return onboardingResponse;
+    } catch (Exception e) {
+      this.lastError = response.readEntity(String.class);
+      throw e;
     } finally {
       response.close();
     }
@@ -93,7 +96,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
   @Override
   public Optional<OnboardingError> getLastOnboardingError() {
-    if (this.lastError == null || this.lastError.equals("")) {
+    if (this.lastError == null || StringUtils.isBlank(this.lastError)) {
       return Optional.empty();
 
     } else {

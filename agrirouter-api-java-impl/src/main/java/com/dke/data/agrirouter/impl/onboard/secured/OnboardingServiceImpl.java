@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringUtils;
 
 /** Internal service implementation. */
 public class OnboardingServiceImpl extends AbstractOnboardingService
@@ -79,10 +80,12 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
     try {
       response.bufferEntity();
-      this.lastError = response.readEntity(String.class);
       this.assertStatusCodeIsCreated(response.getStatus());
       this.lastError = "";
       return response.readEntity(OnboardingResponse.class);
+    } catch (Exception e) {
+      this.lastError = response.readEntity(String.class);
+      throw e;
     } finally {
       response.close();
     }
@@ -171,7 +174,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
   @Override
   public Optional<OnboardingError> getLastOnboardingError() {
-    if (this.lastError == null || this.lastError.equals("")) {
+    if (this.lastError == null || StringUtils.isBlank(this.lastError)) {
       return Optional.empty();
 
     } else {

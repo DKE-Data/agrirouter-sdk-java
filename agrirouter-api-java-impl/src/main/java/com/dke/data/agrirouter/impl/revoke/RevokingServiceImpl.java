@@ -17,6 +17,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringUtils;
 
 public class RevokingServiceImpl extends EnvironmentalService
     implements RevokingService, SignatureService {
@@ -46,13 +47,12 @@ public class RevokingServiceImpl extends EnvironmentalService
               .invoke();
 
       response.bufferEntity();
-      this.lastError = response.readEntity(String.class);
-
       RevokeResponse result = RevokeResponse.Filter.valueOf(response.getStatus());
       if (result.getKey() == RevokeResponse.SUCCESS.getKey()) {
         this.lastError = "";
         return result;
       } else {
+        this.lastError = response.readEntity(String.class);
         throw new UnexpectedHttpStatusException(
             response.getStatus(), RevokeResponse.SUCCESS.getKey());
       }
@@ -86,7 +86,7 @@ public class RevokingServiceImpl extends EnvironmentalService
 
   public Optional<RevokingError> getLastRevokingError() {
     Gson gson = new Gson();
-    if (this.lastError.equals("")) {
+    if (StringUtils.isBlank(this.lastError)) {
       return Optional.empty();
     } else {
       return Optional.of(gson.fromJson(this.lastError, RevokingError.class));
