@@ -88,12 +88,9 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
   @Override
   public Optional<OnboardingError> getLastOnboardingError(String errorResponse) {
-    if (errorResponse == null || StringUtils.isBlank(errorResponse)) {
-      return Optional.empty();
-
-    } else {
-      Gson gson = new Gson();
-      return Optional.of(gson.fromJson(errorResponse, OnboardingError.class));
-    }
+    Gson gson = new Gson();
+    return StringUtils.isBlank(errorResponse)
+        ? Optional.empty()
+        : Optional.of(gson.fromJson(errorResponse, OnboardingError.class));
   }
 }
