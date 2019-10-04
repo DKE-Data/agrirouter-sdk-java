@@ -46,8 +46,8 @@ public class MqttClientService extends EnvironmentalService {
                 onboardingResponse.getConnectionCriteria().getPort()),
             Objects.requireNonNull(onboardingResponse.getConnectionCriteria().getClientId()));
       }
-    } catch (MqttException var3) {
-      throw new CouldNotCreateMqttClientException("Could not create MQTT client.", var3);
+    } catch (MqttException e) {
+      throw new CouldNotCreateMqttClientException("Could not create MQTT client.", e);
     }
   }
 
@@ -74,8 +74,8 @@ public class MqttClientService extends EnvironmentalService {
                 String.valueOf(routerDevice.getConnectionCriteria().getPort())),
             Objects.requireNonNull(routerDevice.getDeviceAlternateId()));
       }
-    } catch (MqttException var3) {
-      throw new CouldNotCreateMqttClientException("Could not create MQTT client.", var3);
+    } catch (MqttException e) {
+      throw new CouldNotCreateMqttClientException("Could not create MQTT client.", e);
     }
   }
 }
