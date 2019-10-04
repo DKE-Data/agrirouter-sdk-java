@@ -2,11 +2,13 @@ package com.dke.data.agrirouter.impl.onboard.secured;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.dke.data.agrirouter.api.dto.onboard.OnboardingError;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingRequest;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotVerifySecuredOnboardingRequestException;
 import com.dke.data.agrirouter.api.exception.InvalidSignatureException;
+import com.dke.data.agrirouter.api.exception.OnboardingException;
 import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
 import com.dke.data.agrirouter.api.service.onboard.secured.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
@@ -20,11 +22,13 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.Optional;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringUtils;
 
 /** Internal service implementation. */
 public class OnboardingServiceImpl extends AbstractOnboardingService
@@ -73,8 +77,16 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
                 securedOnboardingParameters.getApplicationId(),
                 encodedSignature)
             .post(Entity.entity(jsonBody, MediaType.APPLICATION_JSON_TYPE));
-    this.assertStatusCodeIsCreated(response.getStatus());
-    return response.readEntity(OnboardingResponse.class);
+    try {
+      response.bufferEntity();
+      this.assertStatusCodeIsCreated(response.getStatus());
+      return response.readEntity(OnboardingResponse.class);
+    } catch (Exception e) {
+      String lastError = response.readEntity(String.class);
+      throw new OnboardingException(lastError);
+    } finally {
+      response.close();
+    }
   }
 
   private void verify(
@@ -151,5 +163,13 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
         parameters.getResponseType(),
         parameters.getState(),
         parameters.getRedirectUri());
+  }
+
+  @Override
+  public Optional<OnboardingError> getLastOnboardingError(String errorResponse) {
+    Gson gson = new Gson();
+    return StringUtils.isBlank(errorResponse)
+        ? Optional.empty()
+        : Optional.of(gson.fromJson(errorResponse, OnboardingError.class));
   }
 }

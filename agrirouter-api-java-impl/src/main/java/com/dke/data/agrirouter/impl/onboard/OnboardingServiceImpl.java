@@ -1,15 +1,20 @@
 package com.dke.data.agrirouter.impl.onboard;
 
+import com.dke.data.agrirouter.api.dto.onboard.OnboardingError;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingRequest;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.exception.OnboardingException;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import com.google.gson.Gson;
+import java.util.Optional;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import org.apache.commons.lang3.StringUtils;
 
 /** Internal service implementation. */
 public class OnboardingServiceImpl extends AbstractOnboardingService
@@ -52,12 +57,20 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     Response response =
         RequestFactory.bearerTokenRequest(this.environment.getOnboardUrl(), registrationCode)
             .post(Entity.json(onboardingRequest));
-    this.assertStatusCodeIsCreated(response.getStatus());
-    OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
+    try {
+      response.bufferEntity();
+      this.assertStatusCodeIsCreated(response.getStatus());
+      OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
 
-    this.getNativeLogger()
-        .info("END | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
-    return onboardingResponse;
+      this.getNativeLogger()
+          .info("END | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
+      return onboardingResponse;
+    } catch (Exception e) {
+      String lastError = response.readEntity(String.class);
+      throw new OnboardingException(lastError);
+    } finally {
+      response.close();
+    }
   }
 
   @Override
@@ -71,5 +84,13 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
             parameters.getRedirectUri());
     this.getNativeLogger().info("END | Generating authorization URL. | '{}'.", parameters);
     return securedOnboardingAuthorizationUrl;
+  }
+
+  @Override
+  public Optional<OnboardingError> getLastOnboardingError(String errorResponse) {
+    Gson gson = new Gson();
+    return StringUtils.isBlank(errorResponse)
+        ? Optional.empty()
+        : Optional.of(gson.fromJson(errorResponse, OnboardingError.class));
   }
 }

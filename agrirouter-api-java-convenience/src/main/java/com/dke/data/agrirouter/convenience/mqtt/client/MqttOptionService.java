@@ -62,7 +62,8 @@ public class MqttOptionService extends EnvironmentalService {
   private SocketFactory getSocketFactory(
       String certificate, String password, CertificationType certificationType) {
     try {
-      KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+      KeyManagerFactory kmf =
+          KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
       if (certificationType == CertificationType.PEM) {
         kmf.init(
             this.keyStoreCreationService.createAndReturnKeystoreFromPEM(certificate, password),
