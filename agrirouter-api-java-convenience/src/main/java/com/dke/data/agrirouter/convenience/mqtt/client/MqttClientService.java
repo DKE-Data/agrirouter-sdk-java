@@ -35,23 +35,7 @@ public class MqttClientService extends EnvironmentalService {
      * @return -
      */
     public IMqttClient create(OnboardingResponse onboardingResponse) {
-        try {
-            if (StringUtils.isAnyBlank(
-                    onboardingResponse.getConnectionCriteria().getHost(),
-                    onboardingResponse.getConnectionCriteria().getPort(),
-                    onboardingResponse.getConnectionCriteria().getClientId())) {
-                throw new CouldNotCreateMqttClientException(
-                        "Currently there are parameters missing. Did you onboard correctly - host, port or client id are missing.");
-            }
-            return new MqttClient(
-                    this.environment.getMqttServerUrl(
-                            onboardingResponse.getConnectionCriteria().getHost(),
-                            onboardingResponse.getConnectionCriteria().getPort()),
-                    Objects.requireNonNull(onboardingResponse.getConnectionCriteria().getClientId()));
-
-        } catch (MqttException e) {
-            throw new CouldNotCreateMqttClientException("Could not create MQTT client.", e);
-        }
+        return this.createMqttClient(onboardingResponse.getConnectionCriteria().getHost(), onboardingResponse.getConnectionCriteria().getPort(), onboardingResponse.getConnectionCriteria().getClientId());
     }
 
     /**
@@ -63,21 +47,21 @@ public class MqttClientService extends EnvironmentalService {
      * @return -
      */
     public IMqttClient create(RouterDevice routerDevice) {
+        return this.createMqttClient(routerDevice.getConnectionCriteria().getHost(), routerDevice.getConnectionCriteria().getHost(), routerDevice.getDeviceAlternateId());
+    }
+    
+    private IMqttClient createMqttClient(String host, String port, String clientId) {
         try {
-            if (StringUtils.isAnyBlank(
-                    routerDevice.getConnectionCriteria().getHost(),
-                    String.valueOf(routerDevice.getConnectionCriteria().getPort()),
-                    routerDevice.getDeviceAlternateId())) {
+            if (StringUtils.isAnyBlank(host, port, clientId)) {
                 throw new CouldNotCreateMqttClientException(
                         "Currently there are parameters missing. Did you onboard correctly - host, port or client id are missing.");
             }
-            return new MqttClient(
-                    this.environment.getMqttServerUrl(
-                            routerDevice.getConnectionCriteria().getHost(),
-                            String.valueOf(routerDevice.getConnectionCriteria().getPort())),
-                    Objects.requireNonNull(routerDevice.getDeviceAlternateId()));
+            return new MqttClient(this.environment.getMqttServerUrl(host, port), Objects.requireNonNull(clientId));
+
         } catch (MqttException e) {
             throw new CouldNotCreateMqttClientException("Could not create MQTT client.", e);
         }
+
     }
+
 }
