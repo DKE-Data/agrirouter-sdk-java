@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.convenience.mqtt.client;
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
+import com.dke.data.agrirouter.api.dto.onboard.RouterDevice;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateMqttClientException;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
@@ -31,22 +32,38 @@ public class MqttClientService extends EnvironmentalService {
    * @return -
    */
   public IMqttClient create(OnboardingResponse onboardingResponse) {
+    return this.createMqttClient(
+        onboardingResponse.getConnectionCriteria().getHost(),
+        onboardingResponse.getConnectionCriteria().getPort(),
+        onboardingResponse.getConnectionCriteria().getClientId());
+  }
+
+  /**
+   * Creates a MQTT client using the given router Device. Communication relies on given root
+   * certificates in an external keystore. The keystore with the root certificates is not created
+   * locally.
+   *
+   * @param routerDevice -
+   * @return -
+   */
+  public IMqttClient create(RouterDevice routerDevice) {
+    return this.createMqttClient(
+        routerDevice.getConnectionCriteria().getHost(),
+        routerDevice.getConnectionCriteria().getHost(),
+        routerDevice.getDeviceAlternateId());
+  }
+
+  private IMqttClient createMqttClient(String host, String port, String clientId) {
     try {
-      if (StringUtils.isAnyBlank(
-          onboardingResponse.getConnectionCriteria().getHost(),
-          onboardingResponse.getConnectionCriteria().getPort(),
-          onboardingResponse.getConnectionCriteria().getClientId())) {
+      if (StringUtils.isAnyBlank(host, port, clientId)) {
         throw new CouldNotCreateMqttClientException(
             "Currently there are parameters missing. Did you onboard correctly - host, port or client id are missing.");
-      } else {
-        return new MqttClient(
-            this.environment.getMqttServerUrl(
-                onboardingResponse.getConnectionCriteria().getHost(),
-                onboardingResponse.getConnectionCriteria().getPort()),
-            Objects.requireNonNull(onboardingResponse.getConnectionCriteria().getClientId()));
       }
-    } catch (MqttException var3) {
-      throw new CouldNotCreateMqttClientException("Could not create MQTT client.", var3);
+      return new MqttClient(
+          this.environment.getMqttServerUrl(host, port), Objects.requireNonNull(clientId));
+
+    } catch (MqttException e) {
+      throw new CouldNotCreateMqttClientException("Could not create MQTT client.", e);
     }
   }
 }
