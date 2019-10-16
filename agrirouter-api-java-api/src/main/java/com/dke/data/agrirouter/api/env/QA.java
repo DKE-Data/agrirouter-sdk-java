@@ -1,6 +1,5 @@
 package com.dke.data.agrirouter.api.env;
 
-
 /** Abstraction of the QA environment, currently no overrides because the default is QA already. */
 public abstract class QA implements Environment {
 
