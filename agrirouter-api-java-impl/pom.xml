@@ -20,7 +20,6 @@
         <dependency>
             <groupId>com.agrirouter.proto</groupId>
             <artifactId>agrirouter-api-protobuf-definitions</artifactId>
-            <classifier>${jdk.dependent.jar.classifier}</classifier>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
