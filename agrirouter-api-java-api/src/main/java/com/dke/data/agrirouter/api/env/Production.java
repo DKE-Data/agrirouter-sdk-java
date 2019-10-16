@@ -28,8 +28,4 @@ public abstract class Production implements Environment {
     return REGISTRATION_SERVICE_URL;
   }
 
-  @Override
-  public List<String> getRootCertificates() {
-    throw new RuntimeException("Not supported. Deprecated.");
-  }
 }
