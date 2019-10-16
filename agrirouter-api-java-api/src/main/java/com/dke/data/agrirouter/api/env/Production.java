@@ -1,6 +1,5 @@
 package com.dke.data.agrirouter.api.env;
 
-import java.util.List;
 
 /**
  * Abstraction of the production environment, currently no overrides because the default is
@@ -27,5 +26,4 @@ public abstract class Production implements Environment {
   public String getRegistrationServiceUrl() {
     return REGISTRATION_SERVICE_URL;
   }
-
 }
