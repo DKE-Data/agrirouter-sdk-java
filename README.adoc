@@ -90,7 +90,7 @@ After adding the snapshot repository feel free to add the Maven dependencies:
 </dependency>
 ```
 
-Currently we are supporting JDK 8, JDK 9 and JDK 10 by using classifiers.
+Currently we are supporting JDK 8, JDK 9, JDK 10 and JDK 11 by using classifiers.
 
 ==== JDK 8
 
