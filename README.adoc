@@ -74,19 +74,19 @@ After adding the snapshot repository feel free to add the Maven dependencies:
     <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-api</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk10</classifier>
+    <classifier>jdk11</classifier>
 </dependency>
 <dependency>
     <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-impl</artifactId>
     <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk10</classifier>
+    <classifier>jdk11</classifier>
 </dependency>
 <dependency>
     <groupId>com.agrirouter.api.lmis</groupId>
     <artifactId>agrirouter-api-java-convenience</artifactId>
     <version>${agrirouter-api-java-convenience.version}</version>
-    <classifier>jdk10</classifier>
+    <classifier>jdk11</classifier>
 </dependency>
 ```
 
@@ -189,10 +189,32 @@ After adding the snapshot repository feel free to add the following Maven depend
 </dependency>
 ```
 
+== Certificates for the communication
+
+We do not longer maintain the certificates within the API.
+Maintaining them in the API would mean, that we have to release the API with every API change.
+Therefore feel free to add the root certificates to a Java Key Store add reference it within your application.
+
+=== Adding a certificate to the JKS
+
+The certificates are PEM files which can be added directly to the keystore using the following command.
+
+```keytool -importcert -file certificate.pem -keystore my_agrirouter_key_store.jks```
+
+If you try to add the command, please be aware, that the containing PEM file has to fulfill the following requirements:
+
+* The header and footer are included enclosed between five dashes.
+* There are no trailing spaces on each line.
+* The certificate is saved as a .p7b.
+
+If the files does not meet those requirements, the import will not be possible.
+The certificates are part of the integration guide which can be found in the external resources.
+
 == External resources
 
 Here are some external resources for the development:
 
 * https://my-agrirouter.com[My Agrirouter Website]
+* https://github.com/DKE-Data/agrirouter-interface-documentation[Integration Guide]
 * https://www.aef-online.org[EFDI Protobuf Definition]
 * https://www.lmis.de[LMIS - Maintenance & Support]

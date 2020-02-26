@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.api.env;
 
 import com.dke.data.agrirouter.api.enums.SecuredOnboardingResponseType;
-import java.util.List;
 
 /** Common Environment, holds some default methods pointing to the QA. */
 public interface Environment {
@@ -137,11 +136,4 @@ public interface Environment {
   default String getMqttServerUrl(String host, String port) {
     return String.format(MQTT_URL_TEMPLATE, host, port);
   }
-
-  /**
-   * All necessary root certificates to provide a secure connection.
-   *
-   * @return -
-   */
-  List<String> getRootCertificates();
 }
