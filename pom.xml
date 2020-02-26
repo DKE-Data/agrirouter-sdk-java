@@ -58,17 +58,13 @@
     </modules>
 
     <properties>
-        <jdk.dependent.jar.classifier>default</jdk.dependent.jar.classifier>
-
         <!-- PROJECT SETTINGS -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.encoding>UTF-8</maven-compiler-plugin.encoding>
         <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
         <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
 
         <!-- DEPENDENCIES -->
-        <agrirouter-api-protobuf-definitions.version>0.0.1-SNAPSHOT</agrirouter-api-protobuf-definitions.version>
         <rest-assured.version>3.0.5</rest-assured.version>
         <junit.version>4.12</junit.version>
         <junit-jupiter.version>5.0.2</junit-jupiter.version>
@@ -108,7 +104,7 @@
         <protoc-jar-maven-plugin.version>3.5.1.1</protoc-jar-maven-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
@@ -119,18 +115,12 @@
         <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <fmt-maven-plugin.version>2.5.1</fmt-maven-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-
-            <!-- PROTOBUF DEFINITIONS -->
-            <dependency>
-                <groupId>com.agrirouter.proto</groupId>
-                <artifactId>agrirouter-api-protobuf-definitions</artifactId>
-                <version>${agrirouter-api-protobuf-definitions.version}</version>
-                <classifier>${jdk.dependent.jar.classifier}</classifier>
-            </dependency>
 
             <!-- INTERNAL -->
             <dependency>
@@ -351,29 +341,11 @@
                 <version>${lombok.version}</version>
             </dependency>
 
-
-
         </dependencies>
     </dependencyManagement>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <classifier>${jdk.dependent.jar.classifier}</classifier>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
@@ -480,7 +452,7 @@
 
     <profiles>
         <profile>
-            <id>snapshot</id>
+            <id>release</id>
             <build>
                 <plugins>
                     <plugin>
@@ -508,6 +480,33 @@
                         </executions>
                     </plugin>
                     <plugin>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>${maven-deploy-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>${maven-javadoc-plugin.version}</version>
@@ -519,6 +518,10 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <doclint>none</doclint>
+                            <excludePackageNames>com.dke.data.agrirouter.*</excludePackageNames>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -526,19 +529,20 @@
         <profile>
             <id>jdk11</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
                 <jdk>11</jdk>
             </activation>
             <properties>
-                <jdk.dependent.jar.classifier>jdk11</jdk.dependent.jar.classifier>
+                <maven.compiler.source>11</maven.compiler.source>
+                <maven.compiler.target>11</maven.compiler.target>
+                <agrirouter-api-protobuf-definitions.version>1.0.0-jdk11</agrirouter-api-protobuf-definitions.version>
             </properties>
             <dependencyManagement>
                 <dependencies>
                     <dependency>
                         <groupId>com.agrirouter.proto</groupId>
-                        <artifactId>definitions</artifactId>
-                        <version>${definitions.version}</version>
-                        <classifier>jdk11</classifier>
+                        <artifactId>agrirouter-api-protobuf-definitions</artifactId>
+                        <version>${agrirouter-api-protobuf-definitions.version}</version>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
@@ -550,15 +554,16 @@
                 <jdk>10</jdk>
             </activation>
             <properties>
-                <jdk.dependent.jar.classifier>jdk10</jdk.dependent.jar.classifier>
+                <maven.compiler.source>10</maven.compiler.source>
+                <maven.compiler.target>10</maven.compiler.target>
+                <agrirouter-api-protobuf-definitions.version>1.0.0-jdk10</agrirouter-api-protobuf-definitions.version>
             </properties>
             <dependencyManagement>
                 <dependencies>
                     <dependency>
                         <groupId>com.agrirouter.proto</groupId>
-                        <artifactId>definitions</artifactId>
-                        <version>${definitions.version}</version>
-                        <classifier>jdk10</classifier>
+                        <artifactId>agrirouter-api-protobuf-definitions</artifactId>
+                        <version>${agrirouter-api-protobuf-definitions.version}</version>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
@@ -570,15 +575,16 @@
                 <jdk>9</jdk>
             </activation>
             <properties>
-                <jdk.dependent.jar.classifier>jdk9</jdk.dependent.jar.classifier>
+                <maven.compiler.source>9</maven.compiler.source>
+                <maven.compiler.target>9</maven.compiler.target>
+                <agrirouter-api-protobuf-definitions.version>1.0.0-jdk9</agrirouter-api-protobuf-definitions.version>
             </properties>
             <dependencyManagement>
                 <dependencies>
                     <dependency>
                         <groupId>com.agrirouter.proto</groupId>
-                        <artifactId>definitions</artifactId>
-                        <version>${definitions.version}</version>
-                        <classifier>jdk9</classifier>
+                        <artifactId>agrirouter-api-protobuf-definitions</artifactId>
+                        <version>${agrirouter-api-protobuf-definitions.version}</version>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
@@ -590,15 +596,16 @@
                 <jdk>1.8</jdk>
             </activation>
             <properties>
-                <jdk.dependent.jar.classifier>jdk8</jdk.dependent.jar.classifier>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <agrirouter-api-protobuf-definitions.version>1.0.0-jdk8</agrirouter-api-protobuf-definitions.version>
             </properties>
             <dependencyManagement>
                 <dependencies>
                     <dependency>
                         <groupId>com.agrirouter.proto</groupId>
-                        <artifactId>definitions</artifactId>
-                        <version>${definitions.version}</version>
-                        <classifier>jdk8</classifier>
+                        <artifactId>agrirouter-api-protobuf-definitions</artifactId>
+                        <version>${agrirouter-api-protobuf-definitions.version}</version>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
