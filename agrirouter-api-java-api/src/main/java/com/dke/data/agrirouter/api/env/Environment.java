@@ -8,7 +8,6 @@ public interface Environment {
   String AGRIROUTER_LOGIN_URL = "/app";
 
   String MQTT_URL_TEMPLATE = "ssl://%s:%s";
-  String REGISTRATION_CODE_SERVICE_DATA_SERVICE_URL_TEMPLATE = "/application/%s/registrationcode";
   String SECURED_ONBOARDING_AUTHORIZATION_LINK_TEMPLATE =
       "/application/%s/authorize?response_type=%s&state=%s&redirect_uri=%s";
 
@@ -67,16 +66,6 @@ public interface Environment {
    */
   default String getRevokeUrl() {
     return getRegistrationServiceUrl() + getApiPrefix() + "/registration/onboard/revoke";
-  }
-
-  /**
-   * Returning the URL for the ui service to generate registration / TAN codes.
-   *
-   * @return -
-   */
-  default String getRegistrationServiceDataServiceUrl(String applicationId) {
-    return this.getEnvironmentBaseUrl()
-        + String.format(REGISTRATION_CODE_SERVICE_DATA_SERVICE_URL_TEMPLATE, applicationId);
   }
 
   /**
