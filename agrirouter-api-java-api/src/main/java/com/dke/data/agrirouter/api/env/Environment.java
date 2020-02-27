@@ -35,20 +35,6 @@ public interface Environment {
   String getRegistrationServiceUrl();
 
   /**
-   * Client ID for the XSUAA-Token request.
-   *
-   * @return -
-   */
-  String getAgrirouterLoginUsername();
-
-  /**
-   * Client secret for the XSUAA-Token request.
-   *
-   * @return -
-   */
-  String getAgrirouterLoginPassword();
-
-  /**
    * URL for the onboarding request.
    *
    * @return -
