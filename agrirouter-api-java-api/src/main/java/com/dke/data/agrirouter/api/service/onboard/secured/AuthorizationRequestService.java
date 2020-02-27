@@ -9,9 +9,6 @@ import java.net.URL;
 /** Service for the registration request. */
 public interface AuthorizationRequestService {
 
-  AuthorizationResponse callForAuthorizationResponse(
-      AuthorizationRequestParameters authorizationRequestParameters);
-
   String getAuthorizationRequestURL(AuthorizationRequestParameters authorizationRequestParameters);
 
   AuthorizationResponse extractAuthorizationResponseFromQuery(String query);
