@@ -9,7 +9,6 @@ public interface Environment {
 
   String MQTT_URL_TEMPLATE = "ssl://%s:%s";
   String REGISTRATION_CODE_SERVICE_DATA_SERVICE_URL_TEMPLATE = "/application/%s/registrationcode";
-  String AUTHORIZATION_SERVICE_DATA_SERVICE_URL_TEMPLATE = "/application/%s/authorize";
   String SECURED_ONBOARDING_AUTHORIZATION_LINK_TEMPLATE =
       "/application/%s/authorize?response_type=%s&state=%s&redirect_uri=%s";
 
