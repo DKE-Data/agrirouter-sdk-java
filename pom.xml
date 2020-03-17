@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.agrirouter.api.lmis</groupId>
+    <groupId>com.agrirouter.api</groupId>
     <artifactId>agrirouter-api-java</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -32,22 +32,24 @@
     </scm>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
+        <repository>
+            <id>github</id>
+            <name>GitHub DKE-Data Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/DKE-Data/agrirouter-api-java</url>
+        </repository>
     </distributionManagement>
 
     <repositories>
         <repository>
-            <id>central-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>github</id>
+            <name>GitHub DKE-Data Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/DKE-Data/agrirouter-api-protobuf-definitions</url>
         </repository>
     </repositories>
 
@@ -124,12 +126,12 @@
 
             <!-- INTERNAL -->
             <dependency>
-                <groupId>com.agrirouter.api.lmis</groupId>
+                <groupId>com.agrirouter.api</groupId>
                 <artifactId>agrirouter-api-java-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.agrirouter.api.lmis</groupId>
+                <groupId>com.agrirouter.api</groupId>
                 <artifactId>agrirouter-api-java-impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -535,7 +537,7 @@
             <properties>
                 <maven.compiler.source>11</maven.compiler.source>
                 <maven.compiler.target>11</maven.compiler.target>
-                <agrirouter-api-protobuf-definitions.version>1.0.0-jdk11</agrirouter-api-protobuf-definitions.version>
+                <agrirouter-api-protobuf-definitions.version>1.1.0-jdk11</agrirouter-api-protobuf-definitions.version>
             </properties>
             <dependencyManagement>
                 <dependencies>
@@ -556,7 +558,7 @@
             <properties>
                 <maven.compiler.source>10</maven.compiler.source>
                 <maven.compiler.target>10</maven.compiler.target>
-                <agrirouter-api-protobuf-definitions.version>1.0.0-jdk10</agrirouter-api-protobuf-definitions.version>
+                <agrirouter-api-protobuf-definitions.version>1.1.0-jdk10</agrirouter-api-protobuf-definitions.version>
             </properties>
             <dependencyManagement>
                 <dependencies>
@@ -577,7 +579,7 @@
             <properties>
                 <maven.compiler.source>9</maven.compiler.source>
                 <maven.compiler.target>9</maven.compiler.target>
-                <agrirouter-api-protobuf-definitions.version>1.0.0-jdk9</agrirouter-api-protobuf-definitions.version>
+                <agrirouter-api-protobuf-definitions.version>1.1.0-jdk9</agrirouter-api-protobuf-definitions.version>
             </properties>
             <dependencyManagement>
                 <dependencies>
@@ -598,7 +600,7 @@
             <properties>
                 <maven.compiler.source>1.8</maven.compiler.source>
                 <maven.compiler.target>1.8</maven.compiler.target>
-                <agrirouter-api-protobuf-definitions.version>1.0.0-jdk8</agrirouter-api-protobuf-definitions.version>
+                <agrirouter-api-protobuf-definitions.version>1.1.0-jdk8</agrirouter-api-protobuf-definitions.version>
             </properties>
             <dependencyManagement>
                 <dependencies>

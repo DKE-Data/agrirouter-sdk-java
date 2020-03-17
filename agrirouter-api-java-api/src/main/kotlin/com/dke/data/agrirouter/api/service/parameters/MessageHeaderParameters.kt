@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.api.service.parameters
 
 import agrirouter.commons.Chunk
+import agrirouter.commons.MessageOuterClass
 import agrirouter.request.Request
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType
 import com.dke.data.agrirouter.api.service.ParameterValidation
@@ -30,5 +31,7 @@ class MessageHeaderParameters :  ParameterValidation {
     var recipients: List<String> = Collections.emptyList()
 
     var chunkInfo: Chunk.ChunkComponent? = null
+
+    var metadata: MessageOuterClass.Metadata? = null
 
 }
