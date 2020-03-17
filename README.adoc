@@ -51,7 +51,7 @@ If you want to add a dependency feel free to fetch the latest snapshot or releas
 == Certificates for the communication
 
 We do not longer maintain the certificates within the API.
-Maintaining them in the API would mean, that we have to release the API with every API change.
+Maintaining them in the API would mean, that we have to release the API with every change of the certificate.
 Therefore feel free to add the root certificates to a Java Key Store add reference it within your application.
 
 === Adding a certificate to the JKS
