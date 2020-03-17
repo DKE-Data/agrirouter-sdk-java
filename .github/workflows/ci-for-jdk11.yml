@@ -1,4 +1,4 @@
-name: CI for JDK 8
+name: CI for JDK 11
 
 on:
   push:
