@@ -44,10 +44,6 @@ The `impl` module contains the implementation of the given API defined by the `a
 
 The `convenience` module contains common implementations for different problems which are not located within the API. Those could be capability setting, MQTT client creation or other common problems that are normally not part of the API.
 
-== Project status
-image::https://travis-ci.com/DKE-Data/agrirouter-api-java.svg?branch=develop[Build status]
-image:https://api.codacy.com/project/badge/Grade/d8fde962e7814c96badd43e65aa84815["Codacy code quality", link="https://www.codacy.com/app/cf4thqgxcnxaovouxtnv/agrirouter-api-java?utm_source=github.com&utm_medium=referral&utm_content=DKE-Data/agrirouter-api-java&utm_campaign=Badge_Grade"]
-
 === Maven integration
 
 If you want to add a Maven dependency feel free to fetch the latest snapshot from Maven Central. Just add the following repository:
