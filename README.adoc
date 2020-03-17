@@ -44,146 +44,9 @@ The `impl` module contains the implementation of the given API defined by the `a
 
 The `convenience` module contains common implementations for different problems which are not located within the API. Those could be capability setting, MQTT client creation or other common problems that are normally not part of the API.
 
-=== Maven integration
+=== Integration
 
-If you want to add a Maven dependency feel free to fetch the latest snapshot from Maven Central. Just add the following repository:
-
-```xml
-<repositories>
-    <repository>
-        <id>snapshots-repo</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-    </repository>
-</repositories>
-```
-
-After adding the snapshot repository feel free to add the Maven dependencies:
-
-```xml
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-api</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk11</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-impl</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk11</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-convenience</artifactId>
-    <version>${agrirouter-api-java-convenience.version}</version>
-    <classifier>jdk11</classifier>
-</dependency>
-```
-
-Currently we are supporting JDK 8, JDK 9, JDK 10 and JDK 11 by using classifiers.
-
-==== JDK 8
-
-After adding the snapshot repository feel free to add the following Maven dependencies:
-
-```xml
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-api</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk8</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-impl</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk8</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-convenience</artifactId>
-    <version>${agrirouter-api-java-convenience.version}</version>
-    <classifier>jdk8</classifier>
-</dependency>
-```
-==== JDK 9
-
-After adding the snapshot repository feel free to add the following Maven dependencies:
-
-```xml
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-api</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk9</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-impl</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk9</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-convenience</artifactId>
-    <version>${agrirouter-api-java-convenience.version}</version>
-    <classifier>jdk9</classifier>
-</dependency>
-```
-==== JDK 10
-
-After adding the snapshot repository feel free to add the following Maven dependencies:
-
-```xml
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-api</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk10</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-impl</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk10</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-convenience</artifactId>
-    <version>${agrirouter-api-java-convenience.version}</version>
-    <classifier>jdk10</classifier>
-</dependency>
-```
-==== JDK 11
-
-After adding the snapshot repository feel free to add the following Maven dependencies:
-
-```xml
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-api</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk11</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-impl</artifactId>
-    <version>${agrirouter-api-java-api.version}</version>
-    <classifier>jdk11</classifier>
-</dependency>
-<dependency>
-    <groupId>com.agrirouter.api.lmis</groupId>
-    <artifactId>agrirouter-api-java-convenience</artifactId>
-    <version>${agrirouter-api-java-convenience.version}</version>
-    <classifier>jdk11</classifier>
-</dependency>
-```
+If you want to add a dependency feel free to fetch the latest snapshot or release from Github Packages. Please find the documentation right https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages[here].
 
 == Certificates for the communication
 
@@ -195,7 +58,10 @@ Therefore feel free to add the root certificates to a Java Key Store add referen
 
 The certificates are PEM files which can be added directly to the keystore using the following command.
 
-```keytool -importcert -file certificate.pem -keystore my_agrirouter_key_store.jks```
+[source]
+----
+keytool -importcert -file certificate.pem -keystore my_agrirouter_key_store.jks
+----
 
 If you try to add the command, please be aware, that the containing PEM file has to fulfill the following requirements:
 
