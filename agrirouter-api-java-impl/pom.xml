@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.agrirouter.api.lmis</groupId>
+        <groupId>com.agrirouter.api</groupId>
         <artifactId>agrirouter-api-java</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -39,7 +39,7 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.agrirouter.api.lmis</groupId>
+            <groupId>com.agrirouter.api</groupId>
             <artifactId>agrirouter-api-java-api</artifactId>
         </dependency>
         <dependency>
