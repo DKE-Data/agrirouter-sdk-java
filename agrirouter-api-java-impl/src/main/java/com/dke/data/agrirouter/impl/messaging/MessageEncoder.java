@@ -15,7 +15,6 @@ import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.google.protobuf.ByteString;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public interface MessageEncoder extends LoggingEnabledService {
@@ -165,7 +164,11 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-    List<Capabilities.CapabilitySpecification.Capability> capabilities = new ArrayList<>();
+    Capabilities.CapabilitySpecification.Builder capabilitySpecification =
+        Capabilities.CapabilitySpecification.newBuilder();
+    capabilitySpecification.setAppCertificationId(parameters.getApplicationId());
+    capabilitySpecification.setAppCertificationVersionId(parameters.getCertificationVersionId());
+    capabilitySpecification.setEnablePushNotifications(parameters.getEnablePushNotifications());
 
     parameters.getCapabilitiesParameters();
     parameters
@@ -178,23 +181,13 @@ public interface MessageEncoder extends LoggingEnabledService {
               capabilityBuilder.setDirection(p.direction);
               Capabilities.CapabilitySpecification.Capability capability =
                   capabilityBuilder.build();
-              capabilities.add(capability);
+              capabilitySpecification.getCapabilitiesList().add(capability);
             });
-
-    CapabilitiesMessageParameters capabilitiesMessageParameters =
-        new CapabilitiesMessageParameters();
-    capabilitiesMessageParameters.setCapabilities(capabilities);
-    capabilitiesMessageParameters.setAppCertificationId(parameters.getApplicationId());
-    capabilitiesMessageParameters.setAppCertificationVersionId(
-        parameters.getCertificationVersionId());
-    capabilitiesMessageParameters.setEnablePushNotifications(
-        parameters.getEnablePushNotifications());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
         Capabilities.CapabilitySpecification.getDescriptor().getFullName());
-    payloadParameters.setValue(
-        new CapabilitiesMessageContentFactory().message(capabilitiesMessageParameters));
+    payloadParameters.setValue(capabilitySpecification.build().toByteString());
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
