@@ -1,4 +1,4 @@
-name: CI for PRs
+name: Continuous integration
 
 on:
   pull_request:
