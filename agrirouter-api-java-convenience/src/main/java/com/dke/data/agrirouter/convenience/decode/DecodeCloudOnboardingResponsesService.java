@@ -46,7 +46,8 @@ public class DecodeCloudOnboardingResponsesService
       MessageOuterClass.Messages message =
           this.decodeMessageService.decode(
               decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails());
-      throw new CouldNotOnboardVirtualCommunicationUnitException(message.getMessages(0).getMessage());
+      throw new CouldNotOnboardVirtualCommunicationUnitException(
+          message.getMessages(0).getMessage());
     }
     if (decodedMessageQueryResponse.getResponseEnvelope().getType()
             == Response.ResponseEnvelope.ResponseBodyType.CLOUD_REGISTRATIONS
