@@ -27,8 +27,7 @@ public class MessageQueryServiceImpl extends EnvironmentalService
 
   @Override
   public String send(MessageQueryParameters parameters) {
-    String applicationMessageID = this.messageQueryHelperService.send(parameters);
-    return applicationMessageID;
+    return this.messageQueryHelperService.send(parameters);
   }
 
   @Override
