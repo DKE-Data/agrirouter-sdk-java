@@ -1,4 +1,4 @@
-package com.dke.data.agrirouter.api.service.onboard.cloud;
+package com.dke.data.agrirouter.api.service.messaging.cloud;
 
 import com.dke.data.agrirouter.api.service.parameters.CloudOffboardingParameters;
 

@@ -1,4 +1,4 @@
-package com.dke.data.agrirouter.impl.onboard.cloud;
+package com.dke.data.agrirouter.impl.messaging.rest.cloud;
 
 import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
 import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
@@ -14,7 +14,7 @@ import com.dke.data.agrirouter.api.exception.CouldNotOnboardVirtualCommunication
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
-import com.dke.data.agrirouter.api.service.onboard.cloud.OnboardingService;
+import com.dke.data.agrirouter.api.service.messaging.cloud.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.CloudOnboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
@@ -54,9 +54,9 @@ public class OnboardingServiceImpl
     parameters.validate();
     EncodedMessage encodedMessageResponse = this.encode(parameters);
     SendMessageParameters sendMessageParameters =
-        createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
+        this.createSendMessageParameters(encodedMessageResponse, parameters.getOnboardingResponse());
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
-        sendMessageAndFetchResponses(sendMessageParameters, parameters.getOnboardingResponse());
+        this.sendMessageAndFetchResponses(sendMessageParameters, parameters.getOnboardingResponse());
 
     List<OnboardingResponse> responses = new ArrayList<>();
     if (fetchMessageResponses.isPresent()) {

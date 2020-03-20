@@ -1,4 +1,4 @@
-package com.dke.data.agrirouter.impl.onboard.cloud;
+package com.dke.data.agrirouter.impl.messaging.rest.cloud;
 
 import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
 import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
@@ -12,7 +12,7 @@ import com.dke.data.agrirouter.api.exception.CouldNotOffboardVirtualCommunicatio
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
-import com.dke.data.agrirouter.api.service.onboard.cloud.OffboardingService;
+import com.dke.data.agrirouter.api.service.messaging.cloud.OffboardingService;
 import com.dke.data.agrirouter.api.service.parameters.CloudOffboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
