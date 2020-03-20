@@ -7,8 +7,14 @@ import agrirouter.request.payload.endpoint.Capabilities;
 import agrirouter.request.payload.endpoint.SubscriptionOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
-import com.dke.data.agrirouter.api.factories.impl.*;
-import com.dke.data.agrirouter.api.factories.impl.parameters.*;
+import com.dke.data.agrirouter.api.factories.impl.DeleteMessageMessageContentFactory;
+import com.dke.data.agrirouter.api.factories.impl.MessageConfirmationMessageContentFactory;
+import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
+import com.dke.data.agrirouter.api.factories.impl.SubscriptionMessageContentFactory;
+import com.dke.data.agrirouter.api.factories.impl.parameters.DeleteMessageMessageParameters;
+import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmationMessageParameters;
+import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
+import com.dke.data.agrirouter.api.factories.impl.parameters.SubscriptionMessageParameters;
 import com.dke.data.agrirouter.api.service.LoggingEnabledService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
@@ -91,9 +97,13 @@ public interface MessageEncoder extends LoggingEnabledService {
     }
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
+    Endpoints.ListEndpointsQuery.Builder messageContent = Endpoints.ListEndpointsQuery.newBuilder();
+    messageContent.setDirection(parameters.direction);
+    messageContent.setTechnicalMessageType(parameters.technicalMessageType.getKey());
+
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(Endpoints.ListEndpointsQuery.getDescriptor().getFullName());
-    payloadParameters.setValue(new ListEndpointsMessageContentFactory().message(parameters));
+    payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
@@ -164,11 +174,11 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-    Capabilities.CapabilitySpecification.Builder capabilitySpecification =
+    Capabilities.CapabilitySpecification.Builder messageContent =
         Capabilities.CapabilitySpecification.newBuilder();
-    capabilitySpecification.setAppCertificationId(parameters.getApplicationId());
-    capabilitySpecification.setAppCertificationVersionId(parameters.getCertificationVersionId());
-    capabilitySpecification.setEnablePushNotifications(parameters.getEnablePushNotifications());
+    messageContent.setAppCertificationId(parameters.getApplicationId());
+    messageContent.setAppCertificationVersionId(parameters.getCertificationVersionId());
+    messageContent.setEnablePushNotifications(parameters.getEnablePushNotifications());
 
     parameters.getCapabilitiesParameters();
     parameters
@@ -181,13 +191,13 @@ public interface MessageEncoder extends LoggingEnabledService {
               capabilityBuilder.setDirection(p.direction);
               Capabilities.CapabilitySpecification.Capability capability =
                   capabilityBuilder.build();
-              capabilitySpecification.getCapabilitiesList().add(capability);
+              messageContent.getCapabilitiesList().add(capability);
             });
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
         Capabilities.CapabilitySpecification.getDescriptor().getFullName());
-    payloadParameters.setValue(capabilitySpecification.build().toByteString());
+    payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
