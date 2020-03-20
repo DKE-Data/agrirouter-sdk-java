@@ -1,9 +1,6 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
-import agrirouter.request.payload.account.Endpoints;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
-import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
-import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
 import com.dke.data.agrirouter.api.service.messaging.ListEndpointsService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
@@ -47,26 +44,6 @@ public class ListEndpointsServiceImpl extends MqttService
     } catch (MqttException e) {
       throw new CouldNotSendMqttMessageException(e);
     }
-  }
-
-  public String requestFullListFilteredByAppliedRoutings(OnboardingResponse onboardingResponse) {
-    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    listEndpointsParameters.technicalMessageType = TechnicalMessageType.EMPTY;
-    listEndpointsParameters.onboardingResponse = onboardingResponse;
-    listEndpointsParameters.setUnfilteredList(false);
-
-    return this.send(listEndpointsParameters);
-  }
-
-  public String requestFullList(OnboardingResponse onboardingResponse) {
-    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    listEndpointsParameters.technicalMessageType = TechnicalMessageType.EMPTY;
-    listEndpointsParameters.onboardingResponse = onboardingResponse;
-    listEndpointsParameters.setUnfilteredList(true);
-
-    return this.send(listEndpointsParameters);
   }
 
   @Override
