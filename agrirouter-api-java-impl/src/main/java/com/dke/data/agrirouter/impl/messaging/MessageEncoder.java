@@ -310,6 +310,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
+  /**
+   * Encode message for cloud onboarding of virtual CUs.
+   *
+   * @param parameters -
+   * @return -
+   */
   default EncodedMessage encode(CloudOnboardingParameters parameters) {
     final String applicationMessageID =
         parameters.getApplicationMessageId() == null
@@ -347,6 +353,36 @@ public interface MessageEncoder extends LoggingEnabledService {
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
         CloudVirtualizedAppRegistration.OnboardingRequest.getDescriptor().getFullName());
+    payloadParameters.setValue(messageContent.build().toByteString());
+
+    String encodedMessage =
+        this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
+  }
+
+  /**
+   * Encode cloud offboarding message.
+   *
+   * @param parameters -
+   * @return -
+   */
+  default EncodedMessage encode(CloudOffboardingParameters parameters) {
+    final String applicationMessageID = MessageIdService.generateMessageId();
+
+    CloudVirtualizedAppRegistration.OffboardingRequest.Builder messageContent =
+        CloudVirtualizedAppRegistration.OffboardingRequest.newBuilder();
+    messageContent.addAllEndpoints(parameters.getEndpointIds());
+
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    messageHeaderParameters.setTechnicalMessageType(
+        TechnicalMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS);
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(
+        CloudVirtualizedAppRegistration.OffboardingRequest.getDescriptor().getFullName());
+
     payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
