@@ -37,26 +37,6 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     return encodedMessage.getApplicationMessageID();
   }
 
-  public String requestFullListFilteredByAppliedRoutings(OnboardingResponse onboardingResponse) {
-    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    listEndpointsParameters.technicalMessageType = TechnicalMessageType.EMPTY;
-    listEndpointsParameters.onboardingResponse = onboardingResponse;
-    listEndpointsParameters.setUnfilteredList(false);
-
-    return this.send(listEndpointsParameters);
-  }
-
-  public String requestFullList(OnboardingResponse onboardingResponse) {
-    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    listEndpointsParameters.technicalMessageType = TechnicalMessageType.EMPTY;
-    listEndpointsParameters.onboardingResponse = onboardingResponse;
-    listEndpointsParameters.setUnfilteredList(true);
-
-    return this.send(listEndpointsParameters);
-  }
-
   @Override
   public EncodeMessageService getEncodeMessageService() {
     return this.encodeMessageService;
