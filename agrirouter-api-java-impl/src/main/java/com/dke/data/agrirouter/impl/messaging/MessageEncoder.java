@@ -8,16 +8,13 @@ import agrirouter.request.payload.endpoint.SubscriptionOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
-import com.dke.data.agrirouter.api.factories.impl.SubscriptionMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
-import com.dke.data.agrirouter.api.factories.impl.parameters.SubscriptionMessageParameters;
 import com.dke.data.agrirouter.api.service.LoggingEnabledService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
-import com.google.protobuf.ByteString;
-import java.util.ArrayList;
+
 import java.util.Objects;
 
 public interface MessageEncoder extends LoggingEnabledService {
@@ -227,23 +224,18 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_SUBSCRIPTION);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-    SubscriptionMessageParameters subscriptionList = new SubscriptionMessageParameters();
-    subscriptionList.setSubscriptions(new ArrayList<>());
-
-    for (SetSubscriptionParameters.Subscription entry : parameters.getSubscriptions()) {
-      SubscriptionMessageParameters.SubscriptionMessageEntry messageTypeSubscriptionItem =
-          new SubscriptionMessageParameters.SubscriptionMessageEntry();
-      messageTypeSubscriptionItem.setTechnicalMessageType(entry.getTechnicalMessageType());
-      messageTypeSubscriptionItem.setDdis(entry.getDdis());
-      messageTypeSubscriptionItem.setPosition(entry.getPosition());
-      subscriptionList.getSubscriptions().add(messageTypeSubscriptionItem);
-    }
+    SubscriptionOuterClass.Subscription.Builder messageContent = SubscriptionOuterClass.Subscription.newBuilder();
+    parameters.getSubscriptions().forEach( parameter -> {
+                    SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.Builder technicalMessageType = SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.newBuilder();
+      technicalMessageType.setTechnicalMessageType(parameter.getTechnicalMessageType().getKey());
+      technicalMessageType.addAllDdis(parameter.getDdis());
+      technicalMessageType.setPosition(parameter.getPosition());
+      messageContent.addTechnicalMessageTypes(technicalMessageType);
+    });
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(SubscriptionOuterClass.Subscription.getDescriptor().getFullName());
-
-    ByteString messageValue = new SubscriptionMessageContentFactory().message(subscriptionList);
-    payloadParameters.setValue(messageValue);
+    payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
