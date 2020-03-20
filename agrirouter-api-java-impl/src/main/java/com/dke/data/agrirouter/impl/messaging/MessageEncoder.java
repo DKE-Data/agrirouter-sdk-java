@@ -7,14 +7,11 @@ import agrirouter.request.payload.endpoint.Capabilities;
 import agrirouter.request.payload.endpoint.SubscriptionOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
-import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
-import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
 import com.dke.data.agrirouter.api.service.LoggingEnabledService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
-
 import java.util.Objects;
 
 public interface MessageEncoder extends LoggingEnabledService {
@@ -44,8 +41,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     FeedRequests.MessageDelete.Builder messageContent = FeedRequests.MessageDelete.newBuilder();
-    messageContent.addAllMessageIds(parameters.getMessageIds());
-    messageContent.addAllSenders(parameters.getSenderIds());
+    if (parameters.getMessageIds() != null) {
+      messageContent.addAllMessageIds(parameters.getMessageIds());
+    }
+    if (parameters.getSenderIds() != null) {
+      messageContent.addAllSenders(parameters.getSenderIds());
+    }
     if (null != parameters.getSentFromInSeconds() || null != parameters.getSentToInSeconds()) {
       FeedRequests.ValidityPeriod.Builder validityPeriod = FeedRequests.ValidityPeriod.newBuilder();
       if (null != parameters.getSentFromInSeconds()) {
@@ -224,14 +225,21 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_SUBSCRIPTION);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-    SubscriptionOuterClass.Subscription.Builder messageContent = SubscriptionOuterClass.Subscription.newBuilder();
-    parameters.getSubscriptions().forEach( parameter -> {
-                    SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.Builder technicalMessageType = SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.newBuilder();
-      technicalMessageType.setTechnicalMessageType(parameter.getTechnicalMessageType().getKey());
-      technicalMessageType.addAllDdis(parameter.getDdis());
-      technicalMessageType.setPosition(parameter.getPosition());
-      messageContent.addTechnicalMessageTypes(technicalMessageType);
-    });
+    SubscriptionOuterClass.Subscription.Builder messageContent =
+        SubscriptionOuterClass.Subscription.newBuilder();
+    parameters
+        .getSubscriptions()
+        .forEach(
+            parameter -> {
+              SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.Builder
+                  technicalMessageType =
+                      SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.newBuilder();
+              technicalMessageType.setTechnicalMessageType(
+                  parameter.getTechnicalMessageType().getKey());
+              technicalMessageType.addAllDdis(parameter.getDdis());
+              technicalMessageType.setPosition(parameter.getPosition());
+              messageContent.addTechnicalMessageTypes(technicalMessageType);
+            });
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(SubscriptionOuterClass.Subscription.getDescriptor().getFullName());
@@ -270,18 +278,28 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     this.getNativeLogger().trace("Build message query parameters.");
-    MessageQueryMessageParameters messageQueryMessageParameters =
-        new MessageQueryMessageParameters();
-    messageQueryMessageParameters.setMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
-    messageQueryMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
-    messageQueryMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
-    messageQueryMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
+    FeedRequests.MessageQuery.Builder messageContent = FeedRequests.MessageQuery.newBuilder();
+    if (parameters.getMessageIds() != null) {
+      messageContent.addAllMessageIds(parameters.getMessageIds());
+    }
+    if (parameters.getSenderIds() != null) {
+      messageContent.addAllSenders(parameters.getSenderIds());
+    }
+    if (null != parameters.getSentFromInSeconds() || null != parameters.getSentToInSeconds()) {
+      FeedRequests.ValidityPeriod.Builder validityPeriod = FeedRequests.ValidityPeriod.newBuilder();
+      if (null != parameters.getSentFromInSeconds()) {
+        validityPeriod.setSentTo(new TimestampUtil().seconds(parameters.getSentFromInSeconds()));
+      }
+      if (null != parameters.getSentToInSeconds()) {
+        validityPeriod.setSentTo(new TimestampUtil().seconds(parameters.getSentToInSeconds()));
+      }
+      messageContent.setValidityPeriod(validityPeriod);
+    }
 
     this.getNativeLogger().trace("Build message payload parameters.");
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(FeedRequests.MessageQuery.getDescriptor().getFullName());
-    payloadParameters.setValue(
-        new MessageQueryMessageContentFactory().message(messageQueryMessageParameters));
+    payloadParameters.setValue(messageContent.build().toByteString());
 
     this.getNativeLogger().trace("Encode message.");
     String encodedMessage =
