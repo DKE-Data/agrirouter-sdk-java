@@ -8,12 +8,9 @@ import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-
 import java.util.Collections;
 
-/**
- * Service implementation.
- */
+/** Service implementation. */
 public class CloudOffboardingServiceImpl
     implements CloudOffboardingService, MessageSender, ResponseValidator, MessageEncoder {
 
@@ -36,7 +33,7 @@ public class CloudOffboardingServiceImpl
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
-            Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
     this.assertStatusCodeIsValid(response.getNativeResponse().getStatus());
     return encodedMessageResponse.getApplicationMessageID();
