@@ -7,17 +7,16 @@ import agrirouter.request.payload.endpoint.Capabilities;
 import agrirouter.request.payload.endpoint.SubscriptionOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
-import com.dke.data.agrirouter.api.factories.impl.DeleteMessageMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.MessageConfirmationMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.SubscriptionMessageContentFactory;
-import com.dke.data.agrirouter.api.factories.impl.parameters.DeleteMessageMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmationMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.SubscriptionMessageParameters;
 import com.dke.data.agrirouter.api.service.LoggingEnabledService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
+import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.google.protobuf.ByteString;
 import java.util.ArrayList;
@@ -49,18 +48,23 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-    DeleteMessageMessageParameters deleteMessageMessageParameters =
-        new DeleteMessageMessageParameters();
-    deleteMessageMessageParameters.setMessageIds(
-        Objects.requireNonNull(parameters.getMessageIds()));
-    deleteMessageMessageParameters.setSenderIds(Objects.requireNonNull(parameters.getSenderIds()));
-    deleteMessageMessageParameters.setSentFromInSeconds(parameters.getSentFromInSeconds());
-    deleteMessageMessageParameters.setSentToInSeconds(parameters.getSentToInSeconds());
+    FeedRequests.MessageDelete.Builder messageContent = FeedRequests.MessageDelete.newBuilder();
+    messageContent.addAllMessageIds(parameters.getMessageIds());
+    messageContent.addAllSenders(parameters.getSenderIds());
+    if (null != parameters.getSentFromInSeconds() || null != parameters.getSentToInSeconds()) {
+      FeedRequests.ValidityPeriod.Builder validityPeriod = FeedRequests.ValidityPeriod.newBuilder();
+      if (null != parameters.getSentFromInSeconds()) {
+        validityPeriod.setSentFrom(new TimestampUtil().seconds(parameters.getSentFromInSeconds()));
+      }
+      if (null != parameters.getSentToInSeconds()) {
+        validityPeriod.setSentTo(new TimestampUtil().seconds(parameters.getSentToInSeconds()));
+      }
+      messageContent.setValidityPeriod(validityPeriod);
+    }
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(FeedRequests.MessageDelete.getDescriptor().getFullName());
-    payloadParameters.setValue(
-        new DeleteMessageMessageContentFactory().message(deleteMessageMessageParameters));
+    payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
