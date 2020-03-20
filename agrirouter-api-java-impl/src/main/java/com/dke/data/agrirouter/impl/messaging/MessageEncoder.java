@@ -7,10 +7,8 @@ import agrirouter.request.payload.endpoint.Capabilities;
 import agrirouter.request.payload.endpoint.SubscriptionOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
-import com.dke.data.agrirouter.api.factories.impl.MessageConfirmationMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.MessageQueryMessageContentFactory;
 import com.dke.data.agrirouter.api.factories.impl.SubscriptionMessageContentFactory;
-import com.dke.data.agrirouter.api.factories.impl.parameters.MessageConfirmationMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.MessageQueryMessageParameters;
 import com.dke.data.agrirouter.api.factories.impl.parameters.SubscriptionMessageParameters;
 import com.dke.data.agrirouter.api.service.LoggingEnabledService;
@@ -139,15 +137,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_CONFIRM);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-    MessageConfirmationMessageParameters messageConfirmationMessageParameters =
-        new MessageConfirmationMessageParameters();
-    messageConfirmationMessageParameters.setMessageIds(parameters.getMessageIds());
+    FeedRequests.MessageConfirm.Builder messageContent = FeedRequests.MessageConfirm.newBuilder();
+    messageContent.addAllMessageIds(parameters.getMessageIds());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(FeedRequests.MessageConfirm.getDescriptor().getFullName());
-    payloadParameters.setValue(
-        new MessageConfirmationMessageContentFactory()
-            .message(messageConfirmationMessageParameters));
+    payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
