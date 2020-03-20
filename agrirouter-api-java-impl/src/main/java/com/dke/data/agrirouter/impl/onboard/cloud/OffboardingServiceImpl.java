@@ -12,20 +12,20 @@ import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.exception.CouldNotOffboardVirtualCommunicationUnitException;
-import com.dke.data.agrirouter.api.factories.impl.CloudEndpointOffboardingMessageContentFactory;
-import com.dke.data.agrirouter.api.factories.impl.parameters.CloudEndpointOffboardingMessageParameters;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.onboard.cloud.OffboardingService;
-import com.dke.data.agrirouter.api.service.parameters.*;
+import com.dke.data.agrirouter.api.service.parameters.CloudOffboardingParameters;
+import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
+import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
+import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -84,22 +84,15 @@ public class OffboardingServiceImpl
   private EncodedMessage encodeOffboardingMessage(CloudOffboardingParameters parameters) {
     final String applicationMessageID = MessageIdService.generateMessageId();
 
-    CloudEndpointOffboardingMessageParameters cloudOffboardingParameters =
-        new CloudEndpointOffboardingMessageParameters();
-    cloudOffboardingParameters.setEndpointIds(new ArrayList<>());
-    parameters
-        .getEndpointIds()
-        .forEach(
-            endpointId -> {
-              cloudOffboardingParameters.getEndpointIds().add(endpointId);
-            });
+    CloudVirtualizedAppRegistration.OffboardingRequest.Builder messageContent =
+        CloudVirtualizedAppRegistration.OffboardingRequest.newBuilder();
+    messageContent.addAllEndpoints(parameters.getEndpointIds());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
         CloudVirtualizedAppRegistration.OffboardingRequest.getDescriptor().getFullName());
 
-    payloadParameters.setValue(
-        new CloudEndpointOffboardingMessageContentFactory().message(cloudOffboardingParameters));
+    payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
         this.encodeMessageService.encode(
