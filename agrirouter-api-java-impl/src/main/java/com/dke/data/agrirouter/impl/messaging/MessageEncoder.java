@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.impl.messaging;
 
+import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
 import agrirouter.request.payload.account.Endpoints;
@@ -306,6 +307,50 @@ public interface MessageEncoder extends LoggingEnabledService {
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
 
     this.logMethodEnd(encodedMessage);
+    return new EncodedMessage(applicationMessageID, encodedMessage);
+  }
+
+  default EncodedMessage encode(CloudOnboardingParameters parameters) {
+    final String applicationMessageID =
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
+
+    final String teamsetContextId =
+        parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
+
+    int sequenceNumber = parameters.getSequenceNumber();
+
+    MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+    messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+    messageHeaderParameters.setTeamSetContextId(teamsetContextId);
+    messageHeaderParameters.setApplicationMessageSeqNo(sequenceNumber);
+    messageHeaderParameters.setTechnicalMessageType(
+        TechnicalMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+
+    CloudVirtualizedAppRegistration.OnboardingRequest.Builder messageContent =
+        CloudVirtualizedAppRegistration.OnboardingRequest.newBuilder();
+    parameters
+        .getEndpointDetails()
+        .forEach(
+            p -> {
+              CloudVirtualizedAppRegistration.OnboardingRequest.EndpointRegistrationDetails.Builder
+                  builder =
+                      CloudVirtualizedAppRegistration.OnboardingRequest.EndpointRegistrationDetails
+                          .newBuilder();
+              builder.setId(p.getEndpointId());
+              builder.setName(p.getEndpointName());
+              messageContent.addOnboardingRequests(builder.build());
+            });
+
+    PayloadParameters payloadParameters = new PayloadParameters();
+    payloadParameters.setTypeUrl(
+        CloudVirtualizedAppRegistration.OnboardingRequest.getDescriptor().getFullName());
+    payloadParameters.setValue(messageContent.build().toByteString());
+
+    String encodedMessage =
+        this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
     return new EncodedMessage(applicationMessageID, encodedMessage);
   }
 
