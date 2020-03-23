@@ -21,64 +21,70 @@ public class SendContentMessageServiceImpl
     implements SendContentMessageService, MessageSender, ResponseValidator, MessageEncoder {
 
   private final EncodeMessageService encodeMessageService;
-  private final SendMessageService sendMessageService;
 
   public SendContentMessageServiceImpl() {
     this.encodeMessageService = new EncodeMessageServiceImpl();
-    this.sendMessageService = new SendMessageServiceImpl();
   }
 
   @Override
   public String send(SendContentMessageParameters parameters) {
     parameters.validate();
+    String base64EncodedMessageContent = parameters.getBase64EncodedMessageContent();
 
-    String base64EncodedMessageContent = Base64.getEncoder().encodeToString(Objects.requireNonNull(parameters.getBase64EncodedMessageContent()).getBytes());
-
-    String applicationMessageId =
-        parameters.getApplicationMessageId() != null
-            ? parameters.getApplicationMessageId()
-            : MessageIdService.generateMessageId();
-
-    SendMessageParameters sendMessageParameters = new SendMessageParameters();
-    sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-    sendMessageParameters.setApplicationMessageId(applicationMessageId);
-    sendMessageParameters.setTeamsetContextId(parameters.getTeamsetContextId());
-
-    if (this.hasMessageContentToBeChunked(base64EncodedMessageContent)) {
-      String chunkContextId = UUID.randomUUID().toString();
-      int totalSize =
-          parameters.getBase64EncodedMessageContent().getBytes(StandardCharsets.UTF_8).length;
-      List<byte[]> chunks =
-          this.chunkMessageContent(base64EncodedMessageContent, parameters.getChunkSize());
-      int current = 0;
-      chunks.forEach(
-          chunk -> {
-            MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
-            messageHeaderParameters.setMode(parameters.getMode());
-            messageHeaderParameters.setApplicationMessageId(MessageIdService.generateMessageId());
-            messageHeaderParameters.setApplicationMessageSeqNo(SequenceNumberService.next());
-            messageHeaderParameters.setTechnicalMessageType(parameters.getTechnicalMessageType());
-            messageHeaderParameters.setTeamSetContextId(parameters.getTeamsetContextId());
-            messageHeaderParameters.setRecipients(parameters.getRecipients());
-            messageHeaderParameters.setMetadata(parameters.getMetadata());
-            Chunk.ChunkComponent.Builder chunkInfo = Chunk.ChunkComponent.newBuilder();
-            chunkInfo.setContextId(chunkContextId);
-            chunkInfo.setCurrent(current);
-            chunkInfo.setTotal(chunks.size());
-            chunkInfo.setTotalSize(totalSize);
-            messageHeaderParameters.setChunkInfo(chunkInfo.build());
-            PayloadParameters payloadParameters = new PayloadParameters();
-            payloadParameters.setTypeUrl(parameters.getTypeUrl());
-            payloadParameters.setValue(ByteString.copyFrom(chunk));
-            sendMessageParameters
-                .getEncodedMessages()
-                .add(this.encodeMessageService.encode(messageHeaderParameters, payloadParameters));
-          });
+      if(parameters.getTechnicalMessageType().getHasToBeBase64Encoded()){
+        assert base64EncodedMessageContent != null;
+        base64EncodedMessageContent = Base64.getEncoder().encodeToString(base64EncodedMessageContent.getBytes());
     }
+      String applicationMessageId =
+              parameters.getApplicationMessageId() != null
+                      ? parameters.getApplicationMessageId()
+                      : MessageIdService.generateMessageId();
 
-    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
-    this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
-    return applicationMessageId;
+      SendMessageParameters sendMessageParameters = new SendMessageParameters();
+      sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+      sendMessageParameters.setApplicationMessageId(applicationMessageId);
+      sendMessageParameters.setTeamsetContextId(parameters.getTeamsetContextId());
+
+    if(parameters.getTechnicalMessageType().isChunkable()) {
+        assert base64EncodedMessageContent != null;
+        if (this.hasMessageContentToBeChunked(base64EncodedMessageContent)) {
+            String chunkContextId = UUID.randomUUID().toString();
+            int totalSize =
+                    Objects.requireNonNull(parameters.getBase64EncodedMessageContent()).getBytes(StandardCharsets.UTF_8).length;
+            List<byte[]> chunks =
+                    this.chunkMessageContent(base64EncodedMessageContent, parameters.getChunkSize());
+            int current = 0;
+            chunks.forEach(
+                    chunk -> {
+                        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+                        messageHeaderParameters.setMode(parameters.getMode());
+                        messageHeaderParameters.setApplicationMessageId(MessageIdService.generateMessageId());
+                        messageHeaderParameters.setApplicationMessageSeqNo(SequenceNumberService.next());
+                        messageHeaderParameters.setTechnicalMessageType(parameters.getTechnicalMessageType());
+                        messageHeaderParameters.setTeamSetContextId(parameters.getTeamsetContextId());
+                        messageHeaderParameters.setRecipients(parameters.getRecipients());
+                        messageHeaderParameters.setMetadata(parameters.getMetadata());
+                        Chunk.ChunkComponent.Builder chunkInfo = Chunk.ChunkComponent.newBuilder();
+                        chunkInfo.setContextId(chunkContextId);
+                        chunkInfo.setCurrent(current);
+                        chunkInfo.setTotal(chunks.size());
+                        chunkInfo.setTotalSize(totalSize);
+                        messageHeaderParameters.setChunkInfo(chunkInfo.build());
+                        PayloadParameters payloadParameters = new PayloadParameters();
+                        payloadParameters.setTypeUrl(parameters.getTypeUrl());
+                        payloadParameters.setValue(ByteString.copyFrom(chunk));
+                        sendMessageParameters
+                                .getEncodedMessages()
+                                .add(this.encodeMessageService.encode(messageHeaderParameters, payloadParameters));
+                    });
+        }
+
+    }else{
+        sendMessageParameters.getEncodedMessages().add(parameters.getBase64EncodedMessageContent());
+    }
+      MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+      this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
+      return applicationMessageId;
   }
 
   private boolean hasMessageContentToBeChunked(String base64EncodedMessageContent) {
