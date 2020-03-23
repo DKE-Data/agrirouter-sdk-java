@@ -32,6 +32,8 @@ public class SendContentMessageServiceImpl
   public String send(SendContentMessageParameters parameters) {
     parameters.validate();
 
+    String base64EncodedMessageContent = Base64.getEncoder().encodeToString(Objects.requireNonNull(parameters.getBase64EncodedMessageContent()).getBytes());
+
     String applicationMessageId =
         parameters.getApplicationMessageId() != null
             ? parameters.getApplicationMessageId()
@@ -42,14 +44,12 @@ public class SendContentMessageServiceImpl
     sendMessageParameters.setApplicationMessageId(applicationMessageId);
     sendMessageParameters.setTeamsetContextId(parameters.getTeamsetContextId());
 
-    if (this.hasMessageContentToBeChunked(
-        Objects.requireNonNull(parameters.getBase64EncodedMessageContent()))) {
+    if (this.hasMessageContentToBeChunked(base64EncodedMessageContent)) {
       String chunkContextId = UUID.randomUUID().toString();
       int totalSize =
           parameters.getBase64EncodedMessageContent().getBytes(StandardCharsets.UTF_8).length;
       List<byte[]> chunks =
-          this.chunkMessageContent(
-              parameters.getBase64EncodedMessageContent(), parameters.getChunkSize());
+          this.chunkMessageContent(base64EncodedMessageContent, parameters.getChunkSize());
       int current = 0;
       chunks.forEach(
           chunk -> {
