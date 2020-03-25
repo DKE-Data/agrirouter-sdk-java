@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging;
 
 import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
+import agrirouter.commons.MessageOuterClass;
 import agrirouter.feed.request.FeedRequests;
 import agrirouter.request.Request;
 import agrirouter.request.payload.account.Endpoints;
@@ -37,6 +38,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
     messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
@@ -83,6 +85,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             ? MessageIdService.generateMessageId()
             : parameters.getApplicationMessageId();
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+    messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
     final String teamsetContextId =
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
@@ -127,6 +130,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+    messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
     final String teamsetContextId =
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
@@ -163,6 +167,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+    messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
     final String teamsetContextId =
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
@@ -217,6 +222,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+    messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
     final String teamsetContextId =
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
@@ -270,6 +276,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             : parameters.getApplicationMessageId();
 
     messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
+    messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
     final String teamsetContextId =
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
@@ -331,6 +338,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
     messageHeaderParameters.setTeamSetContextId(teamsetContextId);
     messageHeaderParameters.setApplicationMessageSeqNo(sequenceNumber);
+    messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
     messageHeaderParameters.setTechnicalMessageType(
         TechnicalMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
@@ -378,6 +386,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setTechnicalMessageType(
         TechnicalMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+    messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
