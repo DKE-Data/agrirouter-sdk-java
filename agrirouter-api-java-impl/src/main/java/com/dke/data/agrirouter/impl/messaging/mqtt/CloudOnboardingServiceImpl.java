@@ -2,9 +2,9 @@ package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
-import com.dke.data.agrirouter.api.service.messaging.ListEndpointsService;
+import com.dke.data.agrirouter.api.service.messaging.CloudOnboardingService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
-import com.dke.data.agrirouter.api.service.parameters.ListEndpointsParameters;
+import com.dke.data.agrirouter.api.service.parameters.CloudOnboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
@@ -15,18 +15,23 @@ import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class ListEndpointsServiceImpl extends MqttService
-    implements ListEndpointsService, MessageBodyCreator, MessageEncoder {
+public class CloudOnboardingServiceImpl extends MqttService
+    implements CloudOnboardingService, MessageBodyCreator, MessageEncoder {
 
-  private EncodeMessageService encodeMessageService;
+  private final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-  public ListEndpointsServiceImpl(IMqttClient mqttClient) {
+  public CloudOnboardingServiceImpl(IMqttClient mqttClient) {
     super(mqttClient);
-    this.encodeMessageService = new EncodeMessageServiceImpl();
   }
 
+  /**
+   * Onboarding a virtual CU for an existing cloud application (incl. several checks).
+   *
+   * @param parameters Parameters for the onboarding.
+   * @return -
+   */
   @Override
-  public String send(ListEndpointsParameters parameters) {
+  public String send(CloudOnboardingParameters parameters) {
     parameters.validate();
     try {
       EncodedMessage encodedMessage = this.encode(parameters);

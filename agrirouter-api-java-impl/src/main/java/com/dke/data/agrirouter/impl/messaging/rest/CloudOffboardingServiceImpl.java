@@ -1,36 +1,41 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
-import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.service.messaging.ListEndpointsService;
+import com.dke.data.agrirouter.api.service.messaging.CloudOffboardingService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
-import com.dke.data.agrirouter.api.service.parameters.ListEndpointsParameters;
+import com.dke.data.agrirouter.api.service.parameters.CloudOffboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
-import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 
-public class ListEndpointsServiceImpl extends EnvironmentalService
-    implements ListEndpointsService, MessageSender, MessageEncoder, ResponseValidator {
+/** Service implementation. */
+public class CloudOffboardingServiceImpl
+    implements CloudOffboardingService, MessageSender, ResponseValidator, MessageEncoder {
 
-  private EncodeMessageService encodeMessageService;
+  private final EncodeMessageService encodeMessageService;
 
-  public ListEndpointsServiceImpl(Environment environment) {
-    super(environment);
+  public CloudOffboardingServiceImpl() {
     this.encodeMessageService = new EncodeMessageServiceImpl();
   }
 
+  /**
+   * Offboarding a virtual CU. Will deliver no result if the action was successful, if there's any
+   * error an exception will be thrown.
+   *
+   * @param parameters Parameters for offboarding.
+   */
   @Override
-  public String send(ListEndpointsParameters parameters) {
+  public String send(CloudOffboardingParameters parameters) {
     parameters.validate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
         Collections.singletonList(encodedMessage.getEncodedMessage()));
-    this.sendMessage(sendMessageParameters);
+    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+    this.assertStatusCodeIsValid(response.getNativeResponse().getStatus());
     return encodedMessage.getApplicationMessageID();
   }
 

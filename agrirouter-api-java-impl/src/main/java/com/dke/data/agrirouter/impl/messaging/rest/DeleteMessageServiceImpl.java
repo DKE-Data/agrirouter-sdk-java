@@ -22,14 +22,14 @@ public class DeleteMessageServiceImpl
   @Override
   public String send(DeleteMessageParameters parameters) {
     parameters.validate();
-    EncodedMessage encodedMessageResponse = this.encode(parameters);
+    EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
+        Collections.singletonList(encodedMessage.getEncodedMessage()));
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
     this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
-    return encodedMessageResponse.getApplicationMessageID();
+    return encodedMessage.getApplicationMessageID();
   }
 
   @Override

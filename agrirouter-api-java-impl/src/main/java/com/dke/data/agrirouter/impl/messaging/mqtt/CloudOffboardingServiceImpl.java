@@ -2,9 +2,9 @@ package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
-import com.dke.data.agrirouter.api.service.messaging.ListEndpointsService;
+import com.dke.data.agrirouter.api.service.messaging.CloudOffboardingService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
-import com.dke.data.agrirouter.api.service.parameters.ListEndpointsParameters;
+import com.dke.data.agrirouter.api.service.parameters.CloudOffboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
@@ -15,18 +15,24 @@ import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class ListEndpointsServiceImpl extends MqttService
-    implements ListEndpointsService, MessageBodyCreator, MessageEncoder {
+/** Service implementation. */
+public class CloudOffboardingServiceImpl extends MqttService
+    implements CloudOffboardingService, MessageBodyCreator, MessageEncoder {
 
-  private EncodeMessageService encodeMessageService;
+  private final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-  public ListEndpointsServiceImpl(IMqttClient mqttClient) {
+  public CloudOffboardingServiceImpl(IMqttClient mqttClient) {
     super(mqttClient);
-    this.encodeMessageService = new EncodeMessageServiceImpl();
   }
 
+  /**
+   * Offboarding a virtual CU. Will deliver no result if the action was successful, if there's any
+   * error an exception will be thrown.
+   *
+   * @param parameters Parameters for offboarding.
+   */
   @Override
-  public String send(ListEndpointsParameters parameters) {
+  public String send(CloudOffboardingParameters parameters) {
     parameters.validate();
     try {
       EncodedMessage encodedMessage = this.encode(parameters);
