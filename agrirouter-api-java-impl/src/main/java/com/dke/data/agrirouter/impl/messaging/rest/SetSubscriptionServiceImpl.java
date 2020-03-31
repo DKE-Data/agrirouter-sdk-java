@@ -25,15 +25,14 @@ public class SetSubscriptionServiceImpl extends EnvironmentalService
   @Override
   public String send(SetSubscriptionParameters parameters) {
     parameters.validate();
-
-    EncodedMessage encodeMessageResponse = this.encodeMessage(parameters);
+    EncodedMessage encodedMessage = this.encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
-        Collections.singletonList(encodeMessageResponse.getEncodedMessage()));
+        Collections.singletonList(encodedMessage.getEncodedMessage()));
     MessageSenderResponse response = this.sendMessage(sendMessageParameters);
     this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
-    return encodeMessageResponse.getApplicationMessageID();
+    return encodedMessage.getApplicationMessageID();
   }
 
   @Override
