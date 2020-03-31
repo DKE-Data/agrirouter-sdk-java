@@ -30,7 +30,6 @@
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.el</artifactId>
-            <version>${javax.el.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
