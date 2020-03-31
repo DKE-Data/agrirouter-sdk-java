@@ -164,8 +164,7 @@ public final class RequestFactory {
     WebTarget target = client.target(url);
     Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
     request.accept(MediaType.APPLICATION_JSON_TYPE);
-    cookies
-        .stream()
+    cookies.stream()
         .map(
             cookie ->
                 new javax.ws.rs.core.Cookie(
