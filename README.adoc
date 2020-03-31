@@ -46,7 +46,8 @@ The `convenience` module contains common implementations for different problems 
 
 === Integration
 
-If you want to add a dependency feel free to fetch the latest snapshot or release from Github Packages. Please find the documentation right https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages[here].
+If you want to add a dependency feel free to fetch the latest release from Github Packages. Please find the documentation right https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages[here].
+We are supporting JDK 8 and later, releases are build using a JDK 8 to have compatibility for most users. If you need to build the current development branch, please feel free build the branch on yourself and install it to your local repository.
 
 == Certificates for the communication
 
