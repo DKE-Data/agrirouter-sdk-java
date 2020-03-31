@@ -428,18 +428,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>jdk8</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <jdk>1.8</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.source>1.8</maven.compiler.source>
-                <maven.compiler.target>1.8</maven.compiler.target>
-                </properties>
-        </profile>
-    </profiles>
-
 </project>
