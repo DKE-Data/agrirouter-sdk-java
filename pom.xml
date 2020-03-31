@@ -529,72 +529,9 @@
             </build>
         </profile>
         <profile>
-            <id>jdk11</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <jdk>11</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.source>11</maven.compiler.source>
-                <maven.compiler.target>11</maven.compiler.target>
-                <agrirouter-api-protobuf-definitions.version>1.1.0-jdk11</agrirouter-api-protobuf-definitions.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.agrirouter.proto</groupId>
-                        <artifactId>agrirouter-api-protobuf-definitions</artifactId>
-                        <version>${agrirouter-api-protobuf-definitions.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-        </profile>
-        <profile>
-            <id>jdk10</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <jdk>10</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.source>10</maven.compiler.source>
-                <maven.compiler.target>10</maven.compiler.target>
-                <agrirouter-api-protobuf-definitions.version>1.1.0-jdk10</agrirouter-api-protobuf-definitions.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.agrirouter.proto</groupId>
-                        <artifactId>agrirouter-api-protobuf-definitions</artifactId>
-                        <version>${agrirouter-api-protobuf-definitions.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-        </profile>
-        <profile>
-            <id>jdk9</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <jdk>9</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.source>9</maven.compiler.source>
-                <maven.compiler.target>9</maven.compiler.target>
-                <agrirouter-api-protobuf-definitions.version>1.1.0-jdk9</agrirouter-api-protobuf-definitions.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.agrirouter.proto</groupId>
-                        <artifactId>agrirouter-api-protobuf-definitions</artifactId>
-                        <version>${agrirouter-api-protobuf-definitions.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-        </profile>
-        <profile>
             <id>jdk8</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
                 <jdk>1.8</jdk>
             </activation>
             <properties>
