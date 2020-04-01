@@ -93,8 +93,7 @@ public class CookieResolverService extends EnvironmentalService {
   private boolean isAnyCookieExpired(Set<Cookie> cookies) {
     return null == cookies
         || cookies.isEmpty()
-        || cookies
-            .stream()
+        || cookies.stream()
             .anyMatch(
                 cookie ->
                     cookie.getExpires() != null

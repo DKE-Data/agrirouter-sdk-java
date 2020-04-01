@@ -23,8 +23,7 @@ public class IllegalParameterDefinitionException extends RuntimeException {
   public IllegalParameterDefinitionException(Set<ConstraintViolation<ParameterValidation>> errors) {
     if (null != errors) {
       this.errors =
-          errors
-              .stream()
+          errors.stream()
               .map(
                   e ->
                       "Validation error for property '"
