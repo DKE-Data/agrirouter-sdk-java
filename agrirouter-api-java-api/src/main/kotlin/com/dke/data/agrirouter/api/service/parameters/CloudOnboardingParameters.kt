@@ -4,17 +4,14 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
 import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
-import javax.validation.constraints.NotNull
 
 /**
  * Parameters class. Encapsulation for the services.
  */
 class CloudOnboardingParameters : AbstractParameterBase(), ParameterValidation {
 
-    @NotNull
     lateinit var onboardingResponse: OnboardingResponse
 
-    @NotNull
     lateinit var endpointDetails: List<EndpointDetailsParameters>
 
     override fun validate() {

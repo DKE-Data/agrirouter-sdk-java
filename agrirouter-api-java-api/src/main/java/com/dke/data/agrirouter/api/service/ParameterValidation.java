@@ -1,15 +1,12 @@
 package com.dke.data.agrirouter.api.service;
 
 import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/** Parameter validation using bean validation. */
+/**
+ * Parameter validation using bean validation.
+ */
 public interface ParameterValidation {
 
   Logger LOGGER = LogManager.getLogger();
@@ -22,11 +19,32 @@ public interface ParameterValidation {
    */
   default void validate() {
     LOGGER.debug("Validating parameters.");
-    ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-    Validator validator = validatorFactory.getValidator();
-    Set<ConstraintViolation<ParameterValidation>> validate = validator.validate(this);
-    if (validate.size() > 0) {
-      throw new IllegalParameterDefinitionException(validate);
-    }
+    LOGGER.trace("Technical validation.");
+    this.technicalValidation();
+    LOGGER.trace("Business validation.");
+    this.businessValidation();
   }
+
+  /**
+   * Technical validation. Empty by default.
+   */
+  default void technicalValidation() {
+    //
+  }
+
+  /**
+   * Business validation. Empty by default.
+   */
+  default void businessValidation() {
+    //
+  }
+
+  /**
+   * rise an exception if the parameter was not valid.
+   * @param parameterName
+   */
+  default void throwException(String parameterName){
+    throw new IllegalParameterDefinitionException(String.format("Parameter '%s' was not defined correctly, please check the values."));
+  }
+
 }
