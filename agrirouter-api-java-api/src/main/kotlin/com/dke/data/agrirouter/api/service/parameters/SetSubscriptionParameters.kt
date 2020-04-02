@@ -4,27 +4,31 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
-import lombok.ToString
-import javax.validation.constraints.NotNull
 
 /**
  * Parameters class. Encapsulation for the services.
  */
-@ToString
 class SetSubscriptionParameters : AbstractParameterBase(), ParameterValidation {
 
-    @NotNull
-    lateinit var onboardingResponse: OnboardingResponse
+    var onboardingResponse: OnboardingResponse? = null
 
     class Subscription : ParameterValidation {
-        @NotNull
-        lateinit var technicalMessageType: TechnicalMessageType
+
+        var technicalMessageType: TechnicalMessageType? = null
 
         var ddis: List<Int> = ArrayList()
 
         var position: Boolean = false
+
+        override fun technicalValidation() {
+            nullCheck(technicalMessageType)
+        }
     }
 
     var subscriptions: List<Subscription> = ArrayList()
+
+    override fun technicalValidation() {
+        nullCheck(onboardingResponse)
+    }
 
 }

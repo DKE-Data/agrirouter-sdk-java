@@ -3,46 +3,37 @@ package com.dke.data.agrirouter.api.service.parameters
 import com.dke.data.agrirouter.api.enums.CertificationType
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
-import lombok.ToString
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 
 /**
  * Parameters class. Encapsulation for the services.
  */
-@ToString
 class SecuredOnboardingParameters : AbstractParameterBase(), ParameterValidation {
 
-    @NotNull
-    @NotEmpty
-    lateinit var applicationId: String
+    var applicationId: String? = null
 
-    @NotNull
-    @NotEmpty
-    lateinit var privateKey: String
+    var privateKey: String? = null
 
-    @NotNull
-    @NotEmpty
-    lateinit var publicKey: String
+    var publicKey: String? = null
 
-    @NotNull
-    @NotEmpty
-    lateinit var uuid: String
+    var uuid: String? = null
 
-    @NotNull
-    @NotEmpty
-    lateinit var certificationVersionId: String
+    var certificationVersionId: String? = null
 
-    @NotNull
-    @NotEmpty
-    lateinit var gatewayId: String
+    var gatewayId: String? = null
 
-    @NotNull
-    lateinit var certificationType: CertificationType
+    var certificationType: CertificationType? = null
 
-    @NotNull
-    @NotBlank
-    lateinit var registrationCode: String
+    var registrationCode: String? = null
+
+    override fun technicalValidation() {
+        isBlank(applicationId)
+        isBlank(privateKey)
+        isBlank(publicKey)
+        isBlank(uuid)
+        isBlank(certificationVersionId)
+        isBlank(gatewayId)
+        isBlank(registrationCode)
+        nullCheck(certificationType)
+    }
 
 }

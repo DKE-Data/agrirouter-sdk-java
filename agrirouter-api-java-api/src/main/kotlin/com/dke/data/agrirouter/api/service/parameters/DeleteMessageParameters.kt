@@ -1,20 +1,15 @@
 package com.dke.data.agrirouter.api.service.parameters
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
-import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
-import lombok.ToString
-import javax.validation.constraints.NotNull
 
 /**
  * Parameters class. Encapsulation for the services.
  */
-@ToString
 class DeleteMessageParameters : AbstractParameterBase(), ParameterValidation {
 
-    @NotNull
-    lateinit var onboardingResponse: OnboardingResponse
+    var onboardingResponse: OnboardingResponse? = null
 
     var messageIds: List<String>? = null
 
@@ -24,10 +19,13 @@ class DeleteMessageParameters : AbstractParameterBase(), ParameterValidation {
 
     var sentToInSeconds: Long? = null
 
-    override fun validate() {
-        super.validate()
+    override fun technicalValidation() {
+        nullCheck(onboardingResponse)
+    }
+
+    override fun businessValidation() {
         if (null == messageIds && null == senderIds && null == sentFromInSeconds && null == sentToInSeconds) {
-            throw IllegalParameterDefinitionException("There has to be a filter criteria for the query.")
+            rise("There has to be a filter criteria for the query.")
         }
     }
 

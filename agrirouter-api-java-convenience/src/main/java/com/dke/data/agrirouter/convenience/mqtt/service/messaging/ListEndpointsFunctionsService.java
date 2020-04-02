@@ -25,9 +25,9 @@ public class ListEndpointsFunctionsService {
    */
   public String requestFullListFilteredByAppliedRoutings(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    listEndpointsParameters.technicalMessageType = TechnicalMessageType.EMPTY;
-    listEndpointsParameters.onboardingResponse = onboardingResponse;
+    listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
+    listEndpointsParameters.setTechnicalMessageType(TechnicalMessageType.EMPTY);
+    listEndpointsParameters.setOnboardingResponse(onboardingResponse);
     listEndpointsParameters.setUnfilteredList(false);
 
     return this.listEndpointsService.send(listEndpointsParameters);
@@ -41,9 +41,9 @@ public class ListEndpointsFunctionsService {
    */
   public String requestFullList(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.direction = Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE;
-    listEndpointsParameters.technicalMessageType = TechnicalMessageType.EMPTY;
-    listEndpointsParameters.onboardingResponse = onboardingResponse;
+    listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
+    listEndpointsParameters.setTechnicalMessageType(TechnicalMessageType.EMPTY);
+    listEndpointsParameters.setOnboardingResponse(onboardingResponse);
     listEndpointsParameters.setUnfilteredList(true);
 
     return this.listEndpointsService.send(listEndpointsParameters);
