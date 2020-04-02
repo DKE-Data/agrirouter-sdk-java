@@ -18,8 +18,4 @@ class MessageConfirmationParameters : AbstractParameterBase(), ParameterValidati
         nullCheck(messageIds)
     }
 
-    override fun businessValidation() {
-        nullOrEmpty(messageIds)
-    }
-
 }

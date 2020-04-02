@@ -103,7 +103,8 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     Endpoints.ListEndpointsQuery.Builder messageContent = Endpoints.ListEndpointsQuery.newBuilder();
     messageContent.setDirection(Objects.requireNonNull(parameters.getDirection()));
-    messageContent.setTechnicalMessageType(Objects.requireNonNull(parameters.getTechnicalMessageType()).getKey());
+    messageContent.setTechnicalMessageType(
+        Objects.requireNonNull(parameters.getTechnicalMessageType()).getKey());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(Endpoints.ListEndpointsQuery.getDescriptor().getFullName());
@@ -180,17 +181,18 @@ public interface MessageEncoder extends LoggingEnabledService {
     Capabilities.CapabilitySpecification.Builder messageContent =
         Capabilities.CapabilitySpecification.newBuilder();
     messageContent.setAppCertificationId(Objects.requireNonNull(parameters.getApplicationId()));
-    messageContent.setAppCertificationVersionId(Objects.requireNonNull(parameters.getCertificationVersionId()));
+    messageContent.setAppCertificationVersionId(
+        Objects.requireNonNull(parameters.getCertificationVersionId()));
     messageContent.setEnablePushNotifications(parameters.getEnablePushNotifications());
 
     parameters.getCapabilitiesParameters();
-    Objects.requireNonNull(parameters
-            .getCapabilitiesParameters())
+    Objects.requireNonNull(parameters.getCapabilitiesParameters())
         .forEach(
             p -> {
               Capabilities.CapabilitySpecification.Capability.Builder capabilityBuilder =
                   Capabilities.CapabilitySpecification.Capability.newBuilder();
-              capabilityBuilder.setTechnicalMessageType(Objects.requireNonNull(p.getTechnicalMessageType()).getKey());
+              capabilityBuilder.setTechnicalMessageType(
+                  Objects.requireNonNull(p.getTechnicalMessageType()).getKey());
               capabilityBuilder.setDirection(Objects.requireNonNull(p.getDirection()));
               Capabilities.CapabilitySpecification.Capability capability =
                   capabilityBuilder.build();
@@ -345,8 +347,7 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     CloudVirtualizedAppRegistration.OnboardingRequest.Builder messageContent =
         CloudVirtualizedAppRegistration.OnboardingRequest.newBuilder();
-    Objects.requireNonNull(parameters
-            .getEndpointDetails())
+    Objects.requireNonNull(parameters.getEndpointDetails())
         .forEach(
             p -> {
               CloudVirtualizedAppRegistration.OnboardingRequest.EndpointRegistrationDetails.Builder
