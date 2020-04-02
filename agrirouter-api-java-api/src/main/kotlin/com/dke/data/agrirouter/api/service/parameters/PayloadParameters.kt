@@ -14,7 +14,7 @@ class PayloadParameters : AbstractParameterBase(), ParameterValidation {
     var value: ByteString? = null
 
     override fun technicalValidation() {
-        isBlank(typeUrl)
+        nullCheck(typeUrl)
         nullCheck(value)
     }
 
