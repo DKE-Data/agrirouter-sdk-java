@@ -19,9 +19,7 @@ class CloudOnboardingParameters : AbstractParameterBase(), ParameterValidation {
     }
 
     override fun businessValidation() {
-        if (endpointDetails.isNullOrEmpty()) {
-            this.rise("There have to be endpoint details to onboard.")
-        }
+        nullOrEmpty(endpointDetails)
         endpointDetails?.forEach {
             it.validate()
         }

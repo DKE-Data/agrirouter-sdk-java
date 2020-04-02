@@ -19,9 +19,7 @@ class CloudOffboardingParameters : AbstractParameterBase(), ParameterValidation 
     }
 
     override fun businessValidation() {
-        if (endpointIds.isNullOrEmpty()) {
-            rise("There have to be endpoint IDs to delete.")
-        }
+        nullOrEmpty(endpointIds)
     }
 
 }

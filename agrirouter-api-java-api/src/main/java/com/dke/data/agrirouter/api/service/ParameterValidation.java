@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -76,7 +77,19 @@ public interface ParameterValidation {
      */
     default void isBlank(String s) {
         if (StringUtils.isBlank(s)) {
-            this.rise("The parameter should not have been null, please check your values.");
+            this.rise("The parameter should not have been blank, please check your values.");
+        }
+    }
+
+    /**
+     * Check for null or empty values.
+     *
+     * @param c -
+     */
+    default void nullOrEmpty(Collection c) {
+        nullCheck(c);
+        if (c.isEmpty()) {
+            this.rise("The parameter should not have been empty, please check your values.");
         }
     }
 
