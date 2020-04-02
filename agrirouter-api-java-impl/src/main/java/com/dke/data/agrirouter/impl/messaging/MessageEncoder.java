@@ -102,8 +102,8 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     Endpoints.ListEndpointsQuery.Builder messageContent = Endpoints.ListEndpointsQuery.newBuilder();
-    messageContent.setDirection(parameters.direction);
-    messageContent.setTechnicalMessageType(parameters.technicalMessageType.getKey());
+    messageContent.setDirection(Objects.requireNonNull(parameters.getDirection()));
+    messageContent.setTechnicalMessageType(Objects.requireNonNull(parameters.getTechnicalMessageType()).getKey());
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(Endpoints.ListEndpointsQuery.getDescriptor().getFullName());
@@ -141,7 +141,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     FeedRequests.MessageConfirm.Builder messageContent = FeedRequests.MessageConfirm.newBuilder();
-    messageContent.addAllMessageIds(parameters.getMessageIds());
+    messageContent.addAllMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(FeedRequests.MessageConfirm.getDescriptor().getFullName());
@@ -179,19 +179,19 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     Capabilities.CapabilitySpecification.Builder messageContent =
         Capabilities.CapabilitySpecification.newBuilder();
-    messageContent.setAppCertificationId(parameters.getApplicationId());
-    messageContent.setAppCertificationVersionId(parameters.getCertificationVersionId());
+    messageContent.setAppCertificationId(Objects.requireNonNull(parameters.getApplicationId()));
+    messageContent.setAppCertificationVersionId(Objects.requireNonNull(parameters.getCertificationVersionId()));
     messageContent.setEnablePushNotifications(parameters.getEnablePushNotifications());
 
     parameters.getCapabilitiesParameters();
-    parameters
-        .getCapabilitiesParameters()
+    Objects.requireNonNull(parameters
+            .getCapabilitiesParameters())
         .forEach(
             p -> {
               Capabilities.CapabilitySpecification.Capability.Builder capabilityBuilder =
                   Capabilities.CapabilitySpecification.Capability.newBuilder();
-              capabilityBuilder.setTechnicalMessageType(p.technicalMessageType.getKey());
-              capabilityBuilder.setDirection(p.direction);
+              capabilityBuilder.setTechnicalMessageType(Objects.requireNonNull(p.getTechnicalMessageType()).getKey());
+              capabilityBuilder.setDirection(Objects.requireNonNull(p.getDirection()));
               Capabilities.CapabilitySpecification.Capability capability =
                   capabilityBuilder.build();
               messageContent.getCapabilitiesList().add(capability);
@@ -242,7 +242,7 @@ public interface MessageEncoder extends LoggingEnabledService {
                   technicalMessageType =
                       SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.newBuilder();
               technicalMessageType.setTechnicalMessageType(
-                  parameter.getTechnicalMessageType().getKey());
+                  Objects.requireNonNull(parameter.getTechnicalMessageType()).getKey());
               technicalMessageType.addAllDdis(parameter.getDdis());
               technicalMessageType.setPosition(parameter.getPosition());
               messageContent.addTechnicalMessageTypes(technicalMessageType);
@@ -345,16 +345,16 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     CloudVirtualizedAppRegistration.OnboardingRequest.Builder messageContent =
         CloudVirtualizedAppRegistration.OnboardingRequest.newBuilder();
-    parameters
-        .getEndpointDetails()
+    Objects.requireNonNull(parameters
+            .getEndpointDetails())
         .forEach(
             p -> {
               CloudVirtualizedAppRegistration.OnboardingRequest.EndpointRegistrationDetails.Builder
                   builder =
                       CloudVirtualizedAppRegistration.OnboardingRequest.EndpointRegistrationDetails
                           .newBuilder();
-              builder.setId(p.getEndpointId());
-              builder.setName(p.getEndpointName());
+              builder.setId(Objects.requireNonNull(p.getEndpointId()));
+              builder.setName(Objects.requireNonNull(p.getEndpointName()));
               messageContent.addOnboardingRequests(builder.build());
             });
 
@@ -379,7 +379,7 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     CloudVirtualizedAppRegistration.OffboardingRequest.Builder messageContent =
         CloudVirtualizedAppRegistration.OffboardingRequest.newBuilder();
-    messageContent.addAllEndpoints(parameters.getEndpointIds());
+    messageContent.addAllEndpoints(Objects.requireNonNull(parameters.getEndpointIds()));
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
