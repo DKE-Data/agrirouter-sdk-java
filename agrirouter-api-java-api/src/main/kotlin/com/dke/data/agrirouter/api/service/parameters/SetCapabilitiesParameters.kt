@@ -5,42 +5,41 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 /**
  * Parameters class. Encapsulation for the services.
  */
 class SetCapabilitiesParameters : AbstractParameterBase(), ParameterValidation {
 
-    @NotNull
-    lateinit var onboardingResponse: OnboardingResponse
+    var onboardingResponse: OnboardingResponse? = null
 
-    @NotNull
-    @NotBlank
-    lateinit var applicationId: String
+    var applicationId: String? = null
 
-    @NotNull
-    @NotBlank
-    lateinit var certificationVersionId: String
+    var certificationVersionId: String? = null
 
-    lateinit var capabilitiesParameters: List<CapabilityParameters>
+    var capabilitiesParameters: List<CapabilityParameters>? = null
 
     var enablePushNotifications: Capabilities.CapabilitySpecification.PushNotification = Capabilities.CapabilitySpecification.PushNotification.DISABLED
 
     class CapabilityParameters : ParameterValidation {
 
-        @NotNull
-        lateinit var technicalMessageType: TechnicalMessageType
+        var technicalMessageType: TechnicalMessageType? = null
 
-        @NotNull
-        lateinit var direction: Capabilities.CapabilitySpecification.Direction
+        var direction: Capabilities.CapabilitySpecification.Direction? = null
+
+        override fun technicalValidation() {
+            nullCheck(technicalMessageType)
+            nullCheck(direction)
+        }
 
     }
 
-    override fun validate() {
-        super.validate()
-        capabilitiesParameters.stream().forEach { c -> c.validate() }
+    override fun technicalValidation() {
+        nullCheck(onboardingResponse)
+        isBlank(applicationId)
+        isBlank(certificationVersionId)
+        nullCheck(capabilitiesParameters)
+        capabilitiesParameters?.forEach { c -> c.validate() }
     }
 
 }

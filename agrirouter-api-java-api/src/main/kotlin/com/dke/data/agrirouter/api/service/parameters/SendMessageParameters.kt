@@ -3,17 +3,23 @@ package com.dke.data.agrirouter.api.service.parameters
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
-import javax.validation.constraints.NotNull
 
 /**
  * Parameters class. Encapsulation for the services.
  */
 open class SendMessageParameters : AbstractParameterBase(), ParameterValidation {
 
-    @NotNull
-    lateinit var onboardingResponse: OnboardingResponse
+    var onboardingResponse: OnboardingResponse? = null
 
-    @NotNull
-    lateinit var encodedMessages: List<String>
+    var encodedMessages: List<String>? = null
+
+    override fun technicalValidation() {
+        nullCheck(onboardingResponse)
+        nullCheck(encodedMessages)
+    }
+
+    override fun businessValidation() {
+        nullOrEmpty(encodedMessages)
+    }
 
 }
