@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.api.service.parameters
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
-import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
 
@@ -14,19 +13,16 @@ class CloudOnboardingParameters : AbstractParameterBase(), ParameterValidation {
 
     lateinit var endpointDetails: List<EndpointDetailsParameters>
 
-    override fun validate() {
-        super.validate()
+    override fun businessValidation() {
         if (endpointDetails.isEmpty()) {
-            throw IllegalParameterDefinitionException("There have to be endpoint details to onboard.")
+            this.rise("endpointDetails", "There have to be endpoint IDs to delete.")
         }
     }
 
     class EndpointDetailsParameters {
 
-        @org.jetbrains.annotations.NotNull
         lateinit var endpointId: String
 
-        @org.jetbrains.annotations.NotNull
         lateinit var endpointName: String
 
     }

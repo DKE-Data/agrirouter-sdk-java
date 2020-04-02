@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.api.service.parameters
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
-import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
 
@@ -16,7 +15,7 @@ class CloudOffboardingParameters : AbstractParameterBase(), ParameterValidation 
 
     override fun businessValidation() {
         if (endpointIds.isEmpty()) {
-            throw IllegalParameterDefinitionException("There have to be endpoint IDs to delete.")
+            this.rise("endpointIds", "There have to be endpoint IDs to delete.")
         }
     }
 
