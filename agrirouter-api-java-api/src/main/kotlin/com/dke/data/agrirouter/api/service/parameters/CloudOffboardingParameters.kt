@@ -1,29 +1,25 @@
 package com.dke.data.agrirouter.api.service.parameters
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
-import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
-import lombok.ToString
-import javax.validation.constraints.NotNull
 
 /**
  * Parameters class. Encapsulation for the services.
  */
-@ToString
 class CloudOffboardingParameters : AbstractParameterBase(), ParameterValidation {
 
-    @NotNull
-    lateinit var onboardingResponse: OnboardingResponse
+    var onboardingResponse: OnboardingResponse? = null
 
-    @NotNull
-    lateinit var endpointIds: List<String>
+    var endpointIds: List<String>? = null
 
-    override fun validate() {
-        super.validate()
-        if (endpointIds.isEmpty()) {
-            throw IllegalParameterDefinitionException("There have to be endpoint IDs to delete.")
-        }
+    override fun technicalValidation() {
+        nullCheck(onboardingResponse)
+        nullCheck(endpointIds)
+    }
+
+    override fun businessValidation() {
+        nullOrEmpty(endpointIds)
     }
 
 }
