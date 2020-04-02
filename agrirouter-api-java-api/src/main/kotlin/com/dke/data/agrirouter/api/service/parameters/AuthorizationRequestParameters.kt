@@ -9,12 +9,16 @@ import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
  */
 class AuthorizationRequestParameters : AbstractParameterBase(), ParameterValidation {
 
-    lateinit var applicationId : String
+    var applicationId : String = ""
 
     var redirectUri: String = ""
 
     var state: String = ""
 
     var responseType: SecuredOnboardingResponseType = SecuredOnboardingResponseType.ONBOARD
+
+    override fun technicalValidation() {
+        isBlank(applicationId)
+    }
 
 }

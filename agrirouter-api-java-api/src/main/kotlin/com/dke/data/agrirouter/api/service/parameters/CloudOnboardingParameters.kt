@@ -9,21 +9,34 @@ import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
  */
 class CloudOnboardingParameters : AbstractParameterBase(), ParameterValidation {
 
-    lateinit var onboardingResponse: OnboardingResponse
+    var onboardingResponse: OnboardingResponse? = null
 
-    lateinit var endpointDetails: List<EndpointDetailsParameters>
+    var endpointDetails: List<EndpointDetailsParameters>? = null
+
+    override fun technicalValidation() {
+        nullCheck(onboardingResponse)
+        nullCheck(endpointDetails)
+    }
 
     override fun businessValidation() {
-        if (endpointDetails.isEmpty()) {
-            this.rise("endpointDetails", "There have to be endpoint IDs to delete.")
+        if (endpointDetails.isNullOrEmpty()) {
+            this.rise("There have to be endpoint details to onboard.")
+        }
+        endpointDetails?.forEach {
+            it.validate()
         }
     }
 
-    class EndpointDetailsParameters {
+    class EndpointDetailsParameters : ParameterValidation {
 
-        lateinit var endpointId: String
+        var endpointId: String? = null
 
-        lateinit var endpointName: String
+        var endpointName: String? = null
+
+        override fun technicalValidation() {
+            isBlank(endpointId)
+            isBlank(endpointName)
+        }
 
     }
 
