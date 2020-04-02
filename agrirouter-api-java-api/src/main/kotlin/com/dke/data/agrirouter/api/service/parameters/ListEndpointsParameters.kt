@@ -4,7 +4,6 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
-import javax.validation.constraints.NotNull
 
 /**
  * Parameters class. Encapsulation for the services.
@@ -12,15 +11,18 @@ import javax.validation.constraints.NotNull
 class ListEndpointsParameters : AbstractParameterBase(), ParameterValidation {
 
 
-    @NotNull
-    lateinit var onboardingResponse: OnboardingResponse
+    var onboardingResponse: OnboardingResponse? = null
 
-    @NotNull
-    lateinit var technicalMessageType: TechnicalMessageType
+    var technicalMessageType: TechnicalMessageType? = null
 
-    @NotNull
-    lateinit var direction: agrirouter.request.payload.account.Endpoints.ListEndpointsQuery.Direction
+    var direction: agrirouter.request.payload.account.Endpoints.ListEndpointsQuery.Direction? = null
 
     var unfilteredList: Boolean = false
+
+    override fun technicalValidation() {
+        nullCheck(onboardingResponse)
+        nullCheck(technicalMessageType)
+        nullCheck(direction)
+    }
 
 }
