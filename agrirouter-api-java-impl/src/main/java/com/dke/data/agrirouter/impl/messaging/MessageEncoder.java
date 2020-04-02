@@ -178,12 +178,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-    Capabilities.CapabilitySpecification.Builder messageContent =
+    Capabilities.CapabilitySpecification.Builder builder =
         Capabilities.CapabilitySpecification.newBuilder();
-    messageContent.setAppCertificationId(Objects.requireNonNull(parameters.getApplicationId()));
-    messageContent.setAppCertificationVersionId(
+    builder.setAppCertificationId(Objects.requireNonNull(parameters.getApplicationId()));
+    builder.setAppCertificationVersionId(
         Objects.requireNonNull(parameters.getCertificationVersionId()));
-    messageContent.setEnablePushNotifications(parameters.getEnablePushNotifications());
+    builder.setEnablePushNotifications(parameters.getEnablePushNotifications());
 
     parameters.getCapabilitiesParameters();
     Objects.requireNonNull(parameters.getCapabilitiesParameters())
@@ -196,13 +196,13 @@ public interface MessageEncoder extends LoggingEnabledService {
               capabilityBuilder.setDirection(Objects.requireNonNull(p.getDirection()));
               Capabilities.CapabilitySpecification.Capability capability =
                   capabilityBuilder.build();
-              messageContent.getCapabilitiesList().add(capability);
+              builder.addCapabilities(capability);
             });
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
         Capabilities.CapabilitySpecification.getDescriptor().getFullName());
-    payloadParameters.setValue(messageContent.build().toByteString());
+    payloadParameters.setValue(builder.build().toByteString());
 
     String encodedMessage =
         this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
