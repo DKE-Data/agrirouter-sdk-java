@@ -4,39 +4,33 @@ import com.dke.data.agrirouter.api.enums.ApplicationType
 import com.dke.data.agrirouter.api.enums.CertificationType
 import com.dke.data.agrirouter.api.service.ParameterValidation
 import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 
 /**
  * Parameters class. Encapsulation for the services.
  */
 class OnboardingParameters : AbstractParameterBase(), ParameterValidation {
 
-    @NotNull
-    @NotEmpty
-    lateinit var applicationId: String
+    var applicationId: String? = null
 
-    @NotNull
-    @NotEmpty
-    lateinit var uuid: String
+    var uuid: String? = null
 
-    @NotNull
-    @NotEmpty
-    lateinit var certificationVersionId: String
+    var certificationVersionId: String? = null
 
-    @NotNull
-    @NotEmpty
-    lateinit var gatewayId: String
+    var gatewayId: String? = null
 
-    @NotNull
-    lateinit var certificationType: CertificationType
+    var certificationType: CertificationType? = null
 
-    @NotNull
-    lateinit var applicationType: ApplicationType
+    var applicationType: ApplicationType? = null
 
-    @NotNull
-    @NotBlank
-    lateinit var registrationCode: String
+    var registrationCode: String? = null
 
+    override fun technicalValidation() {
+        isBlank(applicationId)
+        isBlank(uuid)
+        isBlank(certificationVersionId)
+        isBlank(gatewayId)
+        nullCheck(certificationType)
+        nullCheck(applicationType)
+        isBlank(registrationCode)
+    }
 }
