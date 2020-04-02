@@ -11,7 +11,7 @@ class PayloadParameters : AbstractParameterBase(), ParameterValidation {
 
     var typeUrl: String = ""
 
-    lateinit var value: ByteString
+    var value: ByteString? = null
 
     override fun technicalValidation() {
         isBlank(typeUrl)
