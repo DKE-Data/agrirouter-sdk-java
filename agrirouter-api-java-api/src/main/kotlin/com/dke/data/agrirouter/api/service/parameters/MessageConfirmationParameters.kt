@@ -9,9 +9,9 @@ import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
  */
 class MessageConfirmationParameters : AbstractParameterBase(), ParameterValidation {
 
-    lateinit var onboardingResponse: OnboardingResponse
+    var onboardingResponse: OnboardingResponse? = null
 
-    lateinit var messageIds: List<String>
+    var messageIds: List<String>? = null
 
     override fun technicalValidation() {
         nullCheck(onboardingResponse)
