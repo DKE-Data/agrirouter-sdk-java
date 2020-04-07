@@ -55,7 +55,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     messageHeader.setApplicationMessageSeqNo(parameters.getApplicationMessageSeqNo());
     messageHeader.setTechnicalMessageType(parameters.getTechnicalMessageType().getKey());
     messageHeader.setMode(parameters.getMode());
-    if(null!=parameters.getMetadata()) {
+    if (null != parameters.getMetadata()) {
       messageHeader.setMetadata(parameters.getMetadata());
     }
     if (StringUtils.isNotBlank(parameters.getTeamSetContextId())) {
