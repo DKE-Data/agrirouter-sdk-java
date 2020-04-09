@@ -10,15 +10,12 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageServi
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.google.protobuf.ByteString;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class EncodeMessageServiceImplTest {
 
   @Test
-  @Disabled("Bean validation does not work properly in unit tests.")
   void givenValidParametersEncodeAndDecodeBackShouldNotFail() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
@@ -35,7 +32,6 @@ class EncodeMessageServiceImplTest {
   }
 
   @Test
-  @Disabled("Bean validation does not work properly in unit tests.")
   void givenWrongPayloadEncodeAndDecodeBackShouldFail() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
@@ -71,7 +67,6 @@ class EncodeMessageServiceImplTest {
         IllegalArgumentException.class, () -> encodeMessageService.encode(null, payloadParameters));
   }
 
-  @NotNull
   private MessageHeaderParameters getMessageHeaderParameters() {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId("1");
@@ -81,7 +76,6 @@ class EncodeMessageServiceImplTest {
     return messageHeaderParameters;
   }
 
-  @NotNull
   private PayloadParameters getPayloadParameters(ByteString toSendMessage) {
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
