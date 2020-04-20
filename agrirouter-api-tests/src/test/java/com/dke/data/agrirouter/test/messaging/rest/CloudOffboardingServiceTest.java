@@ -32,8 +32,8 @@ import java.util.concurrent.TimeUnit;
 
 class CloudOffboardingServiceTest extends AbstractIntegrationTest {
 
-    public static final String EXTERNAL_ID = "8c31e156-3c29-4b46-863c-5e49b405b343";
-    public static final String ENDPOINT_NAME = "CLOUD-ONBOARDING-SERVICE-TEST";
+    public static final String EXTERNAL_ID = "8c31e156-3c29-4b46-863c-5e49b405b344";
+    public static final String ENDPOINT_NAME = "CLOUD-OFFBOARDING-SERVICE-TEST";
 
     private OnboardingResponse virtualCommunicationUnit;
 
