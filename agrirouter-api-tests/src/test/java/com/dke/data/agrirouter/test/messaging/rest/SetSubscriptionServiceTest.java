@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Demonstration how to use the service class.
  */
-class SetSubscriptionServiceImplTest extends AbstractIntegrationTest {
+class SetSubscriptionServiceTest extends AbstractIntegrationTest {
 
     @Test
     void givenValidEndpointWhenSendingSubscriptionsTheSubscriptionMessageShouldBeAccepted()

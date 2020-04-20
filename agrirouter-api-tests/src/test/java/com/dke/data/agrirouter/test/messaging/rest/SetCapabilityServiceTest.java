@@ -29,7 +29,7 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
 /** Demonstration how to use the service class. */
-class SetCapabilityServiceImplTest extends AbstractIntegrationTest {
+class SetCapabilityServiceTest extends AbstractIntegrationTest {
 
   @Test
   void givenValidEndpointWhenSendingCapabilitiesTheCapabilityMessageShouldBeAccepted()

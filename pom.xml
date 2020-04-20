@@ -136,6 +136,11 @@
                 <artifactId>agrirouter-api-java-impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.agrirouter.api</groupId>
+                <artifactId>agrirouter-api-java-convenience</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- INTERNAL PROTOBUF DEFINITIONS -->
             <dependency>
