@@ -56,6 +56,7 @@
         <module>agrirouter-api-java-api</module>
         <module>agrirouter-api-java-impl</module>
         <module>agrirouter-api-java-convenience</module>
+        <module>agrirouter-api-tests</module>
     </modules>
 
     <properties>
@@ -133,6 +134,11 @@
             <dependency>
                 <groupId>com.agrirouter.api</groupId>
                 <artifactId>agrirouter-api-java-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.agrirouter.api</groupId>
+                <artifactId>agrirouter-api-java-convenience</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
