@@ -25,6 +25,7 @@ enum class TechnicalMessageType(val key: String) {
     VID_AVI("vid:avi"),
     VID_MP4("vid:mp4"),
     VID_WMV("vid:wmv"),
+    GPS_INFO("gps:info"),
 
     TESTING_PURPOSE_INVALID("SOME_INVALID_TYPE"),
     TEST_OTHER ("test:other")
