@@ -20,5 +20,4 @@ public abstract class AbstractIntegrationTest {
   protected Environment getEnvironment() {
     return new QA() {};
   }
-
 }
