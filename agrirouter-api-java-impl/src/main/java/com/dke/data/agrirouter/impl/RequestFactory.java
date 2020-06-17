@@ -4,9 +4,7 @@ import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.exception.CertificationTypeNotSupportedException;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
 import com.dke.data.agrirouter.impl.common.ssl.KeyStoreCreationService;
-import com.gargoylesoftware.htmlunit.util.Cookie;
 import java.security.KeyStore;
-import java.util.Set;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
@@ -150,26 +148,5 @@ public final class RequestFactory {
   public class AgrirouterHttpHeader {
     public static final String APPLICATION_ID = "X-Agrirouter-ApplicationId";
     public static final String SIGNATURE = "X-Agrirouter-Signature";
-  }
-
-  /**
-   * Setting the cookies for the request.
-   *
-   * @param url -
-   * @return Builder -
-   */
-  public static Invocation.Builder request(String url, Set<Cookie> cookies) {
-    Client client = ClientBuilder.newClient();
-    client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
-    WebTarget target = client.target(url);
-    Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
-    request.accept(MediaType.APPLICATION_JSON_TYPE);
-    cookies.stream()
-        .map(
-            cookie ->
-                new javax.ws.rs.core.Cookie(
-                    cookie.getName(), cookie.getValue(), cookie.getPath(), cookie.getDomain()))
-        .forEach(request::cookie);
-    return request;
   }
 }
