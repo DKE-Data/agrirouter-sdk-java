@@ -68,7 +68,6 @@
 
         <!-- DEPENDENCIES -->
         <rest-assured.version>4.3.0</rest-assured.version>
-        <junit.version>4.12</junit.version>
         <junit-jupiter.version>5.6.1</junit-jupiter.version>
         <junit-vintage.version>4.12.2</junit-vintage.version>
         <junit-platform.version>1.6.1</junit-platform.version>
@@ -78,18 +77,8 @@
         <gson.version>2.8.6</gson.version>
         <jersey-client.version>2.30.1</jersey-client.version>
         <httpcore.version>4.4.13</httpcore.version>
-        <geb.version>2.0</geb.version>
-        <selenium.version>3.9.1</selenium.version>
-        <selenium-chrome-driver.version>4.0.0-alpha-5</selenium-chrome-driver.version>
-        <selenium-chrome-firefox.version>3.9.1</selenium-chrome-firefox.version>
-        <groovyVersion>3.0.2</groovyVersion>
         <guava.version>28.2-jre</guava.version>
-        <phantomjsdriver.version>1.4.4</phantomjsdriver.version>
-        <gmaven-mojo.version>1.5</gmaven-mojo.version>
-        <spock-core.version>1.1-groovy-2.4</spock-core.version>
         <webdrivermanager.version>3.8.1</webdrivermanager.version>
-        <hibernate-validator.version>7.0.0.Alpha1</hibernate-validator.version>
-        <javax.el.version>3.0.1-b11</javax.el.version>
         <protobuf.version>3.11.4</protobuf.version>
         <htmlunit.version>2.38.0</htmlunit.version>
         <activation.version>1.1.1</activation.version>
@@ -100,25 +89,14 @@
         <javax.ws.rs-api.version>2.1.1</javax.ws.rs-api.version>
         <annotations.version>19.0.0</annotations.version>
         <jackson-annotations.version>2.11.0.rc1</jackson-annotations.version>
-        <lombok.version>1.18.12</lombok.version>
         <agrirouter-api-protobuf-definitions.version>1.1.1</agrirouter-api-protobuf-definitions.version>
 
         <!-- PLUGINS -->
-        <protoc-jar-maven-plugin.version>3.5.1.1</protoc-jar-maven-plugin.version>
-        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
-        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
-        <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
-        <os-maven-plugin.version>1.5.0.Final</os-maven-plugin.version>
         <maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
-        <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
         <build-helper-maven-plugin.version>3.1.0</build-helper-maven-plugin.version>
-        <maven-shade-plugin.version>3.1.0</maven-shade-plugin.version>
-        <validation-api.version>2.0.1.Final</validation-api.version>
         <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
-        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     </properties>
 
     <dependencyManagement>
