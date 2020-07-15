@@ -14,4 +14,13 @@ public class OnboardingException extends RuntimeException {
   public OnboardingError getOnboardingError() {
     return onboardingError;
   }
+
+  @Override
+  public String getMessage() {
+    return null != onboardingError
+        ? String.format(
+            "There was an error '%s' during the onboarding process, details were '%s'",
+            onboardingError.getError().getCode(), onboardingError.getError().message)
+        : "There was an error during the onboarding process.";
+  }
 }
