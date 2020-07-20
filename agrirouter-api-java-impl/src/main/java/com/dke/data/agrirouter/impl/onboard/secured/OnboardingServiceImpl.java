@@ -11,7 +11,6 @@ import com.dke.data.agrirouter.api.exception.InvalidSignatureException;
 import com.dke.data.agrirouter.api.exception.OnboardingException;
 import com.dke.data.agrirouter.api.exception.UnexpectedHttpStatusException;
 import com.dke.data.agrirouter.api.service.onboard.secured.OnboardingService;
-import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
 import com.dke.data.agrirouter.api.service.parameters.SecuredOnboardingParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.common.signing.SecurityKeyCreationService;
@@ -28,7 +27,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringUtils;
 
 /** Internal service implementation. */
 public class OnboardingServiceImpl extends AbstractOnboardingService
@@ -52,6 +50,11 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     securedOnboardingParameters.validate();
     this.verify(
         securedOnboardingParameters, this.createOnboardingRequestBody(securedOnboardingParameters));
+  }
+
+  @Override
+  public Optional<OnboardingError> getLastOnboardingError(String error) {
+    return getOnboardingError(error);
   }
 
   private OnboardingRequest createOnboardingRequestBody(SecuredOnboardingParameters parameters) {
@@ -82,8 +85,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
       this.assertStatusCodeIsCreated(response.getStatus());
       return response.readEntity(OnboardingResponse.class);
     } catch (Exception e) {
-      String lastError = response.readEntity(String.class);
-      throw new OnboardingException(lastError);
+      throw new OnboardingException(getOnboardingError(response.readEntity(String.class)));
     } finally {
       response.close();
     }
@@ -154,22 +156,5 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  @Override
-  public String generateAuthorizationUrl(AuthorizationRequestParameters parameters) {
-    return this.environment.getSecuredOnboardingAuthorizationUrl(
-        parameters.getApplicationId(),
-        parameters.getResponseType(),
-        parameters.getState(),
-        parameters.getRedirectUri());
-  }
-
-  @Override
-  public Optional<OnboardingError> getLastOnboardingError(String errorResponse) {
-    Gson gson = new Gson();
-    return StringUtils.isBlank(errorResponse)
-        ? Optional.empty()
-        : Optional.of(gson.fromJson(errorResponse, OnboardingError.class));
   }
 }
