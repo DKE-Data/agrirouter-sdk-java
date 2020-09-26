@@ -298,7 +298,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     if (null != parameters.getSentFromInSeconds() || null != parameters.getSentToInSeconds()) {
       FeedRequests.ValidityPeriod.Builder validityPeriod = FeedRequests.ValidityPeriod.newBuilder();
       if (null != parameters.getSentFromInSeconds()) {
-        validityPeriod.setSentTo(new TimestampUtil().seconds(parameters.getSentFromInSeconds()));
+        validityPeriod.setSentFrom(new TimestampUtil().seconds(parameters.getSentFromInSeconds()));
       }
       if (null != parameters.getSentToInSeconds()) {
         validityPeriod.setSentTo(new TimestampUtil().seconds(parameters.getSentToInSeconds()));
