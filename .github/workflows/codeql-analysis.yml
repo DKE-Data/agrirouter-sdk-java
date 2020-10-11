@@ -32,10 +32,10 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
-    - name: Autobuild
+    - name: Build project
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      uses: github/codeql-action/autobuild@v1
+      run: mvn -B clean package --file pom.xml --settings ci/settings.xml -DskipTests=true
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
