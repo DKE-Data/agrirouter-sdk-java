@@ -376,7 +376,10 @@ public interface MessageEncoder extends LoggingEnabledService {
    * @return -
    */
   default EncodedMessage encode(CloudOffboardingParameters parameters) {
-    final String applicationMessageID = MessageIdService.generateMessageId();
+    final String applicationMessageID =
+        parameters.getApplicationMessageId() == null
+            ? MessageIdService.generateMessageId()
+            : parameters.getApplicationMessageId();
 
     CloudVirtualizedAppRegistration.OffboardingRequest.Builder messageContent =
         CloudVirtualizedAppRegistration.OffboardingRequest.newBuilder();
