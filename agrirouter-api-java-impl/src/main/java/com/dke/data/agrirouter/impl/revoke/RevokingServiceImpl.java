@@ -48,8 +48,7 @@ public class RevokingServiceImpl extends EnvironmentalService
       if (result.getKey() == RevokeResponse.SUCCESS.getKey()) {
         return result;
       } else {
-        String lastError = response.readEntity(String.class);
-        throw new RevokingException(lastError);
+        throw new RevokingException(getLastRevokingError(response.readEntity(String.class)));
       }
     } finally {
       if (response != null) {
