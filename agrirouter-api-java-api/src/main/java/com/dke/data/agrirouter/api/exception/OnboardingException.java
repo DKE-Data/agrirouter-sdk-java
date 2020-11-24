@@ -24,7 +24,4 @@ public class OnboardingException extends RuntimeException {
         : "There was an error during the onboarding process.";
   }
 
-  public String getLastError() {
-    return lastError;
-  }
 }
