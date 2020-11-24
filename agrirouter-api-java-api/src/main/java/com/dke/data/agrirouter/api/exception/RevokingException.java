@@ -6,4 +6,8 @@ public class RevokingException extends RuntimeException {
   public RevokingException(String lastError) {
     this.lastError = lastError;
   }
+
+  public String getLastError() {
+    return lastError;
+  }
 }

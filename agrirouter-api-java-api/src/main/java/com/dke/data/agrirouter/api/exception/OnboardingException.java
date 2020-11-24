@@ -6,4 +6,8 @@ public class OnboardingException extends RuntimeException {
   public OnboardingException(String lastError) {
     this.lastError = lastError;
   }
+
+  public String getLastError() {
+    return lastError;
+  }
 }
