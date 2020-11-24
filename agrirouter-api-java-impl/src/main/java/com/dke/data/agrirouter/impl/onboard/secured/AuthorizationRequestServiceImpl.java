@@ -7,7 +7,6 @@ import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.onboard.secured.AuthorizationRequestService;
 import com.dke.data.agrirouter.api.service.parameters.AuthorizationRequestParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
-import com.dke.data.agrirouter.impl.common.CookieResolverService;
 import com.dke.data.agrirouter.impl.common.StateIdService;
 import com.dke.data.agrirouter.impl.onboard.OnboardingServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
@@ -32,7 +31,6 @@ public class AuthorizationRequestServiceImpl extends EnvironmentalService
   private static final String TOKEN_KEY = "token";
   private static final String ERROR_KEY = "error";
 
-  private CookieResolverService cookieResolverService;
   private final OnboardingService onboardingService;
 
   public AuthorizationRequestServiceImpl(Environment environment) {
