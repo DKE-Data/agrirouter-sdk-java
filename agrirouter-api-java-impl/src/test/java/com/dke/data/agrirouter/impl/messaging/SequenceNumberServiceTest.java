@@ -53,11 +53,15 @@ class SequenceNumberServiceTest {
         3, SequenceNumberService.generateSequenceNumberForEndpoint(firstOnboardingResponse));
     Assertions.assertEquals(
         4, SequenceNumberService.generateSequenceNumberForEndpoint(firstOnboardingResponse));
+
     Assertions.assertEquals(
         1, SequenceNumberService.generateSequenceNumberForEndpoint(secondOnboardingResponse));
     Assertions.assertEquals(
         2, SequenceNumberService.generateSequenceNumberForEndpoint(secondOnboardingResponse));
     Assertions.assertEquals(
         3, SequenceNumberService.generateSequenceNumberForEndpoint(secondOnboardingResponse));
+
+    Assertions.assertEquals(
+        5, SequenceNumberService.generateSequenceNumberForEndpoint(firstOnboardingResponse));
   }
 }
