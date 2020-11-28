@@ -23,5 +23,4 @@ public class OnboardingException extends RuntimeException {
             onboardingError.getError().getCode(), onboardingError.getError().message)
         : "There was an error during the onboarding process.";
   }
-
 }

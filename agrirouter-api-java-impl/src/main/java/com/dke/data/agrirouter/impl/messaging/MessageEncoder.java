@@ -25,6 +25,8 @@ public interface MessageEncoder extends LoggingEnabledService {
    * @return -
    */
   default EncodedMessage encode(DeleteMessageParameters parameters) {
+    assert parameters.getOnboardingResponse() != null;
+
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
@@ -37,7 +39,11 @@ public interface MessageEncoder extends LoggingEnabledService {
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
-    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setApplicationMessageSeqNo(
+        parameters.getSequenceNumber() != 0
+            ? parameters.getSequenceNumber()
+            : SequenceNumberService.generateSequenceNumberForEndpoint(
+                parameters.getOnboardingResponse()));
     messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
@@ -77,6 +83,7 @@ public interface MessageEncoder extends LoggingEnabledService {
    * @return -
    */
   default EncodedMessage encode(ListEndpointsParameters parameters) {
+    assert parameters.getOnboardingResponse() != null;
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
@@ -91,7 +98,11 @@ public interface MessageEncoder extends LoggingEnabledService {
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
-    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setApplicationMessageSeqNo(
+        parameters.getSequenceNumber() != 0
+            ? parameters.getSequenceNumber()
+            : SequenceNumberService.generateSequenceNumberForEndpoint(
+                parameters.getOnboardingResponse()));
 
     if (parameters.getUnfilteredList()) {
       messageHeaderParameters.setTechnicalMessageType(
@@ -123,6 +134,8 @@ public interface MessageEncoder extends LoggingEnabledService {
    * @return -
    */
   default EncodedMessage encode(MessageConfirmationParameters parameters) {
+    assert parameters.getOnboardingResponse() != null;
+
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
@@ -137,7 +150,11 @@ public interface MessageEncoder extends LoggingEnabledService {
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
-    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setApplicationMessageSeqNo(
+        parameters.getSequenceNumber() != 0
+            ? parameters.getSequenceNumber()
+            : SequenceNumberService.generateSequenceNumberForEndpoint(
+                parameters.getOnboardingResponse()));
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_CONFIRM);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
@@ -160,6 +177,8 @@ public interface MessageEncoder extends LoggingEnabledService {
    * @return -
    */
   default EncodedMessage encode(SetCapabilitiesParameters parameters) {
+    assert parameters.getOnboardingResponse() != null;
+
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
@@ -174,7 +193,11 @@ public interface MessageEncoder extends LoggingEnabledService {
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
-    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setApplicationMessageSeqNo(
+        parameters.getSequenceNumber() != 0
+            ? parameters.getSequenceNumber()
+            : SequenceNumberService.generateSequenceNumberForEndpoint(
+                parameters.getOnboardingResponse()));
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
@@ -216,6 +239,8 @@ public interface MessageEncoder extends LoggingEnabledService {
    * @return -
    */
   default EncodedMessage encodeMessage(SetSubscriptionParameters parameters) {
+    assert parameters.getOnboardingResponse() != null;
+
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
 
     final String applicationMessageID =
@@ -230,7 +255,11 @@ public interface MessageEncoder extends LoggingEnabledService {
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
-    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setApplicationMessageSeqNo(
+        parameters.getSequenceNumber() != 0
+            ? parameters.getSequenceNumber()
+            : SequenceNumberService.generateSequenceNumberForEndpoint(
+                parameters.getOnboardingResponse()));
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_SUBSCRIPTION);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
@@ -267,6 +296,8 @@ public interface MessageEncoder extends LoggingEnabledService {
    */
   default EncodedMessage encode(
       TechnicalMessageType technicalMessageType, MessageQueryParameters parameters) {
+    assert parameters.getOnboardingResponse() != null;
+
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Build message header parameters.");
@@ -283,7 +314,12 @@ public interface MessageEncoder extends LoggingEnabledService {
     final String teamsetContextId =
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
     messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
-    messageHeaderParameters.setApplicationMessageSeqNo(parameters.getSequenceNumber());
+    messageHeaderParameters.setApplicationMessageSeqNo(
+        parameters.getSequenceNumber() != 0
+            ? parameters.getSequenceNumber()
+            : SequenceNumberService.generateSequenceNumberForEndpoint(
+                parameters.getOnboardingResponse()));
+
     messageHeaderParameters.setTechnicalMessageType(technicalMessageType);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
@@ -326,6 +362,8 @@ public interface MessageEncoder extends LoggingEnabledService {
    * @return -
    */
   default EncodedMessage encode(CloudOnboardingParameters parameters) {
+    assert parameters.getOnboardingResponse() != null;
+
     final String applicationMessageID =
         parameters.getApplicationMessageId() == null
             ? MessageIdService.generateMessageId()
@@ -334,12 +372,14 @@ public interface MessageEncoder extends LoggingEnabledService {
     final String teamsetContextId =
         parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
 
-    int sequenceNumber = parameters.getSequenceNumber();
-
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
     messageHeaderParameters.setTeamSetContextId(teamsetContextId);
-    messageHeaderParameters.setApplicationMessageSeqNo(sequenceNumber);
+    messageHeaderParameters.setApplicationMessageSeqNo(
+        parameters.getSequenceNumber() != 0
+            ? parameters.getSequenceNumber()
+            : SequenceNumberService.generateSequenceNumberForEndpoint(
+                parameters.getOnboardingResponse()));
     messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
     messageHeaderParameters.setTechnicalMessageType(
         TechnicalMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
@@ -376,6 +416,8 @@ public interface MessageEncoder extends LoggingEnabledService {
    * @return -
    */
   default EncodedMessage encode(CloudOffboardingParameters parameters) {
+    assert parameters.getOnboardingResponse() != null;
+
     final String applicationMessageID =
         parameters.getApplicationMessageId() == null
             ? MessageIdService.generateMessageId()
@@ -391,6 +433,11 @@ public interface MessageEncoder extends LoggingEnabledService {
         TechnicalMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
     messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
+    messageHeaderParameters.setApplicationMessageSeqNo(
+        parameters.getSequenceNumber() != 0
+            ? parameters.getSequenceNumber()
+            : SequenceNumberService.generateSequenceNumberForEndpoint(
+                parameters.getOnboardingResponse()));
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setTypeUrl(
