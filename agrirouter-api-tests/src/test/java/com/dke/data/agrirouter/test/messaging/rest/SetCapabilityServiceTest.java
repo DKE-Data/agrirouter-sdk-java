@@ -1,11 +1,12 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
+import static com.dke.data.agrirouter.test.OnboardingResponseRepository.*;
+
 import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
-import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
@@ -18,9 +19,6 @@ import com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher;
 import com.dke.data.agrirouter.impl.messaging.rest.SetCapabilityServiceImpl;
 import com.dke.data.agrirouter.test.AbstractIntegrationTest;
 import com.dke.data.agrirouter.test.Assertions;
-import com.dke.data.agrirouter.test.OnboardingResponseRepository;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,8 +26,6 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
-
-import static com.dke.data.agrirouter.test.OnboardingResponseRepository.*;
 
 /** Demonstration how to use the service class. */
 class SetCapabilityServiceTest extends AbstractIntegrationTest {
@@ -127,5 +123,4 @@ class SetCapabilityServiceTest extends AbstractIntegrationTest {
     MessageOuterClass.Message message = messages.getMessages(0);
     Assertions.assertEquals("VAL_000007", message.getMessageCode());
   }
-
 }
