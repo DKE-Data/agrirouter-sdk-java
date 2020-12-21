@@ -1,4 +1,4 @@
-package com.dke.data.agrirouter.impl.messaging.rest.cancellation;
+package com.dke.data.agrirouter.api.cancellation;
 
 /** Default - time based - implementation of the cancellation token. */
 public class DefaultCancellationToken implements CancellationToken {

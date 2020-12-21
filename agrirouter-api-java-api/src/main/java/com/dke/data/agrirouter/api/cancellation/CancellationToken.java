@@ -1,4 +1,4 @@
-package com.dke.data.agrirouter.impl.messaging.rest.cancellation;
+package com.dke.data.agrirouter.api.cancellation;
 
 /** Cancellation token to enable custom implementations integration within the solution. */
 public interface CancellationToken {

@@ -1,9 +1,12 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 import static com.dke.data.agrirouter.test.OnboardingResponseRepository.*;
 
 import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.payload.endpoint.Capabilities;
+import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
@@ -15,7 +18,6 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageServi
 import com.dke.data.agrirouter.api.service.parameters.SetCapabilitiesParameters;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
-import com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher;
 import com.dke.data.agrirouter.impl.messaging.rest.SetCapabilityServiceImpl;
 import com.dke.data.agrirouter.test.AbstractIntegrationTest;
 import com.dke.data.agrirouter.test.Assertions;
@@ -56,8 +58,7 @@ class SetCapabilityServiceTest extends AbstractIntegrationTest {
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
         fetchMessageService.fetch(
             read(Identifier.FARMING_SOFTWARE),
-            MessageFetcher.MAX_TRIES_BEFORE_FAILURE,
-            MessageFetcher.DEFAULT_INTERVAL);
+            new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
 
     Assertions.assertTrue(fetchMessageResponses.isPresent());
     Assertions.assertEquals(1, fetchMessageResponses.get().size());
@@ -100,8 +101,7 @@ class SetCapabilityServiceTest extends AbstractIntegrationTest {
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
         fetchMessageService.fetch(
             read(Identifier.FARMING_SOFTWARE),
-            MessageFetcher.MAX_TRIES_BEFORE_FAILURE,
-            MessageFetcher.DEFAULT_INTERVAL);
+            new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
 
     Assertions.assertTrue(fetchMessageResponses.isPresent());
     Assertions.assertEquals(1, fetchMessageResponses.get().size());

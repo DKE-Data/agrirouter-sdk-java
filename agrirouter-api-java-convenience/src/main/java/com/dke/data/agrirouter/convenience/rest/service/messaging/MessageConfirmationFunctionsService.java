@@ -5,6 +5,7 @@ import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRI
 
 import agrirouter.feed.response.FeedResponse;
 import agrirouter.response.Response;
+import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.env.Environment;
@@ -68,7 +69,8 @@ public class MessageConfirmationFunctionsService implements ResponseValidator {
 
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
         this.fetchMessageService.fetch(
-            parameters.getOnboardingResponse(), MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
+            parameters.getOnboardingResponse(),
+            new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
     if (fetchMessageResponses.isPresent()) {
       DecodeMessageResponse decodedMessageQueryResponse =
           this.decodeMessageService.decode(
@@ -101,7 +103,8 @@ public class MessageConfirmationFunctionsService implements ResponseValidator {
     DecodeMessageResponse decodedMessageQueryResponse;
     fetchMessageResponses =
         this.fetchMessageService.fetch(
-            parameters.getOnboardingResponse(), MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL);
+            parameters.getOnboardingResponse(),
+            new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
     if (fetchMessageResponses.isPresent()) {
       decodedMessageQueryResponse =
           this.decodeMessageService.decode(

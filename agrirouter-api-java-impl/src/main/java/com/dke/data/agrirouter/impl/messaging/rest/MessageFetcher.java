@@ -1,10 +1,9 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
+import com.dke.data.agrirouter.api.cancellation.CancellationToken;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
-import com.dke.data.agrirouter.impl.messaging.rest.cancellation.CancellationToken;
-import com.dke.data.agrirouter.impl.messaging.rest.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Objects;
 import java.util.Optional;
@@ -18,20 +17,6 @@ public interface MessageFetcher extends ResponseValidator {
   long DEFAULT_INTERVAL = 500;
 
   String EMPTY_CONTENT = "[]";
-
-  /**
-   * Poll for messages using the given parameters.
-   *
-   * @param fetchMessageParameters -
-   * @param maxTries Maximum number of tries before cancelling polling.
-   * @param interval Time interval between the tries.
-   * @return Response from the outbox, if existing.
-   */
-  @Deprecated
-  default Optional<String> poll(
-      FetchMessageParameters fetchMessageParameters, int maxTries, long interval) {
-    return poll(fetchMessageParameters, new DefaultCancellationToken(maxTries, interval));
-  }
 
   /**
    * Poll for new messages using the given parameters.
