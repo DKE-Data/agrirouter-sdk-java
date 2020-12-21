@@ -47,6 +47,7 @@ public class AuthorizationRequestServiceImpl extends EnvironmentalService
    */
   public String getAuthorizationRequestURL(
       AuthorizationRequestParameters authorizationRequestParameters) {
+    authorizationRequestParameters.validate();
     if (StringUtils.isBlank(authorizationRequestParameters.getState())) {
       authorizationRequestParameters.setState(StateIdService.generateState());
     }

@@ -24,9 +24,9 @@ class OnboardingWithErrorMessageTest extends AbstractIntegrationTest {
     OnboardingParameters onboardingParameters = new OnboardingParameters();
     onboardingParameters.setApplicationMessageId(MessageIdService.generateMessageId());
     onboardingParameters.setApplicationType(ApplicationType.APPLICATION);
-    onboardingParameters.setApplicationId(getApplicationId());
+    onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
     onboardingParameters.setCertificationType(CertificationType.P12);
-    onboardingParameters.setCertificationVersionId(getCertificationVersionId());
+    onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
     onboardingParameters.setGatewayId(Gateway.REST.getKey());
     onboardingParameters.setUuid(UUID.randomUUID().toString());
     onboardingParameters.setRegistrationCode("INVALID_REGISTRATION_TOKEN");
