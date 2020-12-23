@@ -43,7 +43,11 @@ public class OnboardingResponseRepository {
   /** Identifier for the onboarding responses. */
   public enum Identifier {
     FARMING_SOFTWARE("farming-software"),
-    TELEMETRY_PLATFORM("telemetry-platform");
+    FARMING_SOFTWARE_REMOVED("farming-software-removed"),
+    FARMING_SOFTWARE_DEACTIVATED("farming-software-deactivated"),
+    TELEMETRY_PLATFORM("telemetry-platform"),
+    TELEMETRY_PLATFORM_REMOVED("telemetry-platform-removed"),
+    TELEMETRY_PLATFORM_DEACTIVATED("telemetry-platform-deactivated");
 
     private final String fileName;
 
