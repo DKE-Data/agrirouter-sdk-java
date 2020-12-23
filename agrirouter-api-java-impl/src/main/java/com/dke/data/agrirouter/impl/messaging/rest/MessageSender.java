@@ -5,11 +5,10 @@ import com.dke.data.agrirouter.api.messaging.MessageSendingResponse;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Response;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 
 /**
  * Default message sending interface. Used by all REST implementations to send messages to the AR.

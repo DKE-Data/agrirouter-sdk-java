@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.api.service.messaging;
 
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
-
 import java.util.concurrent.CompletableFuture;
 
 /** Service for sending a message */
