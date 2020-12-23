@@ -7,9 +7,7 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Base class to send messages.
- */
+/** Base class to send messages. */
 public class SendMessageServiceImpl
     implements SendMessageService<MessageSendingResponse>, ResponseValidator, MessageSender {
 
@@ -21,10 +19,9 @@ public class SendMessageServiceImpl
   }
 
   @Override
-  public CompletableFuture<MessageSendingResponse> sendAsync(SendMessageParameters sendMessageParameters) {
+  public CompletableFuture<MessageSendingResponse> sendAsync(
+      SendMessageParameters sendMessageParameters) {
     sendMessageParameters.validate();
     return this.sendMessageAsync(sendMessageParameters);
   }
-
-
 }

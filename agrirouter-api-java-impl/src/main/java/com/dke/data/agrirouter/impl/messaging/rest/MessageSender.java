@@ -19,13 +19,16 @@ public interface MessageSender extends MessageBodyCreator {
 
   /**
    * Synchronous messages sending.
+   *
    * @param parameters Parameters to send messages.
    * @return Response of the server.
    */
   default MessageSendingResponse sendMessage(SendMessageParameters parameters) {
     Response response =
         RequestFactory.securedRequest(
-                Objects.requireNonNull(parameters.getOnboardingResponse()).getConnectionCriteria().getMeasures(),
+                Objects.requireNonNull(parameters.getOnboardingResponse())
+                    .getConnectionCriteria()
+                    .getMeasures(),
                 parameters.getOnboardingResponse().getAuthentication().getCertificate(),
                 parameters.getOnboardingResponse().getAuthentication().getSecret(),
                 CertificationType.valueOf(
@@ -36,12 +39,12 @@ public interface MessageSender extends MessageBodyCreator {
 
   /**
    * Synchronous messages sending.
+   *
    * @param parameters Parameters to send messages.
    * @return Response of the server, wrapped within a completable future.
    */
-  default CompletableFuture<MessageSendingResponse> sendMessageAsync(SendMessageParameters parameters){
+  default CompletableFuture<MessageSendingResponse> sendMessageAsync(
+      SendMessageParameters parameters) {
     return CompletableFuture.supplyAsync(() -> this.sendMessage(parameters));
   }
-
-
 }

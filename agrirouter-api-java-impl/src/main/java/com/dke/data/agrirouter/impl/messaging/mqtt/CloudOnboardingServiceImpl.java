@@ -47,7 +47,9 @@ public class CloudOnboardingServiceImpl extends MqttService
       byte[] payload = messageAsJson.getBytes();
       this.getMqttClient()
           .publish(
-              Objects.requireNonNull(parameters.getOnboardingResponse()).getConnectionCriteria().getMeasures(),
+              Objects.requireNonNull(parameters.getOnboardingResponse())
+                  .getConnectionCriteria()
+                  .getMeasures(),
               new MqttMessage(payload));
       return encodedMessage.getApplicationMessageID();
     } catch (MqttException e) {
@@ -57,9 +59,9 @@ public class CloudOnboardingServiceImpl extends MqttService
 
   @Override
   public MqttAsyncMessageSendingResult sendAsync(CloudOnboardingParameters parameters) {
-    return new MqttAsyncMessageSendingResult(CompletableFuture.supplyAsync(() -> this.send(parameters)));
+    return new MqttAsyncMessageSendingResult(
+        CompletableFuture.supplyAsync(() -> this.send(parameters)));
   }
-
 
   @Override
   public EncodeMessageService getEncodeMessageService() {

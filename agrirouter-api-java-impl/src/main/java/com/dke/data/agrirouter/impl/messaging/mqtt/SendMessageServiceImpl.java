@@ -25,6 +25,7 @@ public class SendMessageServiceImpl extends MqttService
 
   /**
    * Send message synchronous.
+   *
    * @param sendMessageParameters Parameters to send the message.
    */
   public void send(SendMessageParameters sendMessageParameters) {
@@ -34,7 +35,9 @@ public class SendMessageServiceImpl extends MqttService
       byte[] payload = messageAsJson.getBytes();
       this.getMqttClient()
           .publish(
-              Objects.requireNonNull(sendMessageParameters.getOnboardingResponse()).getConnectionCriteria().getMeasures(),
+              Objects.requireNonNull(sendMessageParameters.getOnboardingResponse())
+                  .getConnectionCriteria()
+                  .getMeasures(),
               new MqttMessage(payload));
     } catch (MqttException e) {
       throw new CouldNotSendMqttMessageException(e);
@@ -43,5 +46,6 @@ public class SendMessageServiceImpl extends MqttService
 
   @Override
   public CompletableFuture<Void> sendAsync(SendMessageParameters sendMessageParameters) {
-    return CompletableFuture.runAsync(() -> this.send(sendMessageParameters));  }
+    return CompletableFuture.runAsync(() -> this.send(sendMessageParameters));
+  }
 }

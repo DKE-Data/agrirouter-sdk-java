@@ -42,7 +42,9 @@ public class MessageConfirmationServiceImpl extends MqttService
       byte[] payload = messageAsJson.getBytes();
       this.getMqttClient()
           .publish(
-              Objects.requireNonNull(parameters.getOnboardingResponse()).getConnectionCriteria().getMeasures(),
+              Objects.requireNonNull(parameters.getOnboardingResponse())
+                  .getConnectionCriteria()
+                  .getMeasures(),
               new MqttMessage(payload));
       return encodedMessage.getApplicationMessageID();
     } catch (MqttException e) {
@@ -52,7 +54,8 @@ public class MessageConfirmationServiceImpl extends MqttService
 
   @Override
   public MqttAsyncMessageSendingResult sendAsync(MessageConfirmationParameters parameters) {
-    return new MqttAsyncMessageSendingResult(CompletableFuture.supplyAsync(() -> this.send(parameters)));
+    return new MqttAsyncMessageSendingResult(
+        CompletableFuture.supplyAsync(() -> this.send(parameters)));
   }
 
   @Override

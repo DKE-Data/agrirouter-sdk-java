@@ -45,9 +45,11 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
-            Collections.singletonList(encodedMessage.getEncodedMessage()));
-    final CompletableFuture<MessageSendingResponse> response = this.sendMessageAsync(sendMessageParameters);
-    return new HttpAsyncMessageSendingResult(response, encodedMessage.getApplicationMessageID());}
+        Collections.singletonList(encodedMessage.getEncodedMessage()));
+    final CompletableFuture<MessageSendingResponse> response =
+        this.sendMessageAsync(sendMessageParameters);
+    return new HttpAsyncMessageSendingResult(response, encodedMessage.getApplicationMessageID());
+  }
 
   @Override
   public EncodeMessageService getEncodeMessageService() {

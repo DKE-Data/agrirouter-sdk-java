@@ -70,10 +70,12 @@ public class MessageQueryHelperService extends NonEnvironmentalService
         Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
 
     this.getNativeLogger().trace("Send and fetch message response.");
-    CompletableFuture<MessageSendingResponse> response = this.sendMessageAsync(sendMessageParameters);
+    CompletableFuture<MessageSendingResponse> response =
+        this.sendMessageAsync(sendMessageParameters);
 
     this.logMethodEnd();
-    return new HttpAsyncMessageSendingResult(response, encodedMessageResponse.getApplicationMessageID());
+    return new HttpAsyncMessageSendingResult(
+        response, encodedMessageResponse.getApplicationMessageID());
   }
 
   @Override

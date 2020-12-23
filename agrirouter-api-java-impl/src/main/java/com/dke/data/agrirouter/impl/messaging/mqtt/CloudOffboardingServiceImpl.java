@@ -19,52 +19,53 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Service implementation.
- */
+/** Service implementation. */
 public class CloudOffboardingServiceImpl extends MqttService
-        implements CloudOffboardingService, MessageBodyCreator, MessageEncoder {
+    implements CloudOffboardingService, MessageBodyCreator, MessageEncoder {
 
-    private final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
+  private final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-    public CloudOffboardingServiceImpl(IMqttClient mqttClient) {
-        super(mqttClient);
+  public CloudOffboardingServiceImpl(IMqttClient mqttClient) {
+    super(mqttClient);
+  }
+
+  /**
+   * Offboarding a virtual CU. Will deliver no result if the action was successful, if there's any
+   * error an exception will be thrown.
+   *
+   * @param parameters Parameters for offboarding.
+   */
+  @Override
+  public String send(CloudOffboardingParameters parameters) {
+    parameters.validate();
+    try {
+      EncodedMessage encodedMessage = this.encode(parameters);
+      SendMessageParameters sendMessageParameters = new SendMessageParameters();
+      sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+      sendMessageParameters.setEncodedMessages(
+          Collections.singletonList(encodedMessage.getEncodedMessage()));
+      String messageAsJson = this.createMessageBody(sendMessageParameters);
+      byte[] payload = messageAsJson.getBytes();
+      this.getMqttClient()
+          .publish(
+              Objects.requireNonNull(parameters.getOnboardingResponse())
+                  .getConnectionCriteria()
+                  .getMeasures(),
+              new MqttMessage(payload));
+      return encodedMessage.getApplicationMessageID();
+    } catch (MqttException e) {
+      throw new CouldNotSendMqttMessageException(e);
     }
+  }
 
-    /**
-     * Offboarding a virtual CU. Will deliver no result if the action was successful, if there's any
-     * error an exception will be thrown.
-     *
-     * @param parameters Parameters for offboarding.
-     */
-    @Override
-    public String send(CloudOffboardingParameters parameters) {
-        parameters.validate();
-        try {
-            EncodedMessage encodedMessage = this.encode(parameters);
-            SendMessageParameters sendMessageParameters = new SendMessageParameters();
-            sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-            sendMessageParameters.setEncodedMessages(
-                    Collections.singletonList(encodedMessage.getEncodedMessage()));
-            String messageAsJson = this.createMessageBody(sendMessageParameters);
-            byte[] payload = messageAsJson.getBytes();
-            this.getMqttClient()
-                    .publish(
-                            Objects.requireNonNull(parameters.getOnboardingResponse()).getConnectionCriteria().getMeasures(),
-                            new MqttMessage(payload));
-            return encodedMessage.getApplicationMessageID();
-        } catch (MqttException e) {
-            throw new CouldNotSendMqttMessageException(e);
-        }
-    }
+  @Override
+  public MqttAsyncMessageSendingResult sendAsync(CloudOffboardingParameters parameters) {
+    return new MqttAsyncMessageSendingResult(
+        CompletableFuture.supplyAsync(() -> this.send(parameters)));
+  }
 
-    @Override
-    public MqttAsyncMessageSendingResult sendAsync(CloudOffboardingParameters parameters) {
-        return new MqttAsyncMessageSendingResult(CompletableFuture.supplyAsync(() -> this.send(parameters)));
-    }
-
-    @Override
-    public EncodeMessageService getEncodeMessageService() {
-        return this.encodeMessageService;
-    }
+  @Override
+  public EncodeMessageService getEncodeMessageService() {
+    return this.encodeMessageService;
+  }
 }

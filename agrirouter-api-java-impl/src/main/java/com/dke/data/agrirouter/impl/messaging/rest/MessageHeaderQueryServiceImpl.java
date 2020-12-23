@@ -29,7 +29,6 @@ public class MessageHeaderQueryServiceImpl extends EnvironmentalService
     return this.messageQueryHelperService.send(parameters);
   }
 
-
   @Override
   public HttpAsyncMessageSendingResult sendAsync(MessageQueryParameters parameters) {
     return messageQueryHelperService.sendAsync(parameters);

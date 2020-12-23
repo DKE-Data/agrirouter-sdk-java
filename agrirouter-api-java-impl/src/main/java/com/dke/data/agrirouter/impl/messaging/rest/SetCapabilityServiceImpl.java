@@ -45,8 +45,9 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
-            Collections.singletonList(encodedMessage.getEncodedMessage()));
-    return new HttpAsyncMessageSendingResult(this.sendMessageAsync(sendMessageParameters),encodedMessage.getApplicationMessageID());
+        Collections.singletonList(encodedMessage.getEncodedMessage()));
+    return new HttpAsyncMessageSendingResult(
+        this.sendMessageAsync(sendMessageParameters), encodedMessage.getApplicationMessageID());
   }
 
   @Override

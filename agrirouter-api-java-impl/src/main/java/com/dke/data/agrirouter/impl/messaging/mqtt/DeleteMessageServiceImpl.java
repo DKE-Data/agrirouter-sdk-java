@@ -41,7 +41,9 @@ public class DeleteMessageServiceImpl extends MqttService
       byte[] payload = messageAsJson.getBytes();
       this.getMqttClient()
           .publish(
-              Objects.requireNonNull(parameters.getOnboardingResponse()).getConnectionCriteria().getMeasures(),
+              Objects.requireNonNull(parameters.getOnboardingResponse())
+                  .getConnectionCriteria()
+                  .getMeasures(),
               new MqttMessage(payload));
       return encodedMessage.getApplicationMessageID();
     } catch (MqttException e) {
@@ -51,9 +53,9 @@ public class DeleteMessageServiceImpl extends MqttService
 
   @Override
   public MqttAsyncMessageSendingResult sendAsync(DeleteMessageParameters parameters) {
-    return new MqttAsyncMessageSendingResult(CompletableFuture.supplyAsync(() -> this.send(parameters)));
+    return new MqttAsyncMessageSendingResult(
+        CompletableFuture.supplyAsync(() -> this.send(parameters)));
   }
-
 
   public EncodeMessageService getEncodeMessageService() {
     return encodeMessageService;

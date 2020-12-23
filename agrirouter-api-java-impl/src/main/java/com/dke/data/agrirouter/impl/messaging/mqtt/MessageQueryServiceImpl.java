@@ -38,7 +38,8 @@ public class MessageQueryServiceImpl extends MqttService
 
   @Override
   public MqttAsyncMessageSendingResult sendAsync(MessageQueryParameters parameters) {
-    return new MqttAsyncMessageSendingResult(CompletableFuture.supplyAsync(() -> this.send(parameters)));
+    return new MqttAsyncMessageSendingResult(
+        CompletableFuture.supplyAsync(() -> this.send(parameters)));
   }
 
   @Override
