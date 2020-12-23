@@ -1,6 +1,8 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
+import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
+import com.dke.data.agrirouter.api.messaging.MessageSendingResponse;
 import com.dke.data.agrirouter.api.service.messaging.CloudOffboardingService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.CloudOffboardingParameters;
@@ -8,7 +10,9 @@ import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 
 /** Service implementation. */
 public class CloudOffboardingServiceImpl
@@ -20,12 +24,6 @@ public class CloudOffboardingServiceImpl
     this.encodeMessageService = new EncodeMessageServiceImpl();
   }
 
-  /**
-   * Offboarding a virtual CU. Will deliver no result if the action was successful, if there's any
-   * error an exception will be thrown.
-   *
-   * @param parameters Parameters for offboarding.
-   */
   @Override
   public String send(CloudOffboardingParameters parameters) {
     parameters.validate();
@@ -34,9 +32,21 @@ public class CloudOffboardingServiceImpl
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     sendMessageParameters.setEncodedMessages(
         Collections.singletonList(encodedMessage.getEncodedMessage()));
-    MessageSenderResponse response = this.sendMessage(sendMessageParameters);
+    MessageSendingResponse response = this.sendMessage(sendMessageParameters);
     this.assertStatusCodeIsValid(response.getNativeResponse().getStatus());
     return encodedMessage.getApplicationMessageID();
+  }
+
+  @Override
+  public HttpAsyncMessageSendingResult sendAsync(CloudOffboardingParameters parameters) {
+    parameters.validate();
+    EncodedMessage encodedMessage = this.encode(parameters);
+    SendMessageParameters sendMessageParameters = new SendMessageParameters();
+    sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+    sendMessageParameters.setEncodedMessages(
+            Collections.singletonList(encodedMessage.getEncodedMessage()));
+    CompletableFuture<MessageSendingResponse> response = this.sendMessageAsync(sendMessageParameters);
+    return new HttpAsyncMessageSendingResult(response, encodedMessage.getApplicationMessageID());
   }
 
   @Override

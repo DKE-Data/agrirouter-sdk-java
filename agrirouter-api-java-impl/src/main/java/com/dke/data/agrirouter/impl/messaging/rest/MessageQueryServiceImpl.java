@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 import agrirouter.feed.response.FeedResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
@@ -20,14 +21,19 @@ public class MessageQueryServiceImpl extends EnvironmentalService
 
   public MessageQueryServiceImpl(Environment environment) {
     super(environment);
-    this.messageQueryHelperService =
+    messageQueryHelperService =
         new MessageQueryHelperService(
             new EncodeMessageServiceImpl(), TechnicalMessageType.DKE_FEED_MESSAGE_QUERY);
   }
 
   @Override
   public String send(MessageQueryParameters parameters) {
-    return this.messageQueryHelperService.send(parameters);
+    return messageQueryHelperService.send(parameters);
+  }
+
+  @Override
+  public HttpAsyncMessageSendingResult sendAsync(MessageQueryParameters parameters) {
+    return messageQueryHelperService.sendAsync(parameters);
   }
 
   @Override
