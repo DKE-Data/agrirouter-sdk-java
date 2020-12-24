@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 /** Class to onboard endpoints for different reasons. */
 class TelemetryPlatformFixture extends AbstractIntegrationTest {
+
   /**
    * Create a new registration token by using the following link:
    *
