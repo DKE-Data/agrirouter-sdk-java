@@ -17,5 +17,5 @@ public interface CancellationToken {
   void step();
 
   /** Will wait a dedicated amount of time before starting the next step. */
-  void waitBeforeStartingTheNextStep();
+  void waitBeforeStartingNextStep();
 }

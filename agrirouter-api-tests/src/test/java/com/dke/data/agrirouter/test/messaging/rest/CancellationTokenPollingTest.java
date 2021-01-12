@@ -90,7 +90,7 @@ class CancellationTokenPollingTest extends AbstractIntegrationTest {
               }
 
               @Override
-              public void waitBeforeStartingTheNextStep() {
+              public void waitBeforeStartingNextStep() {
                 // NOP
               }
             });

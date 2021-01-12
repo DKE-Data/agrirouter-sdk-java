@@ -48,7 +48,7 @@ public interface MessageFetcher extends ResponseValidator {
         return Optional.of(entityContent);
       }
       cancellationToken.step();
-      cancellationToken.waitBeforeStartingTheNextStep();
+      cancellationToken.waitBeforeStartingNextStep();
     }
     return Optional.empty();
   }
