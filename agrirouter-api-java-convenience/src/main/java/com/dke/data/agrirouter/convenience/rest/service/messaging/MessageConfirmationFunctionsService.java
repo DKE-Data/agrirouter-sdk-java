@@ -48,26 +48,34 @@ public class MessageConfirmationFunctionsService implements ResponseValidator {
 
   public void confirmAllPendingMessagesWithValidation(
       MessageConfirmationForAllPendingMessagesParameters parameters) {
-    this.confirmAllPendingMessages(parameters, true, new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
+    this.confirmAllPendingMessages(
+        parameters, true, new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
   }
 
   public void confirmAllPendingMessages(
       MessageConfirmationForAllPendingMessagesParameters parameters) {
-    this.confirmAllPendingMessages(parameters, false, new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
+    this.confirmAllPendingMessages(
+        parameters,
+        false,
+        new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
   }
 
   public void confirmAllPendingMessagesWithValidation(
-      MessageConfirmationForAllPendingMessagesParameters parameters, CancellationToken cancellationToken) {
+      MessageConfirmationForAllPendingMessagesParameters parameters,
+      CancellationToken cancellationToken) {
     this.confirmAllPendingMessages(parameters, true, cancellationToken);
   }
 
   public void confirmAllPendingMessages(
-      MessageConfirmationForAllPendingMessagesParameters parameters, CancellationToken cancellationToken) {
+      MessageConfirmationForAllPendingMessagesParameters parameters,
+      CancellationToken cancellationToken) {
     this.confirmAllPendingMessages(parameters, false, cancellationToken);
   }
 
   private void confirmAllPendingMessages(
-          MessageConfirmationForAllPendingMessagesParameters parameters, boolean enableValidation, CancellationToken cancellationToken) {
+      MessageConfirmationForAllPendingMessagesParameters parameters,
+      boolean enableValidation,
+      CancellationToken cancellationToken) {
     MessageQueryParameters messageQueryParameters = new MessageQueryParameters();
     messageQueryParameters.setOnboardingResponse(parameters.getOnboardingResponse());
     messageQueryParameters.setMessageIds(Collections.emptyList());
@@ -79,9 +87,7 @@ public class MessageConfirmationFunctionsService implements ResponseValidator {
     this.messageQueryService.send(messageQueryParameters);
 
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
-        this.fetchMessageService.fetch(
-            parameters.getOnboardingResponse(),
-            cancellationToken);
+        this.fetchMessageService.fetch(parameters.getOnboardingResponse(), cancellationToken);
     if (fetchMessageResponses.isPresent()) {
       DecodeMessageResponse decodedMessageQueryResponse =
           this.decodeMessageService.decode(
@@ -109,13 +115,13 @@ public class MessageConfirmationFunctionsService implements ResponseValidator {
     }
   }
 
-  private void validateResponse(MessageConfirmationForAllPendingMessagesParameters parameters, CancellationToken cancellationToken) {
+  private void validateResponse(
+      MessageConfirmationForAllPendingMessagesParameters parameters,
+      CancellationToken cancellationToken) {
     Optional<List<FetchMessageResponse>> fetchMessageResponses;
     DecodeMessageResponse decodedMessageQueryResponse;
     fetchMessageResponses =
-        this.fetchMessageService.fetch(
-            parameters.getOnboardingResponse(),
-            cancellationToken);
+        this.fetchMessageService.fetch(parameters.getOnboardingResponse(), cancellationToken);
     if (fetchMessageResponses.isPresent()) {
       decodedMessageQueryResponse =
           this.decodeMessageService.decode(

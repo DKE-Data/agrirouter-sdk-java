@@ -15,8 +15,8 @@ public interface MessageSender extends MessageBodyCreator {
    * Send message to the AR using the given parameters.
    *
    * @param parameters -
-   * @return The actual HTTP response from the AR for this request. This is not the ACK that can be fetched
-   *     afterwards.
+   * @return The actual HTTP response from the AR for this request. This is not the ACK that can be
+   *     fetched afterwards.
    */
   default MessageSenderResponse sendMessage(SendMessageParameters parameters) {
     Response response =
