@@ -90,9 +90,10 @@ class CancellationTokenPollingTest extends AbstractIntegrationTest {
               }
 
               @Override
-              public void waitBeforeStartingTheNextStep() {
-                // NOP
+              public boolean waitBeforeStartingNextStep() {
+                return true;
               }
+
             });
     Assertions.assertFalse(fetchMessageResponses.isPresent());
   }

@@ -24,11 +24,23 @@ public class DefaultCancellationToken implements CancellationToken {
   }
 
   @Override
-  public void waitBeforeStartingTheNextStep() {
+  public boolean waitBeforeStartingNextStep() {
     try {
       Thread.sleep(timeToWait);
+      return true;
     } catch (InterruptedException nop) {
-      // NOP
+      return onWaitBeforeStartingNextStepSleepThrowsError();
     }
   }
+
+  /**
+   * Will be called when the sleep functionality breaks
+   * Shall return true to continue the loop of requests
+   **/
+  private boolean onWaitBeforeStartingNextStepSleepThrowsError() {
+    System.out.println("Sleep functionality in FetchMessage Command failed");
+    //By Default, we continue anyway
+    return true;
+  }
+
 }

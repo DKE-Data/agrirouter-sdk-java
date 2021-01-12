@@ -5,6 +5,7 @@ import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRI
 
 import agrirouter.feed.response.FeedResponse;
 import agrirouter.response.Response;
+import com.dke.data.agrirouter.api.cancellation.CancellationToken;
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
@@ -37,12 +38,19 @@ public class MessageConfirmationFunctionsService implements ResponseValidator {
   private final FetchMessageService fetchMessageService;
   private final DecodeMessageService decodeMessageService;
   private final MessageConfirmationService messageConfirmationService;
+  private CancellationToken cancellationToken;
 
-  public MessageConfirmationFunctionsService(Environment environment) {
+  public MessageConfirmationFunctionsService(Environment environment, CancellationToken cancellationToken){
     this.messageQueryService = new MessageQueryServiceImpl(environment);
     this.fetchMessageService = new FetchMessageServiceImpl();
     this.decodeMessageService = new DecodeMessageServiceImpl();
     this.messageConfirmationService = new MessageConfirmationServiceImpl(environment);
+    this.cancellationToken = cancellationToken;
+
+  }
+
+  public MessageConfirmationFunctionsService(Environment environment) {
+    this(environment,new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
   }
 
   public void confirmAllPendingMessagesWithValidation(
@@ -70,7 +78,8 @@ public class MessageConfirmationFunctionsService implements ResponseValidator {
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
         this.fetchMessageService.fetch(
             parameters.getOnboardingResponse(),
-            new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
+            this.cancellationToken
+            );
     if (fetchMessageResponses.isPresent()) {
       DecodeMessageResponse decodedMessageQueryResponse =
           this.decodeMessageService.decode(
@@ -104,7 +113,7 @@ public class MessageConfirmationFunctionsService implements ResponseValidator {
     fetchMessageResponses =
         this.fetchMessageService.fetch(
             parameters.getOnboardingResponse(),
-            new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
+            this.cancellationToken);
     if (fetchMessageResponses.isPresent()) {
       decodedMessageQueryResponse =
           this.decodeMessageService.decode(
