@@ -1,13 +1,16 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
+import com.dke.data.agrirouter.api.cancellation.CancellationToken;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import java.util.Objects;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 
+/** Interface to fetch messages for the HTTP implementation by polling the outbox. */
 public interface MessageFetcher extends ResponseValidator {
 
   int MAX_TRIES_BEFORE_FAILURE = 10;
@@ -15,29 +18,37 @@ public interface MessageFetcher extends ResponseValidator {
 
   String EMPTY_CONTENT = "[]";
 
-  default Optional<String> poll(FetchMessageParameters parameters, int maxTries, long interval) {
-    parameters.validate();
-    int nrOfTries = 0;
-    while (nrOfTries < maxTries) {
+  /**
+   * Poll for new messages using the given parameters.
+   *
+   * @param fetchMessageParameters -
+   * @param cancellationToken Token to manage the whole polling process.
+   * @return Response from the outbox, if existing.
+   */
+  default Optional<String> poll(
+      FetchMessageParameters fetchMessageParameters, CancellationToken cancellationToken) {
+    fetchMessageParameters.validate();
+    while (cancellationToken.isNotCancelled()) {
       Response response =
           RequestFactory.securedRequest(
-                  parameters.getOnboardingResponse().getConnectionCriteria().getCommands(),
-                  parameters.getOnboardingResponse().getAuthentication().getCertificate(),
-                  parameters.getOnboardingResponse().getAuthentication().getSecret(),
+                  Objects.requireNonNull(fetchMessageParameters.getOnboardingResponse())
+                      .getConnectionCriteria()
+                      .getCommands(),
+                  fetchMessageParameters
+                      .getOnboardingResponse()
+                      .getAuthentication()
+                      .getCertificate(),
+                  fetchMessageParameters.getOnboardingResponse().getAuthentication().getSecret(),
                   CertificationType.valueOf(
-                      parameters.getOnboardingResponse().getAuthentication().getType()))
+                      fetchMessageParameters.getOnboardingResponse().getAuthentication().getType()))
               .get();
       this.assertStatusCodeIsOk(response.getStatus());
       String entityContent = response.readEntity(String.class);
       if (!StringUtils.equalsIgnoreCase(entityContent, EMPTY_CONTENT)) {
         return Optional.of(entityContent);
       }
-      nrOfTries++;
-      try {
-        Thread.sleep(interval);
-      } catch (InterruptedException nop) {
-        // NOP
-      }
+      cancellationToken.step();
+      cancellationToken.waitBeforeStartingNextStep();
     }
     return Optional.empty();
   }

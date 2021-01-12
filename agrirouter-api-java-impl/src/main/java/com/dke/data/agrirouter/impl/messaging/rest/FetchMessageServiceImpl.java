@@ -1,5 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
+import com.dke.data.agrirouter.api.cancellation.CancellationToken;
+import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
@@ -17,14 +19,31 @@ public class FetchMessageServiceImpl implements FetchMessageService, MessageFetc
       OnboardingResponse onboardingResponse, int maxTries, long interval) {
     FetchMessageParameters fetchMessageParameters = new FetchMessageParameters();
     fetchMessageParameters.setOnboardingResponse(onboardingResponse);
-    return this.fetch(fetchMessageParameters, maxTries, interval);
+    return fetch(fetchMessageParameters, maxTries, interval);
   }
 
   @Override
   public Optional<List<FetchMessageResponse>> fetch(
-      FetchMessageParameters parameters, int maxTries, long interval) {
-    parameters.validate();
-    Optional<String> response = this.poll(parameters, maxTries, interval);
+      FetchMessageParameters fetchMessageParameters, int maxTries, long interval) {
+    fetchMessageParameters.validate();
+    Optional<String> response =
+        poll(fetchMessageParameters, new DefaultCancellationToken(maxTries, interval));
+    return response.map(this::parseJson);
+  }
+
+  @Override
+  public Optional<List<FetchMessageResponse>> fetch(
+      OnboardingResponse onboardingResponse, CancellationToken cancellationToken) {
+    FetchMessageParameters fetchMessageParameters = new FetchMessageParameters();
+    fetchMessageParameters.setOnboardingResponse(onboardingResponse);
+    return fetch(fetchMessageParameters, cancellationToken);
+  }
+
+  @Override
+  public Optional<List<FetchMessageResponse>> fetch(
+      FetchMessageParameters fetchMessageParameters, CancellationToken cancellationToken) {
+    fetchMessageParameters.validate();
+    Optional<String> response = poll(fetchMessageParameters, cancellationToken);
     return response.map(this::parseJson);
   }
 
