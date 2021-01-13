@@ -20,7 +20,8 @@ public interface MessageSender extends MessageBodyCreator {
    * Synchronous messages sending.
    *
    * @param parameters Parameters to send messages.
-   * @return Response of the server.
+   * @return The actual HTTP response from the AR for this request. This is not the ACK that can be
+   *     fetched afterwards.
    */
   default MessageSendingResponse sendMessage(SendMessageParameters parameters) {
     Response response =
