@@ -38,7 +38,7 @@ public interface MessageSender extends MessageBodyCreator {
   }
 
   /**
-   * Synchronous messages sending.
+   * Asynchronous messages sending.
    *
    * @param parameters Parameters to send messages.
    * @return Response of the server, wrapped within a completable future.
