@@ -3,7 +3,7 @@ package com.dke.data.agrirouter.impl.messaging.mqtt;
 import agrirouter.feed.response.FeedResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
-import com.dke.data.agrirouter.api.service.messaging.MessageHeaderQueryService;
+import com.dke.data.agrirouter.api.service.messaging.mqtt.MessageHeaderQueryService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;

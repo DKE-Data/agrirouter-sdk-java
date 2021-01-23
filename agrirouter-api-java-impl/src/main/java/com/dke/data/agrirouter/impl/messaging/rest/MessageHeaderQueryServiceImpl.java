@@ -4,7 +4,7 @@ import agrirouter.feed.response.FeedResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
-import com.dke.data.agrirouter.api.service.messaging.MessageHeaderQueryService;
+import com.dke.data.agrirouter.api.service.messaging.http.MessageHeaderQueryService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;

@@ -1,12 +1,13 @@
-package com.dke.data.agrirouter.api.service.messaging;
+package com.dke.data.agrirouter.api.service.messaging.mqtt;
+
+import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
 
 /**
  * Centralized service interface.
  *
  * @param <T> The type of parameters needed to send messages.
- * @param <R> The type of result the asynchronous messaging will deliver.
  */
-public interface MessagingService<T, R> {
+public interface MessagingService<T> {
 
   /**
    * Send a synchronous message.
@@ -22,5 +23,5 @@ public interface MessagingService<T, R> {
    * @param parameters -
    * @return The completable future containing the possible result.
    */
-  R sendAsync(T parameters);
+  MqttAsyncMessageSendingResult sendAsync(T parameters);
 }

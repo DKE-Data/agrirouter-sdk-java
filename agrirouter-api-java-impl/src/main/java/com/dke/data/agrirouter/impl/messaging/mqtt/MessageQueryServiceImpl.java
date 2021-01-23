@@ -4,6 +4,7 @@ import agrirouter.feed.response.FeedResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
+import com.dke.data.agrirouter.api.service.messaging.mqtt.MessageQueryService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
@@ -15,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 public class MessageQueryServiceImpl extends MqttService
-    implements com.dke.data.agrirouter.api.service.messaging.MessageQueryService,
+    implements MessageQueryService,
         MessageSender,
         MessageDecoder<FeedResponse.MessageQueryResponse> {
 

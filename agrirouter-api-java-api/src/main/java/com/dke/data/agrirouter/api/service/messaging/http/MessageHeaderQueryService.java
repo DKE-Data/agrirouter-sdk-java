@@ -1,10 +1,9 @@
-package com.dke.data.agrirouter.api.service.messaging;
+package com.dke.data.agrirouter.api.service.messaging.http;
 
 import agrirouter.feed.response.FeedResponse;
-import com.dke.data.agrirouter.api.messaging.AsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 
 public interface MessageHeaderQueryService
-    extends MessagingService<MessageQueryParameters, AsyncMessageSendingResult>,
+    extends MessagingService<MessageQueryParameters>,
         MessageDecoder<FeedResponse.HeaderQueryResponse> {}
