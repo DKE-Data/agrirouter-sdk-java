@@ -18,7 +18,7 @@ public interface MessagingService<T> {
   String send(T parameters);
 
   /**
-   * Send a asynchronous message.
+   * Send an asynchronous message.
    *
    * @param parameters -
    * @return The completable future containing the possible result.
