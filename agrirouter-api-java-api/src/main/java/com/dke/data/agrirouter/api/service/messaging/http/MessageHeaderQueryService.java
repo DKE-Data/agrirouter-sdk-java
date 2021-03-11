@@ -1,4 +1,4 @@
-package com.dke.data.agrirouter.api.service.messaging;
+package com.dke.data.agrirouter.api.service.messaging.http;
 
 import agrirouter.feed.response.FeedResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;

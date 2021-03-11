@@ -2,7 +2,8 @@ package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import agrirouter.feed.response.FeedResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
-import com.dke.data.agrirouter.api.service.messaging.MessageHeaderQueryService;
+import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
+import com.dke.data.agrirouter.api.service.messaging.mqtt.MessageHeaderQueryService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
@@ -10,6 +11,7 @@ import com.dke.data.agrirouter.impl.messaging.helper.mqtt.MessageQueryHelperServ
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import java.util.concurrent.CompletableFuture;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 public class MessageHeaderQueryServiceImpl extends MqttService
@@ -27,6 +29,12 @@ public class MessageHeaderQueryServiceImpl extends MqttService
   @Override
   public String send(MessageQueryParameters parameters) {
     return this.messageQueryHelperService.send(parameters);
+  }
+
+  @Override
+  public MqttAsyncMessageSendingResult sendAsync(MessageQueryParameters parameters) {
+    return new MqttAsyncMessageSendingResult(
+        CompletableFuture.supplyAsync(() -> this.send(parameters)));
   }
 
   @Override

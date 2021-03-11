@@ -6,7 +6,7 @@ import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRI
 import com.dke.data.agrirouter.api.cancellation.CancellationToken;
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
-import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
+import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher;
 import com.dke.data.agrirouter.test.AbstractIntegrationTest;

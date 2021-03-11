@@ -2,17 +2,18 @@ package com.dke.data.agrirouter.test.messaging.rest;
 
 import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
 import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
-import static com.dke.data.agrirouter.test.OnboardingResponseRepository.*;
+import static com.dke.data.agrirouter.test.OnboardingResponseRepository.Identifier;
+import static com.dke.data.agrirouter.test.OnboardingResponseRepository.read;
 
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
-import com.dke.data.agrirouter.api.service.messaging.CloudOffboardingService;
-import com.dke.data.agrirouter.api.service.messaging.CloudOnboardingService;
-import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
+import com.dke.data.agrirouter.api.service.messaging.http.CloudOffboardingService;
+import com.dke.data.agrirouter.api.service.messaging.http.CloudOnboardingService;
+import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
 import com.dke.data.agrirouter.api.service.parameters.CloudOffboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.CloudOnboardingParameters;
 import com.dke.data.agrirouter.convenience.decode.DecodeCloudOnboardingResponsesService;

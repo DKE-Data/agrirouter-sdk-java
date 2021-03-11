@@ -1,24 +1,29 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import com.dke.data.agrirouter.api.enums.CertificationType;
+import com.dke.data.agrirouter.api.messaging.MessageSendingResponse;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
-/** Interface with default implementations for sending messages. */
+/**
+ * Default message sending interface. Used by all REST implementations to send messages to the AR.
+ * Provides methods to send messages synchronous and asynchronous.
+ */
 public interface MessageSender extends MessageBodyCreator {
 
   /**
-   * Send message to the AR using the given parameters.
+   * Synchronous messages sending.
    *
-   * @param parameters -
+   * @param parameters Parameters to send messages.
    * @return The actual HTTP response from the AR for this request. This is not the ACK that can be
    *     fetched afterwards.
    */
-  default MessageSenderResponse sendMessage(SendMessageParameters parameters) {
+  default MessageSendingResponse sendMessage(SendMessageParameters parameters) {
     Response response =
         RequestFactory.securedRequest(
                 Objects.requireNonNull(parameters.getOnboardingResponse())
@@ -29,21 +34,17 @@ public interface MessageSender extends MessageBodyCreator {
                 CertificationType.valueOf(
                     parameters.getOnboardingResponse().getAuthentication().getType()))
             .post(Entity.json(this.createSendMessageRequest(parameters)));
-    return new MessageSenderResponse(response);
+    return new MessageSendingResponse(response);
   }
 
-  /** Message response. */
-  class MessageSenderResponse {
-
-    /** Wrapped HTTP response for the request. */
-    private final Response nativeResponse;
-
-    private MessageSenderResponse(Response nativeResponse) {
-      this.nativeResponse = nativeResponse;
-    }
-
-    public Response getNativeResponse() {
-      return nativeResponse;
-    }
+  /**
+   * Asynchronous messages sending.
+   *
+   * @param parameters Parameters to send messages.
+   * @return Response of the server, wrapped within a completable future.
+   */
+  default CompletableFuture<MessageSendingResponse> sendMessageAsync(
+      SendMessageParameters parameters) {
+    return CompletableFuture.supplyAsync(() -> this.sendMessage(parameters));
   }
 }

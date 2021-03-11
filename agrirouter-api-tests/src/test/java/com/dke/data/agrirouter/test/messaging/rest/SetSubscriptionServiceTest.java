@@ -2,7 +2,8 @@ package com.dke.data.agrirouter.test.messaging.rest;
 
 import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
 import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
-import static com.dke.data.agrirouter.test.OnboardingResponseRepository.*;
+import static com.dke.data.agrirouter.test.OnboardingResponseRepository.Identifier;
+import static com.dke.data.agrirouter.test.OnboardingResponseRepository.read;
 
 import agrirouter.commons.MessageOuterClass;
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
@@ -11,9 +12,9 @@ import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.env.QA;
-import com.dke.data.agrirouter.api.service.messaging.FetchMessageService;
-import com.dke.data.agrirouter.api.service.messaging.SetSubscriptionService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
+import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
+import com.dke.data.agrirouter.api.service.messaging.http.SetSubscriptionService;
 import com.dke.data.agrirouter.api.service.parameters.SetSubscriptionParameters;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;

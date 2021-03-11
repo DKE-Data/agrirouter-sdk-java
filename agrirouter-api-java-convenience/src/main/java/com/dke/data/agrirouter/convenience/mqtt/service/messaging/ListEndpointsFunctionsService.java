@@ -3,7 +3,7 @@ package com.dke.data.agrirouter.convenience.mqtt.service.messaging;
 import agrirouter.request.payload.account.Endpoints;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
-import com.dke.data.agrirouter.api.service.messaging.ListEndpointsService;
+import com.dke.data.agrirouter.api.service.messaging.mqtt.ListEndpointsService;
 import com.dke.data.agrirouter.api.service.parameters.ListEndpointsParameters;
 import com.dke.data.agrirouter.impl.messaging.mqtt.ListEndpointsServiceImpl;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
