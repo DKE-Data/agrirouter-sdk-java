@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.api.enums
 
+@Deprecated(message = "This enum will be removed, please use the content or system message type definitions.")
 enum class TechnicalMessageType(val key: String) {
     EMPTY(""),
     DKE_CLOUD_ONBOARD_ENDPOINTS("dke:cloud_onboard_endpoints"),
@@ -13,7 +14,6 @@ enum class TechnicalMessageType(val key: String) {
     DKE_FEED_MESSAGE_QUERY("dke:feed_message_query"),
     DKE_FEED_HEADER_QUERY("dke:feed_header_query"),
 
-    DKE_OTHER("dke:other"),
     ISO_11783_TASKDATA_ZIP("iso:11783:-10:taskdata:zip"),
     ISO_11783_DEVICE_DESCRIPTION("iso:11783:-10:device_description:protobuf"),
     ISO_11783_TIME_LOG("iso:11783:-10:time_log:protobuf"),
@@ -25,8 +25,6 @@ enum class TechnicalMessageType(val key: String) {
     VID_AVI("vid:avi"),
     VID_MP4("vid:mp4"),
     VID_WMV("vid:wmv"),
-    GPS_INFO("gps:info"),
+    GPS_INFO("gps:info");
 
-    TESTING_PURPOSE_INVALID("SOME_INVALID_TYPE"),
-    TEST_OTHER ("test:other")
 }
