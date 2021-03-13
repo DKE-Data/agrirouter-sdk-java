@@ -28,5 +28,24 @@ enum class TechnicalMessageType(val key: String) {
     GPS_INFO("gps:info"),
 
     TESTING_PURPOSE_INVALID("SOME_INVALID_TYPE"),
-    TEST_OTHER ("test:other")
+    TEST_OTHER("test:other");
+
+    /**
+     * Return all the content message types the AR is currently supporting.
+     */
+    fun contentMessageTypes(): List<TechnicalMessageType> {
+        return listOf(ISO_11783_TASKDATA_ZIP,
+                ISO_11783_DEVICE_DESCRIPTION,
+                ISO_11783_TIME_LOG,
+                SHP_SHAPE_ZIP,
+                DOC_PDF,
+                IMG_JPEG,
+                IMG_PNG,
+                IMG_BMP,
+                VID_AVI,
+                VID_MP4,
+                VID_WMV,
+                GPS_INFO)
+    }
+
 }
