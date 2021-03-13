@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.api.enums
 
+@Deprecated(message = "This enum will be removed, please use the content or system message type definitions.")
 enum class TechnicalMessageType(val key: String) {
     EMPTY(""),
     DKE_CLOUD_ONBOARD_ENDPOINTS("dke:cloud_onboard_endpoints"),
@@ -25,23 +26,5 @@ enum class TechnicalMessageType(val key: String) {
     VID_MP4("vid:mp4"),
     VID_WMV("vid:wmv"),
     GPS_INFO("gps:info");
-
-    /**
-     * Return all the content message types the AR is currently supporting.
-     */
-    fun contentMessageTypes(): List<TechnicalMessageType> {
-        return listOf(ISO_11783_TASKDATA_ZIP,
-                ISO_11783_DEVICE_DESCRIPTION,
-                ISO_11783_TIME_LOG,
-                SHP_SHAPE_ZIP,
-                DOC_PDF,
-                IMG_JPEG,
-                IMG_PNG,
-                IMG_BMP,
-                VID_AVI,
-                VID_MP4,
-                VID_WMV,
-                GPS_INFO)
-    }
 
 }
