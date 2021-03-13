@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import agrirouter.request.Request;
 import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
-import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
@@ -71,7 +71,7 @@ class EncodeMessageServiceImplTest {
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId("1");
     messageHeaderParameters.setApplicationMessageSeqNo(1);
-    messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
+    messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_CAPABILITIES);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
     return messageHeaderParameters;
   }

@@ -11,7 +11,8 @@ import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
-import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.enums.ContentMessageType;
+import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
@@ -47,7 +48,7 @@ class SetCapabilityServiceTest extends AbstractIntegrationTest {
     List<SetCapabilitiesParameters.CapabilityParameters> capabilities = new ArrayList<>();
     SetCapabilitiesParameters.CapabilityParameters capability =
         new SetCapabilitiesParameters.CapabilityParameters();
-    capability.setTechnicalMessageType(TechnicalMessageType.ISO_11783_TASKDATA_ZIP);
+    capability.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
     capability.setDirection(Capabilities.CapabilitySpecification.Direction.SEND_RECEIVE);
     capabilities.add(capability);
     parameters.setCapabilitiesParameters(capabilities);
@@ -90,7 +91,7 @@ class SetCapabilityServiceTest extends AbstractIntegrationTest {
     List<SetCapabilitiesParameters.CapabilityParameters> capabilities = new ArrayList<>();
     SetCapabilitiesParameters.CapabilityParameters capability =
         new SetCapabilitiesParameters.CapabilityParameters();
-    capability.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
+    capability.setTechnicalMessageType(SystemMessageType.DKE_FEED_DELETE);
     capability.setDirection(Capabilities.CapabilitySpecification.Direction.SEND_RECEIVE);
     capabilities.add(capability);
     parameters.setCapabilitiesParameters(capabilities);
