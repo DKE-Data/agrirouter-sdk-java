@@ -30,6 +30,10 @@ Feel free to get in touch by visiting our https://www.lmis.de[website] or contac
 
 This project contains the API for the communication with the agrirouter. Everything you need for the onboarding process, secure communication and much more.
 
+== Releases
+
+The release workflow follows the https://docs.microsoft.com/en-us/azure/devops/repos/git/git-branching-guidance?view=azure-devops[Microsoft DevOps Release Model] where a release shows up as a branch in the repository.
+
 == Modules
 
 === `api` Module
