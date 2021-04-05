@@ -22,8 +22,9 @@ public class OnboardingResponseRepository {
    */
   public static OnboardingResponse read(Identifier identifier) throws IOException {
     Path path = Paths.get(FOLDER.concat(identifier.getFileName()).concat(FILE_SUFFIX));
-    String fileContent = Files.readAllLines(path).get(0);
-    return new Gson().fromJson(fileContent, OnboardingResponse.class);
+    final StringBuilder fileContent = new StringBuilder();
+    Files.readAllLines(path).forEach(fileContent::append);
+    return new Gson().fromJson(fileContent.toString(), OnboardingResponse.class);
   }
 
   /**
