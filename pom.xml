@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.agrirouter.api</groupId>
-    <artifactId>agrirouter-api-java</artifactId>
+    <artifactId>agrirouter-sdk-java</artifactId>
     <version>1.4.0</version>
     <packaging>pom</packaging>
 
     <name>AGRIROUTER API JAVA</name>
-    <url>https://github.com/DKE-Data/agrirouter-api-java</url>
+    <url>https://github.com/DKE-Data/agrirouter-sdk-java</url>
     <licenses>
         <license>
             <name>Apache License Version 2.0</name>
@@ -25,17 +25,17 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git:github.com/DKE-Data/agrirouter-api-java.git</connection>
-        <developerConnection>scm:git:git@github.com:DKE-Data/agrirouter-api-java.git
+        <connection>scm:git:git:github.com/DKE-Data/agrirouter-sdk-java.git</connection>
+        <developerConnection>scm:git:git@github.com:DKE-Data/agrirouter-sdk-java.git
         </developerConnection>
-        <url>https://github.com/DKE-Data/agrirouter-api-java</url>
+        <url>https://github.com/DKE-Data/agrirouter-sdk-java</url>
     </scm>
 
     <distributionManagement>
         <repository>
             <id>github</id>
             <name>GitHub DKE-Data Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/DKE-Data/agrirouter-api-java</url>
+            <url>https://maven.pkg.github.com/DKE-Data/agrirouter-sdk-java</url>
         </repository>
     </distributionManagement>
 
@@ -58,10 +58,10 @@
     </repositories>
 
     <modules>
-        <module>agrirouter-api-java-api</module>
-        <module>agrirouter-api-java-impl</module>
-        <module>agrirouter-api-java-convenience</module>
-        <module>agrirouter-api-tests</module>
+        <module>agrirouter-sdk-java-api</module>
+        <module>agrirouter-sdk-java-impl</module>
+        <module>agrirouter-sdk-java-convenience</module>
+        <module>agrirouter-sdk-java-tests</module>
     </modules>
 
     <properties>
@@ -108,17 +108,17 @@
             <!-- INTERNAL -->
             <dependency>
                 <groupId>com.agrirouter.api</groupId>
-                <artifactId>agrirouter-api-java-api</artifactId>
+                <artifactId>agrirouter-sdk-java-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.agrirouter.api</groupId>
-                <artifactId>agrirouter-api-java-impl</artifactId>
+                <artifactId>agrirouter-sdk-java-impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.agrirouter.api</groupId>
-                <artifactId>agrirouter-api-java-convenience</artifactId>
+                <artifactId>agrirouter-sdk-java-convenience</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
