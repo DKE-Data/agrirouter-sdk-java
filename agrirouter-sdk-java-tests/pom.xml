@@ -8,7 +8,7 @@
         <version>1.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <name>AGRIROUTER API JAVA - TESTS</name>
+    <name>AGRIROUTER SDK JAVA - TESTS</name>
     <artifactId>agrirouter-api-tests</artifactId>
 
     <dependencies>

@@ -8,7 +8,7 @@
         <artifactId>agrirouter-sdk-java</artifactId>
         <version>1.4.0</version>
     </parent>
-    <name>AGRIROUTER API JAVA - IMPL</name>
+    <name>AGRIROUTER SDK JAVA - IMPL</name>
     <artifactId>agrirouter-sdk-java-impl</artifactId>
 
     <dependencies>
