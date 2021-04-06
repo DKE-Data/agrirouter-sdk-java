@@ -1,5 +1,5 @@
 
-= agrirouter-api-java
+= agrirouter-sdk-java
 :imagesdir: assets/images
 :toc:
 :toc-title:
@@ -21,14 +21,14 @@ of IT solutions. We also provide professional IT consulting services and trainin
 the whole project during the development in the field of test management and are currently responsible for the development
 support of the platform.
 
-We are active maintainers of the API and are using the API for internal testing purposes as well. Therefore we have a
+We are active maintainers of the SDK and are using the SDK for internal testing purposes as well. Therefore we have a
 high interest in a stable and usable interface to connect to the agrirouter.
 
 Feel free to get in touch by visiting our https://www.lmis.de[website] or contacting us via GitHub.
 
 == The current project you're looking at
 
-This project contains the API for the communication with the agrirouter. Everything you need for the onboarding process, secure communication and much more.
+This project contains the SDK for the communication with the agrirouter. Everything you need for the onboarding process, secure communication and much more.
 
 == Releases
 
@@ -42,11 +42,15 @@ The `api` module contains interfaces, common helper classes and DTOs as well as 
 
 === `impl` Module
 
-The `impl` module contains the implementation of the given API defined by the `api` module.
+The `impl` module contains the implementation of the given SDK defined by the `api` module.
 
 === `convenience` Module
 
-The `convenience` module contains common implementations for different problems which are not located within the API. Those could be capability setting, MQTT client creation or other common problems that are normally not part of the API.
+The `convenience` module contains common implementations for different problems which are not located within the SDK. Those could be capability setting, MQTT client creation or other common problems that are normally not part of the SDK.
+
+=== `test` Module
+
+The `test` module contains integration tests not only for the SDK, but also for different scenarios.
 
 === Integration
 
@@ -55,8 +59,8 @@ We are supporting JDK 8 and later, releases are build using a JDK 8 to have comp
 
 == Certificates for the communication
 
-We do not longer maintain the certificates within the API.
-Maintaining them in the API would mean, that we have to release the API with every change of the certificate.
+We do not longer maintain the certificates within the SDK.
+Maintaining them in the SDK would mean, that we have to release the SDK with every change of the certificate.
 Therefore feel free to add the root certificates to a Java Key Store add reference it within your application.
 
 === Adding a certificate to the JKS
