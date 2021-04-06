@@ -100,6 +100,7 @@
         <maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
         <build-helper-maven-plugin.version>3.1.0</build-helper-maven-plugin.version>
         <fmt-maven-plugin.version>2.9</fmt-maven-plugin.version>
+        <guava.version>30.1.1-jre</guava.version>
     </properties>
 
     <dependencyManagement>
@@ -266,6 +267,13 @@
                 <groupId>javax.ws.rs</groupId>
                 <artifactId>javax.ws.rs-api</artifactId>
                 <version>${javax.ws.rs-api.version}</version>
+            </dependency>
+
+            <!-- GUAVA -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
 
         </dependencies>
