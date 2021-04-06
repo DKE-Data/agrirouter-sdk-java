@@ -62,9 +62,6 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
         payloadParameters.setTypeUrl(TechnicalMessageType.EMPTY.getKey());
 
         List<MessageParameterTuple> tuples = encodeMessageService.chunk(messageHeaderParameters, payloadParameters, onboardingResponse);
-        final List<String> messageIdsWaitingForAck = tuples.stream()
-                .map(messageParameterTuple -> messageParameterTuple.getMessageHeaderParameters().getApplicationMessageId())
-                .collect(Collectors.toList());
 
         List<String> encodedMessages = encodeMessageService.encode(tuples);
 
