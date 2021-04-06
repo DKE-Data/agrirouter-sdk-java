@@ -29,9 +29,9 @@ class MessageHeaderParameters : ParameterValidation {
     var metadata: MessageOuterClass.Metadata? = null
 
     override fun technicalValidation() {
-        isBlank(applicationMessageId)
-        nullCheck(technicalMessageType)
-        nullCheck(mode)
+        isBlank("applicationMessageId",applicationMessageId)
+        nullCheck("technicalMessageType",technicalMessageType)
+        nullCheck("mode",mode)
     }
 
     /**

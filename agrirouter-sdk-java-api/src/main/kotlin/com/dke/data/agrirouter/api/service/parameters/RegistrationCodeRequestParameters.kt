@@ -11,7 +11,7 @@ class RegistrationCodeRequestParameters : AbstractParameterBase(), ParameterVali
     lateinit var applicationId: String
 
     override fun technicalValidation() {
-        isBlank(applicationId)
+        isBlank("applicationId",applicationId)
     }
 
 

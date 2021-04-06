@@ -15,6 +15,7 @@ import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.SequenceNumberService;
 import com.google.common.base.Splitter;
 import com.google.protobuf.Any;
+import com.google.protobuf.ByteString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -70,14 +71,16 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
     /**
      * Encode a number of messages.
+     *
      * @param messageParameterTuples -
      * @return -
      */
-    public List<String> encode(List<MessageParameterTuple> messageParameterTuples){
+    public List<String> encode(List<MessageParameterTuple> messageParameterTuples) {
         return messageParameterTuples.stream()
                 .map(messageParameterTuple -> encode(messageParameterTuple.getMessageHeaderParameters(), messageParameterTuple.getPayloadParameters()))
                 .collect(Collectors.toList());
     }
+
     /**
      * Chunk a message if necessary. The chunk information and all IDs will be set by the SDK and are not longer
      * in control of the application.
@@ -122,6 +125,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
                 final PayloadParameters payload = new PayloadParameters();
                 payload.copy(payload);
+                payload.setValue(ByteString.copyFromUtf8(chunk));
 
                 tuples.add(new MessageParameterTuple(header, payload));
 

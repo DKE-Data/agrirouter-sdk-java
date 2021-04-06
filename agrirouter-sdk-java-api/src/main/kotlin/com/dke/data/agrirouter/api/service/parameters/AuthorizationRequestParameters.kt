@@ -18,7 +18,7 @@ class AuthorizationRequestParameters : AbstractParameterBase(), ParameterValidat
     var responseType: SecuredOnboardingResponseType = SecuredOnboardingResponseType.ONBOARD
 
     override fun technicalValidation() {
-        isBlank(applicationId)
+        isBlank("applicationId",applicationId)
     }
 
 }
