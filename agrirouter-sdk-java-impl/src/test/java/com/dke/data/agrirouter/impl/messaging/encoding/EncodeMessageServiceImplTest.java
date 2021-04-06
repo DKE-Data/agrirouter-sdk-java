@@ -1,6 +1,5 @@
 package com.dke.data.agrirouter.impl.messaging.encoding;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import agrirouter.request.Request;
@@ -13,16 +12,15 @@ import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.MessageParameterTuple;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
 import com.google.protobuf.ByteString;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 class EncodeMessageServiceImplTest {
 
   @Test
-  void givenEmptyMessageWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks(){
+  void givenEmptyMessageWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     ByteString toSendMessage = ByteString.copyFromUtf8("");
@@ -30,12 +28,15 @@ class EncodeMessageServiceImplTest {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.ISO_11783_TASKDATA_ZIP);
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
-    final List<MessageParameterTuple> chunks = encodeMessageService.chunk(messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
-    Assertions.assertEquals(1,chunks.size());
+    final List<MessageParameterTuple> chunks =
+        encodeMessageService.chunk(
+            messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
+    Assertions.assertEquals(1, chunks.size());
   }
 
   @Test
-  void givenSingleChunkMessageWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks(){
+  void
+      givenSingleChunkMessageWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     ByteString toSendMessage = ByteString.copyFromUtf8("secretMessage");
@@ -43,12 +44,15 @@ class EncodeMessageServiceImplTest {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.ISO_11783_TASKDATA_ZIP);
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
-    final List<MessageParameterTuple> chunks = encodeMessageService.chunk(messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
-    Assertions.assertEquals(1,chunks.size());
+    final List<MessageParameterTuple> chunks =
+        encodeMessageService.chunk(
+            messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
+    Assertions.assertEquals(1, chunks.size());
   }
 
   @Test
-  void givenSingleChunkMessageWithMaxSizeWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks(){
+  void
+      givenSingleChunkMessageWithMaxSizeWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     ByteString toSendMessage = ByteString.copyFromUtf8(RandomStringUtils.randomAlphabetic(1024000));
@@ -56,13 +60,16 @@ class EncodeMessageServiceImplTest {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.ISO_11783_TASKDATA_ZIP);
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
-    final List<MessageParameterTuple> chunks = encodeMessageService.chunk(messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
-    Assertions.assertEquals(1,chunks.size());
+    final List<MessageParameterTuple> chunks =
+        encodeMessageService.chunk(
+            messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
+    Assertions.assertEquals(1, chunks.size());
   }
 
   @Test
   @SuppressWarnings("ConstantConditions")
-  void givenMultipleChunkMessageWithMaxSizeWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks(){
+  void
+      givenMultipleChunkMessageWithMaxSizeWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
     ByteString toSendMessage = ByteString.copyFromUtf8(RandomStringUtils.randomAlphabetic(1024001));
@@ -70,16 +77,24 @@ class EncodeMessageServiceImplTest {
     messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.ISO_11783_TASKDATA_ZIP);
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
-    final List<MessageParameterTuple> chunks = encodeMessageService.chunk(messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
-    Assertions.assertEquals(2,chunks.size());
+    final List<MessageParameterTuple> chunks =
+        encodeMessageService.chunk(
+            messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
+    Assertions.assertEquals(2, chunks.size());
 
-    Assertions.assertEquals(2,chunks.get(0).getMessageHeaderParameters().getChunkInfo().getTotal());
-    Assertions.assertEquals(2,chunks.get(1).getMessageHeaderParameters().getChunkInfo().getTotal());
+    Assertions.assertEquals(
+        2, chunks.get(0).getMessageHeaderParameters().getChunkInfo().getTotal());
+    Assertions.assertEquals(
+        2, chunks.get(1).getMessageHeaderParameters().getChunkInfo().getTotal());
 
-    Assertions.assertEquals(1,chunks.get(0).getMessageHeaderParameters().getChunkInfo().getCurrent());
-    Assertions.assertEquals(2,chunks.get(1).getMessageHeaderParameters().getChunkInfo().getCurrent());
+    Assertions.assertEquals(
+        1, chunks.get(0).getMessageHeaderParameters().getChunkInfo().getCurrent());
+    Assertions.assertEquals(
+        2, chunks.get(1).getMessageHeaderParameters().getChunkInfo().getCurrent());
 
-    Assertions.assertEquals(chunks.get(0).getMessageHeaderParameters().getChunkInfo().getContextId(), chunks.get(1).getMessageHeaderParameters().getChunkInfo().getContextId());
+    Assertions.assertEquals(
+        chunks.get(0).getMessageHeaderParameters().getChunkInfo().getContextId(),
+        chunks.get(1).getMessageHeaderParameters().getChunkInfo().getContextId());
   }
 
   @Test
@@ -156,5 +171,4 @@ class EncodeMessageServiceImplTest {
     onboardingResponse.setSensorAlternateId("THIS_IS_FAKE");
     return onboardingResponse;
   }
-
 }
