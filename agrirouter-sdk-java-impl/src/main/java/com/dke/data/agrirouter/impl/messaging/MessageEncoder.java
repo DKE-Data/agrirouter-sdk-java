@@ -8,6 +8,7 @@ import agrirouter.request.payload.account.Endpoints;
 import agrirouter.request.payload.endpoint.Capabilities;
 import agrirouter.request.payload.endpoint.SubscriptionOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
+import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.service.LoggingEnabledService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
@@ -46,7 +47,7 @@ public interface MessageEncoder extends LoggingEnabledService {
                 parameters.getOnboardingResponse()));
     messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
-    messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
+    messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_FEED_DELETE);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     FeedRequests.MessageDelete.Builder messageContent = FeedRequests.MessageDelete.newBuilder();
@@ -106,9 +107,9 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     if (parameters.getUnfilteredList()) {
       messageHeaderParameters.setTechnicalMessageType(
-          TechnicalMessageType.DKE_LIST_ENDPOINTS_UNFILTERED);
+          SystemMessageType.DKE_LIST_ENDPOINTS_UNFILTERED);
     } else {
-      messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_LIST_ENDPOINTS);
+      messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_LIST_ENDPOINTS);
     }
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
@@ -155,7 +156,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             ? parameters.getSequenceNumber()
             : SequenceNumberService.generateSequenceNumberForEndpoint(
                 parameters.getOnboardingResponse()));
-    messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_CONFIRM);
+    messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_FEED_CONFIRM);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     FeedRequests.MessageConfirm.Builder messageContent = FeedRequests.MessageConfirm.newBuilder();
@@ -198,7 +199,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             ? parameters.getSequenceNumber()
             : SequenceNumberService.generateSequenceNumberForEndpoint(
                 parameters.getOnboardingResponse()));
-    messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_CAPABILITIES);
+    messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_CAPABILITIES);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     Capabilities.CapabilitySpecification.Builder builder =
@@ -260,7 +261,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             ? parameters.getSequenceNumber()
             : SequenceNumberService.generateSequenceNumberForEndpoint(
                 parameters.getOnboardingResponse()));
-    messageHeaderParameters.setTechnicalMessageType(TechnicalMessageType.DKE_SUBSCRIPTION);
+    messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_SUBSCRIPTION);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     SubscriptionOuterClass.Subscription.Builder messageContent =
@@ -381,8 +382,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             : SequenceNumberService.generateSequenceNumberForEndpoint(
                 parameters.getOnboardingResponse()));
     messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
-    messageHeaderParameters.setTechnicalMessageType(
-        TechnicalMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
+    messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
     CloudVirtualizedAppRegistration.OnboardingRequest.Builder messageContent =
@@ -429,8 +429,7 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
     messageHeaderParameters.setApplicationMessageId(applicationMessageID);
-    messageHeaderParameters.setTechnicalMessageType(
-        TechnicalMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS);
+    messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS);
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
     messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
     messageHeaderParameters.setApplicationMessageSeqNo(

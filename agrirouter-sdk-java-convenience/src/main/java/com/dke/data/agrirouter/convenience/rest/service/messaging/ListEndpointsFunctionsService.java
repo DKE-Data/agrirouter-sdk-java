@@ -2,7 +2,7 @@ package com.dke.data.agrirouter.convenience.rest.service.messaging;
 
 import agrirouter.request.payload.account.Endpoints;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
-import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.service.messaging.http.ListEndpointsService;
 import com.dke.data.agrirouter.api.service.parameters.ListEndpointsParameters;
@@ -26,7 +26,7 @@ public class ListEndpointsFunctionsService {
   public String requestFullListFilteredByAppliedRoutings(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
-    listEndpointsParameters.setTechnicalMessageType(TechnicalMessageType.EMPTY);
+    listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
     listEndpointsParameters.setOnboardingResponse(onboardingResponse);
     listEndpointsParameters.setUnfilteredList(false);
 
@@ -42,7 +42,7 @@ public class ListEndpointsFunctionsService {
   public String requestFullList(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
-    listEndpointsParameters.setTechnicalMessageType(TechnicalMessageType.EMPTY);
+    listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
     listEndpointsParameters.setOnboardingResponse(onboardingResponse);
     listEndpointsParameters.setUnfilteredList(true);
 

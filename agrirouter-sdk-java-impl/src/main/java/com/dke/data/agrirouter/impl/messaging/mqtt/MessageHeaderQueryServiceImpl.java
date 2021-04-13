@@ -1,7 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import agrirouter.feed.response.FeedResponse;
-import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.MessageHeaderQueryService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
@@ -23,7 +23,7 @@ public class MessageHeaderQueryServiceImpl extends MqttService
     super(mqttClient);
     messageQueryHelperService =
         new MessageQueryHelperService(
-            mqttClient, new EncodeMessageServiceImpl(), TechnicalMessageType.DKE_FEED_HEADER_QUERY);
+            mqttClient, new EncodeMessageServiceImpl(), SystemMessageType.DKE_FEED_HEADER_QUERY);
   }
 
   @Override

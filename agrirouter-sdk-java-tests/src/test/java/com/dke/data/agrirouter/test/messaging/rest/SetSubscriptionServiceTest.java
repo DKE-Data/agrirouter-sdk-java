@@ -10,7 +10,8 @@ import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
-import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.enums.ContentMessageType;
+import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
@@ -42,7 +43,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
     List<SetSubscriptionParameters.Subscription> subscriptions = new ArrayList<>();
     SetSubscriptionParameters.Subscription subscription =
         new SetSubscriptionParameters.Subscription();
-    subscription.setTechnicalMessageType(TechnicalMessageType.ISO_11783_TASKDATA_ZIP);
+    subscription.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
     subscriptions.add(subscription);
     parameters.setSubscriptions(subscriptions);
     setSubscriptionService.send(parameters);
@@ -80,7 +81,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
     List<SetSubscriptionParameters.Subscription> subscriptions = new ArrayList<>();
     SetSubscriptionParameters.Subscription subscription =
         new SetSubscriptionParameters.Subscription();
-    subscription.setTechnicalMessageType(TechnicalMessageType.DKE_FEED_DELETE);
+    subscription.setTechnicalMessageType(SystemMessageType.DKE_FEED_DELETE);
     subscriptions.add(subscription);
     parameters.setSubscriptions(subscriptions);
     setSubscriptionService.send(parameters);
