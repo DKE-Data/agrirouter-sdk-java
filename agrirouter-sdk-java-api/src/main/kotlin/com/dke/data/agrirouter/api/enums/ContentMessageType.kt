@@ -10,7 +10,7 @@ enum class ContentMessageType(private val key: String, private val typeUrl: Stri
 
     //FIXME Since the spec is not public, we can only use those literals.
     ISO_11783_DEVICE_DESCRIPTION("iso:11783:-10:device_description:protobuf", "types.agrirouter.com\\efdi.ISO11783_TaskData"),
-    ISO_11783_TIME_LOG("iso:11783:-10:time_log:protobuf", "types.agrirouter.com\\efdi.ISO11783_TaskData"),
+    ISO_11783_TIME_LOG("iso:11783:-10:time_log:protobuf", "types.agrirouter.com\efdi.TimeLog"),
 
     SHP_SHAPE_ZIP("shp:shape:zip", ""),
     DOC_PDF("doc:pdf", ""),
