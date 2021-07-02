@@ -10,4 +10,9 @@ interface TechnicalMessageType {
      */
     fun getKey(): String
 
+    /**
+     * The type url (if present) of the technical message type.
+     */
+    fun getTypeUrl(): String
+
 }

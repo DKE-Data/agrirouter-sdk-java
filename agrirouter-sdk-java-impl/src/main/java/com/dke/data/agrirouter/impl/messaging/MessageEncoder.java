@@ -69,7 +69,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     }
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(FeedRequests.MessageDelete.getDescriptor().getFullName());
+    payloadParameters.setTypeUrl(SystemMessageType.DKE_FEED_DELETE.getTypeUrl());
     payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
@@ -119,7 +119,7 @@ public interface MessageEncoder extends LoggingEnabledService {
         Objects.requireNonNull(parameters.getTechnicalMessageType()).getKey());
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(Endpoints.ListEndpointsQuery.getDescriptor().getFullName());
+    payloadParameters.setTypeUrl(SystemMessageType.DKE_LIST_ENDPOINTS.getTypeUrl());
     payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
@@ -163,7 +163,7 @@ public interface MessageEncoder extends LoggingEnabledService {
     messageContent.addAllMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(FeedRequests.MessageConfirm.getDescriptor().getFullName());
+    payloadParameters.setTypeUrl(SystemMessageType.DKE_FEED_CONFIRM.getTypeUrl());
     payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
@@ -224,8 +224,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             });
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(
-        Capabilities.CapabilitySpecification.getDescriptor().getFullName());
+    payloadParameters.setTypeUrl(SystemMessageType.DKE_CAPABILITIES.getTypeUrl());
     payloadParameters.setValue(builder.build().toByteString());
 
     String encodedMessage =
@@ -281,7 +280,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             });
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(SubscriptionOuterClass.Subscription.getDescriptor().getFullName());
+    payloadParameters.setTypeUrl(SystemMessageType.DKE_SUBSCRIPTION.getTypeUrl());
     payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
@@ -345,7 +344,7 @@ public interface MessageEncoder extends LoggingEnabledService {
 
     this.getNativeLogger().trace("Build message payload parameters.");
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(FeedRequests.MessageQuery.getDescriptor().getFullName());
+    payloadParameters.setTypeUrl(technicalMessageType.getTypeUrl());
     payloadParameters.setValue(messageContent.build().toByteString());
 
     this.getNativeLogger().trace("Encode message.");
@@ -400,8 +399,7 @@ public interface MessageEncoder extends LoggingEnabledService {
             });
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(
-        CloudVirtualizedAppRegistration.OnboardingRequest.getDescriptor().getFullName());
+    payloadParameters.setTypeUrl(SystemMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS.getTypeUrl());
     payloadParameters.setValue(messageContent.build().toByteString());
 
     String encodedMessage =
@@ -439,8 +437,7 @@ public interface MessageEncoder extends LoggingEnabledService {
                 parameters.getOnboardingResponse()));
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setTypeUrl(
-        CloudVirtualizedAppRegistration.OffboardingRequest.getDescriptor().getFullName());
+    payloadParameters.setTypeUrl(SystemMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS.getTypeUrl());
 
     payloadParameters.setValue(messageContent.build().toByteString());
 

@@ -53,7 +53,7 @@
         <repository>
             <id>github</id>
             <name>GitHub DKE-Data Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/DKE-Data/agrirouter-api-protobuf-definitions</url>
+            <url>https://maven.pkg.github.com/DKE-Data/*</url>
         </repository>
     </repositories>
 
@@ -127,6 +127,13 @@
                 <groupId>com.agrirouter.proto</groupId>
                 <artifactId>agrirouter-api-protobuf-definitions</artifactId>
                 <version>${agrirouter-api-protobuf-definitions.version}</version>
+            </dependency>
+
+            <!-- ADDITIONAL PROTOBUF DEFINITIONS -->
+            <dependency>
+                <groupId>com.agrirouter.proto</groupId>
+                <artifactId>agrirouter-tmt-protobuf-definitions</artifactId>
+                <version>2.0.0</version>
             </dependency>
 
             <!-- REST-ASSURED -->
