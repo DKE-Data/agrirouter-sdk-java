@@ -1,7 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.feed.response.FeedResponse;
-import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.http.MessageHeaderQueryService;
@@ -21,7 +21,7 @@ public class MessageHeaderQueryServiceImpl extends EnvironmentalService
     super(environment);
     messageQueryHelperService =
         new MessageQueryHelperService(
-            new EncodeMessageServiceImpl(), TechnicalMessageType.DKE_FEED_HEADER_QUERY);
+            new EncodeMessageServiceImpl(), SystemMessageType.DKE_FEED_HEADER_QUERY);
   }
 
   @Override
