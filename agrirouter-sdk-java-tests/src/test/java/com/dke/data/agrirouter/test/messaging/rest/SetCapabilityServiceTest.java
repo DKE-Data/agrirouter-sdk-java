@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +53,7 @@ class SetCapabilityServiceTest extends AbstractIntegrationTest {
     parameters.setCapabilitiesParameters(capabilities);
     setCapabilityService.send(parameters);
 
-    Thread.sleep(TimeUnit.SECONDS.toMillis(3));
+    waitForTheAgrirouterToProcessTheMessages();
 
     FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
@@ -97,7 +96,7 @@ class SetCapabilityServiceTest extends AbstractIntegrationTest {
     parameters.setCapabilitiesParameters(capabilities);
     setCapabilityService.send(parameters);
 
-    Thread.sleep(TimeUnit.SECONDS.toMillis(3));
+    waitForTheAgrirouterToProcessTheMessages();
 
     FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
     Optional<List<FetchMessageResponse>> fetchMessageResponses =

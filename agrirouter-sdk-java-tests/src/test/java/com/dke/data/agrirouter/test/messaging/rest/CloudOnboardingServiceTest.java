@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +47,7 @@ class CloudOnboardingServiceTest extends AbstractIntegrationTest {
     parameters.setOnboardingResponse(read(Identifier.TELEMETRY_PLATFORM));
     cloudOffboardingService.send(parameters);
 
-    Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+    waitForTheAgrirouterToProcessTheMessages();
 
     FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
@@ -84,7 +83,7 @@ class CloudOnboardingServiceTest extends AbstractIntegrationTest {
     parameters.setOnboardingResponse(read(Identifier.TELEMETRY_PLATFORM));
     cloudOnboardingService.send(parameters);
 
-    Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+    waitForTheAgrirouterToProcessTheMessages();
 
     FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
