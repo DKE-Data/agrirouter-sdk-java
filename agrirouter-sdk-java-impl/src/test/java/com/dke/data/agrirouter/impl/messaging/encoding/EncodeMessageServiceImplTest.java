@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EncodeMessageServiceImplTest {
 
+
+
     @Test
     void givenEmptyMessageWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
         EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();

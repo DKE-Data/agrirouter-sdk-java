@@ -42,7 +42,7 @@ class PayloadParameters : AbstractParameterBase(), ParameterValidation {
         return MAX_LENGTH_FOR_MESSAGES
     }
 
-    fun copy(payload: PayloadParameters) {
+    fun copyFrom(payload: PayloadParameters) {
         applicationMessageId = payload.applicationMessageId
         teamsetContextId = payload.teamsetContextId
         sequenceNumber = payload.sequenceNumber

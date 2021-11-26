@@ -133,7 +133,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
             header.setChunkInfo(chunkInfo.build());
 
             final PayloadParameters payload = new PayloadParameters();
-            payload.copy(payload);
+            payload.copyFrom(payloadParameters);
             payload.setValue(ByteString.copyFromUtf8(chunk));
 
             tuples.add(new MessageParameterTuple(header, payload));

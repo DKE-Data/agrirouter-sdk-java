@@ -30,7 +30,9 @@ import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -107,6 +109,14 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
                         });
     }
 
+    @Test
+    void determineMaxChunkLengthForNonEncodedChunks() {
+        String base64EncodedString = new String(Base64.getEncoder().encode(RandomStringUtils.randomAlphabetic(767997).getBytes(StandardCharsets.UTF_8)));
+        Assertions.assertTrue(base64EncodedString.length() < 1024000);
+        base64EncodedString = new String(Base64.getEncoder().encode(RandomStringUtils.randomAlphabetic(767998).getBytes(StandardCharsets.UTF_8)));
+        Assertions.assertFalse(base64EncodedString.length() < 1024000);
+    }
+
     /**
      * Delivers fake message content for three chunks.
      *
@@ -114,6 +124,6 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
      */
     private ByteString fakeLargeMessageContent() {
         return ByteString.copyFromUtf8(
-                RandomStringUtils.randomAlphabetic(1024000 * EXPECTED_NUMBER_OF_CHUNKS));
+                RandomStringUtils.randomAlphabetic(767997 * EXPECTED_NUMBER_OF_CHUNKS));
     }
 }
