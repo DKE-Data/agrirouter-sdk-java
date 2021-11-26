@@ -7,12 +7,12 @@ import org.apache.commons.lang3.NotImplementedException;
 public abstract class AbstractIntegrationTest {
 
   /**
-   * Wait for the AR to process the messages. This can take up to five seconds.
+   * Wait for the AR to process the messages. This can take up to 10 seconds.
    *
    * @throws InterruptedException -
    */
   protected void waitForTheAgrirouterToProcessTheMessages() throws InterruptedException {
-    Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+    Thread.sleep(TimeUnit.SECONDS.toMillis(10));
   }
 
   /** Farming software for integration testing. */
