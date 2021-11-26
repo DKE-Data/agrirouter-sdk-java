@@ -15,4 +15,8 @@ interface TechnicalMessageType {
      */
     fun getTypeUrl(): String
 
+    /**
+     * Indicates whether the technical message type needs chunking or not.
+     */
+    fun getNeedsChunking(): Boolean
 }
