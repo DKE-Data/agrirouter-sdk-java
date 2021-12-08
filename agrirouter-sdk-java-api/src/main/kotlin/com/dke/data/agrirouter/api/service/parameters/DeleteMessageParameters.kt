@@ -24,17 +24,8 @@ class DeleteMessageParameters : AbstractParameterBase(), ParameterValidation {
     }
 
     override fun businessValidation() {
-        if (null == messageIds) {
-            rise("messageIds", "There has to be a filter criteria for the query.")
-        }
-        if (null == senderIds) {
-            rise("senderIds", "There has to be a filter criteria for the query.")
-        }
-        if (null == sentFromInSeconds) {
-            rise("sentFromInSeconds", "There has to be a filter criteria for the query.")
-        }
-        if (null == sentToInSeconds) {
-            rise("sentToInSeconds", "There has to be a filter criteria for the query.")
+        if (null == messageIds && null == senderIds && null == sentFromInSeconds && null == sentToInSeconds) {
+            rise("There has to be a filter criteria for the query.", "messageIds", "senderIds", "sentFromInSeconds & sendToInSeconds", "")
         }
     }
 
