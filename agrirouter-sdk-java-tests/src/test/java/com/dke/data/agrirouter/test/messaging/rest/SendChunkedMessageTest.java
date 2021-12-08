@@ -61,7 +61,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.PUBLISH);
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setValue(fakeLargeMessageContent());
+    payloadParameters.setValue(fakeMessageContentThatHasToBeChunked());
     payloadParameters.setTypeUrl(SystemMessageType.EMPTY.getKey());
 
     List<MessageParameterTuple> tuples =
@@ -126,7 +126,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
    *
    * @return -
    */
-  private ByteString fakeLargeMessageContent() {
+  private ByteString fakeMessageContentThatHasToBeChunked() {
     return ByteString.copyFromUtf8(
         RandomStringUtils.randomAlphabetic(767997 * EXPECTED_NUMBER_OF_CHUNKS));
   }
