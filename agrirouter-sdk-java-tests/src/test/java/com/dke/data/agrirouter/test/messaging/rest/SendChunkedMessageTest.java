@@ -1,8 +1,5 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
-
 import agrirouter.request.Request;
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
@@ -11,6 +8,7 @@ import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.ContentMessageType;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
+import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
@@ -28,20 +26,23 @@ import com.dke.data.agrirouter.test.AbstractIntegrationTest;
 import com.dke.data.agrirouter.test.Assertions;
 import com.dke.data.agrirouter.test.OnboardingResponseRepository;
 import com.google.protobuf.ByteString;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
+import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
+
 /** Test case to show the behavior for chunked message sending. */
 class SendChunkedMessageTest extends AbstractIntegrationTest {
 
-  public static final int EXPECTED_NUMBER_OF_CHUNKS = 3;
+  private static final int MAX_CHUNK_SIZE = 767997;
+  private static final int EXPECTED_NUMBER_OF_CHUNKS = 3;
 
   @Test
   void
@@ -105,22 +106,6 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
             });
   }
 
-  @Test
-  void determineMaxChunkLengthForNonEncodedChunks() {
-    String base64EncodedString =
-        new String(
-            Base64.getEncoder()
-                .encode(
-                    RandomStringUtils.randomAlphabetic(767997).getBytes(StandardCharsets.UTF_8)));
-    Assertions.assertTrue(base64EncodedString.length() < 1024000);
-    base64EncodedString =
-        new String(
-            Base64.getEncoder()
-                .encode(
-                    RandomStringUtils.randomAlphabetic(767998).getBytes(StandardCharsets.UTF_8)));
-    Assertions.assertFalse(base64EncodedString.length() < 1024000);
-  }
-
   /**
    * Delivers fake message content for three chunks.
    *
@@ -128,6 +113,6 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
    */
   private ByteString fakeMessageContentThatHasToBeChunked() {
     return ByteString.copyFromUtf8(
-        RandomStringUtils.randomAlphabetic(767997 * EXPECTED_NUMBER_OF_CHUNKS));
+        RandomStringUtils.randomAlphabetic(MAX_CHUNK_SIZE * EXPECTED_NUMBER_OF_CHUNKS));
   }
 }
