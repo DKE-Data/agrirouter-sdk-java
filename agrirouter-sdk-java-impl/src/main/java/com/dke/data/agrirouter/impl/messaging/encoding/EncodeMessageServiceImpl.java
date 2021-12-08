@@ -96,7 +96,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
       OnboardingResponse onboardingResponse) {
     logMethodBegin(messageHeaderParameters, payloadParameters);
 
-    if (null == messageHeaderParameters || null == payloadParameters) {
+    if (null == messageHeaderParameters || null == payloadParameters || null==onboardingResponse) {
       throw new IllegalArgumentException("Parameters cannot be NULL");
     }
     messageHeaderParameters.validate();
