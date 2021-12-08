@@ -10,7 +10,7 @@ import com.google.protobuf.ByteString
  * - Total message size is limited to 1468000 characters/signs
  * - Message that are above this limit will be rejected.
  * The AR will return an error indicated that the message size is above the limit.
- * If the message size is above 5 MB the AR will not return any error. In order to send message with size large that above threshold, the message must be split in chunks with the above limit.
+ * If the message size is above 5 MB the AR will not return any error. In order to send messages with sizes above threshold, these messages must be split into chunks with the above limit.
  */
 const val MAX_LENGTH_FOR_MESSAGES = 1024000
 
