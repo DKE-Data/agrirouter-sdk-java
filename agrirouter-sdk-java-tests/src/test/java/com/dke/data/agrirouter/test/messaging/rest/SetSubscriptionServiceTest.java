@@ -1,7 +1,5 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 import static com.dke.data.agrirouter.test.OnboardingResponseRepository.Identifier;
 import static com.dke.data.agrirouter.test.OnboardingResponseRepository.read;
 
@@ -47,7 +45,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
     parameters.setSubscriptions(subscriptions);
     setSubscriptionService.send(parameters);
 
-    waitForTheAgrirouterToProcessTheMessages();
+    waitForTheAgrirouterToProcessSingleMessage();
 
     FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
@@ -85,7 +83,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
     parameters.setSubscriptions(subscriptions);
     setSubscriptionService.send(parameters);
 
-    waitForTheAgrirouterToProcessTheMessages();
+    waitForTheAgrirouterToProcessSingleMessage();
 
     FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
     Optional<List<FetchMessageResponse>> fetchMessageResponses =

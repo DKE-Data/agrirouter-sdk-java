@@ -18,6 +18,7 @@ import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -96,7 +97,9 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
       OnboardingResponse onboardingResponse) {
     logMethodBegin(messageHeaderParameters, payloadParameters);
 
-    if (null == messageHeaderParameters || null == payloadParameters || null==onboardingResponse) {
+    if (null == messageHeaderParameters
+        || null == payloadParameters
+        || null == onboardingResponse) {
       throw new IllegalArgumentException("Parameters cannot be NULL");
     }
     messageHeaderParameters.validate();
@@ -134,7 +137,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
             final PayloadParameters payload = new PayloadParameters();
             payload.copyFrom(payloadParameters);
-            payload.setValue(ByteString.copyFromUtf8(chunk));
+            payload.setValue(ByteString.copyFromUtf8(Base64.getEncoder().encodeToString(chunk.getBytes(StandardCharsets.UTF_8))));
 
             tuples.add(new MessageParameterTuple(header, payload));
 

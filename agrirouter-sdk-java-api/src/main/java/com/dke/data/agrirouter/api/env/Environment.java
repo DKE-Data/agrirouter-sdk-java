@@ -5,14 +5,10 @@ import com.dke.data.agrirouter.api.enums.SecuredOnboardingResponseType;
 /** Common Environment, holds some default methods pointing to the QA. */
 public interface Environment {
 
-  /**
-   * Template for MQTT connections.
-   */
+  /** Template for MQTT connections. */
   String MQTT_URL_TEMPLATE = "ssl://%s:%s";
 
-  /**
-   * Link template for the secured onboarding process.
-   */
+  /** Link template for the secured onboarding process. */
   String SECURED_ONBOARDING_AUTHORIZATION_LINK_TEMPLATE =
       "/application/%s/authorize?response_type=%s&state=%s&redirect_uri=%s";
 

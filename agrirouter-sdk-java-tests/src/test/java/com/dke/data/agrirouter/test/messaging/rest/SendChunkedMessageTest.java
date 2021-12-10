@@ -8,14 +8,10 @@ import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.ContentMessageType;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
-import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
-import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
-import com.dke.data.agrirouter.api.service.parameters.MessageParameterTuple;
-import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
-import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
+import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.SequenceNumberService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
@@ -26,22 +22,19 @@ import com.dke.data.agrirouter.test.AbstractIntegrationTest;
 import com.dke.data.agrirouter.test.Assertions;
 import com.dke.data.agrirouter.test.OnboardingResponseRepository;
 import com.google.protobuf.ByteString;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
-
 /** Test case to show the behavior for chunked message sending. */
 class SendChunkedMessageTest extends AbstractIntegrationTest {
 
-  private static final int MAX_CHUNK_SIZE = 767997;
+  private static final int MAX_CHUNK_SIZE = 1024000;
   private static final int EXPECTED_NUMBER_OF_CHUNKS = 3;
 
   @Test
@@ -62,11 +55,13 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.PUBLISH);
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setValue(fakeMessageContentThatHasToBeChunked());
+    payloadParameters.setValue(fakeRawMessageContentThatHasToBeChunked());
     payloadParameters.setTypeUrl(SystemMessageType.EMPTY.getKey());
 
     List<MessageParameterTuple> tuples =
         encodeMessageService.chunk(messageHeaderParameters, payloadParameters, onboardingResponse);
+
+    tuples.forEach(messageParameterTuple -> Assertions.assertTrue(Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue()).toStringUtf8().length()<MAX_CHUNK_SIZE));
 
     List<String> encodedMessages = encodeMessageService.encode(tuples);
 
@@ -75,7 +70,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
     sendMessageParameters.setOnboardingResponse(onboardingResponse);
     sendMessageService.send(sendMessageParameters);
 
-    waitForTheAgrirouterToProcessTheMessages();
+    waitForTheAgrirouterToProcessMultipleMessages();
 
     FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
@@ -111,8 +106,8 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
    *
    * @return -
    */
-  private ByteString fakeMessageContentThatHasToBeChunked() {
+  private ByteString fakeRawMessageContentThatHasToBeChunked() {
     return ByteString.copyFromUtf8(
-        RandomStringUtils.randomAlphabetic(MAX_CHUNK_SIZE * EXPECTED_NUMBER_OF_CHUNKS));
+        RandomStringUtils.randomAlphabetic(PayloadParametersKt.MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT * EXPECTED_NUMBER_OF_CHUNKS));
   }
 }
