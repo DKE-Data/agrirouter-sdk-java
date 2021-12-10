@@ -137,7 +137,9 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
             final PayloadParameters payload = new PayloadParameters();
             payload.copyFrom(payloadParameters);
-            payload.setValue(ByteString.copyFromUtf8(Base64.getEncoder().encodeToString(chunk.getBytes(StandardCharsets.UTF_8))));
+            payload.setValue(
+                ByteString.copyFromUtf8(
+                    Base64.getEncoder().encodeToString(chunk.getBytes(StandardCharsets.UTF_8))));
 
             tuples.add(new MessageParameterTuple(header, payload));
 

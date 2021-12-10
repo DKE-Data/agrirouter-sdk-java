@@ -15,8 +15,8 @@ public abstract class AbstractIntegrationTest {
   protected long DEFAULT_INTERVAL = 5000;
 
   /**
-   * Wait for the AR to process the messages. Since the QA has some stability problems,
-   * we will wait up to 30 seconds until the AR has processed the messages.
+   * Wait for the AR to process the messages. Since the QA has some stability problems, we will wait
+   * up to 30 seconds until the AR has processed the messages.
    *
    * @throws InterruptedException -
    */
@@ -25,8 +25,8 @@ public abstract class AbstractIntegrationTest {
   }
 
   /**
-   * Wait for the AR to process the messages. Since the QA has some stability problems,
-   * we will wait up to one minute until the AR has processed the messages.
+   * Wait for the AR to process the messages. Since the QA has some stability problems, we will wait
+   * up to one minute until the AR has processed the messages.
    *
    * @throws InterruptedException -
    */

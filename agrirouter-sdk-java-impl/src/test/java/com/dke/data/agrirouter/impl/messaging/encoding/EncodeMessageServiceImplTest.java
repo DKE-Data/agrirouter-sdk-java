@@ -12,6 +12,7 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageServi
 import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
 import com.dke.data.agrirouter.api.service.parameters.MessageParameterTuple;
 import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
+import com.dke.data.agrirouter.api.service.parameters.PayloadParametersKt;
 import com.google.protobuf.ByteString;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -56,7 +57,10 @@ class EncodeMessageServiceImplTest {
       givenSingleChunkMessageWithMaxSizeWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
     EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-    ByteString toSendMessage = ByteString.copyFromUtf8(RandomStringUtils.randomAlphabetic(1024000));
+    ByteString toSendMessage =
+        ByteString.copyFromUtf8(
+            RandomStringUtils.randomAlphabetic(
+                PayloadParametersKt.MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT));
     MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
     messageHeaderParameters.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);

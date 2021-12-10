@@ -61,7 +61,13 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
     List<MessageParameterTuple> tuples =
         encodeMessageService.chunk(messageHeaderParameters, payloadParameters, onboardingResponse);
 
-    tuples.forEach(messageParameterTuple -> Assertions.assertTrue(Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue()).toStringUtf8().length()<MAX_CHUNK_SIZE));
+    tuples.forEach(
+        messageParameterTuple ->
+            Assertions.assertTrue(
+                Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue())
+                        .toStringUtf8()
+                        .length()
+                    < MAX_CHUNK_SIZE));
 
     List<String> encodedMessages = encodeMessageService.encode(tuples);
 
@@ -108,6 +114,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
    */
   private ByteString fakeRawMessageContentThatHasToBeChunked() {
     return ByteString.copyFromUtf8(
-        RandomStringUtils.randomAlphabetic(PayloadParametersKt.MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT * EXPECTED_NUMBER_OF_CHUNKS));
+        RandomStringUtils.randomAlphabetic(
+            PayloadParametersKt.MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT * EXPECTED_NUMBER_OF_CHUNKS));
   }
 }
