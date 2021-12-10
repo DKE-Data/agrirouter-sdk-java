@@ -28,8 +28,8 @@ public interface EncodeMessageService {
   List<String> encode(List<MessageParameterTuple> messageParameterTuples);
 
   /**
-   * Chunk a message if necessary. The chunk information and all IDs will be set by the SDK and are
-   * not longer in control of the application.
+   * Chunk a raw message if necessary. The chunk information and all IDs will be set by the SDK and are
+   * no longer in control of the application.
    *
    * @param messageHeaderParameters -
    * @param payloadParameters -
