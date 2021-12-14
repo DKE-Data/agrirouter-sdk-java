@@ -51,7 +51,7 @@ class CancellationTokenPollingTest extends AbstractIntegrationTest {
   }
 
   @Test
-  @Timeout(55)
+  @Timeout(60)
   void
       givenDefaultImplementationOfTheCancellationTokenWhenPollingMessagesThenTheCancellationTokenShouldInfluenceTheBehavior()
           throws IOException {
