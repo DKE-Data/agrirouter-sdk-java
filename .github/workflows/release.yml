@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - 1.*
 
 jobs:
   deploy:
@@ -17,4 +17,4 @@ jobs:
       - name: Build with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B deploy --file pom.xml --settings ci/settings.xml
+        run: mvn -B deploy --file pom.xml --settings ci/settings.xml -DskipTests
