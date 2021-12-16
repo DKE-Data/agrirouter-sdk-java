@@ -6,7 +6,7 @@ import com.google.protobuf.ByteString
 
 /**
  * Every endpoint can send message based on its capabilities. The size of a message is however limited. A message contains 2 parts: Header and Body. The limitation of a message is defined as follows:
- * - Body size is equivalent of 1024000 characters/signs
+ * - The maximum body size is equivalent of 1024000 characters/signs
  * - Since the chunking is performed on the raw message data this means, that we have to lower the MAX_LENGTH_FOR_MESSAGES to allow Base64 encoding afterwards.
  * - Total message size is limited to 1468000 characters/signs
  * - Message that are above this limit will be rejected.
