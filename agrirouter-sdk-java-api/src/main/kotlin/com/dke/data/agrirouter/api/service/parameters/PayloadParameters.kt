@@ -10,7 +10,7 @@ import com.google.protobuf.ByteString
  * - Since the chunking is performed on the raw message data this means, that we have to lower the MAX_LENGTH_FOR_MESSAGES to allow Base64 encoding afterwards.
  * - Total message size is limited to 1468000 characters/signs
  * - Messages that are above this limit will be rejected.
- * The AR will return an error indicated that the message size is above the limit.
+ * The AR will return an error indicating that the message size is above the limit.
  * If the message size is above 5 MB the AR will not return any error. In order to send messages with sizes above threshold, these messages must be split into chunks with the above limit.
  */
 const val MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT = 767997
