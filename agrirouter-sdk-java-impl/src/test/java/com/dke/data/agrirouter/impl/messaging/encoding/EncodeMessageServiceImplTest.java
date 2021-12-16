@@ -31,7 +31,7 @@ class EncodeMessageServiceImplTest {
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
     final List<MessageParameterTuple> chunks =
-        encodeMessageService.chunk(
+        encodeMessageService.chunkAndEncode(
             messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
     Assertions.assertEquals(1, chunks.size());
   }
@@ -47,7 +47,7 @@ class EncodeMessageServiceImplTest {
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
     final List<MessageParameterTuple> chunks =
-        encodeMessageService.chunk(
+        encodeMessageService.chunkAndEncode(
             messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
     Assertions.assertEquals(1, chunks.size());
   }
@@ -66,7 +66,7 @@ class EncodeMessageServiceImplTest {
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
     final List<MessageParameterTuple> chunks =
-        encodeMessageService.chunk(
+        encodeMessageService.chunkAndEncode(
             messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
     Assertions.assertEquals(1, chunks.size());
   }
@@ -83,7 +83,7 @@ class EncodeMessageServiceImplTest {
     PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
 
     final List<MessageParameterTuple> chunks =
-        encodeMessageService.chunk(
+        encodeMessageService.chunkAndEncode(
             messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
     Assertions.assertEquals(2, chunks.size());
 

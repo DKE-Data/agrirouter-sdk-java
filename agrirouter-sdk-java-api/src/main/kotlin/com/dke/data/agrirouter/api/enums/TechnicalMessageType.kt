@@ -19,4 +19,10 @@ interface TechnicalMessageType {
      * Indicates whether the technical message type needs chunking or not.
      */
     fun getNeedsChunking(): Boolean
+
+    /**
+     * Indicates whether the technical message type needs base64 encoding or not.
+     */
+    fun getNeedsBase64Encoding(): Boolean;
+
 }

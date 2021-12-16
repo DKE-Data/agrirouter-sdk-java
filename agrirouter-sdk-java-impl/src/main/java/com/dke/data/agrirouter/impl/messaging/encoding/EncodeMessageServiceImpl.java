@@ -84,14 +84,15 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
   }
 
   /**
-   * Chunk a message if necessary. The chunk information and all IDs will be set by the SDK and are
-   * not longer in control of the application.
+   * Chunk and add the Base64 encoding for a message if necessary. If there is only one chunk, the
+   * this single chunk will be returned as Base64 encoded value. The chunk information and all IDs
+   * will be set by the SDK and are no longer in control of the application.
    *
    * @param messageHeaderParameters -
    * @param payloadParameters Content of the message. It shall not be Base64 encoded before.
    * @return -
    */
-  public List<MessageParameterTuple> chunk(
+  public List<MessageParameterTuple> chunkAndEncode(
       MessageHeaderParameters messageHeaderParameters,
       PayloadParameters payloadParameters,
       OnboardingResponse onboardingResponse) {
@@ -106,54 +107,92 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     payloadParameters.validate();
 
     if (null != messageHeaderParameters.getTechnicalMessageType()
-        && messageHeaderParameters.getTechnicalMessageType().getNeedsChunking()
-        && payloadParameters.shouldBeChunked()) {
-      getNativeLogger()
-          .debug(
-              "The message should be chunked, current size of the payload ({}) is above the limitation.",
-              payloadParameters.getValue().toStringUtf8().length());
-      String wholeMessage = payloadParameters.getValue().toStringUtf8();
-      final List<String> messageChunks =
-          Splitter.fixedLength(payloadParameters.maxLengthForMessages()).splitToList(wholeMessage);
-      List<MessageParameterTuple> tuples = new ArrayList<>();
-      AtomicInteger chunkNr = new AtomicInteger(1);
-      final String chunkContextId = ChunkContextIdService.generateChunkContextId();
-      messageChunks.forEach(
-          chunk -> {
-            final String messageIdForChunk = MessageIdService.generateMessageId();
-            final long sequenceNumberForChunk =
-                SequenceNumberService.generateSequenceNumberForEndpoint(onboardingResponse);
+        && messageHeaderParameters.getTechnicalMessageType().getNeedsChunking()) {
+      if (payloadParameters.shouldBeChunked()) {
+        getNativeLogger()
+            .debug(
+                "The message should be chunked, current size of the payload ({}) is above the limitation.",
+                payloadParameters.getValue().toStringUtf8().length());
+        String wholeMessage = payloadParameters.getValue().toStringUtf8();
+        final List<String> messageChunks =
+            Splitter.fixedLength(payloadParameters.maxLengthForMessages())
+                .splitToList(wholeMessage);
+        List<MessageParameterTuple> tuples = new ArrayList<>();
+        AtomicInteger chunkNr = new AtomicInteger(1);
+        final String chunkContextId = ChunkContextIdService.generateChunkContextId();
+        messageChunks.forEach(
+            chunk -> {
+              final String messageIdForChunk = MessageIdService.generateMessageId();
+              final long sequenceNumberForChunk =
+                  SequenceNumberService.generateSequenceNumberForEndpoint(onboardingResponse);
 
-            final MessageHeaderParameters header = new MessageHeaderParameters();
-            header.copy(messageHeaderParameters);
-            header.setApplicationMessageId(messageIdForChunk);
-            header.setApplicationMessageSeqNo(sequenceNumberForChunk);
-            Chunk.ChunkComponent.Builder chunkInfo = Chunk.ChunkComponent.newBuilder();
-            chunkInfo.setContextId(chunkContextId);
-            chunkInfo.setCurrent(chunkNr.get());
-            chunkInfo.setTotal(messageChunks.size());
-            chunkInfo.setTotalSize(wholeMessage.length());
-            header.setChunkInfo(chunkInfo.build());
+              final MessageHeaderParameters header = new MessageHeaderParameters();
+              header.copy(messageHeaderParameters);
+              header.setApplicationMessageId(messageIdForChunk);
+              header.setApplicationMessageSeqNo(sequenceNumberForChunk);
+              Chunk.ChunkComponent.Builder chunkInfo = Chunk.ChunkComponent.newBuilder();
+              chunkInfo.setContextId(chunkContextId);
+              chunkInfo.setCurrent(chunkNr.get());
+              chunkInfo.setTotal(messageChunks.size());
+              chunkInfo.setTotalSize(wholeMessage.length());
+              header.setChunkInfo(chunkInfo.build());
 
-            final PayloadParameters payload = new PayloadParameters();
-            payload.copyFrom(payloadParameters);
-            payload.setValue(
-                ByteString.copyFromUtf8(
-                    Base64.getEncoder().encodeToString(chunk.getBytes(StandardCharsets.UTF_8))));
+              final PayloadParameters payload = new PayloadParameters();
+              payload.copyFrom(payloadParameters);
+              payload.setValue(
+                  ByteString.copyFromUtf8(
+                      Base64.getEncoder().encodeToString(chunk.getBytes(StandardCharsets.UTF_8))));
 
-            tuples.add(new MessageParameterTuple(header, payload));
+              tuples.add(new MessageParameterTuple(header, payload));
 
-            chunkNr.getAndIncrement();
-          });
-      return tuples;
+              chunkNr.getAndIncrement();
+            });
+        return tuples;
+      } else {
+        getNativeLogger()
+            .debug(
+                "The message is not chunked since the current size of the payload ({}) is not above the limitation or the technical message type '{}' does not support chunking.",
+                payloadParameters.getValue().toStringUtf8().length(),
+                messageHeaderParameters.getTechnicalMessageType().getKey());
+        getNativeLogger()
+            .debug("The content is encoded, since in other cases the content is encoded as well.");
+        final PayloadParameters payload = new PayloadParameters();
+        payload.copyFrom(payloadParameters);
+        payload.setValue(
+            ByteString.copyFromUtf8(
+                Base64.getEncoder()
+                    .encodeToString(
+                        payloadParameters
+                            .getValue()
+                            .toStringUtf8()
+                            .getBytes(StandardCharsets.UTF_8))));
+        return Collections.singletonList(
+            new MessageParameterTuple(messageHeaderParameters, payload));
+      }
     } else {
       getNativeLogger()
           .debug(
-              "The message is not chunked since the current size of the payload ({}) is not above the limitation or the technical message type '{}' does not support chunking.",
-              payloadParameters.getValue().toStringUtf8().length(),
-              messageHeaderParameters.getTechnicalMessageType().getKey());
-      return Collections.singletonList(
-          new MessageParameterTuple(messageHeaderParameters, payloadParameters));
+              "The message type needs to be base64 encoded, therefore we are encoding the raw value.");
+      if (messageHeaderParameters.getTechnicalMessageType().getNeedsBase64Encoding()) {
+        final PayloadParameters payload = new PayloadParameters();
+        payload.copyFrom(payloadParameters);
+        payload.setValue(
+            ByteString.copyFromUtf8(
+                Base64.getEncoder()
+                    .encodeToString(
+                        payloadParameters
+                            .getValue()
+                            .toStringUtf8()
+                            .getBytes(StandardCharsets.UTF_8))));
+        return Collections.singletonList(
+            new MessageParameterTuple(messageHeaderParameters, payload));
+      } else {
+        getNativeLogger()
+            .debug(
+                "The message type does not need base 64 encoding, we are returning the tuple 'as it is'.");
+        return Collections.singletonList(
+            new MessageParameterTuple(messageHeaderParameters, payloadParameters));
+      }
     }
   }
 
