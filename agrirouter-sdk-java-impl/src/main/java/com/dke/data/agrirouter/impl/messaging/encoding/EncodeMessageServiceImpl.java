@@ -88,7 +88,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
    * not longer in control of the application.
    *
    * @param messageHeaderParameters -
-   * @param payloadParameters -
+   * @param payloadParameters Content of the message. It shall not be Base64 encoded before.
    * @return -
    */
   public List<MessageParameterTuple> chunk(
