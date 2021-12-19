@@ -1,10 +1,9 @@
 package com.dke.data.agrirouter.api.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
-import org.apache.logging.log4j.message.ObjectArrayMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 
 /**
  * Interface to encapsulate logging capabilities. Logging will be done using LOG4J2, ruleset should
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.message.ObjectArrayMessage;
  *
  * <ul>
  *   <li>Log method entry on level DEBUG.
- *   <li>Log method parameters on level TRACE.
  *   <li>Log method steps on level TRACE.
  *   <li>Log method result on level TRACE.
  *   <li>Log method exit on level DEBUG.
@@ -20,14 +18,10 @@ import org.apache.logging.log4j.message.ObjectArrayMessage;
  *
  * Please be aware of the rule "Log or throw" regarding exceptions.
  */
-public interface LoggingEnabledService {
+public interface HasLogger {
 
-  Marker METHOD_BEGIN = MarkerManager.getMarker("METHOD_BEGIN");
-  Marker METHOD_END = MarkerManager.getMarker("METHOD_END");
-  Marker METHOD_PARAMETERS = MarkerManager.getMarker("METHOD_PARAMETERS");
-  Marker METHOD_RESULTS = MarkerManager.getMarker("METHOD_RESULTS");
-
-  Logger LOGGER = LogManager.getLogger();
+  Marker METHOD_BEGIN = MarkerFactory.getMarker("METHOD_BEGIN");
+  Marker METHOD_END = MarkerFactory.getMarker("METHOD_END");
 
   /**
    * Returns the native LOG4J2 logger for further logging.
@@ -35,7 +29,7 @@ public interface LoggingEnabledService {
    * @return -
    */
   default Logger getNativeLogger() {
-    return LOGGER;
+    return LoggerFactory.getLogger(this.getClass());
   }
 
   /**
@@ -44,8 +38,7 @@ public interface LoggingEnabledService {
    * @param objects The parameters of the method.
    */
   default void logMethodBegin(Object... objects) {
-    LOGGER.debug(METHOD_BEGIN, "BEGIN | Start of method.");
-    LOGGER.trace(METHOD_PARAMETERS, new ObjectArrayMessage(objects));
+    getNativeLogger().debug(METHOD_BEGIN, "BEGIN | Start of method.");
   }
 
   /**
@@ -54,7 +47,6 @@ public interface LoggingEnabledService {
    * @param objects The results of the method.
    */
   default void logMethodEnd(Object... objects) {
-    LOGGER.debug(METHOD_END, "END | End of method.");
-    LOGGER.trace(METHOD_RESULTS, new ObjectArrayMessage(objects));
+    getNativeLogger().debug(METHOD_END, "END | End of method.");
   }
 }

@@ -2,7 +2,7 @@ package com.dke.data.agrirouter.impl.common.signing;
 
 import com.dke.data.agrirouter.api.exception.CouldNotCreatePrivateKeyException;
 import com.dke.data.agrirouter.api.exception.CouldNotCreatePublicKeyException;
-import com.dke.data.agrirouter.api.service.LoggingEnabledService;
+import com.dke.data.agrirouter.api.service.HasLogger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -12,7 +12,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
-public class SecurityKeyCreationService implements LoggingEnabledService {
+public class SecurityKeyCreationService implements HasLogger {
 
   public PrivateKey createPrivateKey(String privateKey) {
     this.logMethodBegin(privateKey);

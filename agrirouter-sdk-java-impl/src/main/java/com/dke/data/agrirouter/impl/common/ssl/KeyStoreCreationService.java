@@ -1,7 +1,7 @@
 package com.dke.data.agrirouter.impl.common.ssl;
 
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
-import com.dke.data.agrirouter.api.service.LoggingEnabledService;
+import com.dke.data.agrirouter.api.service.HasLogger;
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.net.SocketFactory;
 import javax.net.ssl.*;
 
-public class KeyStoreCreationService implements LoggingEnabledService {
+public class KeyStoreCreationService implements HasLogger {
 
   public static final String TEMPORARY_KEY_PASSWORD = "changeit";
 

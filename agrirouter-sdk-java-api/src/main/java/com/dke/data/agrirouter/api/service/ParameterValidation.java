@@ -3,13 +3,9 @@ package com.dke.data.agrirouter.api.service;
 import com.dke.data.agrirouter.api.exception.IllegalParameterDefinitionException;
 import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /** Parameter validation using bean validation. */
-public interface ParameterValidation {
-
-  Logger LOGGER = LogManager.getLogger();
+public interface ParameterValidation extends HasLogger {
 
   /**
    * Validation of the parameters. If there are any constraint violations, there will be a
@@ -18,10 +14,10 @@ public interface ParameterValidation {
    * @throws IllegalParameterDefinitionException -
    */
   default void validate() {
-    LOGGER.debug("Validating parameters.");
-    LOGGER.trace("Technical validation.");
+    getNativeLogger().debug("Validating parameters.");
+    getNativeLogger().trace("Technical validation.");
     this.technicalValidation();
-    LOGGER.trace("Business validation.");
+    getNativeLogger().trace("Business validation.");
     this.businessValidation();
   }
 
@@ -33,12 +29,6 @@ public interface ParameterValidation {
   /** Business validation. Empty by default. */
   default void businessValidation() {
     //
-  }
-
-  /** Rise an exception if the parameter was not valid. */
-  default void rise() {
-    throw new IllegalParameterDefinitionException(
-        "Parameter was not defined correctly, please check the values.");
   }
 
   /**
