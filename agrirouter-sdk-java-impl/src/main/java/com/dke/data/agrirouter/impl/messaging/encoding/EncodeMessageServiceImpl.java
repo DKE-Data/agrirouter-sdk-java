@@ -85,7 +85,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
   /**
    * Chunk and add the Base64 encoding for a message if necessary. If there is only one chunk, the
-   * this single chunk will be returned as Base64 encoded value. The chunk information and all IDs
+   * single chunk will be returned as Base64 encoded value. The chunk information and all IDs
    * will be set by the SDK and are no longer in control of the application.
    *
    * @param messageHeaderParameters -
