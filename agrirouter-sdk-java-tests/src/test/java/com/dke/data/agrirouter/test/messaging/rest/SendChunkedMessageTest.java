@@ -69,7 +69,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
                 Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue())
                         .toStringUtf8()
                         .length()
-                    < MAX_CHUNK_SIZE));
+                    <= MAX_CHUNK_SIZE));
 
     List<String> encodedMessages = encodeMessageService.encode(tuples);
 
