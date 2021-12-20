@@ -151,7 +151,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
       } else {
         getNativeLogger()
             .debug(
-                "The message is not chunked since the current size of the payload ({}) is not above the limitation or the technical message type '{}' does not support chunking.",
+                "The message is not chunked since the current size of the payload ({}) is not above the limitation and the technical message type '{}' does support chunking.",
                 payloadParameters.getValue().toStringUtf8().length(),
                 messageHeaderParameters.getTechnicalMessageType().getKey());
         getNativeLogger()
