@@ -106,8 +106,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     messageHeaderParameters.validate();
     payloadParameters.validate();
 
-    if (null != messageHeaderParameters.getTechnicalMessageType()
-        && messageHeaderParameters.getTechnicalMessageType().getNeedsChunking()) {
+    if (messageHeaderParameters.getTechnicalMessageType().getNeedsChunking()) {
       if (payloadParameters.shouldBeChunked()) {
         getNativeLogger()
             .debug(
