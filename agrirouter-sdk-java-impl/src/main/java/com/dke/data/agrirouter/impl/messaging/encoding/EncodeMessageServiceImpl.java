@@ -170,10 +170,10 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
             new MessageParameterTuple(messageHeaderParameters, payload));
       }
     } else {
-      getNativeLogger()
-          .debug(
-              "The message type needs to be base64 encoded, therefore we are encoding the raw value.");
       if (messageHeaderParameters.getTechnicalMessageType().getNeedsBase64Encoding()) {
+        getNativeLogger()
+                .debug(
+                        "The message type needs to be base64 encoded, therefore we are encoding the raw value.");
         final PayloadParameters payload = new PayloadParameters();
         payload.copyFrom(payloadParameters);
         payload.setValue(
