@@ -14,12 +14,12 @@ class CloudOffboardingParameters : AbstractParameterBase(), ParameterValidation 
     var endpointIds: List<String>? = null
 
     override fun technicalValidation() {
-        nullCheck(onboardingResponse)
-        nullCheck(endpointIds)
+        nullCheck("onboardingResponse",onboardingResponse)
+        nullCheck("endpointIds",endpointIds)
     }
 
     override fun businessValidation() {
-        nullOrEmpty(endpointIds)
+        nullOrEmpty("endpointIds",endpointIds)
     }
 
 }

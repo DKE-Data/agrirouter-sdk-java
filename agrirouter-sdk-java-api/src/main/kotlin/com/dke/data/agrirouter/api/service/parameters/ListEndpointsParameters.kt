@@ -20,9 +20,9 @@ class ListEndpointsParameters : AbstractParameterBase(), ParameterValidation {
     var unfilteredList: Boolean = false
 
     override fun technicalValidation() {
-        nullCheck(onboardingResponse)
-        nullCheck(technicalMessageType)
-        nullCheck(direction)
+        nullCheck("onboardingResponse",onboardingResponse)
+        nullCheck("technicalMessageType",technicalMessageType)
+        nullCheck("direction",direction)
     }
 
 }

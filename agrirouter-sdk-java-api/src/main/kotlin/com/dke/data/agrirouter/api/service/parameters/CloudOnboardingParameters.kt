@@ -14,12 +14,12 @@ class CloudOnboardingParameters : AbstractParameterBase(), ParameterValidation {
     var endpointDetails: List<EndpointDetailsParameters>? = null
 
     override fun technicalValidation() {
-        nullCheck(onboardingResponse)
-        nullCheck(endpointDetails)
+        nullCheck("onboardingResponse",onboardingResponse)
+        nullCheck("endpointDetails",endpointDetails)
     }
 
     override fun businessValidation() {
-        nullOrEmpty(endpointDetails)
+        nullOrEmpty("endpointDetails",endpointDetails)
         endpointDetails?.forEach {
             it.validate()
         }
@@ -32,8 +32,8 @@ class CloudOnboardingParameters : AbstractParameterBase(), ParameterValidation {
         var endpointName: String? = null
 
         override fun technicalValidation() {
-            isBlank(endpointId)
-            isBlank(endpointName)
+            isBlank("endpointId",endpointId)
+            isBlank("endpointName",endpointName)
         }
 
     }

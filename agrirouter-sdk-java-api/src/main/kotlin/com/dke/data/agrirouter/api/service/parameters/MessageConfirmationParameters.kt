@@ -14,8 +14,8 @@ class MessageConfirmationParameters : AbstractParameterBase(), ParameterValidati
     var messageIds: List<String>? = null
 
     override fun technicalValidation() {
-        nullCheck(onboardingResponse)
-        nullCheck(messageIds)
+        nullCheck("onboardingResponse",onboardingResponse)
+        nullCheck("messageIds",messageIds)
     }
 
 }

@@ -28,17 +28,17 @@ class SetCapabilitiesParameters : AbstractParameterBase(), ParameterValidation {
         var direction: Capabilities.CapabilitySpecification.Direction? = null
 
         override fun technicalValidation() {
-            nullCheck(technicalMessageType)
-            nullCheck(direction)
+            nullCheck("technicalMessageType",technicalMessageType)
+            nullCheck("direction",direction)
         }
 
     }
 
     override fun technicalValidation() {
-        nullCheck(onboardingResponse)
-        isBlank(applicationId)
-        isBlank(certificationVersionId)
-        nullCheck(capabilitiesParameters)
+        nullCheck("onboardingResponse",onboardingResponse)
+        isBlank("applicationId",applicationId)
+        isBlank("certificationVersionId",certificationVersionId)
+        nullCheck("capabilitiesParameters",capabilitiesParameters)
         capabilitiesParameters?.forEach { c -> c.validate() }
     }
 

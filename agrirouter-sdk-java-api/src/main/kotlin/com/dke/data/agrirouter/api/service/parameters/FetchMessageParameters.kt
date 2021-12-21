@@ -12,7 +12,7 @@ open class FetchMessageParameters : AbstractParameterBase(), ParameterValidation
     var onboardingResponse: OnboardingResponse? = null
 
     override fun technicalValidation() {
-        nullCheck(onboardingResponse)
+        nullCheck("onboardingResponse",onboardingResponse)
     }
 
 }

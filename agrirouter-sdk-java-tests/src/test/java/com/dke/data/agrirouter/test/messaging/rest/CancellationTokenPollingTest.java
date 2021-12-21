@@ -1,8 +1,5 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
-
 import com.dke.data.agrirouter.api.cancellation.CancellationToken;
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
@@ -22,7 +19,7 @@ import org.junit.jupiter.api.Timeout;
 class CancellationTokenPollingTest extends AbstractIntegrationTest {
 
   @Test
-  @Timeout(value = 15)
+  @Timeout(15)
   @SuppressWarnings("deprecation")
   void
       givenExistingImplementationOfTheCancellationTokenWhenPollingMessagesThenTheDefaultParametersShouldStillInfluenceTheBehavior()
@@ -38,7 +35,7 @@ class CancellationTokenPollingTest extends AbstractIntegrationTest {
   }
 
   @Test
-  @Timeout(value = 1)
+  @Timeout(1)
   @SuppressWarnings("deprecation")
   void
       givenExistingImplementationOfTheCancellationTokenWhenPollingMessagesThenTheCustomParametersShouldStillInfluenceTheBehavior()
@@ -54,7 +51,7 @@ class CancellationTokenPollingTest extends AbstractIntegrationTest {
   }
 
   @Test
-  @Timeout(15)
+  @Timeout(60)
   void
       givenDefaultImplementationOfTheCancellationTokenWhenPollingMessagesThenTheCancellationTokenShouldInfluenceTheBehavior()
           throws IOException {

@@ -1,9 +1,38 @@
 package com.dke.data.agrirouter.test;
 
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.NotImplementedException;
 
 /** Abstract implementation for all integration tests. */
 public abstract class AbstractIntegrationTest {
+
+  /**
+   * Since there are multiple problems with the stability of the QA env we define dedicated
+   * constants for message fetching.
+   */
+  protected int MAX_TRIES_BEFORE_FAILURE = 10;
+
+  protected long DEFAULT_INTERVAL = 5000;
+
+  /**
+   * Wait for the AR to process the messages. Since the QA has some stability problems, we will wait
+   * up to 30 seconds until the AR has processed the messages.
+   *
+   * @throws InterruptedException -
+   */
+  protected void waitForTheAgrirouterToProcessSingleMessage() throws InterruptedException {
+    Thread.sleep(TimeUnit.SECONDS.toMillis(30));
+  }
+
+  /**
+   * Wait for the AR to process the messages. Since the QA has some stability problems, we will wait
+   * up to one minute until the AR has processed the messages.
+   *
+   * @throws InterruptedException -
+   */
+  protected void waitForTheAgrirouterToProcessMultipleMessages() throws InterruptedException {
+    Thread.sleep(TimeUnit.SECONDS.toMillis(60));
+  }
 
   /** Farming software for integration testing. */
   protected Application farmingSoftware =

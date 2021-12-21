@@ -10,7 +10,7 @@ import java.util.*
 /**
  * Parameters class. Encapsulation for the services.
  */
-class MessageHeaderParameters :  ParameterValidation {
+class MessageHeaderParameters : ParameterValidation {
 
     var applicationMessageId: String? = null
 
@@ -29,9 +29,23 @@ class MessageHeaderParameters :  ParameterValidation {
     var metadata: MessageOuterClass.Metadata? = null
 
     override fun technicalValidation() {
-        isBlank(applicationMessageId)
-        nullCheck(technicalMessageType)
-        nullCheck(mode)
+        isBlank("applicationMessageId",applicationMessageId)
+        nullCheck("technicalMessageType",technicalMessageType)
+        nullCheck("mode",mode)
+    }
+
+    /**
+     * Copy the content of the message header parameters into this class.
+     */
+    fun copy(messageHeaderParameters: MessageHeaderParameters) {
+        applicationMessageId = messageHeaderParameters.applicationMessageId
+        applicationMessageSeqNo = messageHeaderParameters.applicationMessageSeqNo
+        technicalMessageType = messageHeaderParameters.technicalMessageType
+        teamSetContextId = messageHeaderParameters.teamSetContextId
+        mode = messageHeaderParameters.mode
+        recipients = messageHeaderParameters.recipients
+        chunkInfo = messageHeaderParameters.chunkInfo
+        metadata = messageHeaderParameters.metadata
     }
 
 }
