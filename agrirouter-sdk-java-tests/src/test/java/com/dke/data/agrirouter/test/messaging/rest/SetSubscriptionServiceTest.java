@@ -1,7 +1,5 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.DEFAULT_INTERVAL;
-import static com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher.MAX_TRIES_BEFORE_FAILURE;
 import static com.dke.data.agrirouter.test.OnboardingResponseRepository.Identifier;
 import static com.dke.data.agrirouter.test.OnboardingResponseRepository.read;
 
@@ -26,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +45,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
     parameters.setSubscriptions(subscriptions);
     setSubscriptionService.send(parameters);
 
-    Thread.sleep(TimeUnit.SECONDS.toMillis(3));
+    waitForTheAgrirouterToProcessSingleMessage();
 
     FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
     Optional<List<FetchMessageResponse>> fetchMessageResponses =
@@ -86,7 +83,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
     parameters.setSubscriptions(subscriptions);
     setSubscriptionService.send(parameters);
 
-    Thread.sleep(TimeUnit.SECONDS.toMillis(3));
+    waitForTheAgrirouterToProcessSingleMessage();
 
     FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
     Optional<List<FetchMessageResponse>> fetchMessageResponses =

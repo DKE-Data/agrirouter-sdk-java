@@ -20,12 +20,12 @@ class MessageQueryParameters : AbstractParameterBase(), ParameterValidation {
     var sentToInSeconds: Long? = null
 
     override fun technicalValidation() {
-        nullCheck(onboardingResponse)
+        nullCheck("onboardingResponse", onboardingResponse)
     }
 
     override fun businessValidation() {
         if (null == messageIds && null == senderIds && null == sentFromInSeconds && null == sentToInSeconds) {
-            this.rise("There has to be a filter criteria for the query.")
+            rise("There has to be a filter criteria for the query.", "messageIds", "senderIds", "sentFromInSeconds & sendToInSeconds", "")
         }
     }
 

@@ -26,14 +26,14 @@ class SecuredOnboardingParameters : AbstractParameterBase(), ParameterValidation
     var registrationCode: String? = null
 
     override fun technicalValidation() {
-        isBlank(applicationId)
-        isBlank(privateKey)
-        isBlank(publicKey)
-        isBlank(uuid)
-        isBlank(certificationVersionId)
-        isBlank(gatewayId)
-        isBlank(registrationCode)
-        nullCheck(certificationType)
+        isBlank("applicationId",applicationId)
+        isBlank("privateKey",privateKey)
+        isBlank("publicKey",publicKey)
+        isBlank("uuid",uuid)
+        isBlank("certificationVersionId",certificationVersionId)
+        isBlank("gatewayId",gatewayId)
+        isBlank("registrationCode",registrationCode)
+        nullCheck("certificationType",certificationType)
     }
 
 }

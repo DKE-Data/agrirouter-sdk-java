@@ -9,9 +9,13 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /** Interface to fetch messages for the HTTP implementation by polling the outbox. */
 public interface MessageFetcher extends ResponseValidator {
+
+  Logger LOGGER = LogManager.getLogger();
 
   int MAX_TRIES_BEFORE_FAILURE = 10;
   long DEFAULT_INTERVAL = 500;
@@ -28,7 +32,11 @@ public interface MessageFetcher extends ResponseValidator {
   default Optional<String> poll(
       FetchMessageParameters fetchMessageParameters, CancellationToken cancellationToken) {
     fetchMessageParameters.validate();
+    int nrOfTries = 1;
     while (cancellationToken.isNotCancelled()) {
+      LOGGER.debug(
+          "The cancellation token is not cancelled, we have another try. This is try number {}.",
+          nrOfTries);
       Response response =
           RequestFactory.securedRequest(
                   Objects.requireNonNull(fetchMessageParameters.getOnboardingResponse())

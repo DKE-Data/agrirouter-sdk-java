@@ -35,22 +35,17 @@ public interface ParameterValidation {
     //
   }
 
-  /** Rise an exception if the parameter was not valid. */
-  default void rise() {
-    throw new IllegalParameterDefinitionException(
-        "Parameter was not defined correctly, please check the values.");
-  }
-
   /**
-   * Rise an exception if the parameter was not valid.
+   * Rise an exception if there has to be at least one valid parameter.
    *
    * @param message -
    */
-  default void rise(String message) {
+  default void rise(String message, String... parameterNames) {
+    final String joinedParametersNames = String.join(",", parameterNames);
     throw new IllegalParameterDefinitionException(
         String.format(
-            "Parameter was not defined correctly, please check the values. Error message is '%s'.",
-            message));
+            "At least one of the following parameters has to be defined [%s] was not defined correctly, please check the values. '%s'.",
+            joinedParametersNames, message));
   }
 
   /**
@@ -58,9 +53,10 @@ public interface ParameterValidation {
    *
    * @param o -
    */
-  default void nullCheck(Object o) {
+  default void nullCheck(String parameterName, Object o) {
     if (null == o) {
-      this.rise("The parameter should not have been null, please check your values.");
+      this.rise(
+          "The parameter '%s' should not have been null, please check your values.", parameterName);
     }
   }
 
@@ -69,9 +65,11 @@ public interface ParameterValidation {
    *
    * @param s -
    */
-  default void isBlank(String s) {
+  default void isBlank(String parameterName, String s) {
     if (StringUtils.isBlank(s)) {
-      this.rise("The parameter should not have been blank, please check your values.");
+      this.rise(
+          "The parameter '%s' should not have been blank, please check your values.",
+          parameterName);
     }
   }
 
@@ -80,10 +78,12 @@ public interface ParameterValidation {
    *
    * @param c -
    */
-  default void nullOrEmpty(Collection<?> c) {
-    nullCheck(c);
+  default void nullOrEmpty(String parameterName, Collection<?> c) {
+    nullCheck(parameterName, c);
     if (c.isEmpty()) {
-      this.rise("The parameter should not have been empty, please check your values.");
+      this.rise(
+          "The parameter '%s' should not have been empty, please check your values.",
+          parameterName);
     }
   }
 }

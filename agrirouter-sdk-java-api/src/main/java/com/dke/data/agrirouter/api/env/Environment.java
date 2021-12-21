@@ -5,9 +5,10 @@ import com.dke.data.agrirouter.api.enums.SecuredOnboardingResponseType;
 /** Common Environment, holds some default methods pointing to the QA. */
 public interface Environment {
 
-  String AGRIROUTER_LOGIN_URL = "/app";
-
+  /** Template for MQTT connections. */
   String MQTT_URL_TEMPLATE = "ssl://%s:%s";
+
+  /** Link template for the secured onboarding process. */
   String SECURED_ONBOARDING_AUTHORIZATION_LINK_TEMPLATE =
       "/application/%s/authorize?response_type=%s&state=%s&redirect_uri=%s";
 
@@ -66,16 +67,6 @@ public interface Environment {
    */
   default String getRevokeUrl() {
     return getRegistrationServiceUrl() + getApiPrefix() + "/registration/onboard/revoke";
-  }
-
-  /**
-   * Returning the URL to login into the AR. This is necessary, because there are services within
-   * the UI whiche are only avalailable if the user is logged in.
-   *
-   * @return -
-   */
-  default String getAgrirouterLoginUrl() {
-    return this.getEnvironmentBaseUrl() + AGRIROUTER_LOGIN_URL;
   }
 
   /**
