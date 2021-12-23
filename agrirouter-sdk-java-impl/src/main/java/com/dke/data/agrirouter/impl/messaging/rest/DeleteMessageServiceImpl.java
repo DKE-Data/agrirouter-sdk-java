@@ -24,7 +24,7 @@ public class DeleteMessageServiceImpl
 
   @Override
   public String send(DeleteMessageParameters parameters) {
-    parameters.validate();
+    parameters.trimAndValidate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
@@ -37,7 +37,7 @@ public class DeleteMessageServiceImpl
 
   @Override
   public HttpAsyncMessageSendingResult sendAsync(DeleteMessageParameters parameters) {
-    parameters.validate();
+    parameters.trimAndValidate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());

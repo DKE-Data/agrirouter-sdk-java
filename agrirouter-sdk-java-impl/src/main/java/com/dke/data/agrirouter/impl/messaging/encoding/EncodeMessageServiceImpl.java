@@ -46,8 +46,8 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     if (null == messageHeaderParameters || null == payloadParameters) {
       throw new IllegalArgumentException("Parameters cannot be NULL");
     }
-    messageHeaderParameters.validate();
-    payloadParameters.validate();
+    messageHeaderParameters.trimAndValidate();
+    payloadParameters.trimAndValidate();
 
     try (ByteArrayOutputStream streamedMessage = new ByteArrayOutputStream()) {
 
@@ -103,8 +103,8 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
         || null == onboardingResponse) {
       throw new IllegalArgumentException("Parameters cannot be NULL");
     }
-    messageHeaderParameters.validate();
-    payloadParameters.validate();
+    messageHeaderParameters.trimAndValidate();
+    payloadParameters.trimAndValidate();
 
     if (messageHeaderParameters.getTechnicalMessageType().getNeedsChunking()) {
       if (payloadParameters.shouldBeChunked()) {

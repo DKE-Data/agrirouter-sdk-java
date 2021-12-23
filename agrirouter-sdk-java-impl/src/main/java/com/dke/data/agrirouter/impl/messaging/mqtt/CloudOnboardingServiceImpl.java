@@ -35,7 +35,7 @@ public class CloudOnboardingServiceImpl extends MqttService
    */
   @Override
   public String send(CloudOnboardingParameters parameters) {
-    parameters.validate();
+    parameters.trimAndValidate();
     try {
       EncodedMessage encodedMessage = this.encode(parameters);
       SendMessageParameters sendMessageParameters = new SendMessageParameters();

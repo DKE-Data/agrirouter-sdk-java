@@ -29,4 +29,10 @@ class MessageQueryParameters : AbstractParameterBase(), ParameterValidation {
         }
     }
 
+    override fun trim() {
+        trimParameterBase()
+        messageIds?.map { messageId -> messageId.trim() }
+        senderIds?.map { senderId -> senderId.trim() }
+    }
+
 }

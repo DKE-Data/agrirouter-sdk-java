@@ -25,7 +25,7 @@ public class CloudOffboardingServiceImpl
 
   @Override
   public String send(CloudOffboardingParameters parameters) {
-    parameters.validate();
+    parameters.trimAndValidate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
@@ -38,7 +38,7 @@ public class CloudOffboardingServiceImpl
 
   @Override
   public HttpAsyncMessageSendingResult sendAsync(CloudOffboardingParameters parameters) {
-    parameters.validate();
+    parameters.trimAndValidate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());

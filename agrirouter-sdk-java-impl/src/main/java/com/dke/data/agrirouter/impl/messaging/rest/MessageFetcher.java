@@ -31,7 +31,7 @@ public interface MessageFetcher extends ResponseValidator {
    */
   default Optional<String> poll(
       FetchMessageParameters fetchMessageParameters, CancellationToken cancellationToken) {
-    fetchMessageParameters.validate();
+    fetchMessageParameters.trimAndValidate();
     int nrOfTries = 1;
     while (cancellationToken.isNotCancelled()) {
       LOGGER.debug(

@@ -40,14 +40,14 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
   @Override
   public OnboardingResponse onboard(SecuredOnboardingParameters securedOnboardingParameters) {
-    securedOnboardingParameters.validate();
+    securedOnboardingParameters.trimAndValidate();
     return this.onboard(
         securedOnboardingParameters, this.createOnboardingRequestBody(securedOnboardingParameters));
   }
 
   @Override
   public void verify(SecuredOnboardingParameters securedOnboardingParameters) {
-    securedOnboardingParameters.validate();
+    securedOnboardingParameters.trimAndValidate();
     this.verify(
         securedOnboardingParameters, this.createOnboardingRequestBody(securedOnboardingParameters));
   }

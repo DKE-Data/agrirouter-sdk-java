@@ -26,14 +26,25 @@ class SecuredOnboardingParameters : AbstractParameterBase(), ParameterValidation
     var registrationCode: String? = null
 
     override fun technicalValidation() {
-        isBlank("applicationId",applicationId)
-        isBlank("privateKey",privateKey)
-        isBlank("publicKey",publicKey)
-        isBlank("uuid",uuid)
-        isBlank("certificationVersionId",certificationVersionId)
-        isBlank("gatewayId",gatewayId)
-        isBlank("registrationCode",registrationCode)
-        nullCheck("certificationType",certificationType)
+        isBlank("applicationId", applicationId)
+        isBlank("privateKey", privateKey)
+        isBlank("publicKey", publicKey)
+        isBlank("uuid", uuid)
+        isBlank("certificationVersionId", certificationVersionId)
+        isBlank("gatewayId", gatewayId)
+        isBlank("registrationCode", registrationCode)
+        nullCheck("certificationType", certificationType)
+    }
+
+    override fun trim() {
+        trimParameterBase()
+        applicationId = applicationId?.trim()
+        privateKey = privateKey?.trim()
+        publicKey = publicKey?.trim()
+        uuid = uuid?.trim()
+        certificationVersionId = certificationVersionId?.trim()
+        gatewayId = gatewayId?.trim()
+        registrationCode = registrationCode?.trim()
     }
 
 }

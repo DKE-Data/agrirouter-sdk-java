@@ -8,27 +8,27 @@ import com.dke.data.agrirouter.impl.gson.MessageTypeAdapter;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public interface MessageBodyCreator {
 
   default String createMessageBody(SendMessageParameters parameters) {
-    parameters.validate();
+    parameters.trimAndValidate();
     GsonBuilder gsonBuilder = new GsonBuilder();
     gsonBuilder.registerTypeAdapter(Message.class, new MessageTypeAdapter());
-    String json = gsonBuilder.create().toJson(this.createSendMessageRequest(parameters));
-    return json;
+      return gsonBuilder.create().toJson(this.createSendMessageRequest(parameters));
   }
 
   default SendMessageRequest createSendMessageRequest(SendMessageParameters parameters) {
-    parameters.validate();
+    parameters.trimAndValidate();
     SendMessageRequest sendMessageRequest = new SendMessageRequest();
     sendMessageRequest.setSensorAlternateId(
-        parameters.getOnboardingResponse().getSensorAlternateId());
+        Objects.requireNonNull(parameters.getOnboardingResponse()).getSensorAlternateId());
     sendMessageRequest.setCapabilityAlternateId(
         parameters.getOnboardingResponse().getCapabilityAlternateId());
     List<Message> messages = new ArrayList<>();
-    parameters
-        .getEncodedMessages()
+    Objects.requireNonNull(parameters
+                    .getEncodedMessages())
         .forEach(
             messageToSend -> {
               Message message = new Message();

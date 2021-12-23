@@ -29,15 +29,16 @@ class MessageHeaderParameters : ParameterValidation {
     var metadata: MessageOuterClass.Metadata? = null
 
     override fun technicalValidation() {
-        isBlank("applicationMessageId",applicationMessageId)
-        nullCheck("technicalMessageType",technicalMessageType)
-        nullCheck("mode",mode)
+        isBlank("applicationMessageId", applicationMessageId)
+        nullCheck("technicalMessageType", technicalMessageType)
+        nullCheck("mode", mode)
     }
 
     /**
      * Copy the content of the message header parameters into this class.
      */
     fun copy(messageHeaderParameters: MessageHeaderParameters) {
+        messageHeaderParameters.trimAndValidate()
         applicationMessageId = messageHeaderParameters.applicationMessageId
         applicationMessageSeqNo = messageHeaderParameters.applicationMessageSeqNo
         technicalMessageType = messageHeaderParameters.technicalMessageType
@@ -47,5 +48,13 @@ class MessageHeaderParameters : ParameterValidation {
         chunkInfo = messageHeaderParameters.chunkInfo
         metadata = messageHeaderParameters.metadata
     }
+
+
+    override fun trim() {
+        applicationMessageId = applicationMessageId?.trim()
+        teamSetContextId = teamSetContextId?.trim()
+        recipients = recipients.map { recipient -> recipient.trim() }
+    }
+
 
 }

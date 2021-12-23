@@ -24,7 +24,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
   @Override
   public OnboardingResponse onboard(OnboardingParameters parameters) {
     this.getNativeLogger().info("BEGIN | Onboarding process. | '{}'.", parameters);
-    parameters.validate();
+    parameters.trimAndValidate();
 
     this.getNativeLogger().debug("Onboard device.");
     OnboardingResponse onboardingResponse =

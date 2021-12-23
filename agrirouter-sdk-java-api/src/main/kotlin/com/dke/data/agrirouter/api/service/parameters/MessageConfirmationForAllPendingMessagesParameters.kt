@@ -12,7 +12,11 @@ class MessageConfirmationForAllPendingMessagesParameters : AbstractParameterBase
     var onboardingResponse: OnboardingResponse? = null
 
     override fun technicalValidation() {
-        nullCheck("onboardingResponse",onboardingResponse)
+        nullCheck("onboardingResponse", onboardingResponse)
+    }
+
+    override fun trim() {
+        trimParameterBase()
     }
 
 }

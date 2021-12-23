@@ -25,12 +25,21 @@ class OnboardingParameters : AbstractParameterBase(), ParameterValidation {
     var registrationCode: String? = null
 
     override fun technicalValidation() {
-        isBlank("applicationId",applicationId)
-        isBlank("uuid",uuid)
-        isBlank("certificationVersionId",certificationVersionId)
-        isBlank("gatewayId",gatewayId)
-        nullCheck("certificationType",certificationType)
-        nullCheck("applicationType",applicationType)
-        isBlank("registrationCode",registrationCode)
+        isBlank("applicationId", applicationId)
+        isBlank("uuid", uuid)
+        isBlank("certificationVersionId", certificationVersionId)
+        isBlank("gatewayId", gatewayId)
+        nullCheck("certificationType", certificationType)
+        nullCheck("applicationType", applicationType)
+        isBlank("registrationCode", registrationCode)
+    }
+
+    override fun trim() {
+        trimParameterBase()
+        applicationId = applicationId?.trim()
+        uuid = uuid?.trim()
+        certificationVersionId = certificationVersionId?.trim()
+        gatewayId = gatewayId?.trim()
+        registrationCode = registrationCode?.trim()
     }
 }

@@ -25,8 +25,8 @@ class PayloadParameters : AbstractParameterBase(), ParameterValidation {
     var value: ByteString? = null
 
     override fun technicalValidation() {
-        nullCheck("typeUrl",typeUrl)
-        nullCheck("value",value)
+        nullCheck("typeUrl", typeUrl)
+        nullCheck("value", value)
     }
 
     /**
@@ -49,6 +49,11 @@ class PayloadParameters : AbstractParameterBase(), ParameterValidation {
         sequenceNumber = payload.sequenceNumber
         typeUrl = payload.typeUrl
         value = payload.value
+    }
+
+    override fun trim() {
+        trimParameterBase()
+        typeUrl = typeUrl.trim()
     }
 
 }

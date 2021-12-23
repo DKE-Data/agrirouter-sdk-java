@@ -10,7 +10,6 @@ import com.dke.data.agrirouter.api.service.parameters.base.AbstractParameterBase
  */
 class ListEndpointsParameters : AbstractParameterBase(), ParameterValidation {
 
-
     var onboardingResponse: OnboardingResponse? = null
 
     var technicalMessageType: TechnicalMessageType? = null
@@ -20,9 +19,13 @@ class ListEndpointsParameters : AbstractParameterBase(), ParameterValidation {
     var unfilteredList: Boolean = false
 
     override fun technicalValidation() {
-        nullCheck("onboardingResponse",onboardingResponse)
-        nullCheck("technicalMessageType",technicalMessageType)
-        nullCheck("direction",direction)
+        nullCheck("onboardingResponse", onboardingResponse)
+        nullCheck("technicalMessageType", technicalMessageType)
+        nullCheck("direction", direction)
+    }
+
+    override fun trim() {
+        trimParameterBase()
     }
 
 }

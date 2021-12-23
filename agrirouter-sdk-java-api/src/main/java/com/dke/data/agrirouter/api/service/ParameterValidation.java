@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /** Parameter validation using bean validation. */
-public interface ParameterValidation {
+public interface ParameterValidation extends ParameterTrimming {
 
   Logger LOGGER = LogManager.getLogger();
 
@@ -17,8 +17,10 @@ public interface ParameterValidation {
    *
    * @throws IllegalParameterDefinitionException -
    */
-  default void validate() {
+  default void trimAndValidate() {
     LOGGER.debug("Validating parameters.");
+    LOGGER.trace("Trim the values.");
+    this.trim();
     LOGGER.trace("Technical validation.");
     this.technicalValidation();
     LOGGER.trace("Business validation.");

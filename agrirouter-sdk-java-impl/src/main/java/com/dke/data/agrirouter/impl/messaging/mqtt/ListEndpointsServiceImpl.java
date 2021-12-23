@@ -30,7 +30,7 @@ public class ListEndpointsServiceImpl extends MqttService
 
   @Override
   public String send(ListEndpointsParameters parameters) {
-    parameters.validate();
+    parameters.trimAndValidate();
     try {
       EncodedMessage encodedMessage = this.encode(parameters);
       SendMessageParameters sendMessageParameters = new SendMessageParameters();

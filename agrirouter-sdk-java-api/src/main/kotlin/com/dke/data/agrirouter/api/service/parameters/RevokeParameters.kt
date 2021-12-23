@@ -18,14 +18,25 @@ class RevokeParameters : ParameterValidation {
     var publicKey: String? = null
 
     override fun technicalValidation() {
-        isBlank("applicationId",applicationId)
-        isBlank("accountId",accountId)
-        isBlank("privateKey",privateKey)
-        isBlank("publicKey",publicKey)
-        nullCheck("endpointIds",endpointIds)
+        isBlank("applicationId", applicationId)
+        isBlank("accountId", accountId)
+        isBlank("privateKey", privateKey)
+        isBlank("publicKey", publicKey)
+        nullCheck("endpointIds", endpointIds)
     }
 
     override fun businessValidation() {
-        nullOrEmpty("endpointIds",endpointIds)
+        nullOrEmpty("endpointIds", endpointIds)
     }
+
+
+    override fun trim() {
+        applicationId = applicationId?.trim()
+        accountId = accountId?.trim()
+        endpointIds = endpointIds?.map { endpointId -> endpointId.trim() }
+        privateKey = privateKey?.trim()
+        privateKey = privateKey?.trim()
+        publicKey = publicKey?.trim()
+    }
+
 }

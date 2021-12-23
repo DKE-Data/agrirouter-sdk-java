@@ -21,14 +21,23 @@ class SetSubscriptionParameters : AbstractParameterBase(), ParameterValidation {
         var position: Boolean = false
 
         override fun technicalValidation() {
-            nullCheck("technicalMessageType",technicalMessageType)
+            nullCheck("technicalMessageType", technicalMessageType)
         }
+
+        override fun trim() {
+            // No trim needed.
+        }
+
     }
 
     var subscriptions: List<Subscription> = ArrayList()
 
     override fun technicalValidation() {
-        nullCheck("onboardingResponse",onboardingResponse)
+        nullCheck("onboardingResponse", onboardingResponse)
+    }
+
+    override fun trim() {
+        trimParameterBase()
     }
 
 }
