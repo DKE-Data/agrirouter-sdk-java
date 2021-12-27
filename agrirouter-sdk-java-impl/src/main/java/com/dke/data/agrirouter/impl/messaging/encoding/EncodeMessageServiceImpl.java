@@ -106,7 +106,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     messageHeaderParameters.validate();
     payloadParameters.validate();
 
-    if (messageHeaderParameters.getTechnicalMessageType().getNeedsChunking()) {
+    if (messageHeaderParameters.getTechnicalMessageType().needsBase64Encoding()) {
       if (payloadParameters.shouldBeChunked()) {
         getNativeLogger()
             .debug(
@@ -169,29 +169,11 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
             new MessageParameterTuple(messageHeaderParameters, payload));
       }
     } else {
-      if (messageHeaderParameters.getTechnicalMessageType().getNeedsBase64Encoding()) {
-        getNativeLogger()
-                .debug(
-                        "The message type needs to be base64 encoded, therefore we are encoding the raw value.");
-        final PayloadParameters payload = new PayloadParameters();
-        payload.copyFrom(payloadParameters);
-        payload.setValue(
-            ByteString.copyFromUtf8(
-                Base64.getEncoder()
-                    .encodeToString(
-                        payloadParameters
-                            .getValue()
-                            .toStringUtf8()
-                            .getBytes(StandardCharsets.UTF_8))));
-        return Collections.singletonList(
-            new MessageParameterTuple(messageHeaderParameters, payload));
-      } else {
         getNativeLogger()
             .debug(
                 "The message type does not need base 64 encoding, we are returning the tuple 'as it is'.");
         return Collections.singletonList(
             new MessageParameterTuple(messageHeaderParameters, payloadParameters));
-      }
     }
   }
 
