@@ -85,8 +85,8 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
   /**
    * Chunk and add the Base64 encoding for a message if necessary. If there is only one chunk, the
-   * single chunk will be returned as Base64 encoded value. The chunk information and all IDs
-   * will be set by the SDK and are no longer in control of the application.
+   * single chunk will be returned as Base64 encoded value. The chunk information and all IDs will
+   * be set by the SDK and are no longer in control of the application.
    *
    * @param messageHeaderParameters -
    * @param payloadParameters Content of the message. It shall not be Base64 encoded before.
@@ -171,8 +171,8 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     } else {
       if (messageHeaderParameters.getTechnicalMessageType().getNeedsBase64Encoding()) {
         getNativeLogger()
-                .debug(
-                        "The message type needs to be base64 encoded, therefore we are encoding the raw value.");
+            .debug(
+                "The message type needs to be base64 encoded, therefore we are encoding the raw value.");
         final PayloadParameters payload = new PayloadParameters();
         payload.copyFrom(payloadParameters);
         payload.setValue(

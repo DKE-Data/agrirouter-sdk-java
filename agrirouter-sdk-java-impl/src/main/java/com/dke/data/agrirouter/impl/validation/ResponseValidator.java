@@ -4,15 +4,11 @@ import com.dke.data.agrirouter.api.exception.ForbiddenRequestException;
 import com.dke.data.agrirouter.api.exception.InvalidHttpStatusException;
 import com.dke.data.agrirouter.api.exception.InvalidUrlForRequestException;
 import com.dke.data.agrirouter.api.exception.UnauthorizedRequestException;
+import com.dke.data.agrirouter.api.service.HasLogger;
 import org.apache.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.message.ObjectArrayMessage;
 
 /** Validation of the response, encapsulated using an interface. */
-public interface ResponseValidator {
-
-  Logger LOGGER = LogManager.getLogger();
+public interface ResponseValidator extends HasLogger {
 
   /**
    * Asserting that the status code is valid. A valid status is in between 200 and 207 (defined by
@@ -21,8 +17,8 @@ public interface ResponseValidator {
    * @param statusCode The current status code.
    */
   default boolean assertStatusCodeIsValid(int statusCode) {
-    LOGGER.debug("Validating status code.");
-    LOGGER.trace(new ObjectArrayMessage(statusCode));
+    getNativeLogger().debug("Validating status code.");
+    getNativeLogger().trace("Status code was '{}'", statusCode);
     this.checkIfStatusCodeIsError(statusCode);
     if (statusCode != HttpStatus.SC_OK
         && statusCode != HttpStatus.SC_CREATED
@@ -42,9 +38,10 @@ public interface ResponseValidator {
    *
    * @param statusCode The current status code.
    */
+  @SuppressWarnings("UnusedReturnValue")
   default boolean assertStatusCodeIsOk(int statusCode) {
-    LOGGER.debug("Validating status code.");
-    LOGGER.trace(new ObjectArrayMessage(statusCode));
+    getNativeLogger().debug("Validating status code.");
+    getNativeLogger().trace("Status code was '{}'", statusCode);
     this.checkIfStatusCodeIsError(statusCode);
     if (statusCode != HttpStatus.SC_OK) {
       throw new InvalidHttpStatusException(statusCode);
@@ -58,8 +55,8 @@ public interface ResponseValidator {
    * @param statusCode The current status code.
    */
   default boolean assertStatusCodeIsCreated(int statusCode) {
-    LOGGER.debug("Validating status code.");
-    LOGGER.trace(new ObjectArrayMessage(statusCode));
+    getNativeLogger().debug("Validating status code.");
+    getNativeLogger().trace("Status code was '{}'", statusCode);
     this.checkIfStatusCodeIsError(statusCode);
     if (statusCode != HttpStatus.SC_CREATED) {
       throw new InvalidHttpStatusException(statusCode);
@@ -73,8 +70,8 @@ public interface ResponseValidator {
    * @param statusCode The current status code.
    */
   default boolean assertStatusCodeIsBadRequest(int statusCode) {
-    LOGGER.debug("Validating status code.");
-    LOGGER.trace(new ObjectArrayMessage(statusCode));
+    getNativeLogger().debug("Validating status code.");
+    getNativeLogger().trace("Status code was '{}'", statusCode);
     this.checkIfStatusCodeIsError(statusCode);
     if (statusCode != HttpStatus.SC_BAD_REQUEST) {
       throw new InvalidHttpStatusException(statusCode);
@@ -89,7 +86,7 @@ public interface ResponseValidator {
    * @param statusCode The current response.
    */
   default void checkIfStatusCodeIsError(int statusCode) {
-    LOGGER.debug("Checking if the response is an error.");
+    getNativeLogger().debug("Checking if the response is an error.");
     if (statusCode == HttpStatus.SC_NOT_FOUND) {
       throw new InvalidUrlForRequestException();
     }
