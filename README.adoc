@@ -55,6 +55,47 @@ The `test` module contains integration tests not only for the SDK, but also for 
 === Integration
 
 If you want to add a dependency feel free to fetch the latest release from Github Packages. Please find the documentation right https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages[here].
+
+If you want to add the packages, you need to define the settings within your `pom` or the `settings.xml` otherwise. If you need an example, you can either have a look at the `ci/settings.xml` for general purpose or check out the snippet below for a custom `settings.xml`.
+
+[xml]
+----
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <activeProfiles>
+        <activeProfile>github</activeProfile>
+    </activeProfiles>
+
+    <profiles>
+        <profile>
+            <id>github</id>
+            <repositories>
+                <repository>
+                    <id>dke-data</id>
+                    <name>GitHub DKE-Data Apache Maven Packages</name>
+                    <url>https://maven.pkg.github.com/DKE-Data/*</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <servers>
+        <server>
+            <id>dke-data</id>
+            <username>{{YOUR.GITHUB.USERNAME}}</username>
+            <password>{{YOUR.GITHUB.ACCESS.TOKEN}}</password>
+        </server>
+    </servers>
+</settings>
+----
+
+You can use this `settings.xml` and include it during the build process in a specific way. Just use `mvn clean verify -s your_path_to_the_file/settings.xml` to use the settings if they are set in a local file.
+
+=== Compatibility
+
 We are supporting JDK 8 and later, releases are build using a JDK 8 to have compatibility for most users. If you need to build the current development branch, please feel free build the branch on yourself and install it to your local repository.
 
 == Certificates for the communication
