@@ -48,7 +48,8 @@ public class OnboardingResponseRepository {
     FARMING_SOFTWARE_DEACTIVATED("farming-software-deactivated"),
     TELEMETRY_PLATFORM("telemetry-platform"),
     TELEMETRY_PLATFORM_REMOVED("telemetry-platform-removed"),
-    TELEMETRY_PLATFORM_DEACTIVATED("telemetry-platform-deactivated");
+    TELEMETRY_PLATFORM_DEACTIVATED("telemetry-platform-deactivated"),
+    COMMUNICATION_UNIT("communication-unit");
 
     private final String fileName;
 
