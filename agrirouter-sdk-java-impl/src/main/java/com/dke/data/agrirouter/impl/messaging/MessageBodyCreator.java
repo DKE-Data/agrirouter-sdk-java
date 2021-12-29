@@ -16,7 +16,7 @@ public interface MessageBodyCreator {
     parameters.trimAndValidate();
     GsonBuilder gsonBuilder = new GsonBuilder();
     gsonBuilder.registerTypeAdapter(Message.class, new MessageTypeAdapter());
-      return gsonBuilder.create().toJson(this.createSendMessageRequest(parameters));
+    return gsonBuilder.create().toJson(this.createSendMessageRequest(parameters));
   }
 
   default SendMessageRequest createSendMessageRequest(SendMessageParameters parameters) {
@@ -27,8 +27,7 @@ public interface MessageBodyCreator {
     sendMessageRequest.setCapabilityAlternateId(
         parameters.getOnboardingResponse().getCapabilityAlternateId());
     List<Message> messages = new ArrayList<>();
-    Objects.requireNonNull(parameters
-                    .getEncodedMessages())
+    Objects.requireNonNull(parameters.getEncodedMessages())
         .forEach(
             messageToSend -> {
               Message message = new Message();

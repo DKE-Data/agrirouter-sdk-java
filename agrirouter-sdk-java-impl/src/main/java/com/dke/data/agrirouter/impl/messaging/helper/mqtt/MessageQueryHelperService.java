@@ -11,7 +11,6 @@ import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import java.util.Collections;
 import java.util.Objects;
-
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -53,7 +52,9 @@ public class MessageQueryHelperService extends MqttService
       byte[] payload = messageAsJson.getBytes();
       this.getMqttClient()
           .publish(
-              Objects.requireNonNull(parameters.getOnboardingResponse()).getConnectionCriteria().getMeasures(),
+              Objects.requireNonNull(parameters.getOnboardingResponse())
+                  .getConnectionCriteria()
+                  .getMeasures(),
               new MqttMessage(payload));
       return encodedMessage.getApplicationMessageID();
     } catch (MqttException e) {

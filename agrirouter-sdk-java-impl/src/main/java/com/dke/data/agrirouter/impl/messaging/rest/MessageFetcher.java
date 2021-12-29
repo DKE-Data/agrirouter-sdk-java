@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.rest;
 
 import com.dke.data.agrirouter.api.cancellation.CancellationToken;
 import com.dke.data.agrirouter.api.enums.CertificationType;
+import com.dke.data.agrirouter.api.service.HasLogger;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
@@ -9,13 +10,9 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /** Interface to fetch messages for the HTTP implementation by polling the outbox. */
-public interface MessageFetcher extends ResponseValidator {
-
-  Logger LOGGER = LogManager.getLogger();
+public interface MessageFetcher extends ResponseValidator, HasLogger {
 
   int MAX_TRIES_BEFORE_FAILURE = 10;
   long DEFAULT_INTERVAL = 500;
@@ -34,9 +31,10 @@ public interface MessageFetcher extends ResponseValidator {
     fetchMessageParameters.trimAndValidate();
     int nrOfTries = 1;
     while (cancellationToken.isNotCancelled()) {
-      LOGGER.debug(
-          "The cancellation token is not cancelled, we have another try. This is try number {}.",
-          nrOfTries);
+      getNativeLogger()
+          .debug(
+              "The cancellation token is not cancelled, we have another try. This is try number {}.",
+              nrOfTries);
       Response response =
           RequestFactory.securedRequest(
                   Objects.requireNonNull(fetchMessageParameters.getOnboardingResponse())

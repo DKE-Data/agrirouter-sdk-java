@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /** Class to onboard endpoints for different reasons. */
+@SuppressWarnings("ALL")
 class FarmingSoftwareFixture extends AbstractIntegrationTest {
 
   /**
@@ -29,7 +30,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
   void onboardFarmingSoftwareAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("e757d7aff5");
+    onboardingParameters.setRegistrationCode("ef1c0c59ba");
     onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
     onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);
@@ -63,7 +64,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
   void onboardAndDeactivateFarmingSoftwareAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("aff2b14ef6");
+    onboardingParameters.setRegistrationCode("a496822032");
     onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
     onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);
@@ -97,7 +98,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
   void onboardAndRemoveFarmingSoftwareAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("cf968d4af7");
+    onboardingParameters.setRegistrationCode("bc4eba6065");
     onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
     onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);

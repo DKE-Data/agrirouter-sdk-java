@@ -12,7 +12,6 @@ import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.SignatureService;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.google.gson.Gson;
-
 import java.util.Objects;
 import java.util.Optional;
 import javax.ws.rs.client.Entity;
@@ -68,7 +67,8 @@ public class RevokingServiceImpl extends EnvironmentalService
     this.getNativeLogger().info("BEGIN | Create revoking request. | '{}'.", parameters);
     RevokeRequest revokeRequest = new RevokeRequest();
     revokeRequest.setAccountId(Objects.requireNonNull(parameters.getAccountId()));
-    revokeRequest.setEndpointIds(Objects.requireNonNull(parameters.getEndpointIds()).toArray(new String[] {}));
+    revokeRequest.setEndpointIds(
+        Objects.requireNonNull(parameters.getEndpointIds()).toArray(new String[] {}));
     revokeRequest.setUTCTimestamp(UtcTimeService.inThePast(10).toString());
     revokeRequest.setTimeZone(UtcTimeService.offset());
     this.getNativeLogger().info("END | Create revoking request. | '{}'.", parameters);

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>AGRIROUTER SDK JAVA - TESTS</name>
-    <artifactId>agrirouter-api-tests</artifactId>
+    <artifactId>agrirouter-sdk-java-tests</artifactId>
 
     <dependencies>
         <dependency>

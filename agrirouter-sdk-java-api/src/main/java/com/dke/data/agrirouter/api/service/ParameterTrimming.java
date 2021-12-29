@@ -5,8 +5,6 @@ package com.dke.data.agrirouter.api.service;
  */
 public interface ParameterTrimming {
 
-    /**
-     * Trim all parameters to remove whitespaces and avoid problems during sending messages.
-     */
-    void trim();
+  /** Trim all parameters to remove whitespaces and avoid problems during sending messages. */
+  void trim();
 }
