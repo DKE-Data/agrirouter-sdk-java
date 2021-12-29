@@ -35,17 +35,18 @@ public abstract class AbstractIntegrationTest {
   }
 
   /** Communication unit for integration testing. */
-  protected Application communicationUnit = new Application() {
-      @Override
-      public String getApplicationId() {
+  protected Application communicationUnit =
+      new Application() {
+        @Override
+        public String getApplicationId() {
           return "434989e2-b4be-4cfd-8e40-f5b89d83458d";
-      }
+        }
 
-      @Override
-      public String getCertificationVersionId() {
+        @Override
+        public String getCertificationVersionId() {
           return "f491d487-f913-4732-8be4-c2eacff21816";
-      }
-  };
+        }
+      };
 
   /** Farming software for integration testing. */
   protected Application farmingSoftware =
