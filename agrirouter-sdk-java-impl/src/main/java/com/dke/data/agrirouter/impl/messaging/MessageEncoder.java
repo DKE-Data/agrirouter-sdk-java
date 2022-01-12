@@ -10,14 +10,14 @@ import agrirouter.request.payload.endpoint.SubscriptionOuterClass;
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
-import com.dke.data.agrirouter.api.service.LoggingEnabledService;
+import com.dke.data.agrirouter.api.service.HasLogger;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import java.util.Objects;
 
-public interface MessageEncoder extends LoggingEnabledService {
+public interface MessageEncoder extends HasLogger {
 
   /**
    * Encode a message to delete messages.

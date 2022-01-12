@@ -10,7 +10,6 @@ import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.google.gson.Gson;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.message.ObjectArrayMessage;
 
 public abstract class AbstractOnboardingService extends EnvironmentalService {
 
@@ -25,10 +24,6 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
       String gatewayId,
       CertificationType certificationType) {
     this.getNativeLogger().info("BEGIN | Creating onboard request.");
-    this.getNativeLogger()
-        .debug(
-            new ObjectArrayMessage(
-                uuid, applicationId, certificationType, gatewayId, certificationType));
 
     OnboardingRequest onboardingRequest = new OnboardingRequest();
     onboardingRequest.setId(uuid);
