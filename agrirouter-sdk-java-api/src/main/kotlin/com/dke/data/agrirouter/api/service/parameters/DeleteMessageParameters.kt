@@ -29,10 +29,4 @@ class DeleteMessageParameters : AbstractParameterBase(), ParameterValidation {
         }
     }
 
-    override fun trim() {
-        trimParameterBase()
-        messageIds = messageIds?.map { messageId -> messageId.trim() }
-        senderIds = senderIds?.map { senderId -> senderId.trim() }
-    }
-
 }

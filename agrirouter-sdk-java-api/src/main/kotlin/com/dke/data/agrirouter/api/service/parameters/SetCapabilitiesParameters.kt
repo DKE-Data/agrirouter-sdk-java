@@ -32,10 +32,6 @@ class SetCapabilitiesParameters : AbstractParameterBase(), ParameterValidation {
             nullCheck("direction", direction)
         }
 
-        override fun trim() {
-            // No trim needed.
-        }
-
     }
 
     override fun technicalValidation() {
@@ -44,12 +40,6 @@ class SetCapabilitiesParameters : AbstractParameterBase(), ParameterValidation {
         isBlank("certificationVersionId", certificationVersionId)
         nullCheck("capabilitiesParameters", capabilitiesParameters)
         capabilitiesParameters?.forEach { c -> c.trimAndValidate() }
-    }
-
-    override fun trim() {
-        trimParameterBase()
-        applicationId = applicationId?.trim()
-        certificationVersionId = certificationVersionId?.trim()
     }
 
 }

@@ -49,12 +49,4 @@ class MessageHeaderParameters : ParameterValidation {
         metadata = messageHeaderParameters.metadata
     }
 
-
-    override fun trim() {
-        applicationMessageId = applicationMessageId?.trim()
-        teamSetContextId = teamSetContextId?.trim()
-        recipients = recipients.map { recipient -> recipient.trim() }
-    }
-
-
 }

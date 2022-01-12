@@ -34,12 +34,4 @@ class OnboardingParameters : AbstractParameterBase(), ParameterValidation {
         isBlank("registrationCode", registrationCode)
     }
 
-    override fun trim() {
-        trimParameterBase()
-        applicationId = applicationId?.trim()
-        uuid = uuid?.trim()
-        certificationVersionId = certificationVersionId?.trim()
-        gatewayId = gatewayId?.trim()
-        registrationCode = registrationCode?.trim()
-    }
 }

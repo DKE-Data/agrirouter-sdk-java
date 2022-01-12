@@ -29,14 +29,4 @@ class RevokeParameters : ParameterValidation {
         nullOrEmpty("endpointIds", endpointIds)
     }
 
-
-    override fun trim() {
-        applicationId = applicationId?.trim()
-        accountId = accountId?.trim()
-        endpointIds = endpointIds?.map { endpointId -> endpointId.trim() }
-        privateKey = privateKey?.trim()
-        privateKey = privateKey?.trim()
-        publicKey = publicKey?.trim()
-    }
-
 }

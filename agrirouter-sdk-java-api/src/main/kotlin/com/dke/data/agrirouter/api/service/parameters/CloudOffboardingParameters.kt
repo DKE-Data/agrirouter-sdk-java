@@ -22,9 +22,4 @@ class CloudOffboardingParameters : AbstractParameterBase(), ParameterValidation 
         nullOrEmpty("endpointIds", endpointIds)
     }
 
-    override fun trim() {
-        trimParameterBase()
-        endpointIds = endpointIds?.map { endpointId -> endpointId.trim() }
-    }
-
 }

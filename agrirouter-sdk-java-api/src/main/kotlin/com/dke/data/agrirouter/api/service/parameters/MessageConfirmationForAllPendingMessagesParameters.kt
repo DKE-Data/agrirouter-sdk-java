@@ -15,8 +15,4 @@ class MessageConfirmationForAllPendingMessagesParameters : AbstractParameterBase
         nullCheck("onboardingResponse", onboardingResponse)
     }
 
-    override fun trim() {
-        trimParameterBase()
-    }
-
 }

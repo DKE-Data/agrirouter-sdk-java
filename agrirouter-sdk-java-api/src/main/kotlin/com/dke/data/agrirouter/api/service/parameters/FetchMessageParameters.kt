@@ -15,8 +15,4 @@ open class FetchMessageParameters : AbstractParameterBase(), ParameterValidation
         nullCheck("onboardingResponse", onboardingResponse)
     }
 
-    override fun trim() {
-        trimParameterBase()
-    }
-
 }

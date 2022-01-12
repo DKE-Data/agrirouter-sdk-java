@@ -51,9 +51,4 @@ class PayloadParameters : AbstractParameterBase(), ParameterValidation {
         value = payload.value
     }
 
-    override fun trim() {
-        trimParameterBase()
-        typeUrl = typeUrl.trim()
-    }
-
 }

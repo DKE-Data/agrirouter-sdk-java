@@ -24,8 +24,4 @@ class ListEndpointsParameters : AbstractParameterBase(), ParameterValidation {
         nullCheck("direction", direction)
     }
 
-    override fun trim() {
-        trimParameterBase()
-    }
-
 }

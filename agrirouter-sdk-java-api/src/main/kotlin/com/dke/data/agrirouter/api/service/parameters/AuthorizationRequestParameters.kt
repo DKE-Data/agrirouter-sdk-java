@@ -21,11 +21,4 @@ class AuthorizationRequestParameters : AbstractParameterBase(), ParameterValidat
         isBlank("applicationId", applicationId)
     }
 
-    override fun trim() {
-        trimParameterBase()
-        applicationId = applicationId.trim()
-        redirectUri = redirectUri.trim()
-        state = state.trim()
-    }
-
 }

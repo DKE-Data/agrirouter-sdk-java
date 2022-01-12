@@ -36,15 +36,6 @@ class CloudOnboardingParameters : AbstractParameterBase(), ParameterValidation {
             isBlank("endpointName", endpointName)
         }
 
-        override fun trim() {
-            endpointId = endpointId?.trim()
-            endpointName = endpointName?.trim()
-        }
-
-    }
-
-    override fun trim() {
-        trimParameterBase()
     }
 
 }

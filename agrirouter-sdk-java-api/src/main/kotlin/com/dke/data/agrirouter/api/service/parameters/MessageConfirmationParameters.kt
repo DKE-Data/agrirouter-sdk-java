@@ -18,9 +18,4 @@ class MessageConfirmationParameters : AbstractParameterBase(), ParameterValidati
         nullCheck("messageIds", messageIds)
     }
 
-    override fun trim() {
-        trimParameterBase()
-        messageIds = messageIds?.map { messageId -> messageId.trim() }
-    }
-
 }

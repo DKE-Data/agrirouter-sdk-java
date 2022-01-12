@@ -22,9 +22,4 @@ open class SendMessageParameters : AbstractParameterBase(), ParameterValidation 
         nullOrEmpty("encodedMessages", encodedMessages)
     }
 
-    override fun trim() {
-        trimParameterBase()
-        encodedMessages = encodedMessages?.map { encodedMessage -> encodedMessage.trim() }
-    }
-
 }

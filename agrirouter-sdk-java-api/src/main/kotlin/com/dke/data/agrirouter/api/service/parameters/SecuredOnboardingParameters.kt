@@ -36,15 +36,4 @@ class SecuredOnboardingParameters : AbstractParameterBase(), ParameterValidation
         nullCheck("certificationType", certificationType)
     }
 
-    override fun trim() {
-        trimParameterBase()
-        applicationId = applicationId?.trim()
-        privateKey = privateKey?.trim()
-        publicKey = publicKey?.trim()
-        uuid = uuid?.trim()
-        certificationVersionId = certificationVersionId?.trim()
-        gatewayId = gatewayId?.trim()
-        registrationCode = registrationCode?.trim()
-    }
-
 }
