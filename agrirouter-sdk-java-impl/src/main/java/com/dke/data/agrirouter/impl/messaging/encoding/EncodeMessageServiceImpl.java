@@ -169,11 +169,11 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
             new MessageParameterTuple(messageHeaderParameters, payload));
       }
     } else {
-        getNativeLogger()
-            .debug(
-                "The message type does not need base 64 encoding, we are returning the tuple 'as it is'.");
-        return Collections.singletonList(
-            new MessageParameterTuple(messageHeaderParameters, payloadParameters));
+      getNativeLogger()
+          .debug(
+              "The message type does not need base 64 encoding, we are returning the tuple 'as it is'.");
+      return Collections.singletonList(
+          new MessageParameterTuple(messageHeaderParameters, payloadParameters));
     }
   }
 
