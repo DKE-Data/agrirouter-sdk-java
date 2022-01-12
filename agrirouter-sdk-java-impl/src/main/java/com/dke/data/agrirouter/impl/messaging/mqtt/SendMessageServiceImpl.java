@@ -28,7 +28,7 @@ public class SendMessageServiceImpl extends MqttService
    * @param sendMessageParameters Parameters to send the message.
    */
   public void send(SendMessageParameters sendMessageParameters) {
-    sendMessageParameters.trimAndValidate();
+    sendMessageParameters.validate();
     try {
       String messageAsJson = this.createMessageBody(sendMessageParameters);
       byte[] payload = messageAsJson.getBytes();

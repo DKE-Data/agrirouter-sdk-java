@@ -12,7 +12,7 @@ public class SendMessageServiceImpl
 
   @Override
   public void send(SendMessageParameters sendMessageParameters) {
-    sendMessageParameters.trimAndValidate();
+    sendMessageParameters.validate();
     MessageSendingResponse response = this.sendMessage(sendMessageParameters);
     this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
   }
@@ -20,7 +20,7 @@ public class SendMessageServiceImpl
   @Override
   public CompletableFuture<MessageSendingResponse> sendAsync(
       SendMessageParameters sendMessageParameters) {
-    sendMessageParameters.trimAndValidate();
+    sendMessageParameters.validate();
     return this.sendMessageAsync(sendMessageParameters);
   }
 }

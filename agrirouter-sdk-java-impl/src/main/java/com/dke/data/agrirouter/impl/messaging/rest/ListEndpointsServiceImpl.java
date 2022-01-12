@@ -27,7 +27,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
 
   @Override
   public String send(ListEndpointsParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
@@ -39,7 +39,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
 
   @Override
   public HttpAsyncMessageSendingResult sendAsync(ListEndpointsParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());

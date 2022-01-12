@@ -31,7 +31,7 @@ public class SetCapabilityServiceImpl extends MqttService
 
   @Override
   public String send(SetCapabilitiesParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     try {
       EncodedMessage encodedMessage = this.encode(parameters);
       SendMessageParameters sendMessageParameters = new SendMessageParameters();

@@ -21,7 +21,7 @@ class CloudOnboardingParameters : AbstractParameterBase(), ParameterValidation {
     override fun businessValidation() {
         nullOrEmpty("endpointDetails", endpointDetails)
         endpointDetails?.forEach {
-            it.trimAndValidate()
+            it.validate()
         }
     }
 

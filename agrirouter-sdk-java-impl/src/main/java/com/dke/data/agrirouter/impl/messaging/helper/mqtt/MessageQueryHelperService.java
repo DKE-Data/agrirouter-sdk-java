@@ -36,7 +36,7 @@ public class MessageQueryHelperService extends MqttService
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Validate parameters.");
-    parameters.trimAndValidate();
+    parameters.validate();
     try {
       this.getNativeLogger().trace("Encode message.");
       EncodedMessage encodedMessage = this.encode(this.technicalMessageType, parameters);

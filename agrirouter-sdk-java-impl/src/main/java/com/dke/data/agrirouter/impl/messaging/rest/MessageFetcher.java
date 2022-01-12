@@ -28,7 +28,7 @@ public interface MessageFetcher extends ResponseValidator, HasLogger {
    */
   default Optional<String> poll(
       FetchMessageParameters fetchMessageParameters, CancellationToken cancellationToken) {
-    fetchMessageParameters.trimAndValidate();
+    fetchMessageParameters.validate();
     int nrOfTries = 1;
     while (cancellationToken.isNotCancelled()) {
       getNativeLogger()

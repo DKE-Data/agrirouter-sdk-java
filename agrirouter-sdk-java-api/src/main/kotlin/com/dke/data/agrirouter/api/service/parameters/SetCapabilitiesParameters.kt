@@ -39,7 +39,7 @@ class SetCapabilitiesParameters : AbstractParameterBase(), ParameterValidation {
         isBlank("applicationId", applicationId)
         isBlank("certificationVersionId", certificationVersionId)
         nullCheck("capabilitiesParameters", capabilitiesParameters)
-        capabilitiesParameters?.forEach { c -> c.trimAndValidate() }
+        capabilitiesParameters?.forEach { c -> c.validate() }
     }
 
 }

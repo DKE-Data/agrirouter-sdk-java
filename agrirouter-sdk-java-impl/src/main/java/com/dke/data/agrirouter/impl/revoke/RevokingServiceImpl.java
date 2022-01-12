@@ -29,7 +29,7 @@ public class RevokingServiceImpl extends EnvironmentalService
 
   @Override
   public RevokeResponse revoke(RevokeParameters revokeParameters) {
-    revokeParameters.trimAndValidate();
+    revokeParameters.validate();
     Response response = null;
     RevokeRequest revokeRequest = createRevokeRequestBody(revokeParameters);
     Gson gson = new Gson();

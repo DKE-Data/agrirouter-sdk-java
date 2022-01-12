@@ -13,14 +13,14 @@ import java.util.Objects;
 public interface MessageBodyCreator {
 
   default String createMessageBody(SendMessageParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     GsonBuilder gsonBuilder = new GsonBuilder();
     gsonBuilder.registerTypeAdapter(Message.class, new MessageTypeAdapter());
     return gsonBuilder.create().toJson(this.createSendMessageRequest(parameters));
   }
 
   default SendMessageRequest createSendMessageRequest(SendMessageParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     SendMessageRequest sendMessageRequest = new SendMessageRequest();
     sendMessageRequest.setSensorAlternateId(
         Objects.requireNonNull(parameters.getOnboardingResponse()).getSensorAlternateId());

@@ -30,7 +30,7 @@ public class MessageConfirmationServiceImpl extends MqttService
 
   @Override
   public String send(MessageConfirmationParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     try {
       EncodedMessage encodedMessage = this.encode(parameters);
       SendMessageParameters sendMessageParameters = new SendMessageParameters();

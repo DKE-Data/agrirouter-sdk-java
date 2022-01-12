@@ -26,7 +26,7 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
 
   @Override
   public String send(SetCapabilitiesParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
@@ -39,7 +39,7 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
 
   @Override
   public HttpAsyncMessageSendingResult sendAsync(SetCapabilitiesParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());

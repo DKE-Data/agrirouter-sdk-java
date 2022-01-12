@@ -21,6 +21,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.Objects;
 import java.util.Optional;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -40,14 +41,14 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
   @Override
   public OnboardingResponse onboard(SecuredOnboardingParameters securedOnboardingParameters) {
-    securedOnboardingParameters.trimAndValidate();
+    securedOnboardingParameters.validate();
     return this.onboard(
         securedOnboardingParameters, this.createOnboardingRequestBody(securedOnboardingParameters));
   }
 
   @Override
   public void verify(SecuredOnboardingParameters securedOnboardingParameters) {
-    securedOnboardingParameters.trimAndValidate();
+    securedOnboardingParameters.validate();
     this.verify(
         securedOnboardingParameters, this.createOnboardingRequestBody(securedOnboardingParameters));
   }
@@ -63,7 +64,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
         parameters.getApplicationId(),
         parameters.getCertificationVersionId(),
         parameters.getGatewayId(),
-        parameters.getCertificationType());
+        Objects.requireNonNull(parameters.getCertificationType()));
   }
 
   private OnboardingResponse onboard(

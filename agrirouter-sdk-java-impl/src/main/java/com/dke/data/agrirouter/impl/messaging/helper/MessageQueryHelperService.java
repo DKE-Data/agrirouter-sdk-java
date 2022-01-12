@@ -32,7 +32,7 @@ public class MessageQueryHelperService extends NonEnvironmentalService
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Validate parameters.");
-    parameters.trimAndValidate();
+    parameters.validate();
 
     this.getNativeLogger().trace("Encode message.");
     EncodedMessage encodedMessageResponse = this.encode(this.technicalMessageType, parameters);
@@ -57,7 +57,7 @@ public class MessageQueryHelperService extends NonEnvironmentalService
     this.logMethodBegin(parameters);
 
     this.getNativeLogger().trace("Validate parameters.");
-    parameters.trimAndValidate();
+    parameters.validate();
 
     this.getNativeLogger().trace("Encode message.");
     EncodedMessage encodedMessageResponse = this.encode(this.technicalMessageType, parameters);

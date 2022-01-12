@@ -27,7 +27,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
 
   @Override
   public String send(MessageConfirmationParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
@@ -40,7 +40,7 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
 
   @Override
   public HttpAsyncMessageSendingResult sendAsync(MessageConfirmationParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     EncodedMessage encodedMessage = this.encode(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());

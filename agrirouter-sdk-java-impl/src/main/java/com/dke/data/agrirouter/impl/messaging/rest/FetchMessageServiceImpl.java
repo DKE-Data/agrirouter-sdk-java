@@ -25,7 +25,7 @@ public class FetchMessageServiceImpl implements FetchMessageService, MessageFetc
   @Override
   public Optional<List<FetchMessageResponse>> fetch(
       FetchMessageParameters fetchMessageParameters, int maxTries, long interval) {
-    fetchMessageParameters.trimAndValidate();
+    fetchMessageParameters.validate();
     Optional<String> response =
         poll(fetchMessageParameters, new DefaultCancellationToken(maxTries, interval));
     return response.map(this::parseJson);
@@ -42,7 +42,7 @@ public class FetchMessageServiceImpl implements FetchMessageService, MessageFetc
   @Override
   public Optional<List<FetchMessageResponse>> fetch(
       FetchMessageParameters fetchMessageParameters, CancellationToken cancellationToken) {
-    fetchMessageParameters.trimAndValidate();
+    fetchMessageParameters.validate();
     Optional<String> response = poll(fetchMessageParameters, cancellationToken);
     return response.map(this::parseJson);
   }

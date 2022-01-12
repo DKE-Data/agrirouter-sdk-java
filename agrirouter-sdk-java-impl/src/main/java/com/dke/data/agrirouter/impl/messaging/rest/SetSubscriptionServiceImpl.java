@@ -26,7 +26,7 @@ public class SetSubscriptionServiceImpl extends EnvironmentalService
 
   @Override
   public String send(SetSubscriptionParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     EncodedMessage encodedMessage = this.encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
@@ -39,7 +39,7 @@ public class SetSubscriptionServiceImpl extends EnvironmentalService
 
   @Override
   public HttpAsyncMessageSendingResult sendAsync(SetSubscriptionParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     EncodedMessage encodedMessage = this.encodeMessage(parameters);
     SendMessageParameters sendMessageParameters = new SendMessageParameters();
     sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());

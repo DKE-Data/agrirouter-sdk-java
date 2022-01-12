@@ -29,7 +29,7 @@ public class DeleteMessageServiceImpl extends MqttService
 
   @Override
   public String send(DeleteMessageParameters parameters) {
-    parameters.trimAndValidate();
+    parameters.validate();
     try {
       EncodedMessage encodedMessage = this.encode(parameters);
       SendMessageParameters sendMessageParameters = new SendMessageParameters();

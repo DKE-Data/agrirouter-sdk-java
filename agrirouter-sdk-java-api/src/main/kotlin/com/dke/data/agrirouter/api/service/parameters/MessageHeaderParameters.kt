@@ -38,7 +38,7 @@ class MessageHeaderParameters : ParameterValidation {
      * Copy the content of the message header parameters into this class.
      */
     fun copy(messageHeaderParameters: MessageHeaderParameters) {
-        messageHeaderParameters.trimAndValidate()
+        messageHeaderParameters.validate()
         applicationMessageId = messageHeaderParameters.applicationMessageId
         applicationMessageSeqNo = messageHeaderParameters.applicationMessageSeqNo
         technicalMessageType = messageHeaderParameters.technicalMessageType

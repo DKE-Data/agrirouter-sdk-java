@@ -13,7 +13,7 @@ public interface ParameterValidation extends HasLogger {
    *
    * @throws IllegalParameterDefinitionException -
    */
-  default void trimAndValidate() {
+  default void validate() {
     getNativeLogger().debug("Validating parameters.");
     getNativeLogger().trace("Technical validation.");
     this.technicalValidation();
