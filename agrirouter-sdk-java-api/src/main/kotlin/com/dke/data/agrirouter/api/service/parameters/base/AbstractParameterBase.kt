@@ -8,12 +8,4 @@ abstract class AbstractParameterBase : DynamicAttributesStorage() {
 
     var sequenceNumber: Int = 1
 
-    /**
-     * Trim the parameters to remove whitespaces and avoid problems.
-     */
-    fun trimParameterBase() {
-        applicationMessageId = applicationMessageId?.trim()
-        teamsetContextId = teamsetContextId?.trim()
-    }
-
 }
