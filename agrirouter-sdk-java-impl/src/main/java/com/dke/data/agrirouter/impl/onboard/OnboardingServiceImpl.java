@@ -9,6 +9,7 @@ import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import java.util.Objects;
 import java.util.Optional;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
@@ -48,7 +49,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
             parameters.getApplicationId(),
             parameters.getCertificationVersionId(),
             parameters.getGatewayId(),
-            parameters.getCertificationType());
+            Objects.requireNonNull(parameters.getCertificationType()));
     this.getNativeLogger().info("END | Create onboarding request. | '{}'.", parameters);
     return onboardRequest;
   }

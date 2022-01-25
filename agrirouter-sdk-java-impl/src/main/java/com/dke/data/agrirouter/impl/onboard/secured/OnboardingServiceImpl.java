@@ -21,6 +21,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.Objects;
 import java.util.Optional;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -63,7 +64,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
         parameters.getApplicationId(),
         parameters.getCertificationVersionId(),
         parameters.getGatewayId(),
-        parameters.getCertificationType());
+        Objects.requireNonNull(parameters.getCertificationType()));
   }
 
   private OnboardingResponse onboard(

@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /** Class to onboard endpoints for different reasons. */
+@SuppressWarnings("ALL")
 class TelemetryPlatformFixture extends AbstractIntegrationTest {
 
   /**
@@ -29,7 +30,7 @@ class TelemetryPlatformFixture extends AbstractIntegrationTest {
   void onboardTelemetryPlatformAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("feea39bdcb");
+    onboardingParameters.setRegistrationCode("3e22929d3f");
     onboardingParameters.setApplicationId(telemetryPlatform.getApplicationId());
     onboardingParameters.setCertificationVersionId(telemetryPlatform.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);
@@ -63,7 +64,7 @@ class TelemetryPlatformFixture extends AbstractIntegrationTest {
   void onboardAndDeactivateTelemetryPlatformAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("66eed4c898");
+    onboardingParameters.setRegistrationCode("b8dbca89d8");
     onboardingParameters.setApplicationId(telemetryPlatform.getApplicationId());
     onboardingParameters.setCertificationVersionId(telemetryPlatform.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);
@@ -97,7 +98,7 @@ class TelemetryPlatformFixture extends AbstractIntegrationTest {
   void onboardAndRemoveTelemetryPlatformAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("bf076ee177");
+    onboardingParameters.setRegistrationCode("bea75dff01");
     onboardingParameters.setApplicationId(telemetryPlatform.getApplicationId());
     onboardingParameters.setCertificationVersionId(telemetryPlatform.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);

@@ -1,5 +1,7 @@
 package com.dke.data.agrirouter.api.service;
 
+import static java.lang.String.valueOf;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
-
-import static java.lang.String.valueOf;
 
 /**
  * Interface to encapsulate logging capabilities. Logging will be done using LOG4J2, ruleset should
@@ -43,9 +43,7 @@ public interface HasLogger {
     return loggerCache.get(this.getClass().getName());
   }
 
-  /**
-   * Log method begin. Will log all given parameters as well.
-   */
+  /** Log method begin. Will log all given parameters as well. */
   default void logMethodBegin(Object... objects) {
     getNativeLogger().debug(METHOD_BEGIN, "BEGIN | Start of method.");
     Arrays.stream(objects).forEach(o -> getNativeLogger().trace(valueOf(o)));
