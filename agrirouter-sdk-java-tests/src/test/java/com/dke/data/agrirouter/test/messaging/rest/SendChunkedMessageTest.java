@@ -53,7 +53,12 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
     messageHeaderParameters.setApplicationMessageId(MessageIdService.generateMessageId());
     messageHeaderParameters.setApplicationMessageSeqNo(
         SequenceNumberService.generateSequenceNumberForEndpoint(onboardingResponse));
-    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.PUBLISH);
+    messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+    messageHeaderParameters.setRecipients(
+        Collections.singletonList(
+            OnboardingResponseRepository.read(
+                    OnboardingResponseRepository.Identifier.COMMUNICATION_UNIT)
+                .getSensorAlternateId()));
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setValue(messageContent);

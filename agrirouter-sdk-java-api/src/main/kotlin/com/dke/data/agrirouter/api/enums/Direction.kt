@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.api.enums
 
+@Suppress("unused")
 enum class Direction(val key: Int) {
 
     SEND(0),

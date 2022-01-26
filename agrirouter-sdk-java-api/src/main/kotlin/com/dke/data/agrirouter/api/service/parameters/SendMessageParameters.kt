@@ -14,12 +14,12 @@ open class SendMessageParameters : AbstractParameterBase(), ParameterValidation 
     var encodedMessages: List<String>? = null
 
     override fun technicalValidation() {
-        nullCheck("onboardingResponse",onboardingResponse)
-        nullCheck("encodedMessages",encodedMessages)
+        nullCheck("onboardingResponse", onboardingResponse)
+        nullCheck("encodedMessages", encodedMessages)
     }
 
     override fun businessValidation() {
-        nullOrEmpty("encodedMessages",encodedMessages)
+        nullOrEmpty("encodedMessages", encodedMessages)
     }
 
 }
