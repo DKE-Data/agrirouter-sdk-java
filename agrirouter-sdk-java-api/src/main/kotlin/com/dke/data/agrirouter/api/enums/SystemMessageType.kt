@@ -31,11 +31,7 @@ enum class SystemMessageType(private val key: String, private val typeUrl: Strin
         return typeUrl
     }
 
-    override fun getNeedsChunking(): Boolean {
-        return false
-    }
-
-    override fun getNeedsBase64Encoding(): Boolean {
+    override fun needsBase64EncodingAndHasToBeChunkedIfNecessary(): Boolean {
         return false
     }
 }
