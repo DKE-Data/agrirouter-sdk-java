@@ -30,7 +30,7 @@ enum class ContentMessageType(private val key: String, private val typeUrl: Stri
         return typeUrl
     }
 
-    override fun needsBase64Encoding(): Boolean {
+    override fun needsBase64EncodingAndHasToBeChunkedIfNecessary(): Boolean {
         return needsBase64Encoding
     }
 

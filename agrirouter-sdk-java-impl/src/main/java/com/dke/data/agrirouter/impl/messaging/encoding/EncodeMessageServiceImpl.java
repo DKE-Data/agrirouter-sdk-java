@@ -106,7 +106,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     messageHeaderParameters.validate();
     payloadParameters.validate();
 
-    if (messageHeaderParameters.getTechnicalMessageType().needsBase64Encoding()) {
+    if (messageHeaderParameters.getTechnicalMessageType().needsBase64EncodingAndHasToBeChunkedIfNecessary()) {
       if (payloadParameters.shouldBeChunked()) {
         getNativeLogger()
             .debug(
@@ -171,7 +171,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     } else {
       getNativeLogger()
           .debug(
-              "The message type does not need base 64 encoding, we are returning the tuple 'as it is'.");
+              "The message type does not need chunking and base 64 encoding, we are returning the tuple 'as it is'.");
       return Collections.singletonList(
           new MessageParameterTuple(messageHeaderParameters, payloadParameters));
     }

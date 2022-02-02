@@ -18,6 +18,6 @@ interface TechnicalMessageType {
     /**
      * Indicates whether the technical message type needs base64 encoding or not.
      */
-    fun needsBase64Encoding(): Boolean
+    fun needsBase64EncodingAndHasToBeChunkedIfNecessary(): Boolean
 
 }
