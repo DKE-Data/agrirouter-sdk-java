@@ -34,13 +34,13 @@ This project contains the SDK for the communication with the agrirouter. Everyth
 
 The release workflow follows the https://docs.microsoft.com/en-us/azure/devops/repos/git/git-branching-guidance?view=azure-devops[Microsoft DevOps Release Model] where a release shows up as a branch in the repository.
 
-=== Update from `1.4.2` to `2.0.0`
+=== Update from 1.4.x to 2.x
 
-The update for the new release includes some breaking changes. To have a rough overview what has to be done to have the new features from `2.0.0` in you application, please see the following migration / update guide when updating.
+The update for the new release includes some breaking changes. To have a rough overview what has to be done to have the new features from 2.x in you application, please see the following migration / update guide when updating.
 
 ==== Update the Maven dependencies
 
-The first step is to update the coordinates of the dependencies. With the release `2.0.0` the coordinates changed to a new name and a new version.
+The first step is to update the coordinates of the dependencies. With the release 2.x the coordinates changed to a new name and a new version.
 
 [xml]
 ----
@@ -90,6 +90,11 @@ image::migration_1-4_to_2-0/former-content-message-type-urls.png[Former content 
 With the new release fetch the URLs is way more comfortable.
 
 image::migration_1-4_to_2-0/type-urls-from-technical-message-types.png[Type URLs from content message types.]
+
+==== Have a look at an example
+
+The http://www.agrirouter-middleware[agrirouter middleware] has been updated after the release of version 2.x and can be an indicator regarding the workload for the migration.
+Have a look at the following https://github.com/agrirouter-middleware/agrirouter-middleware/pull/12[PR #12] to see the necessary adaptions.
 
 == Modules
 
