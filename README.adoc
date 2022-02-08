@@ -93,7 +93,7 @@ image::migration_1-4_to_2-0/type-urls-from-technical-message-types.png[Type URLs
 
 ==== Have a look at an example
 
-The http://www.agrirouter-middleware[agrirouter middleware] has been updated after the release of version 2.x and can be an indicator regarding the workload for the migration.
+The http://www.agrirouter-middleware.de[agrirouter middleware] has been updated after the release of version 2.x and can be an indicator regarding the workload for the migration.
 Have a look at the following https://github.com/agrirouter-middleware/agrirouter-middleware/pull/12[PR #12] to see the necessary adaptions.
 
 == Modules
