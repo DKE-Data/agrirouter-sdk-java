@@ -1,12 +1,14 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
+import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.DeleteMessageService;
 import com.dke.data.agrirouter.api.service.parameters.DeleteMessageParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
+import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
@@ -17,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.jetbrains.annotations.NotNull;
 
 public class DeleteMessageServiceImpl extends MqttService
     implements DeleteMessageService, MessageBodyCreator, MessageEncoder {
@@ -58,5 +61,32 @@ public class DeleteMessageServiceImpl extends MqttService
 
   public EncodeMessageService getEncodeMessageService() {
     return encodeMessageService;
+  }
+
+  @Override
+  public String deleteAll(OnboardingResponse onboardingResponse) {
+    final DeleteMessageParameters deleteMessageParameters =
+        createMessageParametersToDeleteAllMessages(onboardingResponse);
+    return send(deleteMessageParameters);
+  }
+
+  @Override
+  public MqttAsyncMessageSendingResult deleteAllAsync(OnboardingResponse onboardingResponse) {
+    final DeleteMessageParameters deleteMessageParameters =
+        createMessageParametersToDeleteAllMessages(onboardingResponse);
+    return sendAsync(deleteMessageParameters);
+  }
+
+  @NotNull
+  private DeleteMessageParameters createMessageParametersToDeleteAllMessages(
+      OnboardingResponse onboardingResponse) {
+    final DeleteMessageParameters deleteMessageParameters = new DeleteMessageParameters();
+    deleteMessageParameters.setOnboardingResponse(onboardingResponse);
+    deleteMessageParameters.setMessageIds(Collections.emptyList());
+    deleteMessageParameters.setSenderIds(Collections.emptyList());
+    deleteMessageParameters.setSentFromInSeconds(
+        UtcTimeService.inThePast(UtcTimeService.FOUR_WEEKS_AGO).toEpochSecond());
+    deleteMessageParameters.setSentToInSeconds(UtcTimeService.now().toEpochSecond());
+    return deleteMessageParameters;
   }
 }

@@ -1,17 +1,20 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
+import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.messaging.MessageSendingResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.DeleteMessageService;
 import com.dke.data.agrirouter.api.service.parameters.DeleteMessageParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
+import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
+import org.jetbrains.annotations.NotNull;
 
 public class DeleteMessageServiceImpl
     implements DeleteMessageService, MessageSender, ResponseValidator, MessageEncoder {
@@ -51,5 +54,32 @@ public class DeleteMessageServiceImpl
   @Override
   public EncodeMessageService getEncodeMessageService() {
     return this.encodeMessageService;
+  }
+
+  @Override
+  public String deleteAll(OnboardingResponse onboardingResponse) {
+    final DeleteMessageParameters deleteMessageParameters =
+        createMessageParametersToDeleteAllMessages(onboardingResponse);
+    return send(deleteMessageParameters);
+  }
+
+  @Override
+  public HttpAsyncMessageSendingResult deleteAllAsync(OnboardingResponse onboardingResponse) {
+    final DeleteMessageParameters deleteMessageParameters =
+        createMessageParametersToDeleteAllMessages(onboardingResponse);
+    return sendAsync(deleteMessageParameters);
+  }
+
+  @NotNull
+  private DeleteMessageParameters createMessageParametersToDeleteAllMessages(
+      OnboardingResponse onboardingResponse) {
+    final DeleteMessageParameters deleteMessageParameters = new DeleteMessageParameters();
+    deleteMessageParameters.setOnboardingResponse(onboardingResponse);
+    deleteMessageParameters.setMessageIds(Collections.emptyList());
+    deleteMessageParameters.setSenderIds(Collections.emptyList());
+    deleteMessageParameters.setSentFromInSeconds(
+        UtcTimeService.inThePast(UtcTimeService.FOUR_WEEKS_AGO).toEpochSecond());
+    deleteMessageParameters.setSentToInSeconds(UtcTimeService.now().toEpochSecond());
+    return deleteMessageParameters;
   }
 }
