@@ -11,7 +11,7 @@ public interface MessageHeaderQueryService
         MessageDecoder<FeedResponse.HeaderQueryResponse> {
 
   /**
-   * Query all messages as default function. The query will be based on a time period since message
+   * Query all message headers as default function. The query will be based on a time period since message
    * ID filtering or sender filtering can be achieved using the default message sending.
    *
    * @param onboardingResponse The onboard response for the endpoint.
@@ -20,7 +20,7 @@ public interface MessageHeaderQueryService
   String queryAll(OnboardingResponse onboardingResponse);
 
   /**
-   * Query all messages as async default function. The query will be based on a time period since
+   * Query all message headers as async default function. The query will be based on a time period since
    * message ID filtering or sender filtering can be achieved using the default message sending.
    *
    * @param onboardingResponse The onboard response for the endpoint.
