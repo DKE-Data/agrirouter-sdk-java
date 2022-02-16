@@ -8,7 +8,7 @@ public interface DeleteMessageService extends MessagingService<DeleteMessagePara
 
   /**
    * Delete all messages in the feed. The function will delete all messages based on the time
-   * intervall of 4 weeks (which is the maximum of time the messages are stored within the
+   * interval of 4 weeks (which is the maximum of time the messages are stored within the
    * agrirouter).
    *
    * @param onboardingResponse The onboard response for the endpoint.
@@ -18,7 +18,7 @@ public interface DeleteMessageService extends MessagingService<DeleteMessagePara
 
   /**
    * Delete all messages in the feed. The function will delete all messages based on the time
-   * intervall of 4 weeks (which is the maximum of time the messages are stored within the
+   * interval of 4 weeks (which is the maximum of time the messages are stored within the
    * agrirouter).
    *
    * @param onboardingResponse The onboard response for the endpoint.
