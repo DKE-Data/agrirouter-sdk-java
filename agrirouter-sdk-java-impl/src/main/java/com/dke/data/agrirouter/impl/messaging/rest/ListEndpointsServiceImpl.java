@@ -95,7 +95,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
     listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
     listEndpointsParameters.setOnboardingResponse(onboardingResponse);
-    listEndpointsParameters.setUnfilteredList(true);
+    listEndpointsParameters.setUnfilteredList(false);
     return sendAsync(listEndpointsParameters);
   }
 }
