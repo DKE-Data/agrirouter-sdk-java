@@ -8,13 +8,10 @@ import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.http.MessageHeaderQueryService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
-import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.helper.MessageQueryHelperService;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.util.Collections;
-import org.jetbrains.annotations.NotNull;
 
 public class MessageHeaderQueryServiceImpl extends EnvironmentalService
     implements MessageHeaderQueryService, MessageSender {
@@ -47,27 +44,14 @@ public class MessageHeaderQueryServiceImpl extends EnvironmentalService
   @Override
   public String queryAll(OnboardingResponse onboardingResponse) {
     MessageQueryParameters messageQueryParameters =
-        createMessageParametersToQueryAllMessages(onboardingResponse);
+        messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
     return send(messageQueryParameters);
   }
 
   @Override
   public HttpAsyncMessageSendingResult queryAllAsync(OnboardingResponse onboardingResponse) {
     MessageQueryParameters messageQueryParameters =
-        createMessageParametersToQueryAllMessages(onboardingResponse);
+        messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
     return sendAsync(messageQueryParameters);
-  }
-
-  @NotNull
-  private MessageQueryParameters createMessageParametersToQueryAllMessages(
-      OnboardingResponse onboardingResponse) {
-    MessageQueryParameters messageQueryParameters = new MessageQueryParameters();
-    messageQueryParameters.setOnboardingResponse(onboardingResponse);
-    messageQueryParameters.setMessageIds(Collections.emptyList());
-    messageQueryParameters.setSenderIds(Collections.emptyList());
-    messageQueryParameters.setSentFromInSeconds(
-        UtcTimeService.inThePast(UtcTimeService.FOUR_WEEKS_AGO).toEpochSecond());
-    messageQueryParameters.setSentToInSeconds(UtcTimeService.now().toEpochSecond());
-    return messageQueryParameters;
   }
 }
