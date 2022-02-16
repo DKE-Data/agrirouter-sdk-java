@@ -11,13 +11,14 @@ import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
+import com.dke.data.agrirouter.impl.messaging.helper.DeleteAllMessagesParameterCreator;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 
 public class DeleteMessageServiceImpl
-    implements DeleteMessageService, MessageSender, ResponseValidator, MessageEncoder {
+    implements DeleteMessageService, MessageSender, ResponseValidator, MessageEncoder, DeleteAllMessagesParameterCreator {
 
   private final EncodeMessageService encodeMessageService;
 
@@ -70,16 +71,4 @@ public class DeleteMessageServiceImpl
     return sendAsync(deleteMessageParameters);
   }
 
-  @NotNull
-  private DeleteMessageParameters createMessageParametersToDeleteAllMessages(
-      OnboardingResponse onboardingResponse) {
-    final DeleteMessageParameters deleteMessageParameters = new DeleteMessageParameters();
-    deleteMessageParameters.setOnboardingResponse(onboardingResponse);
-    deleteMessageParameters.setMessageIds(Collections.emptyList());
-    deleteMessageParameters.setSenderIds(Collections.emptyList());
-    deleteMessageParameters.setSentFromInSeconds(
-        UtcTimeService.inThePast(UtcTimeService.FOUR_WEEKS_AGO).toEpochSecond());
-    deleteMessageParameters.setSentToInSeconds(UtcTimeService.now().toEpochSecond());
-    return deleteMessageParameters;
-  }
 }

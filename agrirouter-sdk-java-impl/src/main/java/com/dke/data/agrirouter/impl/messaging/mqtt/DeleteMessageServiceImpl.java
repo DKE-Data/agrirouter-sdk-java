@@ -16,13 +16,15 @@ import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+
+import com.dke.data.agrirouter.impl.messaging.helper.DeleteAllMessagesParameterCreator;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.jetbrains.annotations.NotNull;
 
 public class DeleteMessageServiceImpl extends MqttService
-    implements DeleteMessageService, MessageBodyCreator, MessageEncoder {
+    implements DeleteMessageService, MessageBodyCreator, MessageEncoder, DeleteAllMessagesParameterCreator {
 
   private final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
@@ -77,16 +79,4 @@ public class DeleteMessageServiceImpl extends MqttService
     return sendAsync(deleteMessageParameters);
   }
 
-  @NotNull
-  private DeleteMessageParameters createMessageParametersToDeleteAllMessages(
-      OnboardingResponse onboardingResponse) {
-    final DeleteMessageParameters deleteMessageParameters = new DeleteMessageParameters();
-    deleteMessageParameters.setOnboardingResponse(onboardingResponse);
-    deleteMessageParameters.setMessageIds(Collections.emptyList());
-    deleteMessageParameters.setSenderIds(Collections.emptyList());
-    deleteMessageParameters.setSentFromInSeconds(
-        UtcTimeService.inThePast(UtcTimeService.FOUR_WEEKS_AGO).toEpochSecond());
-    deleteMessageParameters.setSentToInSeconds(UtcTimeService.now().toEpochSecond());
-    return deleteMessageParameters;
-  }
 }
