@@ -8,17 +8,19 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageServi
 import com.dke.data.agrirouter.api.service.messaging.http.DeleteMessageService;
 import com.dke.data.agrirouter.api.service.parameters.DeleteMessageParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
-import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.helper.DeleteAllMessagesParameterCreator;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
-import org.jetbrains.annotations.NotNull;
 
 public class DeleteMessageServiceImpl
-    implements DeleteMessageService, MessageSender, ResponseValidator, MessageEncoder, DeleteAllMessagesParameterCreator {
+    implements DeleteMessageService,
+        MessageSender,
+        ResponseValidator,
+        MessageEncoder,
+        DeleteAllMessagesParameterCreator {
 
   private final EncodeMessageService encodeMessageService;
 
@@ -70,5 +72,4 @@ public class DeleteMessageServiceImpl
         createMessageParametersToDeleteAllMessages(onboardingResponse);
     return sendAsync(deleteMessageParameters);
   }
-
 }
