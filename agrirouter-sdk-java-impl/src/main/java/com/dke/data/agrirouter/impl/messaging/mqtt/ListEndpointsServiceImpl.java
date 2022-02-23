@@ -7,6 +7,7 @@ import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
+import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.ListEndpointsService;
 import com.dke.data.agrirouter.api.service.parameters.ListEndpointsParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
@@ -14,6 +15,8 @@ import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -22,7 +25,10 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class ListEndpointsServiceImpl extends MqttService
-    implements ListEndpointsService, MessageBodyCreator, MessageEncoder {
+    implements ListEndpointsService,
+        MessageBodyCreator,
+        MessageEncoder,
+        MessageDecoder<agrirouter.response.payload.account.Endpoints.ListEndpointsResponse> {
 
   private final EncodeMessageService encodeMessageService;
 
@@ -104,5 +110,11 @@ public class ListEndpointsServiceImpl extends MqttService
     listEndpointsParameters.setOnboardingResponse(onboardingResponse);
     listEndpointsParameters.setUnfilteredList(true);
     return sendAsync(listEndpointsParameters);
+  }
+
+  @Override
+  public agrirouter.response.payload.account.Endpoints.ListEndpointsResponse unsafeDecode(
+      ByteString message) throws InvalidProtocolBufferException {
+    return agrirouter.response.payload.account.Endpoints.ListEndpointsResponse.parseFrom(message);
   }
 }

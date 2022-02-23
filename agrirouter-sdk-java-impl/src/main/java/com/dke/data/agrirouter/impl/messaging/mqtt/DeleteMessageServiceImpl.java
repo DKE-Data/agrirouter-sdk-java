@@ -8,23 +8,23 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageServi
 import com.dke.data.agrirouter.api.service.messaging.mqtt.DeleteMessageService;
 import com.dke.data.agrirouter.api.service.parameters.DeleteMessageParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
-import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
+import com.dke.data.agrirouter.impl.messaging.helper.DeleteAllMessagesParameterCreator;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-
-import com.dke.data.agrirouter.impl.messaging.helper.DeleteAllMessagesParameterCreator;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.jetbrains.annotations.NotNull;
 
 public class DeleteMessageServiceImpl extends MqttService
-    implements DeleteMessageService, MessageBodyCreator, MessageEncoder, DeleteAllMessagesParameterCreator {
+    implements DeleteMessageService,
+        MessageBodyCreator,
+        MessageEncoder,
+        DeleteAllMessagesParameterCreator {
 
   private final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
@@ -78,5 +78,4 @@ public class DeleteMessageServiceImpl extends MqttService
         createMessageParametersToDeleteAllMessages(onboardingResponse);
     return sendAsync(deleteMessageParameters);
   }
-
 }
