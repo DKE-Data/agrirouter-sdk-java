@@ -52,7 +52,10 @@ public interface ParameterValidation extends HasLogger {
   default void nullCheck(String parameterName, Object o) {
     if (null == o) {
       this.rise(
-          "The parameter '%s' should not have been null, please check your values.", parameterName);
+          String.format(
+              "The parameter '%s' should not have been null, please check your values.",
+              parameterName),
+          parameterName);
     }
   }
 
@@ -64,7 +67,9 @@ public interface ParameterValidation extends HasLogger {
   default void isBlank(String parameterName, String s) {
     if (StringUtils.isBlank(s)) {
       this.rise(
-          "The parameter '%s' should not have been blank, please check your values.",
+          String.format(
+              "The parameter '%s' should not have been blank, please check your values.",
+              parameterName),
           parameterName);
     }
   }
@@ -78,7 +83,9 @@ public interface ParameterValidation extends HasLogger {
     nullCheck(parameterName, c);
     if (c.isEmpty()) {
       this.rise(
-          "The parameter '%s' should not have been empty, please check your values.",
+          String.format(
+              "The parameter '%s' should not have been empty, please check your values.",
+              parameterName),
           parameterName);
     }
   }
