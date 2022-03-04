@@ -16,6 +16,11 @@ public class ContentReader {
     return new String(Base64.getEncoder().encode(rawData));
   }
 
+  public static byte[] readRawData(Identifier identifier) throws Throwable {
+    Path path = Paths.get(FOLDER.concat(identifier.getFileName()));
+    return Files.readAllBytes(path);
+  }
+
   public enum Identifier {
     BIG_TASK_DATA("big_taskdata.zip"),
     SMALL_TASK_DATA("small_taskdata.zip");
