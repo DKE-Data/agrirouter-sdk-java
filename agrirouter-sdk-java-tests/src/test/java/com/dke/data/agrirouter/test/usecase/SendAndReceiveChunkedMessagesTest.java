@@ -194,7 +194,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
 
     // [2] Chunk the message content using the SDK specific methods ('chunkAndEncode').
     List<MessageParameterTuple> tuples =
-        encodeMessageService.chunkAndEncode(
+        encodeMessageService.chunkAndBase64EncodeEachChunk(
             messageHeaderParameters, payloadParameters, onboardingResponse);
 
     tuples.forEach(

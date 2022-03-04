@@ -92,7 +92,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
    * @param payloadParameters Content of the message. It shall not be Base64 encoded before.
    * @return -
    */
-  public List<MessageParameterTuple> chunkAndEncode(
+  public List<MessageParameterTuple> chunkAndBase64EncodeEachChunk(
       MessageHeaderParameters messageHeaderParameters,
       PayloadParameters payloadParameters,
       OnboardingResponse onboardingResponse) {

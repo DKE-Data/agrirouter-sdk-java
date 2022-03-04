@@ -35,7 +35,7 @@ public interface EncodeMessageService {
    * @param payloadParameters -
    * @return -
    */
-  List<MessageParameterTuple> chunkAndEncode(
+  List<MessageParameterTuple> chunkAndBase64EncodeEachChunk(
       MessageHeaderParameters messageHeaderParameters,
       PayloadParameters payloadParameters,
       OnboardingResponse onboardingResponse);
