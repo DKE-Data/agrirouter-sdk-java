@@ -1,9 +1,13 @@
 package com.dke.data.agrirouter.api.env;
 
 import com.dke.data.agrirouter.api.enums.SecuredOnboardingResponseType;
+import org.apache.commons.lang3.BooleanUtils;
 
 /** Common Environment, holds some default methods pointing to the QA. */
 public interface Environment {
+
+  /** System property to enable logging for HTTP requests. */
+  String ENABLE_HTTP_REQUEST_LOGGING = "agrirouter.sdk.enable.http.request.logging";
 
   /** Template for MQTT connections. */
   String MQTT_URL_TEMPLATE = "ssl://%s:%s";
@@ -11,6 +15,16 @@ public interface Environment {
   /** Link template for the secured onboarding process. */
   String SECURED_ONBOARDING_AUTHORIZATION_LINK_TEMPLATE =
       "/application/%s/authorize?response_type=%s&state=%s&redirect_uri=%s";
+
+  /**
+   * Checks whether the HTTP request logging is enabled or not.
+   *
+   * @return -
+   */
+  static boolean httpRequestLoggingEnabled() {
+    final String httpRequestLoggingEnabled = System.getProperty(ENABLE_HTTP_REQUEST_LOGGING);
+    return BooleanUtils.toBoolean(httpRequestLoggingEnabled);
+  }
 
   /**
    * Returning the AR base URL without trailing '/'.

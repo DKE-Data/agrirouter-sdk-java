@@ -20,28 +20,22 @@ import com.dke.data.agrirouter.impl.messaging.rest.SendMessageServiceImpl;
 import com.dke.data.agrirouter.test.AbstractIntegrationTest;
 import com.dke.data.agrirouter.test.Assertions;
 import com.dke.data.agrirouter.test.OnboardingResponseRepository;
+import com.dke.data.agrirouter.test.helper.ContentReader;
 import com.google.protobuf.ByteString;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 
 /** Test case to show the behavior for chunked message sending. */
 class SendChunkedMessageTest extends AbstractIntegrationTest {
 
   private static final int MAX_CHUNK_SIZE = 1024000;
 
-  @ParameterizedTest
-  @MethodSource("fakeRawMessageContentThatHasToBeChunked")
+  @Test
   void
-      givenLargeContentMessageWhenSendingTheMessageToTheAgrirouterTheSdkShouldHelpToSendTheFileInMultipleChunks(
-          ByteString messageContent, int expectedNrOfChunks)
-          throws IOException, InterruptedException {
+      givenLargeContentMessageWhenSendingTheMessageToTheAgrirouterTheSdkShouldHelpToSendTheFileInMultipleChunks()
+          throws Throwable {
 
     final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
     final SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
@@ -55,17 +49,15 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
         SequenceNumberService.generateSequenceNumberForEndpoint(onboardingResponse));
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
     messageHeaderParameters.setRecipients(
-        Collections.singletonList(
-            OnboardingResponseRepository.read(
-                    OnboardingResponseRepository.Identifier.COMMUNICATION_UNIT)
-                .getSensorAlternateId()));
+        Collections.singletonList("37cd61d1-76eb-4145-a735-c938d05a32d8"));
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setValue(messageContent);
+    payloadParameters.setValue(
+        ByteString.copyFrom(ContentReader.readRawData(ContentReader.Identifier.BIG_TASK_DATA)));
     payloadParameters.setTypeUrl(SystemMessageType.EMPTY.getKey());
 
     List<MessageParameterTuple> tuples =
-        encodeMessageService.chunkAndEncode(
+        encodeMessageService.chunkAndBase64EncodeEachChunk(
             messageHeaderParameters, payloadParameters, onboardingResponse);
 
     tuples.forEach(
@@ -92,7 +84,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
             new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
 
     Assertions.assertTrue(fetchMessageResponses.isPresent());
-    Assertions.assertEquals(expectedNrOfChunks, fetchMessageResponses.get().size());
+    Assertions.assertEquals(3, fetchMessageResponses.get().size());
 
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     AtomicReference<DecodeMessageResponse> decodeMessageResponse = new AtomicReference<>();
@@ -107,29 +99,5 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
                   Arrays.asList(HttpStatus.SC_OK, HttpStatus.SC_CREATED, HttpStatus.SC_NO_CONTENT),
                   decodeMessageResponse.get().getResponseEnvelope().getResponseCode());
             });
-  }
-
-  /**
-   * Delivers fake message content for multiple test cases.
-   *
-   * @return -
-   */
-  private static Stream<Arguments> fakeRawMessageContentThatHasToBeChunked() {
-    return Stream.of(
-        Arguments.of(
-            ByteString.copyFromUtf8(
-                RandomStringUtils.randomAlphabetic(
-                    PayloadParametersKt.MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT * 3)),
-            3),
-        Arguments.of(
-            ByteString.copyFromUtf8(
-                RandomStringUtils.randomAlphabetic(
-                    PayloadParametersKt.MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT * 2)),
-            2),
-        Arguments.of(
-            ByteString.copyFromUtf8(
-                RandomStringUtils.randomAlphabetic(
-                    PayloadParametersKt.MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT)),
-            1));
   }
 }
