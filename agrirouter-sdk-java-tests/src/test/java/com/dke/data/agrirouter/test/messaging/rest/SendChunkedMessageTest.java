@@ -22,16 +22,10 @@ import com.dke.data.agrirouter.test.Assertions;
 import com.dke.data.agrirouter.test.OnboardingResponseRepository;
 import com.dke.data.agrirouter.test.helper.ContentReader;
 import com.google.protobuf.ByteString;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 /** Test case to show the behavior for chunked message sending. */
 class SendChunkedMessageTest extends AbstractIntegrationTest {
@@ -54,10 +48,12 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
     messageHeaderParameters.setApplicationMessageSeqNo(
         SequenceNumberService.generateSequenceNumberForEndpoint(onboardingResponse));
     messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
-    messageHeaderParameters.setRecipients(Collections.singletonList("37cd61d1-76eb-4145-a735-c938d05a32d8"));
+    messageHeaderParameters.setRecipients(
+        Collections.singletonList("37cd61d1-76eb-4145-a735-c938d05a32d8"));
 
     PayloadParameters payloadParameters = new PayloadParameters();
-    payloadParameters.setValue(ByteString.copyFrom(ContentReader.readRawData(ContentReader.Identifier.BIG_TASK_DATA)));
+    payloadParameters.setValue(
+        ByteString.copyFrom(ContentReader.readRawData(ContentReader.Identifier.BIG_TASK_DATA)));
     payloadParameters.setTypeUrl(SystemMessageType.EMPTY.getKey());
 
     List<MessageParameterTuple> tuples =
@@ -104,5 +100,4 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
                   decodeMessageResponse.get().getResponseEnvelope().getResponseCode());
             });
   }
-
 }
