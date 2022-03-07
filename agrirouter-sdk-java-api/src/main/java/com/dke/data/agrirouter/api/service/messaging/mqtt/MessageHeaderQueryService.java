@@ -17,7 +17,7 @@ public interface MessageHeaderQueryService
    * @param onboardingResponse The onboard response for the endpoint.
    * @return The message ID.
    */
-  String queryAll(OnboardingResponse onboardingResponse);
+  String sendMessageToQueryAll(OnboardingResponse onboardingResponse);
 
   /**
    * Query all message headers as async default function. The query will be based on a time period
@@ -27,5 +27,5 @@ public interface MessageHeaderQueryService
    * @param onboardingResponse The onboard response for the endpoint.
    * @return The message ID.
    */
-  MqttAsyncMessageSendingResult queryAllAsync(OnboardingResponse onboardingResponse);
+  MqttAsyncMessageSendingResult sendMessageToQueryAllAsync(OnboardingResponse onboardingResponse);
 }

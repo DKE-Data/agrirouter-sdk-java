@@ -72,7 +72,7 @@ public class ListEndpointsServiceImpl extends MqttService
   }
 
   @Override
-  public String listAllWithExistingRoute(OnboardingResponse onboardingResponse) {
+  public String sendMessageToListAllWithExistingRoute(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
     listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
@@ -82,7 +82,7 @@ public class ListEndpointsServiceImpl extends MqttService
   }
 
   @Override
-  public String listAll(OnboardingResponse onboardingResponse) {
+  public String sendMessageToListAll(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
     listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
@@ -92,7 +92,7 @@ public class ListEndpointsServiceImpl extends MqttService
   }
 
   @Override
-  public MqttAsyncMessageSendingResult listAllWithExistingRouteAsync(
+  public MqttAsyncMessageSendingResult sendMessageToListAllWithExistingRouteAsync(
       OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
@@ -103,7 +103,7 @@ public class ListEndpointsServiceImpl extends MqttService
   }
 
   @Override
-  public MqttAsyncMessageSendingResult listAllAsync(OnboardingResponse onboardingResponse) {
+  public MqttAsyncMessageSendingResult sendMessageToListAllAsync(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
     listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);

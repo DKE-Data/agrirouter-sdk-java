@@ -12,7 +12,7 @@ public interface ListEndpointsService extends MessagingService<ListEndpointsPara
    * @param onboardingResponse The onboard response for the endpoint.
    * @return The message ID.
    */
-  String listAllWithExistingRoute(OnboardingResponse onboardingResponse);
+  String sendMessageToListAllWithExistingRoute(OnboardingResponse onboardingResponse);
 
   /**
    * List all endpoints for the account, even those that do not have a route.
@@ -20,7 +20,7 @@ public interface ListEndpointsService extends MessagingService<ListEndpointsPara
    * @param onboardingResponse The onboard response for the endpoint.
    * @return The message ID.
    */
-  String listAll(OnboardingResponse onboardingResponse);
+  String sendMessageToListAll(OnboardingResponse onboardingResponse);
 
   /**
    * List all endpoints with a route to the dedicated endpoint.
@@ -28,7 +28,7 @@ public interface ListEndpointsService extends MessagingService<ListEndpointsPara
    * @param onboardingResponse The onboard response for the endpoint.
    * @return The message ID.
    */
-  HttpAsyncMessageSendingResult listAllWithExistingRouteAsync(
+  HttpAsyncMessageSendingResult sendMessageToListAllWithExistingRouteAsync(
       OnboardingResponse onboardingResponse);
 
   /**
@@ -37,5 +37,5 @@ public interface ListEndpointsService extends MessagingService<ListEndpointsPara
    * @param onboardingResponse The onboard response for the endpoint.
    * @return The message ID.
    */
-  HttpAsyncMessageSendingResult listAllAsync(OnboardingResponse onboardingResponse);
+  HttpAsyncMessageSendingResult sendMessageToListAllAsync(OnboardingResponse onboardingResponse);
 }
