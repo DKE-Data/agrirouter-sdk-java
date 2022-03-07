@@ -67,7 +67,8 @@ public class DeleteMessageServiceImpl
   }
 
   @Override
-  public HttpAsyncMessageSendingResult sendMessageToDeleteAllAsync(OnboardingResponse onboardingResponse) {
+  public HttpAsyncMessageSendingResult sendMessageToDeleteAllAsync(
+      OnboardingResponse onboardingResponse) {
     final DeleteMessageParameters deleteMessageParameters =
         createMessageParametersToDeleteAllMessages(onboardingResponse);
     return sendAsync(deleteMessageParameters);

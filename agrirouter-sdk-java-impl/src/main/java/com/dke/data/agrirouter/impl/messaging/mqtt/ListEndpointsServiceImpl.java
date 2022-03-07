@@ -103,7 +103,8 @@ public class ListEndpointsServiceImpl extends MqttService
   }
 
   @Override
-  public MqttAsyncMessageSendingResult sendMessageToListAllAsync(OnboardingResponse onboardingResponse) {
+  public MqttAsyncMessageSendingResult sendMessageToListAllAsync(
+      OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
     listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);

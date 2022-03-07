@@ -73,7 +73,8 @@ public class DeleteMessageServiceImpl extends MqttService
   }
 
   @Override
-  public MqttAsyncMessageSendingResult sendMessageToDeleteAllAsync(OnboardingResponse onboardingResponse) {
+  public MqttAsyncMessageSendingResult sendMessageToDeleteAllAsync(
+      OnboardingResponse onboardingResponse) {
     final DeleteMessageParameters deleteMessageParameters =
         createMessageParametersToDeleteAllMessages(onboardingResponse);
     return sendAsync(deleteMessageParameters);

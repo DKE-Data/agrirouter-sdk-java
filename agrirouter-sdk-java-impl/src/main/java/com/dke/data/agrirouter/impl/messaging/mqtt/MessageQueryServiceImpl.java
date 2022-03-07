@@ -55,7 +55,8 @@ public class MessageQueryServiceImpl extends MqttService
   }
 
   @Override
-  public MqttAsyncMessageSendingResult sendMessageToQueryAllAsync(OnboardingResponse onboardingResponse) {
+  public MqttAsyncMessageSendingResult sendMessageToQueryAllAsync(
+      OnboardingResponse onboardingResponse) {
     MessageQueryParameters messageQueryParameters =
         messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
     return sendAsync(messageQueryParameters);

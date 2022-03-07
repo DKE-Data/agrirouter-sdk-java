@@ -86,7 +86,7 @@ public class AuthorizationRequestServiceImpl extends EnvironmentalService
             });
     AuthorizationResponse authorizationResponse = new AuthorizationResponse();
     if (authorizationResults.containsKey(SIGNATURE_KEY)) {
-        authorizationResponse.setSignature(authorizationResults.get(SIGNATURE_KEY));
+      authorizationResponse.setSignature(authorizationResults.get(SIGNATURE_KEY));
     }
     authorizationResponse.setState(authorizationResults.get(STATE_KEY));
     authorizationResponse.setToken(authorizationResults.get(TOKEN_KEY));

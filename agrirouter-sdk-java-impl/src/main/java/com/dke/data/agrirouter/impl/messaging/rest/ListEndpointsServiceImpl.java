@@ -97,7 +97,8 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public HttpAsyncMessageSendingResult sendMessageToListAllAsync(OnboardingResponse onboardingResponse) {
+  public HttpAsyncMessageSendingResult sendMessageToListAllAsync(
+      OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
     listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
