@@ -21,16 +21,18 @@ public class DefaultCancellationToken implements CancellationToken {
   }
 
   @Override
-  public void step() {
+  public void nextStep() {
     nrOfTries++;
   }
 
   @Override
-  public void waitBeforeStartingNextStep() {
-    try {
-      Thread.sleep(timeToWait);
-    } catch (InterruptedException nop) {
-      wasInterrupted = true;
+  public void waitIfNotCancelled() {
+    if (isNotCancelled()) {
+      try {
+        Thread.sleep(timeToWait);
+      } catch (InterruptedException nop) {
+        wasInterrupted = true;
+      }
     }
   }
 }

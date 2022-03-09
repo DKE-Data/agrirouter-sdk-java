@@ -14,8 +14,8 @@ public interface CancellationToken {
    * Will be called if one step during the whole polling mechanism is done and the next iteration
    * will start afterwards.
    */
-  void step();
+  void nextStep();
 
   /** Will wait a dedicated amount of time before starting the next step. */
-  void waitBeforeStartingNextStep();
+  void waitIfNotCancelled();
 }
