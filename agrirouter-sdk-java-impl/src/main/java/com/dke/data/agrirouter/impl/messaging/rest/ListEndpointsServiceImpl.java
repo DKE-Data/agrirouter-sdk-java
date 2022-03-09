@@ -66,7 +66,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public String listAllWithExistingRoute(OnboardingResponse onboardingResponse) {
+  public String sendMessageToListAllWithExistingRoute(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
     listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
@@ -76,7 +76,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public String listAll(OnboardingResponse onboardingResponse) {
+  public String sendMessageToListAll(OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
     listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
@@ -86,7 +86,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public HttpAsyncMessageSendingResult listAllWithExistingRouteAsync(
+  public HttpAsyncMessageSendingResult sendMessageToListAllWithExistingRouteAsync(
       OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
@@ -97,7 +97,8 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
   }
 
   @Override
-  public HttpAsyncMessageSendingResult listAllAsync(OnboardingResponse onboardingResponse) {
+  public HttpAsyncMessageSendingResult sendMessageToListAllAsync(
+      OnboardingResponse onboardingResponse) {
     ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
     listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
     listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);

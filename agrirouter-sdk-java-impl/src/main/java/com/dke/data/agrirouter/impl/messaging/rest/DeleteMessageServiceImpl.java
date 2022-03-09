@@ -60,14 +60,15 @@ public class DeleteMessageServiceImpl
   }
 
   @Override
-  public String deleteAll(OnboardingResponse onboardingResponse) {
+  public String sendMessageToDeleteAll(OnboardingResponse onboardingResponse) {
     final DeleteMessageParameters deleteMessageParameters =
         createMessageParametersToDeleteAllMessages(onboardingResponse);
     return send(deleteMessageParameters);
   }
 
   @Override
-  public HttpAsyncMessageSendingResult deleteAllAsync(OnboardingResponse onboardingResponse) {
+  public HttpAsyncMessageSendingResult sendMessageToDeleteAllAsync(
+      OnboardingResponse onboardingResponse) {
     final DeleteMessageParameters deleteMessageParameters =
         createMessageParametersToDeleteAllMessages(onboardingResponse);
     return sendAsync(deleteMessageParameters);

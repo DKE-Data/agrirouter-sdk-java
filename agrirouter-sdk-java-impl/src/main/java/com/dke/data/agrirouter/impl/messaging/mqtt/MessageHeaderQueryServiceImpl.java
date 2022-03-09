@@ -45,12 +45,13 @@ public class MessageHeaderQueryServiceImpl extends MqttService
   }
 
   @Override
-  public String queryAll(OnboardingResponse onboardingResponse) {
+  public String sendMessageToQueryAll(OnboardingResponse onboardingResponse) {
     return send(messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse));
   }
 
   @Override
-  public MqttAsyncMessageSendingResult queryAllAsync(OnboardingResponse onboardingResponse) {
+  public MqttAsyncMessageSendingResult sendMessageToQueryAllAsync(
+      OnboardingResponse onboardingResponse) {
     return sendAsync(
         messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse));
   }

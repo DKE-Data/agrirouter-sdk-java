@@ -14,7 +14,7 @@ public interface DeleteMessageService extends MessagingService<DeleteMessagePara
    * @param onboardingResponse The onboard response for the endpoint.
    * @return The message ID.
    */
-  String deleteAll(OnboardingResponse onboardingResponse);
+  String sendMessageToDeleteAll(OnboardingResponse onboardingResponse);
 
   /**
    * Delete all messages in the feed. The function will delete all messages based on the time
@@ -24,5 +24,5 @@ public interface DeleteMessageService extends MessagingService<DeleteMessagePara
    * @param onboardingResponse The onboard response for the endpoint.
    * @return The message ID.
    */
-  MqttAsyncMessageSendingResult deleteAllAsync(OnboardingResponse onboardingResponse);
+  MqttAsyncMessageSendingResult sendMessageToDeleteAllAsync(OnboardingResponse onboardingResponse);
 }
