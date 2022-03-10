@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl;
 
 import com.dke.data.agrirouter.api.enums.CertificationType;
+import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CertificationTypeNotSupportedException;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
 import com.dke.data.agrirouter.impl.common.ssl.KeyStoreCreationService;
@@ -14,9 +15,13 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.logging.LoggingFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Factory to encapsulate the requests against the agrirouter */
 public final class RequestFactory {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(RequestFactory.class);
 
   /** Hidden constructor. */
   private RequestFactory() {
@@ -36,7 +41,13 @@ public final class RequestFactory {
     ClientConfig clientConfig = new ClientConfig();
     KeyStore keyStore = createKeyStore(certificate, password, certificationType);
     Client client = createClient(clientConfig, keyStore, password, certificationType);
-    client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+    if (Environment.httpRequestLoggingEnabled()) {
+      client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+    } else {
+      LOGGER.debug(
+          "Request logging is currently disabled. If you want to enable it, please set '{}'.",
+          Environment.ENABLE_HTTP_REQUEST_LOGGING);
+    }
     WebTarget target = client.target(url);
     Invocation.Builder request = target.request(MediaType.APPLICATION_JSON_TYPE);
     request.accept(MediaType.APPLICATION_JSON_TYPE);
@@ -145,7 +156,7 @@ public final class RequestFactory {
     return request;
   }
 
-  public class AgrirouterHttpHeader {
+  public static class AgrirouterHttpHeader {
     public static final String APPLICATION_ID = "X-Agrirouter-ApplicationId";
     public static final String SIGNATURE = "X-Agrirouter-Signature";
   }

@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
 public class MessageQueryHelperService extends NonEnvironmentalService
-    implements MessageSender, MessageEncoder, ResponseValidator {
+    implements MessageSender, MessageEncoder, ResponseValidator, QueryAllMessagesParameterCreator {
 
   private final EncodeMessageService encodeMessageService;
   private final TechnicalMessageType technicalMessageType;

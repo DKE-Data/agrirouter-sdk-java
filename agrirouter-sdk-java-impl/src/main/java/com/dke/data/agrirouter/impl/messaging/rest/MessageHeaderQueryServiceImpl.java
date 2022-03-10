@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.feed.response.FeedResponse;
+import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
@@ -38,5 +39,20 @@ public class MessageHeaderQueryServiceImpl extends EnvironmentalService
   public FeedResponse.HeaderQueryResponse unsafeDecode(ByteString message)
       throws InvalidProtocolBufferException {
     return FeedResponse.HeaderQueryResponse.parseFrom(message);
+  }
+
+  @Override
+  public String sendMessageToQueryAll(OnboardingResponse onboardingResponse) {
+    MessageQueryParameters messageQueryParameters =
+        messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
+    return send(messageQueryParameters);
+  }
+
+  @Override
+  public HttpAsyncMessageSendingResult sendMessageToQueryAllAsync(
+      OnboardingResponse onboardingResponse) {
+    MessageQueryParameters messageQueryParameters =
+        messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
+    return sendAsync(messageQueryParameters);
   }
 }

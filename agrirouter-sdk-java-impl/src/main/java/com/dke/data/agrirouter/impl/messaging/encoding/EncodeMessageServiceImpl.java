@@ -1,5 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.encoding;
 
+import static com.dke.data.agrirouter.api.service.parameters.PayloadParametersKt.MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT;
+
 import agrirouter.commons.Chunk;
 import agrirouter.request.Request;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
@@ -13,16 +15,12 @@ import com.dke.data.agrirouter.impl.ChunkContextIdService;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.SequenceNumberService;
-import com.google.common.base.Splitter;
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -92,7 +90,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
    * @param payloadParameters Content of the message. It shall not be Base64 encoded before.
    * @return -
    */
-  public List<MessageParameterTuple> chunkAndEncode(
+  public List<MessageParameterTuple> chunkAndBase64EncodeEachChunk(
       MessageHeaderParameters messageHeaderParameters,
       PayloadParameters payloadParameters,
       OnboardingResponse onboardingResponse) {
@@ -106,16 +104,16 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
     messageHeaderParameters.validate();
     payloadParameters.validate();
 
-    if (messageHeaderParameters.getTechnicalMessageType().needsBase64EncodingAndHasToBeChunkedIfNecessary()) {
+    if (messageHeaderParameters
+        .getTechnicalMessageType()
+        .needsBase64EncodingAndHasToBeChunkedIfNecessary()) {
       if (payloadParameters.shouldBeChunked()) {
         getNativeLogger()
             .debug(
                 "The message should be chunked, current size of the payload ({}) is above the limitation.",
                 payloadParameters.getValue().toStringUtf8().length());
-        String wholeMessage = payloadParameters.getValue().toStringUtf8();
-        final List<String> messageChunks =
-            Splitter.fixedLength(payloadParameters.maxLengthForMessages())
-                .splitToList(wholeMessage);
+        byte[] wholeMessage = payloadParameters.getValue().toByteArray();
+        final List<byte[]> messageChunks = splitIntoChunks(wholeMessage);
         List<MessageParameterTuple> tuples = new ArrayList<>();
         AtomicInteger chunkNr = new AtomicInteger(1);
         final String chunkContextId = ChunkContextIdService.generateChunkContextId();
@@ -133,14 +131,12 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
               chunkInfo.setContextId(chunkContextId);
               chunkInfo.setCurrent(chunkNr.get());
               chunkInfo.setTotal(messageChunks.size());
-              chunkInfo.setTotalSize(wholeMessage.length());
+              chunkInfo.setTotalSize(wholeMessage.length);
               header.setChunkInfo(chunkInfo.build());
 
               final PayloadParameters payload = new PayloadParameters();
               payload.copyFrom(payloadParameters);
-              payload.setValue(
-                  ByteString.copyFromUtf8(
-                      Base64.getEncoder().encodeToString(chunk.getBytes(StandardCharsets.UTF_8))));
+              payload.setValue(ByteString.copyFromUtf8(Base64.getEncoder().encodeToString(chunk)));
 
               tuples.add(new MessageParameterTuple(header, payload));
 
@@ -175,6 +171,23 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
       return Collections.singletonList(
           new MessageParameterTuple(messageHeaderParameters, payloadParameters));
     }
+  }
+
+  private List<byte[]> splitIntoChunks(byte[] wholeMessage) {
+    List<byte[]> chunks = new ArrayList<>();
+    byte[] remainingBytes = wholeMessage;
+    do {
+      final byte[] chunk =
+          Arrays.copyOfRange(remainingBytes, 0, MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT);
+      chunks.add(chunk);
+      remainingBytes =
+          Arrays.copyOfRange(
+              remainingBytes, MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT + 1, remainingBytes.length - 1);
+    } while (remainingBytes.length > MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT);
+    if (remainingBytes.length > 0) {
+      chunks.add(remainingBytes);
+    }
+    return chunks;
   }
 
   private Request.RequestEnvelope header(MessageHeaderParameters parameters) {

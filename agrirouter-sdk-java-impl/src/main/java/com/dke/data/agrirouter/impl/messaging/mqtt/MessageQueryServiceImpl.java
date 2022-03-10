@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import agrirouter.feed.response.FeedResponse;
+import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
@@ -44,5 +45,20 @@ public class MessageQueryServiceImpl extends MqttService
   public FeedResponse.MessageQueryResponse unsafeDecode(ByteString message)
       throws InvalidProtocolBufferException {
     return FeedResponse.MessageQueryResponse.parseFrom(message);
+  }
+
+  @Override
+  public String sendMessageToQueryAll(OnboardingResponse onboardingResponse) {
+    MessageQueryParameters messageQueryParameters =
+        messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
+    return send(messageQueryParameters);
+  }
+
+  @Override
+  public MqttAsyncMessageSendingResult sendMessageToQueryAllAsync(
+      OnboardingResponse onboardingResponse) {
+    MessageQueryParameters messageQueryParameters =
+        messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
+    return sendAsync(messageQueryParameters);
   }
 }

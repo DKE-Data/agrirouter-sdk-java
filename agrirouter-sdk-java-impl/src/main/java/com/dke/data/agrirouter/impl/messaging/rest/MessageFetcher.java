@@ -53,8 +53,8 @@ public interface MessageFetcher extends ResponseValidator, HasLogger {
       if (!StringUtils.equalsIgnoreCase(entityContent, EMPTY_CONTENT)) {
         return Optional.of(entityContent);
       }
-      cancellationToken.step();
-      cancellationToken.waitBeforeStartingNextStep();
+      cancellationToken.nextStep();
+      cancellationToken.waitIfNotCancelled();
     }
     return Optional.empty();
   }
