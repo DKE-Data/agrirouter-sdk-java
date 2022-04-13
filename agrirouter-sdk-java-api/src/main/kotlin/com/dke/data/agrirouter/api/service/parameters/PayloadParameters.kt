@@ -36,13 +36,6 @@ class PayloadParameters : AbstractParameterBase(), ParameterValidation {
         return value!!.toStringUtf8().length > MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT
     }
 
-    /**
-     * The maximum length for messages / the payload.
-     */
-    fun maxLengthForMessages(): Int {
-        return MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT
-    }
-
     fun copyFrom(payload: PayloadParameters) {
         applicationMessageId = payload.applicationMessageId
         teamsetContextId = payload.teamsetContextId

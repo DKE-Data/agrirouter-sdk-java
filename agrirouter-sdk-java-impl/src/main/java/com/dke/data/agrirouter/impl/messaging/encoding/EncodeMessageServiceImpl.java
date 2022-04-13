@@ -129,7 +129,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
               header.setApplicationMessageSeqNo(sequenceNumberForChunk);
               Chunk.ChunkComponent.Builder chunkInfo = Chunk.ChunkComponent.newBuilder();
               chunkInfo.setContextId(chunkContextId);
-              chunkInfo.setCurrent(chunkNr.get());
+              chunkInfo.setCurrent(chunkNr.getAndIncrement());
               chunkInfo.setTotal(messageChunks.size());
               chunkInfo.setTotalSize(wholeMessage.length);
               header.setChunkInfo(chunkInfo.build());
@@ -139,8 +139,6 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
               payload.setValue(ByteString.copyFromUtf8(Base64.getEncoder().encodeToString(chunk)));
 
               tuples.add(new MessageParameterTuple(header, payload));
-
-              chunkNr.getAndIncrement();
             });
         return tuples;
       } else {
@@ -182,7 +180,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
       chunks.add(chunk);
       remainingBytes =
           Arrays.copyOfRange(
-              remainingBytes, MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT + 1, remainingBytes.length - 1);
+              remainingBytes, MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT, remainingBytes.length);
     } while (remainingBytes.length > MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT);
     if (remainingBytes.length > 0) {
       chunks.add(remainingBytes);
