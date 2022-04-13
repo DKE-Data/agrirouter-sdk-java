@@ -234,11 +234,12 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
    * @return -
    */
   @SuppressWarnings("unused")
-  private static @NotNull Stream<Arguments> givenRealMessageContentWhenSendingMessagesTheContentShouldMatchAfterReceivingAndMergingIt() throws Throwable {
+  private static @NotNull Stream<Arguments>
+      givenRealMessageContentWhenSendingMessagesTheContentShouldMatchAfterReceivingAndMergingIt()
+          throws Throwable {
     return Stream.of(
         Arguments.of(
-            ByteString.copyFrom(
-                ContentReader.readRawData(ContentReader.Identifier.BIG_TASK_DATA)),
+            ByteString.copyFrom(ContentReader.readRawData(ContentReader.Identifier.BIG_TASK_DATA)),
             3));
   }
 

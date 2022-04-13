@@ -19,7 +19,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class EncodeMessageServiceImplTest {
+class AEncodeEncodeMessageServiceImplTest {
 
   @Test
   void givenEmptyMessageWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
