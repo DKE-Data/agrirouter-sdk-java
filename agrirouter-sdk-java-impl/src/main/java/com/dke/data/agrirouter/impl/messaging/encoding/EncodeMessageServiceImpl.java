@@ -156,9 +156,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
                 Base64.getEncoder()
                     .encodeToString(
                         payloadParameters
-                            .getValue()
-                            .toStringUtf8()
-                            .getBytes(StandardCharsets.UTF_8))));
+                            .getValue().toByteArray())));
         return Collections.singletonList(
             new MessageParameterTuple(messageHeaderParameters, payload));
       }
