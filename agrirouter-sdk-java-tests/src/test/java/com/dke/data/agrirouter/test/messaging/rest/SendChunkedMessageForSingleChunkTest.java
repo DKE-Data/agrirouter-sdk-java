@@ -10,7 +10,10 @@ import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
-import com.dke.data.agrirouter.api.service.parameters.*;
+import com.dke.data.agrirouter.api.service.parameters.MessageHeaderParameters;
+import com.dke.data.agrirouter.api.service.parameters.MessageParameterTuple;
+import com.dke.data.agrirouter.api.service.parameters.PayloadParameters;
+import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
 import com.dke.data.agrirouter.impl.messaging.SequenceNumberService;
 import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
@@ -22,19 +25,20 @@ import com.dke.data.agrirouter.test.Assertions;
 import com.dke.data.agrirouter.test.OnboardingResponseRepository;
 import com.dke.data.agrirouter.test.helper.ContentReader;
 import com.google.protobuf.ByteString;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+
 /** Test case to show the behavior for chunked message sending. */
-class SendChunkedMessageTest extends AbstractIntegrationTest {
+class SendChunkedMessageForSingleChunkTest extends AbstractIntegrationTest {
 
   private static final int MAX_CHUNK_SIZE = 1024000;
 
   @Test
   void
-      givenLargeContentMessageWhenSendingTheMessageToTheAhrgrirouterTheSdkShouldHelpToSendTheFileInMultipleChunks()
+      givenSmallContentMessageWhenSendingTheMessageToTheAgrirouterTheSdkShouldHelpToSendTheFileInOneChunk()
           throws Throwable {
 
     final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
@@ -53,7 +57,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
 
     PayloadParameters payloadParameters = new PayloadParameters();
     payloadParameters.setValue(
-        ByteString.copyFrom(ContentReader.readRawData(ContentReader.Identifier.BIG_TASK_DATA)));
+        ByteString.copyFrom(ContentReader.readRawData(ContentReader.Identifier.SMALL_TASK_DATA)));
     payloadParameters.setTypeUrl(SystemMessageType.EMPTY.getKey());
 
     List<MessageParameterTuple> tuples =
@@ -84,7 +88,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
             new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
 
     Assertions.assertTrue(fetchMessageResponses.isPresent());
-    Assertions.assertEquals(3, fetchMessageResponses.get().size());
+    Assertions.assertEquals(1, fetchMessageResponses.get().size());
 
     DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
     AtomicReference<DecodeMessageResponse> decodeMessageResponse = new AtomicReference<>();
