@@ -19,7 +19,6 @@ import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -153,10 +152,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
         payload.copyFrom(payloadParameters);
         payload.setValue(
             ByteString.copyFromUtf8(
-                Base64.getEncoder()
-                    .encodeToString(
-                        payloadParameters
-                            .getValue().toByteArray())));
+                Base64.getEncoder().encodeToString(payloadParameters.getValue().toByteArray())));
         return Collections.singletonList(
             new MessageParameterTuple(messageHeaderParameters, payload));
       }
