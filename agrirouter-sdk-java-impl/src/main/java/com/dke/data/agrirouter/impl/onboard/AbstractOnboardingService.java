@@ -64,12 +64,19 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
    */
   public Optional<OnboardingError> getOnboardingError(String error) {
     this.getNativeLogger().info("BEGIN | Decoding error response. | '{}'.", error);
-    Gson gson = new Gson();
     Optional<OnboardingError> result =
-        StringUtils.isBlank(error)
-            ? Optional.empty()
-            : Optional.of(gson.fromJson(error, OnboardingError.class));
+        StringUtils.isBlank(error) ? Optional.empty() : Optional.of(failSafeGsonParsing(error));
     this.getNativeLogger().info("BEGIN | Decoding error response. | '{}'.", error);
     return result;
+  }
+
+  private OnboardingError failSafeGsonParsing(String error) {
+    Gson gson = new Gson();
+    try {
+      return gson.fromJson(error, OnboardingError.class);
+    } catch (Exception e) {
+      this.getNativeLogger().error("Error parsing error response. | '{}'.", error);
+      return OnboardingError.unknownError(error);
+    }
   }
 }
