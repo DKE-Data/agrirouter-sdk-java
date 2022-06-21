@@ -1,6 +1,5 @@
 package com.dke.data.agrirouter.api.dto.revoke
 
-import com.dke.data.agrirouter.api.dto.onboard.OnboardingError
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,5 +16,18 @@ class RevokingError {
         lateinit var details:Array<SubError>
     }
 
-    lateinit var error:Error;
+    lateinit var error:Error
+
+    companion object {
+        @JvmStatic
+        fun unknownError(): RevokingError {
+            val revokingError = RevokingError()
+            revokingError.error = Error()
+            revokingError.error.code = -1
+            revokingError.error.message = "Unknown error"
+            revokingError.error.target = "Unknown target"
+            revokingError.error.details = arrayOf()
+            return revokingError
+        }
+    }
 }
