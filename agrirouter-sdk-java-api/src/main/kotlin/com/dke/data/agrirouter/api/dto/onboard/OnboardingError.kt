@@ -21,11 +21,11 @@ class OnboardingError {
 
     companion object {
         @JvmStatic
-        fun unknownError(): OnboardingError {
+        fun unknownError(error: String): OnboardingError {
             val onboardingError = OnboardingError()
             onboardingError.error = Error()
             onboardingError.error.code = -1
-            onboardingError.error.message = "Unknown error"
+            onboardingError.error.message = "Unknown error occurred, the original error message is: $error"
             onboardingError.error.target = "Unknown target"
             onboardingError.error.details = arrayOf()
             return onboardingError

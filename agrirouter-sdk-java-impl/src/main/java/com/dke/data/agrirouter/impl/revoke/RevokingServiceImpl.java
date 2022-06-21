@@ -88,7 +88,7 @@ public class RevokingServiceImpl extends EnvironmentalService
       return gson.fromJson(error, RevokingError.class);
     } catch (Exception e) {
       this.getNativeLogger().error("Error parsing error response. | '{}'.", error);
-      return RevokingError.unknownError();
+      return RevokingError.unknownError(error);
     }
   }
 }

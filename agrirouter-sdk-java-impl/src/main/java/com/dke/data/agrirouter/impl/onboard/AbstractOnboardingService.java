@@ -76,7 +76,7 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
       return gson.fromJson(error, OnboardingError.class);
     } catch (Exception e) {
       this.getNativeLogger().error("Error parsing error response. | '{}'.", error);
-      return OnboardingError.unknownError();
+      return OnboardingError.unknownError(error);
     }
   }
 }

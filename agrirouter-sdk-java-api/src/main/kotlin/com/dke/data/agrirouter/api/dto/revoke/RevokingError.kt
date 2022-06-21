@@ -20,11 +20,11 @@ class RevokingError {
 
     companion object {
         @JvmStatic
-        fun unknownError(): RevokingError {
+        fun unknownError(error: String): RevokingError {
             val revokingError = RevokingError()
             revokingError.error = Error()
             revokingError.error.code = -1
-            revokingError.error.message = "Unknown error"
+            revokingError.error.message = "Unknown error occurred, the original error message is: $error"
             revokingError.error.target = "Unknown target"
             revokingError.error.details = arrayOf()
             return revokingError
