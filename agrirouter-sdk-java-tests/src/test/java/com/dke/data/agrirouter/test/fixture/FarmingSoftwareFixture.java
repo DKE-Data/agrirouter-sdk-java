@@ -30,7 +30,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
   void onboardFarmingSoftwareAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("ef1c0c59ba");
+    onboardingParameters.setRegistrationCode("bba7438c45");
     onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
     onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);
@@ -64,7 +64,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
   void onboardAndDeactivateFarmingSoftwareAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("a496822032");
+    onboardingParameters.setRegistrationCode("1f91fb7279");
     onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
     onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);
@@ -98,7 +98,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
   void onboardAndRemoveFarmingSoftwareAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("bc4eba6065");
+    onboardingParameters.setRegistrationCode("ff28b2fa22");
     onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
     onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);

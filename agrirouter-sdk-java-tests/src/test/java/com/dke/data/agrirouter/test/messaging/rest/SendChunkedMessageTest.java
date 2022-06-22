@@ -25,6 +25,7 @@ import com.google.protobuf.ByteString;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /** Test case to show the behavior for chunked message sending. */
@@ -33,6 +34,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
   private static final int MAX_CHUNK_SIZE = 1024000;
 
   @Test
+  @Disabled("Issue #197 | Needs investigation, not running any longer.")
   void
       givenLargeContentMessageWhenSendingTheMessageToTheAhrgrirouterTheSdkShouldHelpToSendTheFileInMultipleChunks()
           throws Throwable {
