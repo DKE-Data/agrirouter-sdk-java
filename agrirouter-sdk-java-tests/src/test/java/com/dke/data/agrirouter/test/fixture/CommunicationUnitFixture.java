@@ -21,6 +21,8 @@ import com.dke.data.agrirouter.test.OnboardingResponseRepository;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.UUID;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /** Class to onboard endpoints for different reasons. */
@@ -32,7 +34,7 @@ class CommunicationUnitFixture extends AbstractIntegrationTest {
    * application for CUs.
    */
   @Test
-  // @Disabled("Please replace the placeholder for the registration code to run the test case.")
+  @Disabled("Please replace the placeholder for the registration code to run the test case.")
   void onboardCommunicationUnitAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     OnboardingParameters onboardingParameters = new OnboardingParameters();
