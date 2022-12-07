@@ -34,6 +34,7 @@ import org.apache.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -43,6 +44,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
 
   private static final int MAX_CHUNK_SIZE = 1024000;
 
+  @Disabled("Takes to much during a normal run.")
   @ParameterizedTest
   @MethodSource
   void givenRealMessageContentWhenSendingMessagesTheContentShouldMatchAfterReceivingAndMergingIt(
