@@ -4,7 +4,6 @@ import com.dke.data.agrirouter.api.env.Constants;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
 import com.dke.data.agrirouter.api.service.HasLogger;
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -153,8 +152,8 @@ public class KeyStoreCreationService implements HasLogger {
 
     this.getNativeLogger().trace("Store keystore within temporary folder.");
     keystore.store(
-            Files.newOutputStream(Paths.get("./target/test-classes/" + tmpKeystoreName + ".jks")),
-            Constants.DEFAULT_PASSWORD.toCharArray());
+        Files.newOutputStream(Paths.get("./target/test-classes/" + tmpKeystoreName + ".jks")),
+        Constants.DEFAULT_PASSWORD.toCharArray());
 
     this.logMethodEnd(tmpKeystoreName);
     return tmpKeystoreName;
