@@ -20,6 +20,10 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("ALL")
 class FarmingSoftwareFixture extends AbstractIntegrationTest {
 
+  public static final String FARMING_SOFTWARE_ENDPOINT_ID = "e306d63b-8b57-4956-bde7-43600e78dae4";
+  public static final String FARMING_SOFTWARE_DEACTIVATED_ENDPOINT_ID =
+      "50e0b616-a084-4402-8bf4-cb64f1e59a98";
+
   /**
    * Create a new registration token by using the following link:
    *
@@ -30,12 +34,12 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
   void onboardFarmingSoftwareAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("ef1c0c59ba");
+    onboardingParameters.setRegistrationCode("cf3a08a02f");
     onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
     onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);
     onboardingParameters.setGatewayId(Gateway.REST.getKey());
-    onboardingParameters.setUuid(UUID.randomUUID().toString());
+    onboardingParameters.setUuid(FARMING_SOFTWARE_ENDPOINT_ID);
     onboardingParameters.setPrivateKey(farmingSoftware.getPrivateKey());
     onboardingParameters.setPublicKey(farmingSoftware.getPublicKey());
     final OnboardingResponse onboardingResponse = onboardingService.onboard(onboardingParameters);
@@ -64,12 +68,12 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
   void onboardAndDeactivateFarmingSoftwareAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-    onboardingParameters.setRegistrationCode("a496822032");
+    onboardingParameters.setRegistrationCode("528bdeab8a");
     onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
     onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);
     onboardingParameters.setGatewayId(Gateway.REST.getKey());
-    onboardingParameters.setUuid(UUID.randomUUID().toString());
+    onboardingParameters.setUuid(FARMING_SOFTWARE_DEACTIVATED_ENDPOINT_ID);
     onboardingParameters.setPrivateKey(farmingSoftware.getPrivateKey());
     onboardingParameters.setPublicKey(farmingSoftware.getPublicKey());
     final OnboardingResponse onboardingResponse = onboardingService.onboard(onboardingParameters);
