@@ -153,7 +153,10 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
         payload.copyFrom(payloadParameters);
         payload.setValue(
             ByteString.copyFromUtf8(
-                Base64.getEncoder().encodeToString(payloadParameters.getValue()
+                Base64.getEncoder()
+                    .encodeToString(
+                        payloadParameters
+                            .getValue()
                             .toStringUtf8()
                             .getBytes(StandardCharsets.UTF_8))));
         return Collections.singletonList(
