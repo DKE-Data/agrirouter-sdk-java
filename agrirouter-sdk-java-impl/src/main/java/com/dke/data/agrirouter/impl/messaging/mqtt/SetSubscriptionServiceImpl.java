@@ -32,7 +32,7 @@ public class SetSubscriptionServiceImpl extends MqttService
   public String send(SetSubscriptionParameters parameters) {
     parameters.validate();
     try {
-      EncodedMessage encodedMessage = this.encodeMessage(parameters);
+      EncodedMessage encodedMessage = this.encode(parameters);
       SendMessageParameters sendMessageParameters = new SendMessageParameters();
       sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
       sendMessageParameters.setEncodedMessages(

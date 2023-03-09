@@ -6,6 +6,6 @@ abstract class AbstractParameterBase : DynamicAttributesStorage() {
 
     var teamsetContextId: String? = null
 
-    var sequenceNumber: Int = 1
+    var sequenceNumber: Int = 0
 
 }
