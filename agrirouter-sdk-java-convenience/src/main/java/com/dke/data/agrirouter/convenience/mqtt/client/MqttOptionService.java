@@ -8,15 +8,14 @@ import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateMqttOptionException;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.common.ssl.KeyStoreCreationService;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-
-import javax.net.SocketFactory;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import javax.net.SocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 
 /** Creating MQTT options for the MQTT client. */
 public class MqttOptionService extends EnvironmentalService {
@@ -92,7 +91,7 @@ public class MqttOptionService extends EnvironmentalService {
       if (certificationType == CertificationType.PEM) {
         kmf.init(
             this.keyStoreCreationService.createAndReturnKeystoreFromPEM(certificate, password),
-                Constants.DEFAULT_PASSWORD.toCharArray());
+            Constants.DEFAULT_PASSWORD.toCharArray());
       } else {
         if (certificationType == CertificationType.P12) {
           kmf.init(
