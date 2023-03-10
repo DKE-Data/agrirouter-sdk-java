@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.convenience.mqtt.client;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.dto.onboard.RouterDevice;
 import com.dke.data.agrirouter.api.enums.CertificationType;
+import com.dke.data.agrirouter.api.env.Constants;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateMqttOptionException;
 import com.dke.data.agrirouter.impl.EnvironmentalService;
@@ -90,7 +91,7 @@ public class MqttOptionService extends EnvironmentalService {
       if (certificationType == CertificationType.PEM) {
         kmf.init(
             this.keyStoreCreationService.createAndReturnKeystoreFromPEM(certificate, password),
-            "changeit".toCharArray());
+            Constants.DEFAULT_PASSWORD.toCharArray());
       } else {
         if (certificationType == CertificationType.P12) {
           kmf.init(
@@ -98,7 +99,7 @@ public class MqttOptionService extends EnvironmentalService {
               password.toCharArray());
         }
       }
-      SSLContext context = SSLContext.getInstance("TLSv1.2");
+      SSLContext context = SSLContext.getInstance(Constants.PROTOCOL);
       context.init(kmf.getKeyManagers(), null, null);
       return context.getSocketFactory();
     } catch (NoSuchAlgorithmException e) {

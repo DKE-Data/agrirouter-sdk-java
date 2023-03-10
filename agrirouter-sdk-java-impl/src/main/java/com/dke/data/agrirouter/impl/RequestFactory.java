@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl;
 
 import com.dke.data.agrirouter.api.enums.CertificationType;
+import com.dke.data.agrirouter.api.env.Constants;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.exception.CertificationTypeNotSupportedException;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
@@ -64,7 +65,7 @@ public final class RequestFactory {
         case PEM:
           return ClientBuilder.newBuilder()
               .withConfig(clientConfig)
-              .keyStore(keyStore, KeyStoreCreationService.TEMPORARY_KEY_PASSWORD)
+              .keyStore(keyStore, Constants.DEFAULT_PASSWORD)
               .build();
         case P12:
           return ClientBuilder.newBuilder()

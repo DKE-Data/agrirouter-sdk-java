@@ -1,11 +1,13 @@
 package com.dke.data.agrirouter.impl.common.ssl;
 
+import com.dke.data.agrirouter.api.env.Constants;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
 import com.dke.data.agrirouter.api.service.HasLogger;
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -21,15 +23,11 @@ import javax.net.ssl.*;
 
 public class KeyStoreCreationService implements HasLogger {
 
-  public static final String TEMPORARY_KEY_PASSWORD = "changeit";
-
   private static final String BEGIN_DELIMITER_PRIVATE_KEY = "-----BEGIN ENCRYPTED PRIVATE KEY-----";
   private static final String END_DELIMITER_PRIVATE_KEY = "-----END ENCRYPTED PRIVATE KEY-----";
 
   private static final String BEGIN_DELIMITER_CERTIFICATE = "-----BEGIN CERTIFICATE-----";
   private static final String END_DELIMITER_CERTIFICATE = "-----END CERTIFICATE-----";
-
-  private static final String DEFAULT_PASSWORD = "changeit";
 
   public SocketFactory getSocketFactory(
       List<String> rootCertificates, String certificate, String password) throws Exception {
@@ -154,8 +152,8 @@ public class KeyStoreCreationService implements HasLogger {
 
     this.getNativeLogger().trace("Store keystore within temporary folder.");
     keystore.store(
-        new FileOutputStream("./target/test-classes/" + tmpKeystoreName + ".jks"),
-        TEMPORARY_KEY_PASSWORD.toCharArray());
+        Files.newOutputStream(Paths.get("./target/test-classes/" + tmpKeystoreName + ".jks")),
+        Constants.DEFAULT_PASSWORD.toCharArray());
 
     this.logMethodEnd(tmpKeystoreName);
     return tmpKeystoreName;
@@ -226,17 +224,17 @@ public class KeyStoreCreationService implements HasLogger {
     this.getNativeLogger().trace("Create JKS keystore.");
     KeyStore keystore = KeyStore.getInstance("JKS");
     keystore.load(null);
-    keystore.setCertificateEntry("cert-alias", x509Certificate);
+    keystore.setCertificateEntry(Constants.CERT_ALIAS, x509Certificate);
 
     this.getNativeLogger().trace("Add certificate to the key store.");
     keystore.setKeyEntry(
-        "key-alias", key, getDefaultPassword(), new Certificate[] {x509Certificate});
+        Constants.KEY_ALIAS, key, getDefaultPassword(), new Certificate[] {x509Certificate});
 
     this.logMethodEnd(keystore);
     return keystore;
   }
 
   private static char[] getDefaultPassword() {
-    return DEFAULT_PASSWORD.toCharArray();
+    return Constants.DEFAULT_PASSWORD.toCharArray();
   }
 }
