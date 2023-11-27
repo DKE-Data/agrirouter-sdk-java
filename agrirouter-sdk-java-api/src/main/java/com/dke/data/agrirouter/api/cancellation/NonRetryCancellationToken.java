@@ -3,6 +3,7 @@ package com.dke.data.agrirouter.api.cancellation;
 /**
  * Non-retry implementation of the cancellation token.
  */
+@SuppressWarnings("unused")
 public class NonRetryCancellationToken implements CancellationToken {
 
     public NonRetryCancellationToken() {
