@@ -17,15 +17,15 @@ import com.dke.data.agrirouter.impl.common.signing.SecurityKeyCreationService;
 import com.dke.data.agrirouter.impl.onboard.AbstractOnboardingService;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.gson.Gson;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.Objects;
 import java.util.Optional;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
@@ -74,7 +74,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     String encodedSignature = this.createSignature(securedOnboardingParameters, jsonBody);
     this.verifySignature(
         jsonBody, decodeHex(encodedSignature), securedOnboardingParameters.getPublicKey());
-    Response response =
+    jakarta.ws.rs.core.Response response =
         RequestFactory.bearerTokenRequest(
                 this.environment.getSecuredOnboardUrl(),
                 securedOnboardingParameters.getRegistrationCode(),

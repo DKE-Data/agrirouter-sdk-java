@@ -13,6 +13,7 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.gson.Gson;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Arrays;
@@ -101,7 +102,7 @@ public class AuthorizationRequestServiceImpl extends EnvironmentalService
 
   public AuthorizationResponse extractAuthorizationResults(String redirectPageUrl)
       throws MalformedURLException {
-    URL url = new URL(redirectPageUrl);
+    URL url = URI.create(redirectPageUrl).toURL();
 
     return extractAuthorizationResponse(url);
   }

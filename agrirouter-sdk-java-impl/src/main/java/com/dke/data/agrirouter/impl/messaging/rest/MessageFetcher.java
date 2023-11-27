@@ -6,9 +6,9 @@ import com.dke.data.agrirouter.api.service.HasLogger;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import jakarta.ws.rs.core.Response;
 import java.util.Objects;
 import java.util.Optional;
-import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 
 /** Interface to fetch messages for the HTTP implementation by polling the outbox. */

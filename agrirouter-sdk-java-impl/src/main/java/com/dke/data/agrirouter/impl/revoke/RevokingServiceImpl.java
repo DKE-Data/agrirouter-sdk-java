@@ -12,11 +12,11 @@ import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.SignatureService;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.google.gson.Gson;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.Objects;
 import java.util.Optional;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 
@@ -76,7 +76,6 @@ public class RevokingServiceImpl extends EnvironmentalService
   }
 
   public Optional<RevokingError> getLastRevokingError(String errorResponse) {
-    Gson gson = new Gson();
     return StringUtils.isBlank(errorResponse)
         ? Optional.empty()
         : Optional.of(failSafeGsonParsing(errorResponse));
