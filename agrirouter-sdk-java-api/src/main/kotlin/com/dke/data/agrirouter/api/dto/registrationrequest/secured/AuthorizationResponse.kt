@@ -13,6 +13,7 @@ class AuthorizationResponse {
     /**
      * Returns true, if an error accoured while generating token serverside
      */
+    @Suppress("unused")
     fun hasError(): Boolean {
         return !error.isNullOrBlank()
     }
