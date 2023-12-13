@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("unused")
 public class ListEndpointsServiceImpl extends MqttService
         implements ListEndpointsService,
         MessageBodyCreator,

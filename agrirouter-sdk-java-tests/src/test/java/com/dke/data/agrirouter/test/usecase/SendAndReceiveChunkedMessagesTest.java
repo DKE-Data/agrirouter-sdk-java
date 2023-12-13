@@ -55,17 +55,16 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
     void givenRealMessageContentWhenSendingMessagesTheContentShouldMatchAfterReceivingAndMergingIt(
             ByteString messageContent, int expectedNrOfChunks) throws Throwable {
         actionsForSender(messageContent, expectedNrOfChunks);
-        actionsForTheRecipient(messageContent, expectedNrOfChunks);
+        actionsForTheRecipient(expectedNrOfChunks);
     }
 
     /**
      * These are the actions for the recipient. The recipient is already set up and declared the
      * capabilities. The actions for the recipient are documented inline.
      *
-     * @param messageContent     -
      * @param expectedNrOfChunks -
      */
-    private void actionsForTheRecipient(ByteString messageContent, int expectedNrOfChunks)
+    private void actionsForTheRecipient(int expectedNrOfChunks)
             throws Throwable {
         // [1] Fetch all the messages within the feed. The number of headers should match the number of
         // chunks sent.

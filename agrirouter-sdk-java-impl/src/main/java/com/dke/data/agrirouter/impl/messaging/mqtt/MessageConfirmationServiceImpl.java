@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("unused")
 public class MessageConfirmationServiceImpl extends MqttService
         implements MessageConfirmationService, MessageSender, MessageEncoder {
 

@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class RevokingServiceImpl extends EnvironmentalService
         implements RevokingService, SignatureService {
 
