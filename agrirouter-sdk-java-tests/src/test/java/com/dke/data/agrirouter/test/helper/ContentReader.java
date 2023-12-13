@@ -12,14 +12,8 @@ public class ContentReader {
 
     private static final String FOLDER = "./message-content/";
 
-    public static String readBase64EncodedMessageContent(Identifier identifier) throws Throwable {
-        Path path = Paths.get(FOLDER.concat(identifier.getFileName()));
-        final byte[] rawData = Files.readAllBytes(path);
-        return new String(Base64.getEncoder().encode(rawData));
-    }
-
     public static byte[] readRawData(Identifier identifier) throws Throwable {
-        Path path = Paths.get(FOLDER.concat(identifier.getFileName()));
+        var path = Paths.get(FOLDER.concat(identifier.getFileName()));
         return Files.readAllBytes(path);
     }
 

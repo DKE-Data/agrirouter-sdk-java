@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface RevokingService {
 
+    @SuppressWarnings("unused")
     RevokeResponse revoke(RevokeParameters revokeParameters);
 
     /**
