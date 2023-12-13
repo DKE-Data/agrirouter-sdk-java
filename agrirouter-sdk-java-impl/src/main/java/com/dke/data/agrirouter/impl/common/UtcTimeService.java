@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Optional;
 import java.util.TimeZone;
 
+@SuppressWarnings("unused")
 public class UtcTimeService {
 
     public static final long ONE_DAY_AGO = 60 * 60 * 24;
