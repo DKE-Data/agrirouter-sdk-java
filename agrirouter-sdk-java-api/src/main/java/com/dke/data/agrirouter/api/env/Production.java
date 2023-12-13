@@ -4,6 +4,7 @@ package com.dke.data.agrirouter.api.env;
  * Abstraction of the production environment, currently no overrides because the default is
  * production already.
  */
+@SuppressWarnings("unused")
 public abstract class Production implements Environment {
 
     private static final String ENV_BASE_URL = "https://goto.my-agrirouter.com";

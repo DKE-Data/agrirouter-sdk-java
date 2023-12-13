@@ -5,7 +5,7 @@ class RevokeRequest {
 
     lateinit var accountId: String
 
-    lateinit var endpointIds: Array<String>;
+    lateinit var endpointIds: Array<String>
 
     lateinit var UTCTimestamp: String
 
