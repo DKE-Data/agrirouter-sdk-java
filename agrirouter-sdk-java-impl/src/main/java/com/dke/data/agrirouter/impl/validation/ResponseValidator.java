@@ -18,6 +18,7 @@ public interface ResponseValidator extends HasLogger {
      *
      * @param statusCode The current status code.
      */
+    @SuppressWarnings("UnusedReturnValue")
     default boolean assertStatusCodeIsValid(int statusCode) {
         getNativeLogger().debug("Validating status code.");
         getNativeLogger().trace("Status code was '{}'", statusCode);
@@ -71,6 +72,7 @@ public interface ResponseValidator extends HasLogger {
      *
      * @param statusCode The current status code.
      */
+    @SuppressWarnings("unused")
     default boolean assertStatusCodeIsBadRequest(int statusCode) {
         getNativeLogger().debug("Validating status code.");
         getNativeLogger().trace("Status code was '{}'", statusCode);

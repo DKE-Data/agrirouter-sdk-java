@@ -12,6 +12,7 @@ public class RevokingException extends RuntimeException {
         this.revokingError = lastError.orElse(null);
     }
 
+    @SuppressWarnings("unused")
     public RevokingError getRevokingError() {
         return revokingError;
     }

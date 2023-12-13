@@ -10,6 +10,7 @@ import java.net.URL;
 /**
  * Service for the registration request.
  */
+@SuppressWarnings("unused")
 public interface AuthorizationRequestService {
 
     String getAuthorizationRequestURL(AuthorizationRequestParameters authorizationRequestParameters);

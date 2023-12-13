@@ -15,6 +15,7 @@ import java.util.Objects;
 /**
  * Service to create a MQTT client using the given onboarding response.
  */
+@SuppressWarnings("unused")
 public class MqttClientService extends EnvironmentalService {
 
     /**

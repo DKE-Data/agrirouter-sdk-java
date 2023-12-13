@@ -4,6 +4,7 @@ import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.parameters.ListEndpointsParameters;
 
+@SuppressWarnings("unused")
 public interface ListEndpointsService extends MessagingService<ListEndpointsParameters> {
 
     /**
