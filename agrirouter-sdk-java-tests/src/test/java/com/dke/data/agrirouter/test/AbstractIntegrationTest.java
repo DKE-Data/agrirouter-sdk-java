@@ -13,9 +13,9 @@ public abstract class AbstractIntegrationTest {
      * Since there are multiple problems with the stability of the QA env we define dedicated
      * constants for message fetching.
      */
-    protected int MAX_TRIES_BEFORE_FAILURE = 10;
+    protected final int MAX_TRIES_BEFORE_FAILURE = 10;
 
-    protected long DEFAULT_INTERVAL = 5000;
+    protected final long DEFAULT_INTERVAL = 5000;
 
     /**
      * Wait for the AR to process the messages. Since the QA has some stability problems, we will wait
@@ -40,7 +40,7 @@ public abstract class AbstractIntegrationTest {
     /**
      * Communication unit for integration testing.
      */
-    protected Application communicationUnit =
+    protected final Application communicationUnit =
             new Application() {
                 @Override
                 public String getApplicationId() {
@@ -56,7 +56,7 @@ public abstract class AbstractIntegrationTest {
     /**
      * Farming software for integration testing.
      */
-    protected Application farmingSoftware =
+    protected final Application farmingSoftware =
             new Application() {
 
                 @Override
@@ -118,7 +118,7 @@ public abstract class AbstractIntegrationTest {
     /**
      * Farming software for integration testing.
      */
-    protected Application telemetryPlatform =
+    protected final Application telemetryPlatform =
             new Application() {
 
                 @Override

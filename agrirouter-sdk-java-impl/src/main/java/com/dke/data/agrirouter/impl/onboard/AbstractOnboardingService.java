@@ -26,7 +26,7 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
             CertificationType certificationType) {
         this.getNativeLogger().info("BEGIN | Creating onboard request.");
 
-        OnboardingRequest onboardingRequest = new OnboardingRequest();
+        var onboardingRequest = new OnboardingRequest();
         onboardingRequest.setId(uuid);
         onboardingRequest.setApplicationId(applicationId);
         onboardingRequest.setCertificationVersionId(certificationVersionId);
@@ -47,7 +47,7 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
      */
     public String generateAuthorizationUrl(AuthorizationRequestParameters parameters) {
         this.getNativeLogger().info("BEGIN | Generating authorization URL. | '{}'.", parameters);
-        String securedOnboardingAuthorizationUrl =
+        var securedOnboardingAuthorizationUrl =
                 this.environment.getSecuredOnboardingAuthorizationUrl(
                         parameters.getApplicationId(),
                         parameters.getResponseType(),
@@ -72,7 +72,7 @@ public abstract class AbstractOnboardingService extends EnvironmentalService {
     }
 
     private OnboardingError failSafeGsonParsing(String error) {
-        Gson gson = new Gson();
+        var gson = new Gson();
         try {
             return gson.fromJson(error, OnboardingError.class);
         } catch (Exception e) {

@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
@@ -68,27 +69,23 @@ public class AuthorizationRequestServiceImpl extends EnvironmentalService
      */
     @Override
     public AuthorizationResponseToken decodeToken(String token) {
-        byte[] decodedBytes = Base64.getDecoder().decode(token);
-        String decodedToken = new String(decodedBytes);
+        var decodedBytes = Base64.getDecoder().decode(token);
+        var decodedToken = new String(decodedBytes);
         return new Gson().fromJson(decodedToken, AuthorizationResponseToken.class);
     }
 
     @NotNull
     public AuthorizationResponse extractAuthorizationResponseFromQuery(String query) {
-        String[] queryParams = query.split("&");
+        var queryParams = query.split("&");
         Map<String, String> authorizationResults = new HashMap<>();
         Arrays.stream(queryParams)
                 .forEach(
                         s -> {
-                            String[] keyValuePair = s.split("=");
-                            try {
-                                authorizationResults.put(
-                                        keyValuePair[0], URLDecoder.decode(keyValuePair[1], "UTF-8"));
-                            } catch (UnsupportedEncodingException e) {
-                                // NOP
-                            }
+                            var keyValuePair = s.split("=");
+                            authorizationResults.put(
+                                    keyValuePair[0], URLDecoder.decode(keyValuePair[1], StandardCharsets.UTF_8));
                         });
-        AuthorizationResponse authorizationResponse = new AuthorizationResponse();
+        var authorizationResponse = new AuthorizationResponse();
         if (authorizationResults.containsKey(SIGNATURE_KEY)) {
             authorizationResponse.setSignature(authorizationResults.get(SIGNATURE_KEY));
         }
@@ -105,7 +102,7 @@ public class AuthorizationRequestServiceImpl extends EnvironmentalService
 
     public AuthorizationResponse extractAuthorizationResults(String redirectPageUrl)
             throws MalformedURLException {
-        URL url = URI.create(redirectPageUrl).toURL();
+        var url = URI.create(redirectPageUrl).toURL();
 
         return extractAuthorizationResponse(url);
     }
