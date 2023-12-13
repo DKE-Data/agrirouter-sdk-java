@@ -23,10 +23,11 @@ class RouterDevice {
         var port: Int = 0
     }
 
-    var authentication: Authentication = Authentication();
+    var authentication: Authentication = Authentication()
 
-    var connectionCriteria: ConnectionCriteria = ConnectionCriteria();
+    var connectionCriteria: ConnectionCriteria = ConnectionCriteria()
 
+    @Suppress("unused")
     lateinit var deviceAlternateId: String
 
 }
