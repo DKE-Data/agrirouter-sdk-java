@@ -5,11 +5,7 @@ package com.dke.data.agrirouter.api.exception;
  */
 public class IllegalParameterDefinitionException extends RuntimeException {
 
-    private String message;
-
-    public IllegalParameterDefinitionException() {
-        this("");
-    }
+    private final String message;
 
     public IllegalParameterDefinitionException(String message) {
         this.message = message;
