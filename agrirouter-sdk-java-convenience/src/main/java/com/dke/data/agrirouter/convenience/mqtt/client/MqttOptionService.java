@@ -21,6 +21,7 @@ import java.security.UnrecoverableKeyException;
 /**
  * Creating MQTT options for the MQTT client.
  */
+@SuppressWarnings("unused")
 public class MqttOptionService extends EnvironmentalService {
 
     private final KeyStoreCreationService keyStoreCreationService = new KeyStoreCreationService();
@@ -42,8 +43,8 @@ public class MqttOptionService extends EnvironmentalService {
      * @return -
      */
     public MqttConnectOptions createMqttConnectOptions(OnboardingResponse onboardingResponse) {
-        MqttConnectOptions options = new MqttConnectOptions();
-        CertificationType certificationType =
+        var options = new MqttConnectOptions();
+        var certificationType =
                 CertificationType.valueOf(onboardingResponse.getAuthentication().getType());
         options.setSocketFactory(
                 this.getSocketFactory(
@@ -64,8 +65,8 @@ public class MqttOptionService extends EnvironmentalService {
      * @return -
      */
     public MqttConnectOptions createMqttConnectOptions(RouterDevice routerDevice) {
-        MqttConnectOptions options = new MqttConnectOptions();
-        CertificationType certificationType =
+        var options = new MqttConnectOptions();
+        var certificationType =
                 CertificationType.valueOf(routerDevice.getAuthentication().getType());
         options.setSocketFactory(
                 this.getSocketFactory(
@@ -89,7 +90,7 @@ public class MqttOptionService extends EnvironmentalService {
     private SocketFactory getSocketFactory(
             String certificate, String password, CertificationType certificationType) {
         try {
-            KeyManagerFactory kmf =
+            var kmf =
                     KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             if (certificationType == CertificationType.PEM) {
                 kmf.init(
@@ -102,7 +103,7 @@ public class MqttOptionService extends EnvironmentalService {
                             password.toCharArray());
                 }
             }
-            SSLContext context = SSLContext.getInstance(Constants.PROTOCOL);
+            var context = SSLContext.getInstance(Constants.PROTOCOL);
             context.init(kmf.getKeyManagers(), null, null);
             return context.getSocketFactory();
         } catch (NoSuchAlgorithmException e) {

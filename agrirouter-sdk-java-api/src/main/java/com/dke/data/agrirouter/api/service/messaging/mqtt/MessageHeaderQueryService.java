@@ -6,6 +6,7 @@ import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 
+@SuppressWarnings("unused")
 public interface MessageHeaderQueryService
         extends MessagingService<MessageQueryParameters>,
         MessageDecoder<FeedResponse.HeaderQueryResponse> {

@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
+@SuppressWarnings("unused")
 public class MessageHeaderQueryServiceImpl extends MqttService
         implements MessageHeaderQueryService, MessageSender {
 

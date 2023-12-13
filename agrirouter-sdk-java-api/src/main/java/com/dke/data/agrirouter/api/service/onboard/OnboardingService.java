@@ -10,6 +10,7 @@ import java.util.Optional;
 /**
  * Service for the onboarding process.
  */
+@SuppressWarnings("unused")
 public interface OnboardingService {
 
     /**
