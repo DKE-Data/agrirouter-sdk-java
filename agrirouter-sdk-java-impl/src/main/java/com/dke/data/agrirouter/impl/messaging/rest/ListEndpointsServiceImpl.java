@@ -1,12 +1,10 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
 import agrirouter.request.payload.account.Endpoints;
-import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
-import com.dke.data.agrirouter.api.messaging.MessageSendingResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.messaging.http.ListEndpointsService;
@@ -20,7 +18,6 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("unused")
 public class ListEndpointsServiceImpl extends EnvironmentalService

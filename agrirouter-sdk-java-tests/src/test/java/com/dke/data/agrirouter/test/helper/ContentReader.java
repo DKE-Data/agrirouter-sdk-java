@@ -1,9 +1,7 @@
 package com.dke.data.agrirouter.test.helper;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 
 /**
  * Generic content reader for the testcases.
