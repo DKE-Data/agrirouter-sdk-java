@@ -45,19 +45,18 @@ public final class RequestFactory {
             String url, String certificate, String password, CertificationType certificationType) {
         var clientConfig = new ClientConfig();
         var keyStore = createKeyStore(certificate, password, certificationType);
-        try (var client = createClient(clientConfig, keyStore, password, certificationType)) {
-            if (Environment.httpRequestLoggingEnabled()) {
-                client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
-            } else {
-                LOGGER.debug(
-                        "Request logging is currently disabled. If you want to enable it, please set '{}'.",
-                        Environment.ENABLE_HTTP_REQUEST_LOGGING);
-            }
-            var target = client.target(url);
-            var request = target.request(MediaType.APPLICATION_JSON_TYPE);
-            request.accept(MediaType.APPLICATION_JSON_TYPE);
-            return request;
+        var client = createClient(clientConfig, keyStore, password, certificationType);
+        if (Environment.httpRequestLoggingEnabled()) {
+            client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+        } else {
+            LOGGER.debug(
+                    "Request logging is currently disabled. If you want to enable it, please set '{}'.",
+                    Environment.ENABLE_HTTP_REQUEST_LOGGING);
         }
+        var target = client.target(url);
+        var request = target.request(MediaType.APPLICATION_JSON_TYPE);
+        request.accept(MediaType.APPLICATION_JSON_TYPE);
+        return request;
     }
 
     private static Client createClient(
@@ -106,14 +105,13 @@ public final class RequestFactory {
      * @return Builder -
      */
     public static Invocation.Builder bearerTokenRequest(String url, String accessToken) {
-        try (var client = ClientBuilder.newClient()) {
-            client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
-            var target = client.target(url);
-            var request = target.request(MediaType.APPLICATION_JSON_TYPE);
-            request.accept(MediaType.APPLICATION_JSON_TYPE);
-            request.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-            return request;
-        }
+        var client = ClientBuilder.newClient();
+        client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+        var target = client.target(url);
+        var request = target.request(MediaType.APPLICATION_JSON_TYPE);
+        request.accept(MediaType.APPLICATION_JSON_TYPE);
+        request.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        return request;
     }
 
     /**
@@ -126,17 +124,16 @@ public final class RequestFactory {
      */
     public static Invocation.Builder signedDeleteRequest(
             String url, String applicationId, String signature) {
-        try (var client = ClientBuilder.newClient()) {
-            client.property(ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, true);
-            client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
-            var target = client.target(url);
-            var request = target.request(MediaType.APPLICATION_JSON_TYPE);
-            request.accept(MediaType.APPLICATION_JSON_TYPE);
-            request.header(AgrirouterHttpHeader.APPLICATION_ID, applicationId);
-            request.header(AgrirouterHttpHeader.SIGNATURE, signature);
+        var client = ClientBuilder.newClient();
+        client.property(ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, true);
+        client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+        var target = client.target(url);
+        var request = target.request(MediaType.APPLICATION_JSON_TYPE);
+        request.accept(MediaType.APPLICATION_JSON_TYPE);
+        request.header(AgrirouterHttpHeader.APPLICATION_ID, applicationId);
+        request.header(AgrirouterHttpHeader.SIGNATURE, signature);
 
-            return request;
-        }
+        return request;
     }
 
     /**
@@ -148,16 +145,15 @@ public final class RequestFactory {
      */
     public static Invocation.Builder bearerTokenRequest(
             String url, String accessToken, String applicationId, String signature) {
-        try (var client = ClientBuilder.newClient()) {
-            client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
-            var target = client.target(url);
-            var request = target.request(MediaType.APPLICATION_JSON_TYPE);
-            request.accept(MediaType.APPLICATION_JSON_TYPE);
-            request.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-            request.header(AgrirouterHttpHeader.APPLICATION_ID, applicationId);
-            request.header(AgrirouterHttpHeader.SIGNATURE, signature);
-            return request;
-        }
+        var client = ClientBuilder.newClient();
+        client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
+        var target = client.target(url);
+        var request = target.request(MediaType.APPLICATION_JSON_TYPE);
+        request.accept(MediaType.APPLICATION_JSON_TYPE);
+        request.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        request.header(AgrirouterHttpHeader.APPLICATION_ID, applicationId);
+        request.header(AgrirouterHttpHeader.SIGNATURE, signature);
+        return request;
     }
 
     public static class AgrirouterHttpHeader {
