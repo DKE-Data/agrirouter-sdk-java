@@ -17,6 +17,7 @@ import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("unused")
 public class MessageQueryServiceImpl extends MqttService
         implements MessageQueryService,
         MessageSender,
@@ -50,7 +51,7 @@ public class MessageQueryServiceImpl extends MqttService
 
     @Override
     public String sendMessageToQueryAll(OnboardingResponse onboardingResponse) {
-        MessageQueryParameters messageQueryParameters =
+        var messageQueryParameters =
                 messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
         return send(messageQueryParameters);
     }
@@ -58,7 +59,7 @@ public class MessageQueryServiceImpl extends MqttService
     @Override
     public MqttAsyncMessageSendingResult sendMessageToQueryAllAsync(
             OnboardingResponse onboardingResponse) {
-        MessageQueryParameters messageQueryParameters =
+        var messageQueryParameters =
                 messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
         return sendAsync(messageQueryParameters);
     }
