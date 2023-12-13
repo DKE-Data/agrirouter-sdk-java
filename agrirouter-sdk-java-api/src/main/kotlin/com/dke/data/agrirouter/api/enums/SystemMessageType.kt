@@ -9,7 +9,6 @@ import agrirouter.request.payload.endpoint.SubscriptionOuterClass
 /**
  * Enum containing all the content message types the AR is supporting.
  */
-@Suppress("unused")
 enum class SystemMessageType(private val key: String, private val typeUrl: String) : TechnicalMessageType {
     EMPTY("", ""),
     DKE_CLOUD_ONBOARD_ENDPOINTS(

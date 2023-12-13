@@ -3,7 +3,6 @@ package com.dke.data.agrirouter.impl;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.env.Constants;
 import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.exception.CertificationTypeNotSupportedException;
 import com.dke.data.agrirouter.api.exception.CouldNotCreateDynamicKeyStoreException;
 import com.dke.data.agrirouter.impl.common.ssl.KeyStoreCreationService;
 import jakarta.ws.rs.client.Client;
@@ -41,6 +40,7 @@ public final class RequestFactory {
      * @param password    -
      * @return Builder -
      */
+    @SuppressWarnings("resource")
     public static Invocation.Builder securedRequest(
             String url, String certificate, String password, CertificationType certificationType) {
         var clientConfig = new ClientConfig();
@@ -100,6 +100,7 @@ public final class RequestFactory {
      * @param accessToken -
      * @return Builder -
      */
+    @SuppressWarnings("resource")
     public static Invocation.Builder bearerTokenRequest(String url, String accessToken) {
         var client = ClientBuilder.newClient();
         client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
@@ -118,6 +119,7 @@ public final class RequestFactory {
      * @param signature     -
      * @return Builder -
      */
+    @SuppressWarnings("resource")
     public static Invocation.Builder signedDeleteRequest(
             String url, String applicationId, String signature) {
         var client = ClientBuilder.newClient();
@@ -139,6 +141,7 @@ public final class RequestFactory {
      * @param accessToken -
      * @return Builder -
      */
+    @SuppressWarnings("resource")
     public static Invocation.Builder bearerTokenRequest(
             String url, String accessToken, String applicationId, String signature) {
         var client = ClientBuilder.newClient();

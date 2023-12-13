@@ -94,6 +94,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
         }
     }
 
+    @SuppressWarnings("resource")
     private void verify(
             SecuredOnboardingParameters securedOnboardingParameters,
             OnboardingRequest onboardingRequest) {
