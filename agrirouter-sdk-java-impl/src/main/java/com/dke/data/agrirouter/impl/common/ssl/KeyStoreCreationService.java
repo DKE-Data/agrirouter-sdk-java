@@ -57,7 +57,7 @@ public class KeyStoreCreationService implements HasLogger {
     KeyStore keyStore;
     try {
       this.getNativeLogger().trace("Create PKCS12 instance for keystore.");
-      keyStore = KeyStore.getInstance("PKCS12");
+      keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
 
       this.getNativeLogger().trace("Create input stream for certificate.");
       InputStream sslInputStream =

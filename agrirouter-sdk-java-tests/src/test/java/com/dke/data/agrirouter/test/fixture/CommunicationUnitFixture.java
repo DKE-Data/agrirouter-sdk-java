@@ -37,7 +37,7 @@ class CommunicationUnitFixture extends AbstractIntegrationTest {
   void onboardCommunicationUnitAndSaveToFile() throws IOException {
     OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {});
     OnboardingParameters onboardingParameters = new OnboardingParameters();
-    onboardingParameters.setRegistrationCode("06535d66c2");
+    onboardingParameters.setRegistrationCode("f50319dc13");
     onboardingParameters.setApplicationId(communicationUnit.getApplicationId());
     onboardingParameters.setCertificationVersionId(communicationUnit.getCertificationVersionId());
     onboardingParameters.setCertificationType(CertificationType.P12);
