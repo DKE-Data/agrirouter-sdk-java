@@ -7,6 +7,7 @@ class RevokeRequest {
 
     lateinit var endpointIds: Array<String>
 
+    @Suppress("PropertyName")
     lateinit var UTCTimestamp: String
 
     lateinit var timeZone: String

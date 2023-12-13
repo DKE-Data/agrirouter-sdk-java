@@ -10,7 +10,7 @@ enum class SecuredOnboardingResponseType(val key: String) {
 
     companion object {
         fun of(key: String): Optional<SecuredOnboardingResponseType>? {
-            return Arrays.stream(SecuredOnboardingResponseType.values()).filter { a -> a.key.contentEquals(key) }
+            return Arrays.stream(entries.toTypedArray()).filter { a -> a.key.contentEquals(key) }
                 .findFirst()
         }
     }

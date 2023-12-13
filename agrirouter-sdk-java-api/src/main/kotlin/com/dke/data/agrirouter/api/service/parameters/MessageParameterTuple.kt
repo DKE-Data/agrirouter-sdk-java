@@ -6,5 +6,4 @@ package com.dke.data.agrirouter.api.service.parameters
 class MessageParameterTuple(
     var messageHeaderParameters: MessageHeaderParameters,
     var payloadParameters: PayloadParameters
-) {
-}
+)
