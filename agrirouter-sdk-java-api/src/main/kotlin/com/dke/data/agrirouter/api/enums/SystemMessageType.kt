@@ -12,12 +12,21 @@ import agrirouter.request.payload.endpoint.SubscriptionOuterClass
 @Suppress("unused")
 enum class SystemMessageType(private val key: String, private val typeUrl: String) : TechnicalMessageType {
     EMPTY("", ""),
-    DKE_CLOUD_ONBOARD_ENDPOINTS("dke:cloud_onboard_endpoints", CloudVirtualizedAppRegistration.OnboardingRequest.getDescriptor().fullName),
-    DKE_CLOUD_OFFBOARD_ENDPOINTS("dke:cloud_offboard_endpoints", CloudVirtualizedAppRegistration.OffboardingRequest.getDescriptor().fullName),
+    DKE_CLOUD_ONBOARD_ENDPOINTS(
+        "dke:cloud_onboard_endpoints",
+        CloudVirtualizedAppRegistration.OnboardingRequest.getDescriptor().fullName
+    ),
+    DKE_CLOUD_OFFBOARD_ENDPOINTS(
+        "dke:cloud_offboard_endpoints",
+        CloudVirtualizedAppRegistration.OffboardingRequest.getDescriptor().fullName
+    ),
     DKE_CAPABILITIES("dke:capabilities", Capabilities.CapabilitySpecification.getDescriptor().fullName),
     DKE_SUBSCRIPTION("dke:subscription", SubscriptionOuterClass.Subscription.getDescriptor().fullName),
     DKE_LIST_ENDPOINTS("dke:list_endpoints", Endpoints.ListEndpointsQuery.getDescriptor().fullName),
-    DKE_LIST_ENDPOINTS_UNFILTERED("dke:list_endpoints_unfiltered", Endpoints.ListEndpointsQuery.getDescriptor().fullName),
+    DKE_LIST_ENDPOINTS_UNFILTERED(
+        "dke:list_endpoints_unfiltered",
+        Endpoints.ListEndpointsQuery.getDescriptor().fullName
+    ),
     DKE_FEED_CONFIRM("dke:feed_confirm", FeedRequests.MessageConfirm.getDescriptor().fullName),
     DKE_FEED_DELETE("dke:feed_delete", FeedRequests.MessageDelete.getDescriptor().fullName),
     DKE_FEED_MESSAGE_QUERY("dke:feed_message_query", FeedRequests.MessageQuery.getDescriptor().fullName),

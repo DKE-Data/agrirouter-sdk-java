@@ -11,59 +11,60 @@ import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.util.Collections;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+
 public class CloudOnboardingServiceImpl extends MqttService
-    implements CloudOnboardingService, MessageBodyCreator, MessageEncoder {
+        implements CloudOnboardingService, MessageBodyCreator, MessageEncoder {
 
-  private final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
+    private final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-  public CloudOnboardingServiceImpl(IMqttClient mqttClient) {
-    super(mqttClient);
-  }
-
-  /**
-   * Onboarding a virtual CU for an existing cloud application (incl. several checks).
-   *
-   * @param parameters Parameters for the onboarding.
-   * @return -
-   */
-  @Override
-  public String send(CloudOnboardingParameters parameters) {
-    parameters.validate();
-    try {
-      EncodedMessage encodedMessage = this.encode(parameters);
-      SendMessageParameters sendMessageParameters = new SendMessageParameters();
-      sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-      sendMessageParameters.setEncodedMessages(
-          Collections.singletonList(encodedMessage.getEncodedMessage()));
-      String messageAsJson = this.createMessageBody(sendMessageParameters);
-      byte[] payload = messageAsJson.getBytes();
-      this.getMqttClient()
-          .publish(
-              Objects.requireNonNull(parameters.getOnboardingResponse())
-                  .getConnectionCriteria()
-                  .getMeasures(),
-              new MqttMessage(payload));
-      return encodedMessage.getApplicationMessageID();
-    } catch (MqttException e) {
-      throw new CouldNotSendMqttMessageException(e);
+    public CloudOnboardingServiceImpl(IMqttClient mqttClient) {
+        super(mqttClient);
     }
-  }
 
-  @Override
-  public MqttAsyncMessageSendingResult sendAsync(CloudOnboardingParameters parameters) {
-    return new MqttAsyncMessageSendingResult(
-        CompletableFuture.supplyAsync(() -> this.send(parameters)));
-  }
+    /**
+     * Onboarding a virtual CU for an existing cloud application (incl. several checks).
+     *
+     * @param parameters Parameters for the onboarding.
+     * @return -
+     */
+    @Override
+    public String send(CloudOnboardingParameters parameters) {
+        parameters.validate();
+        try {
+            EncodedMessage encodedMessage = this.encode(parameters);
+            SendMessageParameters sendMessageParameters = new SendMessageParameters();
+            sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+            sendMessageParameters.setEncodedMessages(
+                    Collections.singletonList(encodedMessage.getEncodedMessage()));
+            String messageAsJson = this.createMessageBody(sendMessageParameters);
+            byte[] payload = messageAsJson.getBytes();
+            this.getMqttClient()
+                    .publish(
+                            Objects.requireNonNull(parameters.getOnboardingResponse())
+                                    .getConnectionCriteria()
+                                    .getMeasures(),
+                            new MqttMessage(payload));
+            return encodedMessage.getApplicationMessageID();
+        } catch (MqttException e) {
+            throw new CouldNotSendMqttMessageException(e);
+        }
+    }
 
-  @Override
-  public EncodeMessageService getEncodeMessageService() {
-    return this.encodeMessageService;
-  }
+    @Override
+    public MqttAsyncMessageSendingResult sendAsync(CloudOnboardingParameters parameters) {
+        return new MqttAsyncMessageSendingResult(
+                CompletableFuture.supplyAsync(() -> this.send(parameters)));
+    }
+
+    @Override
+    public EncodeMessageService getEncodeMessageService() {
+        return this.encodeMessageService;
+    }
 }

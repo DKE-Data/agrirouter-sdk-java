@@ -14,45 +14,45 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class MessageHeaderQueryServiceImpl extends EnvironmentalService
-    implements MessageHeaderQueryService, MessageSender {
+        implements MessageHeaderQueryService, MessageSender {
 
-  private final MessageQueryHelperService messageQueryHelperService;
+    private final MessageQueryHelperService messageQueryHelperService;
 
-  public MessageHeaderQueryServiceImpl(Environment environment) {
-    super(environment);
-    messageQueryHelperService =
-        new MessageQueryHelperService(
-            new EncodeMessageServiceImpl(), SystemMessageType.DKE_FEED_HEADER_QUERY);
-  }
+    public MessageHeaderQueryServiceImpl(Environment environment) {
+        super(environment);
+        messageQueryHelperService =
+                new MessageQueryHelperService(
+                        new EncodeMessageServiceImpl(), SystemMessageType.DKE_FEED_HEADER_QUERY);
+    }
 
-  @Override
-  public String send(MessageQueryParameters parameters) {
-    return this.messageQueryHelperService.send(parameters);
-  }
+    @Override
+    public String send(MessageQueryParameters parameters) {
+        return this.messageQueryHelperService.send(parameters);
+    }
 
-  @Override
-  public HttpAsyncMessageSendingResult sendAsync(MessageQueryParameters parameters) {
-    return messageQueryHelperService.sendAsync(parameters);
-  }
+    @Override
+    public HttpAsyncMessageSendingResult sendAsync(MessageQueryParameters parameters) {
+        return messageQueryHelperService.sendAsync(parameters);
+    }
 
-  @Override
-  public FeedResponse.HeaderQueryResponse unsafeDecode(ByteString message)
-      throws InvalidProtocolBufferException {
-    return FeedResponse.HeaderQueryResponse.parseFrom(message);
-  }
+    @Override
+    public FeedResponse.HeaderQueryResponse unsafeDecode(ByteString message)
+            throws InvalidProtocolBufferException {
+        return FeedResponse.HeaderQueryResponse.parseFrom(message);
+    }
 
-  @Override
-  public String sendMessageToQueryAll(OnboardingResponse onboardingResponse) {
-    MessageQueryParameters messageQueryParameters =
-        messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
-    return send(messageQueryParameters);
-  }
+    @Override
+    public String sendMessageToQueryAll(OnboardingResponse onboardingResponse) {
+        MessageQueryParameters messageQueryParameters =
+                messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
+        return send(messageQueryParameters);
+    }
 
-  @Override
-  public HttpAsyncMessageSendingResult sendMessageToQueryAllAsync(
-      OnboardingResponse onboardingResponse) {
-    MessageQueryParameters messageQueryParameters =
-        messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
-    return sendAsync(messageQueryParameters);
-  }
+    @Override
+    public HttpAsyncMessageSendingResult sendMessageToQueryAllAsync(
+            OnboardingResponse onboardingResponse) {
+        MessageQueryParameters messageQueryParameters =
+                messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
+        return sendAsync(messageQueryParameters);
+    }
 }

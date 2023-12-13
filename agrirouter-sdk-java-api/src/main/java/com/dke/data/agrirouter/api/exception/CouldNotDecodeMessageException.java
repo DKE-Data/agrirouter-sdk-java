@@ -6,7 +6,7 @@ package com.dke.data.agrirouter.api.exception;
  */
 public class CouldNotDecodeMessageException extends RuntimeException {
 
-  public CouldNotDecodeMessageException(Throwable cause) {
-    super(cause);
-  }
+    public CouldNotDecodeMessageException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -1,3 +1,4 @@
 package com.dke.data.agrirouter.api.exception;
 
-public class InvalidSignatureException extends RuntimeException {}
+public class InvalidSignatureException extends RuntimeException {
+}

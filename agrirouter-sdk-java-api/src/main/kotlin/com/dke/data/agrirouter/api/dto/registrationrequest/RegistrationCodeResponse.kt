@@ -8,5 +8,5 @@ class RegistrationCodeResponse {
     lateinit var registrationCode: String
 
     lateinit var validTo: String
-    
+
 }

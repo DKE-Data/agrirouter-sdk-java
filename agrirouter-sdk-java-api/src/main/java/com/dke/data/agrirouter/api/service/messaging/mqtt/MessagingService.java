@@ -9,19 +9,19 @@ import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
  */
 public interface MessagingService<T> {
 
-  /**
-   * Send a synchronous message.
-   *
-   * @param parameters -
-   * @return The ID of the message.
-   */
-  String send(T parameters);
+    /**
+     * Send a synchronous message.
+     *
+     * @param parameters -
+     * @return The ID of the message.
+     */
+    String send(T parameters);
 
-  /**
-   * Send an asynchronous message.
-   *
-   * @param parameters -
-   * @return The completable future containing the possible result.
-   */
-  MqttAsyncMessageSendingResult sendAsync(T parameters);
+    /**
+     * Send an asynchronous message.
+     *
+     * @param parameters -
+     * @return The completable future containing the possible result.
+     */
+    MqttAsyncMessageSendingResult sendAsync(T parameters);
 }
