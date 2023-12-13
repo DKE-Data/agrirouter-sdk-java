@@ -53,7 +53,7 @@ public class MqttClientService extends EnvironmentalService {
         return this.createMqttClient(
                 routerDevice.getConnectionCriteria().getHost(),
                 String.valueOf(routerDevice.getConnectionCriteria().getPort()),
-                routerDevice.getDeviceAlternateId());
+                routerDevice.getConnectionCriteria().getClientId());
     }
 
     private IMqttClient createMqttClient(String host, String port, String clientId) {
