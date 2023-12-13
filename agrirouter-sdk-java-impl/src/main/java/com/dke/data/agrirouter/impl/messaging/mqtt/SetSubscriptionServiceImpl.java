@@ -21,6 +21,7 @@ import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+@SuppressWarnings("unused")
 public class SetSubscriptionServiceImpl extends MqttService
         implements SetSubscriptionService, MessageBodyCreator, MessageEncoder, ResponseValidator {
     private final EncodeMessageService encodeMessageService;
@@ -34,13 +35,13 @@ public class SetSubscriptionServiceImpl extends MqttService
     public String send(SetSubscriptionParameters parameters) {
         parameters.validate();
         try {
-            EncodedMessage encodedMessage = this.encode(parameters);
-            SendMessageParameters sendMessageParameters = new SendMessageParameters();
+            var encodedMessage = this.encode(parameters);
+            var sendMessageParameters = new SendMessageParameters();
             sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
             sendMessageParameters.setEncodedMessages(
                     Collections.singletonList(encodedMessage.getEncodedMessage()));
-            String messageAsJson = this.createMessageBody(sendMessageParameters);
-            byte[] payload = messageAsJson.getBytes();
+            var messageAsJson = this.createMessageBody(sendMessageParameters);
+            var payload = messageAsJson.getBytes();
             this.getMqttClient()
                     .publish(
                             Objects.requireNonNull(parameters.getOnboardingResponse())
