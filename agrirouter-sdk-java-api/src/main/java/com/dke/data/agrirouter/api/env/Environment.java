@@ -30,7 +30,7 @@ public interface Environment {
      * @return -
      */
     static boolean httpRequestLoggingEnabled() {
-        final String httpRequestLoggingEnabled = System.getProperty(ENABLE_HTTP_REQUEST_LOGGING);
+        final var httpRequestLoggingEnabled = System.getProperty(ENABLE_HTTP_REQUEST_LOGGING);
         return BooleanUtils.toBoolean(httpRequestLoggingEnabled);
     }
 

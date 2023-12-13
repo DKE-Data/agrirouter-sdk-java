@@ -26,12 +26,12 @@ class AEncodeEncodeMessageServiceImplTest {
     void givenEmptyMessageWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
         EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-        ByteString toSendMessage = ByteString.copyFromUtf8("");
-        MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
+        var toSendMessage = ByteString.copyFromUtf8("");
+        var messageHeaderParameters = getMessageHeaderParameters();
         messageHeaderParameters.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
-        PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
+        var payloadParameters = getPayloadParameters(toSendMessage);
 
-        final List<MessageParameterTuple> chunks =
+        final var chunks =
                 encodeMessageService.chunkAndBase64EncodeEachChunk(
                         messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
         Assertions.assertEquals(1, chunks.size());
@@ -42,12 +42,12 @@ class AEncodeEncodeMessageServiceImplTest {
     givenSingleChunkMessageWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
         EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-        ByteString toSendMessage = ByteString.copyFromUtf8("secretMessage");
-        MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
+        var toSendMessage = ByteString.copyFromUtf8("secretMessage");
+        var messageHeaderParameters = getMessageHeaderParameters();
         messageHeaderParameters.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
-        PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
+        var payloadParameters = getPayloadParameters(toSendMessage);
 
-        final List<MessageParameterTuple> chunks =
+        final var chunks =
                 encodeMessageService.chunkAndBase64EncodeEachChunk(
                         messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
         Assertions.assertEquals(1, chunks.size());
@@ -58,15 +58,15 @@ class AEncodeEncodeMessageServiceImplTest {
     givenSingleChunkMessageWithMaxSizeWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
         EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-        ByteString toSendMessage =
+        var toSendMessage =
                 ByteString.copyFromUtf8(
                         RandomStringUtils.randomAlphabetic(
                                 PayloadParametersKt.MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT));
-        MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
+        var messageHeaderParameters = getMessageHeaderParameters();
         messageHeaderParameters.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
-        PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
+        var payloadParameters = getPayloadParameters(toSendMessage);
 
-        final List<MessageParameterTuple> chunks =
+        final var chunks =
                 encodeMessageService.chunkAndBase64EncodeEachChunk(
                         messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
         Assertions.assertEquals(1, chunks.size());
@@ -78,12 +78,12 @@ class AEncodeEncodeMessageServiceImplTest {
     givenMultipleChunkMessageWithMaxSizeWhenChunkingThenTheImplementationShouldReturnTheRightNumberOfChunks() {
         EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-        ByteString toSendMessage = ByteString.copyFromUtf8(RandomStringUtils.randomAlphabetic(1024001));
-        MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
+        var toSendMessage = ByteString.copyFromUtf8(RandomStringUtils.randomAlphabetic(1024001));
+        var messageHeaderParameters = getMessageHeaderParameters();
         messageHeaderParameters.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
-        PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
+        var payloadParameters = getPayloadParameters(toSendMessage);
 
-        final List<MessageParameterTuple> chunks =
+        final var chunks =
                 encodeMessageService.chunkAndBase64EncodeEachChunk(
                         messageHeaderParameters, payloadParameters, fakeOnboardingResponse());
         Assertions.assertEquals(2, chunks.size());
@@ -107,13 +107,13 @@ class AEncodeEncodeMessageServiceImplTest {
     void givenValidParametersEncodeAndDecodeBackShouldNotFail() {
         EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-        ByteString toSendMessage = ByteString.copyFromUtf8("secretMessage");
-        MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
-        PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
+        var toSendMessage = ByteString.copyFromUtf8("secretMessage");
+        var messageHeaderParameters = getMessageHeaderParameters();
+        var payloadParameters = getPayloadParameters(toSendMessage);
 
-        String encodedMessage = encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-        DecodeMessageServiceImpl decodeMessageService = new DecodeMessageServiceImpl();
-        DecodeMessageResponse response = decodeMessageService.decode(encodedMessage);
+        var encodedMessage = encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+        var decodeMessageService = new DecodeMessageServiceImpl();
+        var response = decodeMessageService.decode(encodedMessage);
         Assertions.assertEquals(
                 "secretMessage",
                 response.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8());
@@ -123,13 +123,13 @@ class AEncodeEncodeMessageServiceImplTest {
     void givenWrongPayloadEncodeAndDecodeBackShouldFail() {
         EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-        ByteString toSendMessage = ByteString.copyFromUtf8("wrong Message");
-        MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
-        PayloadParameters payloadParameters = getPayloadParameters(toSendMessage);
+        var toSendMessage = ByteString.copyFromUtf8("wrong Message");
+        var messageHeaderParameters = getMessageHeaderParameters();
+        var payloadParameters = getPayloadParameters(toSendMessage);
 
-        String encodedMessage = encodeMessageService.encode(messageHeaderParameters, payloadParameters);
-        DecodeMessageServiceImpl decodeMessageService = new DecodeMessageServiceImpl();
-        DecodeMessageResponse response = decodeMessageService.decode(encodedMessage);
+        var encodedMessage = encodeMessageService.encode(messageHeaderParameters, payloadParameters);
+        var decodeMessageService = new DecodeMessageServiceImpl();
+        var response = decodeMessageService.decode(encodedMessage);
         Assertions.assertNotEquals(
                 "secretMessage",
                 response.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8());
@@ -139,7 +139,7 @@ class AEncodeEncodeMessageServiceImplTest {
     void givenNullPayLoadParametersEncodeShouldThrowException() {
         EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-        MessageHeaderParameters messageHeaderParameters = getMessageHeaderParameters();
+        var messageHeaderParameters = getMessageHeaderParameters();
         assertThrows(
                 IllegalArgumentException.class,
                 () -> encodeMessageService.encode(messageHeaderParameters, null));
@@ -149,14 +149,14 @@ class AEncodeEncodeMessageServiceImplTest {
     void givenNullMessageHeaderEncodeShouldThrowException() {
         EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
 
-        PayloadParameters payloadParameters =
+        var payloadParameters =
                 getPayloadParameters(ByteString.copyFromUtf8("secretMessage"));
         assertThrows(
                 IllegalArgumentException.class, () -> encodeMessageService.encode(null, payloadParameters));
     }
 
     private MessageHeaderParameters getMessageHeaderParameters() {
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
         messageHeaderParameters.setApplicationMessageId("1");
         messageHeaderParameters.setApplicationMessageSeqNo(1);
         messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_CAPABILITIES);
@@ -165,7 +165,7 @@ class AEncodeEncodeMessageServiceImplTest {
     }
 
     private PayloadParameters getPayloadParameters(ByteString toSendMessage) {
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(
                 Capabilities.CapabilitySpecification.getDescriptor().getFullName());
         payloadParameters.setValue(toSendMessage);
@@ -173,7 +173,7 @@ class AEncodeEncodeMessageServiceImplTest {
     }
 
     private OnboardingResponse fakeOnboardingResponse() {
-        OnboardingResponse onboardingResponse = new OnboardingResponse();
+        var onboardingResponse = new OnboardingResponse();
         onboardingResponse.setSensorAlternateId("THIS_IS_FAKE");
         return onboardingResponse;
     }

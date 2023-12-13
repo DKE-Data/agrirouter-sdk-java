@@ -44,9 +44,9 @@ public class UtcTimeService {
     }
 
     public static String offset() {
-        Optional<String> currentTimeZone = timeZone();
+        var currentTimeZone = timeZone();
         if (currentTimeZone.isPresent()) {
-            ZonedDateTime zdt = Instant.now().atZone(ZoneId.of(currentTimeZone.get()));
+            var zdt = Instant.now().atZone(ZoneId.of(currentTimeZone.get()));
             return zdt.getOffset().getId().replaceAll("Z", "+00:00");
         } else {
             throw new CouldNotFindTimeZoneException();
@@ -54,13 +54,13 @@ public class UtcTimeService {
     }
 
     private static Optional<String> timeZone() {
-        Calendar calendar = Calendar.getInstance();
+        var calendar = Calendar.getInstance();
         long zoneOffset = calendar.get(Calendar.ZONE_OFFSET);
-        String[] ids = TimeZone.getAvailableIDs();
+        var ids = TimeZone.getAvailableIDs();
         return Arrays.stream(ids)
                 .filter(
                         (id) -> {
-                            TimeZone tz = TimeZone.getTimeZone(id);
+                            var tz = TimeZone.getTimeZone(id);
                             return tz.getRawOffset() == zoneOffset;
                         })
                 .findFirst();

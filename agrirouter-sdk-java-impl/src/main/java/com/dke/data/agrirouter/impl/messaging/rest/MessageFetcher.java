@@ -32,13 +32,13 @@ public interface MessageFetcher extends ResponseValidator, HasLogger {
     default Optional<String> poll(
             FetchMessageParameters fetchMessageParameters, CancellationToken cancellationToken) {
         fetchMessageParameters.validate();
-        int nrOfTries = 1;
+        var nrOfTries = 1;
         while (cancellationToken.isNotCancelled()) {
             getNativeLogger()
                     .debug(
                             "The cancellation token is not cancelled, we have another try. This is try number {}.",
                             nrOfTries);
-            Response response =
+            var response =
                     RequestFactory.securedRequest(
                                     Objects.requireNonNull(fetchMessageParameters.getOnboardingResponse())
                                             .getConnectionCriteria()
@@ -52,7 +52,7 @@ public interface MessageFetcher extends ResponseValidator, HasLogger {
                                             fetchMessageParameters.getOnboardingResponse().getAuthentication().getType()))
                             .get();
             this.assertStatusCodeIsOk(response.getStatus());
-            String entityContent = response.readEntity(String.class);
+            var entityContent = response.readEntity(String.class);
             if (!StringUtils.equalsIgnoreCase(entityContent, EMPTY_CONTENT)) {
                 return Optional.of(entityContent);
             }

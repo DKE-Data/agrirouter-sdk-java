@@ -38,7 +38,7 @@ public interface HasLogger {
      */
     default Logger getNativeLogger() {
         if (null == loggerCache.get(this.getClass().getName())) {
-            final Logger logger = LoggerFactory.getLogger(this.getClass());
+            final var logger = LoggerFactory.getLogger(this.getClass());
             loggerCache.put(this.getClass().getName(), logger);
         }
         return loggerCache.get(this.getClass().getName());

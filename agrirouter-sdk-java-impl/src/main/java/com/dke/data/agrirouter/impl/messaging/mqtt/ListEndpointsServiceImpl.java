@@ -42,13 +42,13 @@ public class ListEndpointsServiceImpl extends MqttService
     public String send(ListEndpointsParameters parameters) {
         parameters.validate();
         try {
-            EncodedMessage encodedMessage = this.encode(parameters);
-            SendMessageParameters sendMessageParameters = new SendMessageParameters();
+            var encodedMessage = this.encode(parameters);
+            var sendMessageParameters = new SendMessageParameters();
             sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
             sendMessageParameters.setEncodedMessages(
                     Collections.singletonList(encodedMessage.getEncodedMessage()));
-            String messageAsJson = this.createMessageBody(sendMessageParameters);
-            byte[] payload = messageAsJson.getBytes();
+            var messageAsJson = this.createMessageBody(sendMessageParameters);
+            var payload = messageAsJson.getBytes();
             this.getMqttClient()
                     .publish(
                             Objects.requireNonNull(parameters.getOnboardingResponse())
@@ -74,7 +74,7 @@ public class ListEndpointsServiceImpl extends MqttService
 
     @Override
     public String sendMessageToListAllWithExistingRoute(OnboardingResponse onboardingResponse) {
-        ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+        var listEndpointsParameters = new ListEndpointsParameters();
         listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
         listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
         listEndpointsParameters.setOnboardingResponse(onboardingResponse);
@@ -84,7 +84,7 @@ public class ListEndpointsServiceImpl extends MqttService
 
     @Override
     public String sendMessageToListAll(OnboardingResponse onboardingResponse) {
-        ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+        var listEndpointsParameters = new ListEndpointsParameters();
         listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
         listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
         listEndpointsParameters.setOnboardingResponse(onboardingResponse);
@@ -95,7 +95,7 @@ public class ListEndpointsServiceImpl extends MqttService
     @Override
     public MqttAsyncMessageSendingResult sendMessageToListAllWithExistingRouteAsync(
             OnboardingResponse onboardingResponse) {
-        ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+        var listEndpointsParameters = new ListEndpointsParameters();
         listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
         listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
         listEndpointsParameters.setOnboardingResponse(onboardingResponse);
@@ -106,7 +106,7 @@ public class ListEndpointsServiceImpl extends MqttService
     @Override
     public MqttAsyncMessageSendingResult sendMessageToListAllAsync(
             OnboardingResponse onboardingResponse) {
-        ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+        var listEndpointsParameters = new ListEndpointsParameters();
         listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
         listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
         listEndpointsParameters.setOnboardingResponse(onboardingResponse);

@@ -22,7 +22,7 @@ class OnboardingWithErrorMessageTest extends AbstractIntegrationTest {
     void
     givenInvalidRegistrationCodeWhenSendingTheOnboardingRequestThenThereShouldBeAnOnboardingExceptionWithFilledErrorMessage() {
         OnboardingService onboardingService = new OnboardingServiceImpl(getEnv());
-        OnboardingParameters onboardingParameters = new OnboardingParameters();
+        var onboardingParameters = new OnboardingParameters();
         onboardingParameters.setApplicationMessageId(MessageIdService.generateMessageId());
         onboardingParameters.setApplicationType(ApplicationType.APPLICATION);
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
@@ -31,7 +31,7 @@ class OnboardingWithErrorMessageTest extends AbstractIntegrationTest {
         onboardingParameters.setGatewayId(Gateway.REST.getKey());
         onboardingParameters.setUuid(UUID.randomUUID().toString());
         onboardingParameters.setRegistrationCode("INVALID_REGISTRATION_TOKEN");
-        OnboardingException onboardingException =
+        var onboardingException =
                 Assertions.assertThrows(
                         OnboardingException.class, () -> onboardingService.onboard(onboardingParameters));
         Assertions.assertNotNull(onboardingException.getOnboardingError());

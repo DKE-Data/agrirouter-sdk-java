@@ -25,10 +25,10 @@ class HealthCheckForEndpointsByPollingTest extends AbstractIntegrationTest {
     void
     givenExistingAndActivatedEndpointWhenPollingTheOutboxThenTheAgrirouterShouldReturnAnEmptyResult()
             throws IOException {
-        final OnboardingResponse onboardingResponse =
+        final var onboardingResponse =
                 OnboardingResponseRepository.read(OnboardingResponseRepository.Identifier.FARMING_SOFTWARE);
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        final Optional<List<FetchMessageResponse>> optionalMessageResponses =
+        final var optionalMessageResponses =
                 fetchMessageService.fetch(
                         onboardingResponse,
                         new DefaultCancellationToken(
@@ -40,11 +40,11 @@ class HealthCheckForEndpointsByPollingTest extends AbstractIntegrationTest {
     void
     givenExistingAndDeactivatedEndpointWhenPollingTheOutboxThenTheAgrirouterShouldReturnAnEmptyResult()
             throws IOException {
-        final OnboardingResponse onboardingResponse =
+        final var onboardingResponse =
                 OnboardingResponseRepository.read(
                         OnboardingResponseRepository.Identifier.FARMING_SOFTWARE_DEACTIVATED);
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        final Optional<List<FetchMessageResponse>> optionalMessageResponses =
+        final var optionalMessageResponses =
                 fetchMessageService.fetch(
                         onboardingResponse,
                         new DefaultCancellationToken(
@@ -55,7 +55,7 @@ class HealthCheckForEndpointsByPollingTest extends AbstractIntegrationTest {
     @Test
     void givenRemovedEndpointWhenPollingTheOutboxThenTheAgrirouterShouldDenyAccessToTheApi()
             throws IOException {
-        final OnboardingResponse onboardingResponse =
+        final var onboardingResponse =
                 OnboardingResponseRepository.read(
                         OnboardingResponseRepository.Identifier.FARMING_SOFTWARE_REMOVED);
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();

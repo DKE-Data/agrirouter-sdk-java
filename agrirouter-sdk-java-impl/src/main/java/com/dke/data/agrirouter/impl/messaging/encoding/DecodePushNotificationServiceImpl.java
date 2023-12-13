@@ -26,7 +26,7 @@ public class DecodePushNotificationServiceImpl extends NonEnvironmentalService
             throw new IllegalArgumentException("Please provide a valid encoded response.");
         }
         try {
-            DecodeMessageResponse decodedMessagesResponse =
+            var decodedMessagesResponse =
                     this.decodeMessageService.decode(encodedResponse);
             if (decodedMessagesResponse.getResponseEnvelope().getType()
                     == Response.ResponseEnvelope.ResponseBodyType.PUSH_NOTIFICATION) {

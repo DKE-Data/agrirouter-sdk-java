@@ -40,13 +40,13 @@ public class DecodeCloudOnboardingResponsesService
     public List<OnboardingResponse> decode(
             List<FetchMessageResponse> fetchMessageResponses, OnboardingResponse onboardingResponse) {
         List<OnboardingResponse> responses = new ArrayList<>();
-        DecodeMessageResponse decodedMessageQueryResponse =
+        var decodedMessageQueryResponse =
                 this.decodeMessageService.decode(fetchMessageResponses.get(0).getCommand().getMessage());
         try {
             this.assertStatusCodeIsValid(
                     decodedMessageQueryResponse.getResponseEnvelope().getResponseCode());
         } catch (Exception e) {
-            MessageOuterClass.Messages message =
+            var message =
                     this.decodeMessageService.decode(
                             decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails());
             throw new CouldNotOnboardVirtualCommunicationUnitException(
@@ -56,14 +56,14 @@ public class DecodeCloudOnboardingResponsesService
                 == Response.ResponseEnvelope.ResponseBodyType.CLOUD_REGISTRATIONS
                 && this.assertStatusCodeIsCreated(
                 decodedMessageQueryResponse.getResponseEnvelope().getResponseCode())) {
-            CloudVirtualizedAppRegistration.OnboardingResponse cloudOnboardingResponse =
+            var cloudOnboardingResponse =
                     this.decode(
                             decodedMessageQueryResponse.getResponsePayloadWrapper().getDetails().getValue());
             cloudOnboardingResponse
                     .getOnboardedEndpointsList()
                     .forEach(
                             endpointRegistrationDetails -> {
-                                OnboardingResponse internalOnboardingResponse = new OnboardingResponse();
+                                var internalOnboardingResponse = new OnboardingResponse();
                                 internalOnboardingResponse.setSensorAlternateId(
                                         endpointRegistrationDetails.getSensorAlternateId());
                                 internalOnboardingResponse.setCapabilityAlternateId(

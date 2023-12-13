@@ -23,12 +23,12 @@ public class AuthorizationRequestServiceTest extends AbstractIntegrationTest {
         AuthorizationRequestService authorizationRequestService =
                 new AuthorizationRequestServiceImpl(new QA() {
                 });
-        AuthorizationRequestParameters authorizationRequestParameters =
+        var authorizationRequestParameters =
                 new AuthorizationRequestParameters();
         authorizationRequestParameters.setApplicationId(farmingSoftware.getApplicationId());
         authorizationRequestParameters.setResponseType(SecuredOnboardingResponseType.ONBOARD);
         authorizationRequestParameters.setState("my-custom-state-to-identify-the-request");
-        final String authorizationRequestURL =
+        final var authorizationRequestURL =
                 authorizationRequestService.getAuthorizationRequestURL(authorizationRequestParameters);
         assertNotNull(authorizationRequestURL);
         assertTrue(StringUtils.isNotBlank(authorizationRequestURL));
@@ -42,12 +42,12 @@ public class AuthorizationRequestServiceTest extends AbstractIntegrationTest {
         AuthorizationRequestService authorizationRequestService =
                 new AuthorizationRequestServiceImpl(new QA() {
                 });
-        AuthorizationRequestParameters authorizationRequestParameters =
+        var authorizationRequestParameters =
                 new AuthorizationRequestParameters();
         authorizationRequestParameters.setApplicationId(telemetryPlatform.getApplicationId());
         authorizationRequestParameters.setResponseType(SecuredOnboardingResponseType.ONBOARD);
         authorizationRequestParameters.setState("my-custom-state-to-identify-the-request");
-        final String authorizationRequestURL =
+        final var authorizationRequestURL =
                 authorizationRequestService.getAuthorizationRequestURL(authorizationRequestParameters);
         assertNotNull(authorizationRequestURL);
         assertTrue(StringUtils.isNotBlank(authorizationRequestURL));
@@ -61,7 +61,7 @@ public class AuthorizationRequestServiceTest extends AbstractIntegrationTest {
         AuthorizationRequestService authorizationRequestService =
                 new AuthorizationRequestServiceImpl(new QA() {
                 });
-        AuthorizationRequestParameters authorizationRequestParameters =
+        var authorizationRequestParameters =
                 new AuthorizationRequestParameters();
         authorizationRequestParameters.setResponseType(SecuredOnboardingResponseType.ONBOARD);
         Assertions.assertThrows(

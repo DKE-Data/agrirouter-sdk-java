@@ -41,17 +41,17 @@ public class MessageQueryHelperService extends MqttService
         parameters.validate();
         try {
             this.getNativeLogger().trace("Encode message.");
-            EncodedMessage encodedMessage = this.encode(this.technicalMessageType, parameters);
+            var encodedMessage = this.encode(this.technicalMessageType, parameters);
 
             this.getNativeLogger().trace("Build message parameters.");
-            SendMessageParameters sendMessageParameters = new SendMessageParameters();
+            var sendMessageParameters = new SendMessageParameters();
             sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
             sendMessageParameters.setEncodedMessages(
                     Collections.singletonList(encodedMessage.getEncodedMessage()));
 
             this.getNativeLogger().trace("Send and fetch message response.");
-            String messageAsJson = this.createMessageBody(sendMessageParameters);
-            byte[] payload = messageAsJson.getBytes();
+            var messageAsJson = this.createMessageBody(sendMessageParameters);
+            var payload = messageAsJson.getBytes();
             this.getMqttClient()
                     .publish(
                             Objects.requireNonNull(parameters.getOnboardingResponse())

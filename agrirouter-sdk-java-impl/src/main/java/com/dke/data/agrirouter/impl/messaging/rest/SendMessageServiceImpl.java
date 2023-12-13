@@ -16,7 +16,7 @@ public class SendMessageServiceImpl
     @Override
     public void send(SendMessageParameters sendMessageParameters) {
         sendMessageParameters.validate();
-        MessageSendingResponse response = this.sendMessage(sendMessageParameters);
+        var response = this.sendMessage(sendMessageParameters);
         this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
     }
 

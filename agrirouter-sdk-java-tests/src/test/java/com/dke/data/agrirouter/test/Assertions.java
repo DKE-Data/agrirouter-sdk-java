@@ -16,7 +16,7 @@ public class Assertions extends org.junit.jupiter.api.Assertions {
      * @param <T>            -
      */
     public static <T> void assertMatchesAny(List<T> expectedValues, T actual) {
-        AtomicBoolean matches = new AtomicBoolean(false);
+        var matches = new AtomicBoolean(false);
         assertNotNull(expectedValues);
         assertNotNull(actual);
         expectedValues.forEach(

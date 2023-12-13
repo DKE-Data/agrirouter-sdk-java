@@ -21,7 +21,7 @@ public interface QueryAllMessagesParameterCreator {
     @NotNull
     default MessageQueryParameters createMessageParametersToQueryAll(
             OnboardingResponse onboardingResponse) {
-        MessageQueryParameters messageQueryParameters = new MessageQueryParameters();
+        var messageQueryParameters = new MessageQueryParameters();
         messageQueryParameters.setOnboardingResponse(onboardingResponse);
         messageQueryParameters.setMessageIds(Collections.emptyList());
         messageQueryParameters.setSenderIds(Collections.emptyList());

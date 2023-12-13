@@ -34,13 +34,13 @@ public class MessageConfirmationServiceImpl extends MqttService
     public String send(MessageConfirmationParameters parameters) {
         parameters.validate();
         try {
-            EncodedMessage encodedMessage = this.encode(parameters);
-            SendMessageParameters sendMessageParameters = new SendMessageParameters();
+            var encodedMessage = this.encode(parameters);
+            var sendMessageParameters = new SendMessageParameters();
             sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
             sendMessageParameters.setEncodedMessages(
                     Collections.singletonList(encodedMessage.getEncodedMessage()));
-            String messageAsJson = this.createMessageBody(sendMessageParameters);
-            byte[] payload = messageAsJson.getBytes();
+            var messageAsJson = this.createMessageBody(sendMessageParameters);
+            var payload = messageAsJson.getBytes();
             this.getMqttClient()
                     .publish(
                             Objects.requireNonNull(parameters.getOnboardingResponse())

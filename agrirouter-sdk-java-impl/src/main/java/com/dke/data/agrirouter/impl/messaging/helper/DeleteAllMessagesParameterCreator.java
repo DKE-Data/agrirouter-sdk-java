@@ -21,7 +21,7 @@ public interface DeleteAllMessagesParameterCreator {
     @NotNull
     default DeleteMessageParameters createMessageParametersToDeleteAllMessages(
             OnboardingResponse onboardingResponse) {
-        final DeleteMessageParameters deleteMessageParameters = new DeleteMessageParameters();
+        final var deleteMessageParameters = new DeleteMessageParameters();
         deleteMessageParameters.setOnboardingResponse(onboardingResponse);
         deleteMessageParameters.setMessageIds(Collections.emptyList());
         deleteMessageParameters.setSenderIds(Collections.emptyList());

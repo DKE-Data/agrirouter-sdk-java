@@ -50,8 +50,8 @@ class CloudOffboardingServiceTest extends AbstractIntegrationTest {
         offboardExistingVirtualCUFromFormerTestRun();
 
         CloudOnboardingService cloudOnboardingService = new CloudOnboardingServiceImpl();
-        CloudOnboardingParameters parameters = new CloudOnboardingParameters();
-        CloudOnboardingParameters.EndpointDetailsParameters endpointDetails =
+        var parameters = new CloudOnboardingParameters();
+        var endpointDetails =
                 new CloudOnboardingParameters.EndpointDetailsParameters();
         endpointDetails.setEndpointId(EXTERNAL_ID);
         endpointDetails.setEndpointName(ENDPOINT_NAME);
@@ -62,7 +62,7 @@ class CloudOffboardingServiceTest extends AbstractIntegrationTest {
         waitForTheAgrirouterToProcessSingleMessage();
 
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        var fetchMessageResponses =
                 fetchMessageService.fetch(
                         read(Identifier.TELEMETRY_PLATFORM),
                         new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
@@ -71,19 +71,19 @@ class CloudOffboardingServiceTest extends AbstractIntegrationTest {
         Assertions.assertEquals(1, fetchMessageResponses.get().size());
         Assertions.assertNotNull(fetchMessageResponses.get().get(0).getCommand());
 
-        Message command = fetchMessageResponses.get().get(0).getCommand();
-        String message = command.getMessage();
+        var command = fetchMessageResponses.get().get(0).getCommand();
+        var message = command.getMessage();
 
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        DecodeMessageResponse decodeMessageResponse = decodeMessageService.decode(message);
+        var decodeMessageResponse = decodeMessageService.decode(message);
 
         Assertions.assertMatchesAny(
                 Arrays.asList(HttpStatus.SC_OK, HttpStatus.SC_CREATED, HttpStatus.SC_NO_CONTENT),
                 decodeMessageResponse.getResponseEnvelope().getResponseCode());
 
-        DecodeCloudOnboardingResponsesService decodeCloudOnboardingResponsesService =
+        var decodeCloudOnboardingResponsesService =
                 new DecodeCloudOnboardingResponsesService();
-        List<OnboardingResponse> onboardingResponses =
+        var onboardingResponses =
                 decodeCloudOnboardingResponsesService.decode(
                         fetchMessageResponses.get(), read(Identifier.TELEMETRY_PLATFORM));
 
@@ -101,12 +101,12 @@ class CloudOffboardingServiceTest extends AbstractIntegrationTest {
 
     private void offboardExistingVirtualCUFromFormerTestRun() throws Throwable {
         CloudOffboardingService cloudOffboardingService = new CloudOffboardingServiceImpl();
-        CloudOffboardingParameters parameters = new CloudOffboardingParameters();
+        var parameters = new CloudOffboardingParameters();
         parameters.setEndpointIds(Collections.singletonList(VCU_ENDPOINT_ID_FOR_FORMER_TEST_RUN));
         parameters.setOnboardingResponse(read(Identifier.TELEMETRY_PLATFORM));
         cloudOffboardingService.send(parameters);
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        var fetchMessageResponses =
                 fetchMessageService.fetch(
                         read(Identifier.TELEMETRY_PLATFORM),
                         new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
@@ -122,7 +122,7 @@ class CloudOffboardingServiceTest extends AbstractIntegrationTest {
     void givenValidSensorIdWhenOffboardingVirtualCuThenTheOffbardingShouldBeSuccessful()
             throws Throwable {
         CloudOffboardingService cloudOffboardingService = new CloudOffboardingServiceImpl();
-        CloudOffboardingParameters parameters = new CloudOffboardingParameters();
+        var parameters = new CloudOffboardingParameters();
         parameters.setEndpointIds(
                 Collections.singletonList(virtualCommunicationUnit.getSensorAlternateId()));
         parameters.setOnboardingResponse(read(Identifier.TELEMETRY_PLATFORM));
@@ -131,7 +131,7 @@ class CloudOffboardingServiceTest extends AbstractIntegrationTest {
         waitForTheAgrirouterToProcessSingleMessage();
 
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        var fetchMessageResponses =
                 fetchMessageService.fetch(
                         read(Identifier.TELEMETRY_PLATFORM),
                         new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
@@ -140,11 +140,11 @@ class CloudOffboardingServiceTest extends AbstractIntegrationTest {
         Assertions.assertEquals(1, fetchMessageResponses.get().size());
         Assertions.assertNotNull(fetchMessageResponses.get().get(0).getCommand());
 
-        Message command = fetchMessageResponses.get().get(0).getCommand();
-        String message = command.getMessage();
+        var command = fetchMessageResponses.get().get(0).getCommand();
+        var message = command.getMessage();
 
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        DecodeMessageResponse decodeMessageResponse = decodeMessageService.decode(message);
+        var decodeMessageResponse = decodeMessageService.decode(message);
 
         Assertions.assertMatchesAny(
                 Arrays.asList(HttpStatus.SC_OK, HttpStatus.SC_CREATED, HttpStatus.SC_NO_CONTENT),

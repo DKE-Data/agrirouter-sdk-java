@@ -27,7 +27,7 @@ class SecuredOnboardingServiceTest extends AbstractIntegrationTest {
     givenInvalidRegistrationCodeThereShouldBeAnOnboardingExceptionWhenSendingAnOnboardingRequest() {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
-        SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
+        var onboardingParameters = new SecuredOnboardingParameters();
         onboardingParameters.setRegistrationCode("SOME_INVALID_REGISTRATION_CODE");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
         onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
@@ -45,7 +45,7 @@ class SecuredOnboardingServiceTest extends AbstractIntegrationTest {
     givenValidRegistrationCodeThereShouldBeAnOnboardingResponseWhenSendingAnOnboardingRequestForFarmingSoftware() {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
-        SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
+        var onboardingParameters = new SecuredOnboardingParameters();
         onboardingParameters.setRegistrationCode("PLEASE_REPLACE_ME");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
         onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
@@ -54,7 +54,7 @@ class SecuredOnboardingServiceTest extends AbstractIntegrationTest {
         onboardingParameters.setUuid(UUID.randomUUID().toString());
         onboardingParameters.setPrivateKey(farmingSoftware.getPrivateKey());
         onboardingParameters.setPublicKey(farmingSoftware.getPublicKey());
-        final OnboardingResponse onboardingResponse = onboardingService.onboard(onboardingParameters);
+        final var onboardingResponse = onboardingService.onboard(onboardingParameters);
         assertNotNull(onboardingResponse);
         assertNotNull(onboardingResponse.getCapabilityAlternateId());
         assertNotNull(onboardingResponse.getDeviceAlternateId());
@@ -74,7 +74,7 @@ class SecuredOnboardingServiceTest extends AbstractIntegrationTest {
     givenValidRegistrationCodeThereShouldBeAnOnboardingResponseWhenSendingAnOnboardingRequestForTelemetryPlatform() {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
-        SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
+        var onboardingParameters = new SecuredOnboardingParameters();
         onboardingParameters.setRegistrationCode("PLEASE_REPLACE_ME");
         onboardingParameters.setApplicationId(telemetryPlatform.getApplicationId());
         onboardingParameters.setCertificationVersionId(telemetryPlatform.getCertificationVersionId());
@@ -83,7 +83,7 @@ class SecuredOnboardingServiceTest extends AbstractIntegrationTest {
         onboardingParameters.setUuid(UUID.randomUUID().toString());
         onboardingParameters.setPrivateKey(telemetryPlatform.getPrivateKey());
         onboardingParameters.setPublicKey(telemetryPlatform.getPublicKey());
-        final OnboardingResponse onboardingResponse = onboardingService.onboard(onboardingParameters);
+        final var onboardingResponse = onboardingService.onboard(onboardingParameters);
         assertNotNull(onboardingResponse);
         assertNotNull(onboardingResponse.getCapabilityAlternateId());
         assertNotNull(onboardingResponse.getDeviceAlternateId());

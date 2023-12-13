@@ -49,7 +49,7 @@ class DecodePushNotificationServiceImplTest {
     void givenValidEncodedPasswordDecodeShouldNotFail() {
         DecodePushNotificationService decodePushNotificationService =
                 new DecodePushNotificationServiceImpl();
-        PushNotificationOuterClass.PushNotification pushNotification =
+        var pushNotification =
                 decodePushNotificationService.decode(DecodePushNotificationServiceImplTest.ENCODED_MESSAGE);
         assertEquals(
                 "[rq52_givenSinglePushNotificationReceiver_PushNotification_ShouldBeDeliveredToTheOutbox] MESSAGE CONTENT FOR TESTING, GENERATED AT [2019-04-12T09:21:50.649Z]",
@@ -60,7 +60,7 @@ class DecodePushNotificationServiceImplTest {
     void givenWrongEncodedPasswordDecodeShouldThrowException() {
         DecodePushNotificationService decodePushNotificationService =
                 new DecodePushNotificationServiceImpl();
-        String wrongEncodedMessage = "Wrong Message";
+        var wrongEncodedMessage = "Wrong Message";
         assertThrows(
                 IllegalArgumentException.class,
                 () -> decodePushNotificationService.decode(wrongEncodedMessage));
@@ -70,7 +70,7 @@ class DecodePushNotificationServiceImplTest {
     void givenNullEnvironmentDecodeShouldNotFail() {
         DecodePushNotificationService decodePushNotificationService =
                 new DecodePushNotificationServiceImpl();
-        PushNotificationOuterClass.PushNotification pushNotification =
+        var pushNotification =
                 decodePushNotificationService.decode(DecodePushNotificationServiceImplTest.ENCODED_MESSAGE);
         assertEquals(
                 "[rq52_givenSinglePushNotificationReceiver_PushNotification_ShouldBeDeliveredToTheOutbox] MESSAGE CONTENT FOR TESTING, GENERATED AT [2019-04-12T09:21:50.649Z]",

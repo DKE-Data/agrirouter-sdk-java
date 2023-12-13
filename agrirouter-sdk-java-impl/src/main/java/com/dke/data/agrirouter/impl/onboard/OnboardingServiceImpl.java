@@ -31,7 +31,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
         parameters.validate();
 
         this.getNativeLogger().debug("Onboard device.");
-        OnboardingResponse onboardingResponse =
+        var onboardingResponse =
                 this.onboard(
                         parameters.getRegistrationCode(), this.createOnboardingRequestBody(parameters));
 
@@ -46,7 +46,7 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
     private OnboardingRequest createOnboardingRequestBody(OnboardingParameters parameters) {
         this.getNativeLogger().info("BEGIN | Create onboarding request. | '{}'.", parameters);
-        OnboardingRequest onboardRequest =
+        var onboardRequest =
                 this.getOnboardRequest(
                         parameters.getUuid(),
                         parameters.getApplicationId(),
@@ -60,13 +60,13 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     private OnboardingResponse onboard(String registrationCode, OnboardingRequest onboardingRequest) {
         this.getNativeLogger()
                 .info("BEGIN | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);
-        Response response =
+        var response =
                 RequestFactory.bearerTokenRequest(this.environment.getOnboardUrl(), registrationCode)
                         .post(Entity.json(onboardingRequest));
         try {
             response.bufferEntity();
             this.assertStatusCodeIsCreated(response.getStatus());
-            OnboardingResponse onboardingResponse = response.readEntity(OnboardingResponse.class);
+            var onboardingResponse = response.readEntity(OnboardingResponse.class);
 
             this.getNativeLogger()
                     .info("END | Onboarding process. | '{}', '{}'.", registrationCode, onboardingRequest);

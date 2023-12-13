@@ -20,8 +20,8 @@ public interface SignatureService {
 
     default byte[] createSignature(String requestBody, String privateKey) {
         try {
-            SecurityKeyCreationService securityKeyCreationService = new SecurityKeyCreationService();
-            Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
+            var securityKeyCreationService = new SecurityKeyCreationService();
+            var signature = Signature.getInstance(SIGNATURE_ALGORITHM);
             signature.initSign(securityKeyCreationService.createPrivateKey(privateKey));
             signature.update(requestBody.getBytes(UTF_8));
             return signature.sign();
@@ -32,8 +32,8 @@ public interface SignatureService {
 
     default void verifySignature(String requestBody, byte[] signedBytes, String publicKey) {
         try {
-            SecurityKeyCreationService securityKeyCreationService = new SecurityKeyCreationService();
-            Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
+            var securityKeyCreationService = new SecurityKeyCreationService();
+            var signature = Signature.getInstance(SIGNATURE_ALGORITHM);
             signature.initVerify(securityKeyCreationService.createPublicKey(publicKey));
             signature.update(requestBody.getBytes(UTF_8));
             if (!signature.verify(signedBytes)) {

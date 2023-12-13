@@ -36,16 +36,16 @@ public class MessageQueryHelperService extends NonEnvironmentalService
         parameters.validate();
 
         this.getNativeLogger().trace("Encode message.");
-        EncodedMessage encodedMessageResponse = this.encode(this.technicalMessageType, parameters);
+        var encodedMessageResponse = this.encode(this.technicalMessageType, parameters);
 
         this.getNativeLogger().trace("Build message parameters.");
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
 
         this.getNativeLogger().trace("Send and fetch message response.");
-        MessageSendingResponse response = this.sendMessage(sendMessageParameters);
+        var response = this.sendMessage(sendMessageParameters);
 
         this.getNativeLogger().trace("Validate message response.");
         this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
@@ -61,16 +61,16 @@ public class MessageQueryHelperService extends NonEnvironmentalService
         parameters.validate();
 
         this.getNativeLogger().trace("Encode message.");
-        EncodedMessage encodedMessageResponse = this.encode(this.technicalMessageType, parameters);
+        var encodedMessageResponse = this.encode(this.technicalMessageType, parameters);
 
         this.getNativeLogger().trace("Build message parameters.");
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessageResponse.getEncodedMessage()));
 
         this.getNativeLogger().trace("Send and fetch message response.");
-        CompletableFuture<MessageSendingResponse> response =
+        var response =
                 this.sendMessageAsync(sendMessageParameters);
 
         this.logMethodEnd();

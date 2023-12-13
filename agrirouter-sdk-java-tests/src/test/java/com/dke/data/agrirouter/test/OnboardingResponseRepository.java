@@ -24,8 +24,8 @@ public class OnboardingResponseRepository {
      * @throws IOException -
      */
     public static OnboardingResponse read(Identifier identifier) throws IOException {
-        Path path = Paths.get(FOLDER.concat(identifier.getFileName()).concat(FILE_SUFFIX));
-        final StringBuilder fileContent = new StringBuilder();
+        var path = Paths.get(FOLDER.concat(identifier.getFileName()).concat(FILE_SUFFIX));
+        final var fileContent = new StringBuilder();
         Files.readAllLines(path).forEach(fileContent::append);
         return new Gson().fromJson(fileContent.toString(), OnboardingResponse.class);
     }
@@ -39,8 +39,8 @@ public class OnboardingResponseRepository {
      */
     public static void save(Identifier identifier, OnboardingResponse onboardingResponse)
             throws IOException {
-        String fileContent = new Gson().toJson(onboardingResponse);
-        Path path = Paths.get(FOLDER.concat(identifier.getFileName()).concat(FILE_SUFFIX));
+        var fileContent = new Gson().toJson(onboardingResponse);
+        var path = Paths.get(FOLDER.concat(identifier.getFileName()).concat(FILE_SUFFIX));
         Files.write(path, fileContent.getBytes());
     }
 

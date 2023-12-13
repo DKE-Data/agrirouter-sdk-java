@@ -18,7 +18,7 @@ public class FetchMessageServiceImpl implements FetchMessageService, MessageFetc
     @Override
     public Optional<List<FetchMessageResponse>> fetch(
             OnboardingResponse onboardingResponse, int maxTries, long interval) {
-        FetchMessageParameters fetchMessageParameters = new FetchMessageParameters();
+        var fetchMessageParameters = new FetchMessageParameters();
         fetchMessageParameters.setOnboardingResponse(onboardingResponse);
         return fetch(fetchMessageParameters, maxTries, interval);
     }
@@ -27,7 +27,7 @@ public class FetchMessageServiceImpl implements FetchMessageService, MessageFetc
     public Optional<List<FetchMessageResponse>> fetch(
             FetchMessageParameters fetchMessageParameters, int maxTries, long interval) {
         fetchMessageParameters.validate();
-        Optional<String> response =
+        var response =
                 poll(fetchMessageParameters, new DefaultCancellationToken(maxTries, interval));
         return response.map(this::parseJson);
     }
@@ -35,7 +35,7 @@ public class FetchMessageServiceImpl implements FetchMessageService, MessageFetc
     @Override
     public Optional<List<FetchMessageResponse>> fetch(
             OnboardingResponse onboardingResponse, CancellationToken cancellationToken) {
-        FetchMessageParameters fetchMessageParameters = new FetchMessageParameters();
+        var fetchMessageParameters = new FetchMessageParameters();
         fetchMessageParameters.setOnboardingResponse(onboardingResponse);
         return fetch(fetchMessageParameters, cancellationToken);
     }
@@ -44,19 +44,19 @@ public class FetchMessageServiceImpl implements FetchMessageService, MessageFetc
     public Optional<List<FetchMessageResponse>> fetch(
             FetchMessageParameters fetchMessageParameters, CancellationToken cancellationToken) {
         fetchMessageParameters.validate();
-        Optional<String> response = poll(fetchMessageParameters, cancellationToken);
+        var response = poll(fetchMessageParameters, cancellationToken);
         return response.map(this::parseJson);
     }
 
     private List<FetchMessageResponse> parseJson(String json) {
-        Type type = new TypeToken<List<FetchMessageResponse>>() {
+        var type = new TypeToken<List<FetchMessageResponse>>() {
         }.getType();
         return new Gson().fromJson(json, type);
     }
 
     @Override
     public FetchMessageResponse parseJson(byte[] json) {
-        Type type = new TypeToken<FetchMessageResponse>() {
+        var type = new TypeToken<FetchMessageResponse>() {
         }.getType();
         return new Gson().fromJson(new String(json), type);
     }

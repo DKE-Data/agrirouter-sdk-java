@@ -28,7 +28,7 @@ class CancellationTokenPollingTest extends AbstractIntegrationTest {
     givenExistingImplementationOfTheCancellationTokenWhenPollingMessagesThenTheDefaultParametersShouldStillInfluenceTheBehavior()
             throws IOException {
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        final Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        final var fetchMessageResponses =
                 fetchMessageService.fetch(
                         OnboardingResponseRepository.read(
                                 OnboardingResponseRepository.Identifier.FARMING_SOFTWARE),
@@ -44,7 +44,7 @@ class CancellationTokenPollingTest extends AbstractIntegrationTest {
     givenExistingImplementationOfTheCancellationTokenWhenPollingMessagesThenTheCustomParametersShouldStillInfluenceTheBehavior()
             throws IOException {
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        final Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        final var fetchMessageResponses =
                 fetchMessageService.fetch(
                         OnboardingResponseRepository.read(
                                 OnboardingResponseRepository.Identifier.FARMING_SOFTWARE),
@@ -59,7 +59,7 @@ class CancellationTokenPollingTest extends AbstractIntegrationTest {
     givenDefaultImplementationOfTheCancellationTokenWhenPollingMessagesThenTheCancellationTokenShouldInfluenceTheBehavior()
             throws IOException {
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        final Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        final var fetchMessageResponses =
                 fetchMessageService.fetch(
                         OnboardingResponseRepository.read(
                                 OnboardingResponseRepository.Identifier.FARMING_SOFTWARE),
@@ -73,7 +73,7 @@ class CancellationTokenPollingTest extends AbstractIntegrationTest {
     givenCustomImplementationOfTheCancellationTokenWhenPollingMessagesThenTheCancellationTokenShouldInfluenceTheBehavior()
             throws IOException {
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        final Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        final var fetchMessageResponses =
                 fetchMessageService.fetch(
                         OnboardingResponseRepository.read(
                                 OnboardingResponseRepository.Identifier.FARMING_SOFTWARE),

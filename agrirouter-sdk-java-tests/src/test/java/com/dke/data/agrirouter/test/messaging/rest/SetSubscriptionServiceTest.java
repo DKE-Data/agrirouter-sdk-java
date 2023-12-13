@@ -39,10 +39,10 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
         SetSubscriptionService setSubscriptionService = new SetSubscriptionServiceImpl(new QA() {
         });
 
-        SetSubscriptionParameters parameters = new SetSubscriptionParameters();
+        var parameters = new SetSubscriptionParameters();
         parameters.setOnboardingResponse(read(Identifier.FARMING_SOFTWARE));
         List<SetSubscriptionParameters.Subscription> subscriptions = new ArrayList<>();
-        SetSubscriptionParameters.Subscription subscription =
+        var subscription =
                 new SetSubscriptionParameters.Subscription();
         subscription.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
         subscriptions.add(subscription);
@@ -52,7 +52,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
         waitForTheAgrirouterToProcessSingleMessage();
 
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        var fetchMessageResponses =
                 fetchMessageService.fetch(
                         read(Identifier.FARMING_SOFTWARE),
                         new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
@@ -61,11 +61,11 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
         Assertions.assertEquals(1, fetchMessageResponses.get().size());
         Assertions.assertNotNull(fetchMessageResponses.get().get(0).getCommand());
 
-        Message command = fetchMessageResponses.get().get(0).getCommand();
-        String message = command.getMessage();
+        var command = fetchMessageResponses.get().get(0).getCommand();
+        var message = command.getMessage();
 
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        DecodeMessageResponse decodeMessageResponse = decodeMessageService.decode(message);
+        var decodeMessageResponse = decodeMessageService.decode(message);
 
         Assertions.assertMatchesAny(
                 Arrays.asList(HttpStatus.SC_OK, HttpStatus.SC_CREATED, HttpStatus.SC_NO_CONTENT),
@@ -78,10 +78,10 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
         SetSubscriptionService setSubscriptionService = new SetSubscriptionServiceImpl(new QA() {
         });
 
-        SetSubscriptionParameters parameters = new SetSubscriptionParameters();
+        var parameters = new SetSubscriptionParameters();
         parameters.setOnboardingResponse(read(Identifier.FARMING_SOFTWARE));
         List<SetSubscriptionParameters.Subscription> subscriptions = new ArrayList<>();
-        SetSubscriptionParameters.Subscription subscription =
+        var subscription =
                 new SetSubscriptionParameters.Subscription();
         subscription.setTechnicalMessageType(SystemMessageType.DKE_FEED_DELETE);
         subscriptions.add(subscription);
@@ -91,7 +91,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
         waitForTheAgrirouterToProcessSingleMessage();
 
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        var fetchMessageResponses =
                 fetchMessageService.fetch(
                         read(Identifier.FARMING_SOFTWARE),
                         new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
@@ -100,20 +100,20 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
         Assertions.assertEquals(1, fetchMessageResponses.get().size());
         Assertions.assertNotNull(fetchMessageResponses.get().get(0).getCommand());
 
-        Message command = fetchMessageResponses.get().get(0).getCommand();
-        String encodedMessage = command.getMessage();
+        var command = fetchMessageResponses.get().get(0).getCommand();
+        var encodedMessage = command.getMessage();
 
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        DecodeMessageResponse decodeMessageResponse = decodeMessageService.decode(encodedMessage);
+        var decodeMessageResponse = decodeMessageService.decode(encodedMessage);
 
         Assertions.assertEquals(
                 HttpStatus.SC_BAD_REQUEST, decodeMessageResponse.getResponseEnvelope().getResponseCode());
 
-        MessageOuterClass.Messages messages =
+        var messages =
                 decodeMessageService.decode(decodeMessageResponse.getResponsePayloadWrapper().getDetails());
         Assertions.assertEquals(1, messages.getMessagesCount());
 
-        MessageOuterClass.Message message = messages.getMessages(0);
+        var message = messages.getMessages(0);
         Assertions.assertEquals("VAL_000006", message.getMessageCode());
     }
 }

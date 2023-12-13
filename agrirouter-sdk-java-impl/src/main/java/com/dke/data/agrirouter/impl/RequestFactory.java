@@ -84,14 +84,11 @@ public final class RequestFactory {
             String x509Certificate, String password, CertificationType certificationType) {
         var keyStoreCreationService = new KeyStoreCreationService();
         try {
-            switch (certificationType) {
-                case PEM:
-                    return keyStoreCreationService.createAndReturnKeystoreFromPEM(x509Certificate, password);
-                case P12:
-                    return keyStoreCreationService.createAndReturnKeystoreFromP12(x509Certificate, password);
-                default:
-                    throw new CertificationTypeNotSupportedException(certificationType);
-            }
+            return switch (certificationType) {
+                case PEM -> keyStoreCreationService.createAndReturnKeystoreFromPEM(x509Certificate, password);
+                case P12 -> keyStoreCreationService.createAndReturnKeystoreFromP12(x509Certificate, password);
+                default -> throw new CertificationTypeNotSupportedException(certificationType);
+            };
         } catch (Exception e) {
             throw new CouldNotCreateDynamicKeyStoreException(e);
         }

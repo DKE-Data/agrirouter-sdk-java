@@ -46,7 +46,7 @@ public class MessageQueryServiceImpl extends EnvironmentalService
 
     @Override
     public String sendMessageToQueryAll(OnboardingResponse onboardingResponse) {
-        MessageQueryParameters messageQueryParameters =
+        var messageQueryParameters =
                 messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
         return send(messageQueryParameters);
     }
@@ -54,7 +54,7 @@ public class MessageQueryServiceImpl extends EnvironmentalService
     @Override
     public HttpAsyncMessageSendingResult sendMessageToQueryAllAsync(
             OnboardingResponse onboardingResponse) {
-        MessageQueryParameters messageQueryParameters =
+        var messageQueryParameters =
                 messageQueryHelperService.createMessageParametersToQueryAll(onboardingResponse);
         return sendAsync(messageQueryParameters);
     }

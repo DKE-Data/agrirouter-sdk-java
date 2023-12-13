@@ -67,10 +67,10 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
             throws Throwable {
         // [1] Fetch all the messages within the feed. The number of headers should match the number of
         // chunks sent.
-        final MessageQueryServiceImpl messageQueryService = new MessageQueryServiceImpl(new QA() {
+        final var messageQueryService = new MessageQueryServiceImpl(new QA() {
         });
-        final MessageQueryParameters messageQueryParameters = new MessageQueryParameters();
-        final OnboardingResponse recipient =
+        final var messageQueryParameters = new MessageQueryParameters();
+        final var recipient =
                 OnboardingResponseRepository.read(
                         OnboardingResponseRepository.Identifier.COMMUNICATION_UNIT);
         messageQueryParameters.setOnboardingResponse(recipient);
@@ -85,7 +85,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
         // [3] Fetch the chunks from the outbox. Since we have the same restrictions while receiving,
         // this has to be the same number of messages as it is chunks.
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        var fetchMessageResponses =
                 fetchMessageService.fetch(
                         recipient, new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
         Assertions.assertTrue(fetchMessageResponses.isPresent());
@@ -105,7 +105,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
 
         // [5] Map the results from the query to 'real' messages within the feed and perform some
         // assertions.
-        final List<FeedResponse.MessageQueryResponse.FeedMessage> feedMessages =
+        final var feedMessages =
                 fetchMessageResponses.get().stream()
                         .map(
                                 fetchMessageResponse ->
@@ -121,7 +121,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
                 feedMessage -> Assertions.assertNotNull(feedMessage.getHeader().getChunkContext()));
         Assertions.assertEquals(
                 feedMessages.get(0).getHeader().getChunkContext().getTotal(), expectedNrOfChunks);
-        final Set<String> chunkContextIds =
+        final var chunkContextIds =
                 feedMessages.stream()
                         .map(feedMessage -> feedMessage.getHeader().getChunkContext().getContextId())
                         .collect(Collectors.toSet());
@@ -129,14 +129,14 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
                 1, chunkContextIds.size(), "There should be only one chunk context ID.");
 
         // [6] Confirm the chunks to remove them from the feed.
-        final List<String> messageIdsToConfirm =
+        final var messageIdsToConfirm =
                 feedMessages.stream()
                         .map(feedMessage -> feedMessage.getHeader().getMessageId())
                         .collect(Collectors.toList());
-        final MessageConfirmationServiceImpl messageConfirmationService =
+        final var messageConfirmationService =
                 new MessageConfirmationServiceImpl(new QA() {
                 });
-        final MessageConfirmationParameters messageConfirmationParameters =
+        final var messageConfirmationParameters =
                 new MessageConfirmationParameters();
         messageConfirmationParameters.setOnboardingResponse(recipient);
         messageConfirmationParameters.setMessageIds(messageIdsToConfirm);
@@ -164,13 +164,13 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
     private void actionsForSender(ByteString messageContent, int expectedNrOfChunks)
             throws IOException, InterruptedException {
         final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
-        final SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
-        final OnboardingResponse onboardingResponse =
+        final var sendMessageService = new SendMessageServiceImpl();
+        final var onboardingResponse =
                 OnboardingResponseRepository.read(OnboardingResponseRepository.Identifier.FARMING_SOFTWARE);
 
         // [1] Define the raw message, in this case this is the Base64 encoded message content, no
         // chunking needed.
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
         messageHeaderParameters.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
         messageHeaderParameters.setApplicationMessageId(MessageIdService.generateMessageId());
         messageHeaderParameters.setApplicationMessageSeqNo(
@@ -182,12 +182,12 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
                                         OnboardingResponseRepository.Identifier.COMMUNICATION_UNIT)
                                 .getSensorAlternateId()));
 
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setValue(messageContent);
         payloadParameters.setTypeUrl(SystemMessageType.EMPTY.getKey());
 
         // [2] Chunk the message content using the SDK specific methods ('chunkAndEncode').
-        List<MessageParameterTuple> tuples =
+        var tuples =
                 encodeMessageService.chunkAndBase64EncodeEachChunk(
                         messageHeaderParameters, payloadParameters, onboardingResponse);
 
@@ -199,10 +199,10 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
                                         .length()
                                         <= MAX_CHUNK_SIZE));
 
-        List<String> encodedMessages = encodeMessageService.encode(tuples);
+        var encodedMessages = encodeMessageService.encode(tuples);
 
         // [3] Send the chunks to the agrirouter.
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setEncodedMessages(encodedMessages);
         sendMessageParameters.setOnboardingResponse(onboardingResponse);
         sendMessageService.send(sendMessageParameters);
@@ -212,7 +212,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
 
         // [5] Check if the chunks were processed successfully.
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        var fetchMessageResponses =
                 fetchMessageService.fetch(
                         onboardingResponse,
                         new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
@@ -221,7 +221,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
         Assertions.assertEquals(expectedNrOfChunks, fetchMessageResponses.get().size());
 
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        AtomicReference<DecodeMessageResponse> decodeMessageResponse = new AtomicReference<>();
+        var decodeMessageResponse = new AtomicReference<DecodeMessageResponse>();
         fetchMessageResponses.get().stream()
                 .map(FetchMessageResponse::getCommand)
                 .forEach(
@@ -258,10 +258,10 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
     @AfterEach
     public void prepareTestEnvironment() throws Throwable {
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        final OnboardingResponse recipient =
+        final var recipient =
                 OnboardingResponseRepository.read(
                         OnboardingResponseRepository.Identifier.COMMUNICATION_UNIT);
-        final MessageHeaderQueryServiceImpl messageHeaderQueryService =
+        final var messageHeaderQueryService =
                 new MessageHeaderQueryServiceImpl(new QA() {
                 });
 
@@ -271,35 +271,35 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
 
         // [2] Fetch all message headers for the last 4 weeks (maximum retention time within the
         // agrirouter).
-        final MessageQueryParameters messageQueryParameters = new MessageQueryParameters();
+        final var messageQueryParameters = new MessageQueryParameters();
         messageQueryParameters.setOnboardingResponse(recipient);
         messageQueryParameters.setSentToInSeconds(UtcTimeService.inTheFuture(5).toEpochSecond());
         messageQueryParameters.setSentFromInSeconds(
                 UtcTimeService.inThePast(UtcTimeService.FOUR_WEEKS_AGO).toEpochSecond());
         messageHeaderQueryService.send(messageQueryParameters);
         waitForTheAgrirouterToProcessSingleMessage();
-        Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        var fetchMessageResponses =
                 fetchMessageService.fetch(
                         recipient, new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
         Assertions.assertTrue(fetchMessageResponses.isPresent());
         Assertions.assertEquals(
                 1, fetchMessageResponses.get().size(), "This should be a single response.");
         final DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        final DecodeMessageResponse decodeMessageResponse =
+        final var decodeMessageResponse =
                 decodeMessageService.decode(fetchMessageResponses.get().get(0).getCommand().getMessage());
         Assertions.assertEquals(
                 Response.ResponseEnvelope.ResponseBodyType.ACK_FOR_FEED_HEADER_LIST,
                 decodeMessageResponse.getResponseEnvelope().getType());
-        final FeedResponse.HeaderQueryResponse headerQueryResponse =
+        final var headerQueryResponse =
                 messageHeaderQueryService.decode(
                         decodeMessageResponse.getResponsePayloadWrapper().getDetails().getValue());
 
         // [3] Delete the dangling messages from the feed of the endpoint if necessary.
         if (headerQueryResponse.getQueryMetrics().getTotalMessagesInQuery() > 0) {
-            final DeleteMessageServiceImpl deleteMessageService = new DeleteMessageServiceImpl();
-            final DeleteMessageParameters deleteMessageParameters = new DeleteMessageParameters();
+            final var deleteMessageService = new DeleteMessageServiceImpl();
+            final var deleteMessageParameters = new DeleteMessageParameters();
             deleteMessageParameters.setOnboardingResponse(recipient);
-            final List<String> messageIds =
+            final var messageIds =
                     headerQueryResponse.getFeedList().stream()
                             .map(FeedResponse.HeaderQueryResponse.Feed::getHeadersList)
                             .flatMap(Collection::stream)

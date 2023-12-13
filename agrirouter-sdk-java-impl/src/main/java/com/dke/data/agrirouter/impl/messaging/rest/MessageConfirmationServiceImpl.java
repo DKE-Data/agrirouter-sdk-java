@@ -29,12 +29,12 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     @Override
     public String send(MessageConfirmationParameters parameters) {
         parameters.validate();
-        EncodedMessage encodedMessage = this.encode(parameters);
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var encodedMessage = this.encode(parameters);
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessage.getEncodedMessage()));
-        MessageSendingResponse response = this.sendMessage(sendMessageParameters);
+        var response = this.sendMessage(sendMessageParameters);
         this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
         return encodedMessage.getApplicationMessageID();
     }
@@ -42,12 +42,12 @@ public class MessageConfirmationServiceImpl extends EnvironmentalService
     @Override
     public HttpAsyncMessageSendingResult sendAsync(MessageConfirmationParameters parameters) {
         parameters.validate();
-        EncodedMessage encodedMessage = this.encode(parameters);
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var encodedMessage = this.encode(parameters);
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessage.getEncodedMessage()));
-        CompletableFuture<MessageSendingResponse> response =
+        var response =
                 this.sendMessageAsync(sendMessageParameters);
         return new HttpAsyncMessageSendingResult(response, encodedMessage.getApplicationMessageID());
     }

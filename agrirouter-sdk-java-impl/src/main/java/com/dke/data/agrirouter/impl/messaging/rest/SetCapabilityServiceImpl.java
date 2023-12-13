@@ -28,12 +28,12 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     @Override
     public String send(SetCapabilitiesParameters parameters) {
         parameters.validate();
-        EncodedMessage encodedMessage = this.encode(parameters);
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var encodedMessage = this.encode(parameters);
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessage.getEncodedMessage()));
-        MessageSendingResponse response = this.sendMessage(sendMessageParameters);
+        var response = this.sendMessage(sendMessageParameters);
         this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
         return encodedMessage.getApplicationMessageID();
     }
@@ -41,8 +41,8 @@ public class SetCapabilityServiceImpl extends EnvironmentalService
     @Override
     public HttpAsyncMessageSendingResult sendAsync(SetCapabilitiesParameters parameters) {
         parameters.validate();
-        EncodedMessage encodedMessage = this.encode(parameters);
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var encodedMessage = this.encode(parameters);
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessage.getEncodedMessage()));

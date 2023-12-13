@@ -39,7 +39,7 @@ class DecodeMessageServiceImplTest {
     @Test
     void givenValidEncodedPasswordDecodeShouldNotFail() {
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        DecodeMessageResponse decodedMessage =
+        var decodedMessage =
                 decodeMessageService.decode(DecodeMessageServiceImplTest.ENCODED_MESSAGE);
         Assertions.assertEquals(
                 decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),
@@ -49,7 +49,7 @@ class DecodeMessageServiceImplTest {
     @Test
     void givenWrongEncodedPasswordDecodeShouldThrowException() {
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        String wrongEncodedMessage = "Wrong Message";
+        var wrongEncodedMessage = "Wrong Message";
         assertThrows(
                 IllegalArgumentException.class, () -> decodeMessageService.decode(wrongEncodedMessage));
     }
@@ -57,7 +57,7 @@ class DecodeMessageServiceImplTest {
     @Test
     void givenNullEnvironmentDecodeShouldNotFail() {
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        DecodeMessageResponse decodedMessage =
+        var decodedMessage =
                 decodeMessageService.decode(DecodeMessageServiceImplTest.ENCODED_MESSAGE);
         Assertions.assertEquals(
                 decodedMessage.getResponsePayloadWrapper().getDetails().getValue().toStringUtf8(),

@@ -46,11 +46,11 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
             throws Throwable {
 
         final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
-        final SendMessageServiceImpl sendMessageService = new SendMessageServiceImpl();
-        final OnboardingResponse onboardingResponse =
+        final var sendMessageService = new SendMessageServiceImpl();
+        final var onboardingResponse =
                 OnboardingResponseRepository.read(OnboardingResponseRepository.Identifier.FARMING_SOFTWARE);
 
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
         messageHeaderParameters.setTechnicalMessageType(ContentMessageType.ISO_11783_TASKDATA_ZIP);
         messageHeaderParameters.setApplicationMessageId(MessageIdService.generateMessageId());
         messageHeaderParameters.setApplicationMessageSeqNo(
@@ -59,12 +59,12 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
         messageHeaderParameters.setRecipients(
                 Collections.singletonList("797b7f4b-79ec-4247-9fba-e726a55c4c7f"));
 
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setValue(
                 ByteString.copyFrom(ContentReader.readRawData(ContentReader.Identifier.BIG_TASK_DATA)));
         payloadParameters.setTypeUrl(SystemMessageType.EMPTY.getKey());
 
-        List<MessageParameterTuple> tuples =
+        var tuples =
                 encodeMessageService.chunkAndBase64EncodeEachChunk(
                         messageHeaderParameters, payloadParameters, onboardingResponse);
 
@@ -76,9 +76,9 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
                                         .length()
                                         <= MAX_CHUNK_SIZE));
 
-        List<String> encodedMessages = encodeMessageService.encode(tuples);
+        var encodedMessages = encodeMessageService.encode(tuples);
 
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setEncodedMessages(encodedMessages);
         sendMessageParameters.setOnboardingResponse(onboardingResponse);
         sendMessageService.send(sendMessageParameters);
@@ -86,7 +86,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
         waitForTheAgrirouterToProcessMultipleMessages();
 
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        Optional<List<FetchMessageResponse>> fetchMessageResponses =
+        var fetchMessageResponses =
                 fetchMessageService.fetch(
                         onboardingResponse,
                         new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
@@ -95,7 +95,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
         Assertions.assertEquals(3, fetchMessageResponses.get().size());
 
         DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
-        AtomicReference<DecodeMessageResponse> decodeMessageResponse = new AtomicReference<>();
+        var decodeMessageResponse = new AtomicReference<DecodeMessageResponse>();
         fetchMessageResponses.get().stream()
                 .map(FetchMessageResponse::getCommand)
                 .forEach(

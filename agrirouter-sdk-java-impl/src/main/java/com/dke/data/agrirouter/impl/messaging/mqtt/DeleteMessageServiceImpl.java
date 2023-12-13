@@ -37,13 +37,13 @@ public class DeleteMessageServiceImpl extends MqttService
     public String send(DeleteMessageParameters parameters) {
         parameters.validate();
         try {
-            EncodedMessage encodedMessage = this.encode(parameters);
-            SendMessageParameters sendMessageParameters = new SendMessageParameters();
+            var encodedMessage = this.encode(parameters);
+            var sendMessageParameters = new SendMessageParameters();
             sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
             sendMessageParameters.setEncodedMessages(
                     Collections.singletonList(encodedMessage.getEncodedMessage()));
-            String messageAsJson = this.createMessageBody(sendMessageParameters);
-            byte[] payload = messageAsJson.getBytes();
+            var messageAsJson = this.createMessageBody(sendMessageParameters);
+            var payload = messageAsJson.getBytes();
             this.getMqttClient()
                     .publish(
                             Objects.requireNonNull(parameters.getOnboardingResponse())
@@ -68,7 +68,7 @@ public class DeleteMessageServiceImpl extends MqttService
 
     @Override
     public String sendMessageToDeleteAll(OnboardingResponse onboardingResponse) {
-        final DeleteMessageParameters deleteMessageParameters =
+        final var deleteMessageParameters =
                 createMessageParametersToDeleteAllMessages(onboardingResponse);
         return send(deleteMessageParameters);
     }
@@ -76,7 +76,7 @@ public class DeleteMessageServiceImpl extends MqttService
     @Override
     public MqttAsyncMessageSendingResult sendMessageToDeleteAllAsync(
             OnboardingResponse onboardingResponse) {
-        final DeleteMessageParameters deleteMessageParameters =
+        final var deleteMessageParameters =
                 createMessageParametersToDeleteAllMessages(onboardingResponse);
         return sendAsync(deleteMessageParameters);
     }

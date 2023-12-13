@@ -44,7 +44,7 @@ public interface ParameterValidation extends HasLogger {
      * @param message -
      */
     default void rise(String message, String... parameterNames) {
-        final String joinedParametersNames = String.join(",", parameterNames);
+        final var joinedParametersNames = String.join(",", parameterNames);
         throw new IllegalParameterDefinitionException(
                 String.format(
                         "At least one of the following parameters has to be defined [%s] was not defined correctly, please check the values. '%s'.",

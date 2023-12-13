@@ -28,15 +28,15 @@ public interface MessageEncoder extends HasLogger {
      * @return -
      */
     default EncodedMessage encode(DeleteMessageParameters parameters) {
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
 
-        final String applicationMessageID =
+        final var applicationMessageID =
                 parameters.getApplicationMessageId() == null
                         ? MessageIdService.generateMessageId()
                         : parameters.getApplicationMessageId();
         messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
 
-        final String teamsetContextId =
+        final var teamsetContextId =
                 parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
         messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
@@ -49,7 +49,7 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_FEED_DELETE);
         messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-        FeedRequests.MessageDelete.Builder messageContent = FeedRequests.MessageDelete.newBuilder();
+        var messageContent = FeedRequests.MessageDelete.newBuilder();
         if (parameters.getMessageIds() != null) {
             messageContent.addAllMessageIds(parameters.getMessageIds());
         }
@@ -57,7 +57,7 @@ public interface MessageEncoder extends HasLogger {
             messageContent.addAllSenders(parameters.getSenderIds());
         }
         if (null != parameters.getSentFromInSeconds() || null != parameters.getSentToInSeconds()) {
-            FeedRequests.ValidityPeriod.Builder validityPeriod = FeedRequests.ValidityPeriod.newBuilder();
+            var validityPeriod = FeedRequests.ValidityPeriod.newBuilder();
             if (null != parameters.getSentFromInSeconds()) {
                 validityPeriod.setSentFrom(new TimestampUtil().seconds(parameters.getSentFromInSeconds()));
             }
@@ -67,11 +67,11 @@ public interface MessageEncoder extends HasLogger {
             messageContent.setValidityPeriod(validityPeriod);
         }
 
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(SystemMessageType.DKE_FEED_DELETE.getTypeUrl());
         payloadParameters.setValue(messageContent.build().toByteString());
 
-        String encodedMessage =
+        var encodedMessage =
                 this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
         return new EncodedMessage(applicationMessageID, encodedMessage);
     }
@@ -83,16 +83,16 @@ public interface MessageEncoder extends HasLogger {
      * @return -
      */
     default EncodedMessage encode(ListEndpointsParameters parameters) {
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
 
-        final String applicationMessageID =
+        final var applicationMessageID =
                 parameters.getApplicationMessageId() == null
                         ? MessageIdService.generateMessageId()
                         : parameters.getApplicationMessageId();
         messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
         messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
-        final String teamsetContextId =
+        final var teamsetContextId =
                 parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
         messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
@@ -108,16 +108,16 @@ public interface MessageEncoder extends HasLogger {
         }
         messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-        Endpoints.ListEndpointsQuery.Builder messageContent = Endpoints.ListEndpointsQuery.newBuilder();
+        var messageContent = Endpoints.ListEndpointsQuery.newBuilder();
         messageContent.setDirection(Objects.requireNonNull(parameters.getDirection()));
         messageContent.setTechnicalMessageType(
                 Objects.requireNonNull(parameters.getTechnicalMessageType()).getKey());
 
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(SystemMessageType.DKE_LIST_ENDPOINTS.getTypeUrl());
         payloadParameters.setValue(messageContent.build().toByteString());
 
-        String encodedMessage =
+        var encodedMessage =
                 this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
 
         return new EncodedMessage(applicationMessageID, encodedMessage);
@@ -130,9 +130,9 @@ public interface MessageEncoder extends HasLogger {
      * @return -
      */
     default EncodedMessage encode(MessageConfirmationParameters parameters) {
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
 
-        final String applicationMessageID =
+        final var applicationMessageID =
                 parameters.getApplicationMessageId() == null
                         ? MessageIdService.generateMessageId()
                         : parameters.getApplicationMessageId();
@@ -140,7 +140,7 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
         messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
-        final String teamsetContextId =
+        final var teamsetContextId =
                 parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
         messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
@@ -151,14 +151,14 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_FEED_CONFIRM);
         messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-        FeedRequests.MessageConfirm.Builder messageContent = FeedRequests.MessageConfirm.newBuilder();
+        var messageContent = FeedRequests.MessageConfirm.newBuilder();
         messageContent.addAllMessageIds(Objects.requireNonNull(parameters.getMessageIds()));
 
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(SystemMessageType.DKE_FEED_CONFIRM.getTypeUrl());
         payloadParameters.setValue(messageContent.build().toByteString());
 
-        String encodedMessage =
+        var encodedMessage =
                 this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
         return new EncodedMessage(applicationMessageID, encodedMessage);
     }
@@ -170,9 +170,9 @@ public interface MessageEncoder extends HasLogger {
      * @return -
      */
     default EncodedMessage encode(SetCapabilitiesParameters parameters) {
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
 
-        final String applicationMessageID =
+        final var applicationMessageID =
                 parameters.getApplicationMessageId() == null
                         ? MessageIdService.generateMessageId()
                         : parameters.getApplicationMessageId();
@@ -180,7 +180,7 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
         messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
-        final String teamsetContextId =
+        final var teamsetContextId =
                 parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
         messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
@@ -191,7 +191,7 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_CAPABILITIES);
         messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-        Capabilities.CapabilitySpecification.Builder builder =
+        var builder =
                 Capabilities.CapabilitySpecification.newBuilder();
         builder.setAppCertificationId(Objects.requireNonNull(parameters.getApplicationId()));
         builder.setAppCertificationVersionId(
@@ -202,21 +202,21 @@ public interface MessageEncoder extends HasLogger {
         Objects.requireNonNull(parameters.getCapabilitiesParameters())
                 .forEach(
                         p -> {
-                            Capabilities.CapabilitySpecification.Capability.Builder capabilityBuilder =
+                            var capabilityBuilder =
                                     Capabilities.CapabilitySpecification.Capability.newBuilder();
                             capabilityBuilder.setTechnicalMessageType(
                                     Objects.requireNonNull(p.getTechnicalMessageType()).getKey());
                             capabilityBuilder.setDirection(Objects.requireNonNull(p.getDirection()));
-                            Capabilities.CapabilitySpecification.Capability capability =
+                            var capability =
                                     capabilityBuilder.build();
                             builder.addCapabilities(capability);
                         });
 
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(SystemMessageType.DKE_CAPABILITIES.getTypeUrl());
         payloadParameters.setValue(builder.build().toByteString());
 
-        String encodedMessage =
+        var encodedMessage =
                 this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
         return new EncodedMessage(applicationMessageID, encodedMessage);
     }
@@ -255,9 +255,9 @@ public interface MessageEncoder extends HasLogger {
      */
     default EncodedMessage encode(SetSubscriptionParameters parameters) {
         assert parameters.getOnboardingResponse() != null;
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
 
-        final String applicationMessageID =
+        final var applicationMessageID =
                 parameters.getApplicationMessageId() == null
                         ? MessageIdService.generateMessageId()
                         : parameters.getApplicationMessageId();
@@ -265,7 +265,7 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
         messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
-        final String teamsetContextId =
+        final var teamsetContextId =
                 parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
         messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
@@ -276,13 +276,13 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_SUBSCRIPTION);
         messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-        SubscriptionOuterClass.Subscription.Builder messageContent =
+        var messageContent =
                 SubscriptionOuterClass.Subscription.newBuilder();
         parameters
                 .getSubscriptions()
                 .forEach(
                         parameter -> {
-                            SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.Builder
+                            var
                                     technicalMessageType =
                                     SubscriptionOuterClass.Subscription.MessageTypeSubscriptionItem.newBuilder();
                             technicalMessageType.setTechnicalMessageType(
@@ -292,11 +292,11 @@ public interface MessageEncoder extends HasLogger {
                             messageContent.addTechnicalMessageTypes(technicalMessageType);
                         });
 
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(SystemMessageType.DKE_SUBSCRIPTION.getTypeUrl());
         payloadParameters.setValue(messageContent.build().toByteString());
 
-        String encodedMessage =
+        var encodedMessage =
                 this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
         return new EncodedMessage(applicationMessageID, encodedMessage);
     }
@@ -311,9 +311,9 @@ public interface MessageEncoder extends HasLogger {
             TechnicalMessageType technicalMessageType, MessageQueryParameters parameters) {
         this.logMethodBegin(parameters);
         this.getNativeLogger().trace("Build message header parameters.");
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
 
-        final String applicationMessageID =
+        final var applicationMessageID =
                 parameters.getApplicationMessageId() == null
                         ? MessageIdService.generateMessageId()
                         : parameters.getApplicationMessageId();
@@ -321,7 +321,7 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setApplicationMessageId(Objects.requireNonNull(applicationMessageID));
         messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
 
-        final String teamsetContextId =
+        final var teamsetContextId =
                 parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
         messageHeaderParameters.setTeamSetContextId(Objects.requireNonNull(teamsetContextId));
 
@@ -333,7 +333,7 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
         this.getNativeLogger().trace("Build message query parameters.");
-        FeedRequests.MessageQuery.Builder messageContent = FeedRequests.MessageQuery.newBuilder();
+        var messageContent = FeedRequests.MessageQuery.newBuilder();
         if (parameters.getMessageIds() != null) {
             messageContent.addAllMessageIds(parameters.getMessageIds());
         }
@@ -341,7 +341,7 @@ public interface MessageEncoder extends HasLogger {
             messageContent.addAllSenders(parameters.getSenderIds());
         }
         if (null != parameters.getSentFromInSeconds() || null != parameters.getSentToInSeconds()) {
-            FeedRequests.ValidityPeriod.Builder validityPeriod = FeedRequests.ValidityPeriod.newBuilder();
+            var validityPeriod = FeedRequests.ValidityPeriod.newBuilder();
             if (null != parameters.getSentFromInSeconds()) {
                 validityPeriod.setSentFrom(new TimestampUtil().seconds(parameters.getSentFromInSeconds()));
             }
@@ -352,12 +352,12 @@ public interface MessageEncoder extends HasLogger {
         }
 
         this.getNativeLogger().trace("Build message payload parameters.");
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(technicalMessageType.getTypeUrl());
         payloadParameters.setValue(messageContent.build().toByteString());
 
         this.getNativeLogger().trace("Encode message.");
-        String encodedMessage =
+        var encodedMessage =
                 this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
 
         this.logMethodEnd(encodedMessage);
@@ -371,15 +371,15 @@ public interface MessageEncoder extends HasLogger {
      * @return -
      */
     default EncodedMessage encode(CloudOnboardingParameters parameters) {
-        final String applicationMessageID =
+        final var applicationMessageID =
                 parameters.getApplicationMessageId() == null
                         ? MessageIdService.generateMessageId()
                         : parameters.getApplicationMessageId();
 
-        final String teamsetContextId =
+        final var teamsetContextId =
                 parameters.getTeamsetContextId() == null ? "" : parameters.getTeamsetContextId();
 
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
         messageHeaderParameters.setApplicationMessageId(applicationMessageID);
         messageHeaderParameters.setTeamSetContextId(teamsetContextId);
 
@@ -391,12 +391,12 @@ public interface MessageEncoder extends HasLogger {
         messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS);
         messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
 
-        CloudVirtualizedAppRegistration.OnboardingRequest.Builder messageContent =
+        var messageContent =
                 CloudVirtualizedAppRegistration.OnboardingRequest.newBuilder();
         Objects.requireNonNull(parameters.getEndpointDetails())
                 .forEach(
                         p -> {
-                            CloudVirtualizedAppRegistration.OnboardingRequest.EndpointRegistrationDetails.Builder
+                            var
                                     builder =
                                     CloudVirtualizedAppRegistration.OnboardingRequest.EndpointRegistrationDetails
                                             .newBuilder();
@@ -405,11 +405,11 @@ public interface MessageEncoder extends HasLogger {
                             messageContent.addOnboardingRequests(builder.build());
                         });
 
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(SystemMessageType.DKE_CLOUD_ONBOARD_ENDPOINTS.getTypeUrl());
         payloadParameters.setValue(messageContent.build().toByteString());
 
-        String encodedMessage =
+        var encodedMessage =
                 this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
         return new EncodedMessage(applicationMessageID, encodedMessage);
     }
@@ -421,16 +421,16 @@ public interface MessageEncoder extends HasLogger {
      * @return -
      */
     default EncodedMessage encode(CloudOffboardingParameters parameters) {
-        final String applicationMessageID =
+        final var applicationMessageID =
                 parameters.getApplicationMessageId() == null
                         ? MessageIdService.generateMessageId()
                         : parameters.getApplicationMessageId();
 
-        CloudVirtualizedAppRegistration.OffboardingRequest.Builder messageContent =
+        var messageContent =
                 CloudVirtualizedAppRegistration.OffboardingRequest.newBuilder();
         messageContent.addAllEndpoints(Objects.requireNonNull(parameters.getEndpointIds()));
 
-        MessageHeaderParameters messageHeaderParameters = new MessageHeaderParameters();
+        var messageHeaderParameters = new MessageHeaderParameters();
         messageHeaderParameters.setApplicationMessageId(applicationMessageID);
         messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS);
         messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
@@ -440,12 +440,12 @@ public interface MessageEncoder extends HasLogger {
                 messageHeaderParameters,
                 parameters.getSequenceNumber(),
                 parameters.getOnboardingResponse());
-        PayloadParameters payloadParameters = new PayloadParameters();
+        var payloadParameters = new PayloadParameters();
         payloadParameters.setTypeUrl(SystemMessageType.DKE_CLOUD_OFFBOARD_ENDPOINTS.getTypeUrl());
 
         payloadParameters.setValue(messageContent.build().toByteString());
 
-        String encodedMessage =
+        var encodedMessage =
                 this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
         return new EncodedMessage(applicationMessageID, encodedMessage);
     }

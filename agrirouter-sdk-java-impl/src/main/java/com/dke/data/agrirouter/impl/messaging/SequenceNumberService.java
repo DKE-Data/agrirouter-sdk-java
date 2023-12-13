@@ -23,7 +23,7 @@ public class SequenceNumberService {
     public static synchronized long generateSequenceNumberForEndpoint(
             OnboardingResponse onboardingResponse) {
         sequenceNumbersForEndpoints.putIfAbsent(onboardingResponse.getSensorAlternateId(), 1L);
-        Long currentSequenceNumber =
+        var currentSequenceNumber =
                 sequenceNumbersForEndpoints.get(onboardingResponse.getSensorAlternateId());
         sequenceNumbersForEndpoints.put(
                 onboardingResponse.getSensorAlternateId(), currentSequenceNumber + 1);

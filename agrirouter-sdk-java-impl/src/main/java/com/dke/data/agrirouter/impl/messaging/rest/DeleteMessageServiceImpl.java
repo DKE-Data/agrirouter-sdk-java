@@ -32,12 +32,12 @@ public class DeleteMessageServiceImpl
     @Override
     public String send(DeleteMessageParameters parameters) {
         parameters.validate();
-        EncodedMessage encodedMessage = this.encode(parameters);
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var encodedMessage = this.encode(parameters);
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessage.getEncodedMessage()));
-        MessageSendingResponse response = this.sendMessage(sendMessageParameters);
+        var response = this.sendMessage(sendMessageParameters);
         this.assertStatusCodeIsOk(response.getNativeResponse().getStatus());
         return encodedMessage.getApplicationMessageID();
     }
@@ -45,12 +45,12 @@ public class DeleteMessageServiceImpl
     @Override
     public HttpAsyncMessageSendingResult sendAsync(DeleteMessageParameters parameters) {
         parameters.validate();
-        EncodedMessage encodedMessage = this.encode(parameters);
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var encodedMessage = this.encode(parameters);
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessage.getEncodedMessage()));
-        CompletableFuture<MessageSendingResponse> response =
+        var response =
                 this.sendMessageAsync(sendMessageParameters);
         return new HttpAsyncMessageSendingResult(response, encodedMessage.getApplicationMessageID());
     }
@@ -62,7 +62,7 @@ public class DeleteMessageServiceImpl
 
     @Override
     public String sendMessageToDeleteAll(OnboardingResponse onboardingResponse) {
-        final DeleteMessageParameters deleteMessageParameters =
+        final var deleteMessageParameters =
                 createMessageParametersToDeleteAllMessages(onboardingResponse);
         return send(deleteMessageParameters);
     }
@@ -70,7 +70,7 @@ public class DeleteMessageServiceImpl
     @Override
     public HttpAsyncMessageSendingResult sendMessageToDeleteAllAsync(
             OnboardingResponse onboardingResponse) {
-        final DeleteMessageParameters deleteMessageParameters =
+        final var deleteMessageParameters =
                 createMessageParametersToDeleteAllMessages(onboardingResponse);
         return sendAsync(deleteMessageParameters);
     }

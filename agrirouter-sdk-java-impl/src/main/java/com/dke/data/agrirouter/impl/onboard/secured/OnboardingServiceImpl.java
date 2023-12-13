@@ -73,11 +73,11 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     private OnboardingResponse onboard(
             SecuredOnboardingParameters securedOnboardingParameters,
             OnboardingRequest onboardingRequest) {
-        String jsonBody = new Gson().toJson(onboardingRequest).replace("\n", "");
-        String encodedSignature = this.createSignature(securedOnboardingParameters, jsonBody);
+        var jsonBody = new Gson().toJson(onboardingRequest).replace("\n", "");
+        var encodedSignature = this.createSignature(securedOnboardingParameters, jsonBody);
         this.verifySignature(
                 jsonBody, decodeHex(encodedSignature), securedOnboardingParameters.getPublicKey());
-        jakarta.ws.rs.core.Response response =
+        var response =
                 RequestFactory.bearerTokenRequest(
                                 this.environment.getSecuredOnboardUrl(),
                                 securedOnboardingParameters.getRegistrationCode(),
@@ -98,13 +98,13 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
     private void verify(
             SecuredOnboardingParameters securedOnboardingParameters,
             OnboardingRequest onboardingRequest) {
-        String jsonBody = new Gson().toJson(onboardingRequest).replace("\n", "");
-        String encodedSignature = this.createSignature(securedOnboardingParameters, jsonBody);
+        var jsonBody = new Gson().toJson(onboardingRequest).replace("\n", "");
+        var encodedSignature = this.createSignature(securedOnboardingParameters, jsonBody);
         this.verifySignature(
                 jsonBody, decodeHex(encodedSignature), securedOnboardingParameters.getPublicKey());
         System.out.println(
                 "Validation of '" + jsonBody + "' against '" + encodedSignature + "' was successful.");
-        Response response =
+        var response =
                 RequestFactory.bearerTokenRequest(
                                 this.environment.getVerifyOnboardRequestUrl(),
                                 securedOnboardingParameters.getRegistrationCode(),
@@ -128,9 +128,9 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
     private String createSignature(
             SecuredOnboardingParameters securedOnboardingParameters, String jsonBody) {
-        byte[] signature = this.createSignature(jsonBody, securedOnboardingParameters.getPrivateKey());
+        var signature = this.createSignature(jsonBody, securedOnboardingParameters.getPrivateKey());
         this.verifySignature(jsonBody, signature, securedOnboardingParameters.getPublicKey());
-        String encodedSignature = Hex.encodeHexString(signature);
+        var encodedSignature = Hex.encodeHexString(signature);
         this.verifySignature(
                 jsonBody, decodeHex(encodedSignature), securedOnboardingParameters.getPublicKey());
         return encodedSignature;
@@ -138,8 +138,8 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
     byte[] createSignature(String requestBody, String privateKey) {
         try {
-            SecurityKeyCreationService securityKeyCreationService = new SecurityKeyCreationService();
-            Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
+            var securityKeyCreationService = new SecurityKeyCreationService();
+            var signature = Signature.getInstance(SIGNATURE_ALGORITHM);
             signature.initSign(securityKeyCreationService.createPrivateKey(privateKey));
             signature.update(requestBody.getBytes(UTF_8));
             return signature.sign();
@@ -150,8 +150,8 @@ public class OnboardingServiceImpl extends AbstractOnboardingService
 
     void verifySignature(String requestBody, byte[] signedBytes, String publicKey) {
         try {
-            SecurityKeyCreationService securityKeyCreationService = new SecurityKeyCreationService();
-            Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
+            var securityKeyCreationService = new SecurityKeyCreationService();
+            var signature = Signature.getInstance(SIGNATURE_ALGORITHM);
             signature.initVerify(securityKeyCreationService.createPublicKey(publicKey));
             signature.update(requestBody.getBytes(UTF_8));
             if (!signature.verify(signedBytes)) {

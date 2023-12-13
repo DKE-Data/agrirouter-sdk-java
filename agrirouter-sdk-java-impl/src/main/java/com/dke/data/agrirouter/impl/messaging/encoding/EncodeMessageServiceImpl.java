@@ -50,7 +50,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
         messageHeaderParameters.validate();
         payloadParameters.validate();
 
-        try (ByteArrayOutputStream streamedMessage = new ByteArrayOutputStream()) {
+        try (var streamedMessage = new ByteArrayOutputStream()) {
 
             getNativeLogger().trace("Encode header.");
             header(messageHeaderParameters).writeDelimitedTo(streamedMessage);
@@ -59,7 +59,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
             payload(payloadParameters).writeDelimitedTo(streamedMessage);
 
             getNativeLogger().trace("Encoding message.");
-            String encodedMessage = Base64.getEncoder().encodeToString(streamedMessage.toByteArray());
+            var encodedMessage = Base64.getEncoder().encodeToString(streamedMessage.toByteArray());
 
             logMethodEnd(encodedMessage);
             return encodedMessage;
@@ -115,29 +115,29 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
                         .debug(
                                 "The message should be chunked, current size of the payload ({}) is above the limitation.",
                                 payloadParameters.getValue().toStringUtf8().length());
-                byte[] wholeMessage = payloadParameters.getValue().toByteArray();
-                final List<byte[]> messageChunks = splitIntoChunks(wholeMessage);
+                var wholeMessage = payloadParameters.getValue().toByteArray();
+                final var messageChunks = splitIntoChunks(wholeMessage);
                 List<MessageParameterTuple> tuples = new ArrayList<>();
-                AtomicInteger chunkNr = new AtomicInteger(1);
-                final String chunkContextId = ChunkContextIdService.generateChunkContextId();
+                var chunkNr = new AtomicInteger(1);
+                final var chunkContextId = ChunkContextIdService.generateChunkContextId();
                 messageChunks.forEach(
                         chunk -> {
-                            final String messageIdForChunk = MessageIdService.generateMessageId();
-                            final long sequenceNumberForChunk =
+                            final var messageIdForChunk = MessageIdService.generateMessageId();
+                            final var sequenceNumberForChunk =
                                     SequenceNumberService.generateSequenceNumberForEndpoint(onboardingResponse);
 
-                            final MessageHeaderParameters header = new MessageHeaderParameters();
+                            final var header = new MessageHeaderParameters();
                             header.copy(messageHeaderParameters);
                             header.setApplicationMessageId(messageIdForChunk);
                             header.setApplicationMessageSeqNo(sequenceNumberForChunk);
-                            Chunk.ChunkComponent.Builder chunkInfo = Chunk.ChunkComponent.newBuilder();
+                            var chunkInfo = Chunk.ChunkComponent.newBuilder();
                             chunkInfo.setContextId(chunkContextId);
                             chunkInfo.setCurrent(chunkNr.getAndIncrement());
                             chunkInfo.setTotal(messageChunks.size());
                             chunkInfo.setTotalSize(wholeMessage.length);
                             header.setChunkInfo(chunkInfo.build());
 
-                            final PayloadParameters payload = new PayloadParameters();
+                            final var payload = new PayloadParameters();
                             payload.copyFrom(payloadParameters);
                             payload.setValue(ByteString.copyFromUtf8(Base64.getEncoder().encodeToString(chunk)));
 
@@ -152,7 +152,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
                                 messageHeaderParameters.getTechnicalMessageType().getKey());
                 getNativeLogger()
                         .debug("The content is encoded, since in other cases the content is encoded as well.");
-                final PayloadParameters payload = new PayloadParameters();
+                final var payload = new PayloadParameters();
                 payload.copyFrom(payloadParameters);
                 payload.setValue(
                         ByteString.copyFromUtf8(
@@ -176,9 +176,9 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
 
     private List<byte[]> splitIntoChunks(byte[] wholeMessage) {
         List<byte[]> chunks = new ArrayList<>();
-        byte[] remainingBytes = wholeMessage;
+        var remainingBytes = wholeMessage;
         do {
-            final byte[] chunk =
+            final var chunk =
                     Arrays.copyOfRange(remainingBytes, 0, MAX_LENGTH_FOR_RAW_MESSAGE_CONTENT);
             chunks.add(chunk);
             remainingBytes =
@@ -195,7 +195,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
         logMethodBegin(parameters);
 
         getNativeLogger().trace("Create message header.");
-        agrirouter.request.Request.RequestEnvelope.Builder messageHeader =
+        var messageHeader =
                 Request.RequestEnvelope.newBuilder();
         messageHeader.setApplicationMessageId(parameters.getApplicationMessageId());
         messageHeader.setApplicationMessageSeqNo(parameters.getApplicationMessageSeqNo());
@@ -216,7 +216,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
         messageHeader.setTimestamp(new TimestampUtil().current());
 
         getNativeLogger().trace("Build message envelope.");
-        Request.RequestEnvelope requestEnvelope = messageHeader.build();
+        var requestEnvelope = messageHeader.build();
 
         logMethodEnd(requestEnvelope);
         return requestEnvelope;
@@ -226,15 +226,15 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
         logMethodBegin(parameters);
 
         getNativeLogger().trace("Create message payload.");
-        Request.RequestPayloadWrapper.Builder messagePayload =
+        var messagePayload =
                 Request.RequestPayloadWrapper.newBuilder();
-        Any.Builder builder = Any.newBuilder();
+        var builder = Any.newBuilder();
         builder.setTypeUrl(parameters.getTypeUrl());
         builder.setValue(parameters.getValue());
         messagePayload.setDetails(builder.build());
 
         getNativeLogger().trace("Message message payload wrapper.");
-        Request.RequestPayloadWrapper requestPayloadWrapper = messagePayload.build();
+        var requestPayloadWrapper = messagePayload.build();
 
         logMethodEnd(requestPayloadWrapper);
         return requestPayloadWrapper;

@@ -15,14 +15,14 @@ public interface MessageBodyCreator {
 
     default String createMessageBody(SendMessageParameters parameters) {
         parameters.validate();
-        GsonBuilder gsonBuilder = new GsonBuilder();
+        var gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Message.class, new MessageTypeAdapter());
         return gsonBuilder.create().toJson(this.createSendMessageRequest(parameters));
     }
 
     default SendMessageRequest createSendMessageRequest(SendMessageParameters parameters) {
         parameters.validate();
-        SendMessageRequest sendMessageRequest = new SendMessageRequest();
+        var sendMessageRequest = new SendMessageRequest();
         sendMessageRequest.setSensorAlternateId(
                 Objects.requireNonNull(parameters.getOnboardingResponse()).getSensorAlternateId());
         sendMessageRequest.setCapabilityAlternateId(
@@ -31,7 +31,7 @@ public interface MessageBodyCreator {
         Objects.requireNonNull(parameters.getEncodedMessages())
                 .forEach(
                         messageToSend -> {
-                            Message message = new Message();
+                            var message = new Message();
                             message.setMessage(messageToSend);
                             message.setTimestamp("" + UtcTimeService.now().toEpochSecond());
                             messages.add(message);

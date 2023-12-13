@@ -25,7 +25,7 @@ public interface MessageSender extends MessageBodyCreator {
      * fetched afterwards.
      */
     default MessageSendingResponse sendMessage(SendMessageParameters parameters) {
-        Response response =
+        var response =
                 RequestFactory.securedRequest(
                                 Objects.requireNonNull(parameters.getOnboardingResponse())
                                         .getConnectionCriteria()

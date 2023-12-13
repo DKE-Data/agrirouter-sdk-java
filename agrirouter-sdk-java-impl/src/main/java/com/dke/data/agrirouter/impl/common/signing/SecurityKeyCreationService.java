@@ -21,16 +21,16 @@ public class SecurityKeyCreationService implements HasLogger {
         PrivateKey result;
         try {
             this.getNativeLogger().trace("Replacing comments within file.");
-            String pkcs8Pem = privateKey.replace("-----BEGIN PRIVATE KEY-----", "");
+            var pkcs8Pem = privateKey.replace("-----BEGIN PRIVATE KEY-----", "");
             pkcs8Pem = pkcs8Pem.replace("-----END PRIVATE KEY-----", "");
             pkcs8Pem = pkcs8Pem.replaceAll("\\s+", "");
 
             this.getNativeLogger().trace("Decode base 64 values.");
-            byte[] pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
+            var pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
 
             this.getNativeLogger().trace("Generate private key.");
-            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pkcs8EncodedBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            var keySpec = new PKCS8EncodedKeySpec(pkcs8EncodedBytes);
+            var keyFactory = KeyFactory.getInstance("RSA");
             result = keyFactory.generatePrivate(keySpec);
         } catch (IllegalArgumentException | InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new CouldNotCreatePrivateKeyException(e);
@@ -46,16 +46,16 @@ public class SecurityKeyCreationService implements HasLogger {
         PublicKey result;
         try {
             this.getNativeLogger().trace("Replacing comments within file.");
-            String pkcs8Pem = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
+            var pkcs8Pem = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
             pkcs8Pem = pkcs8Pem.replace("-----END PUBLIC KEY-----", "");
             pkcs8Pem = pkcs8Pem.replaceAll("\\s+", "");
 
             this.getNativeLogger().trace("Decode base 64 values.");
-            byte[] pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
+            var pkcs8EncodedBytes = Base64.getDecoder().decode(pkcs8Pem);
 
             this.getNativeLogger().trace("Generate public key.");
-            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(pkcs8EncodedBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            var keySpec = new X509EncodedKeySpec(pkcs8EncodedBytes);
+            var keyFactory = KeyFactory.getInstance("RSA");
             result = keyFactory.generatePublic(keySpec);
         } catch (IllegalArgumentException | InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new CouldNotCreatePublicKeyException(e);

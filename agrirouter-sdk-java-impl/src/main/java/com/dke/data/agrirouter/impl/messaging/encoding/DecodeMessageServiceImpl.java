@@ -30,17 +30,17 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
         try {
 
             this.getNativeLogger().trace("Decoding byte array.");
-            byte[] decodedBytes = Base64.getDecoder().decode(encodedResponse);
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(decodedBytes);
+            var decodedBytes = Base64.getDecoder().decode(encodedResponse);
+            var inputStream = new ByteArrayInputStream(decodedBytes);
 
             this.getNativeLogger().trace("Parse response envelope.");
-            agrirouter.response.Response.ResponseEnvelope responseEnvelope =
+            var responseEnvelope =
                     agrirouter.response.Response.ResponseEnvelope.parseDelimitedFrom(inputStream);
 
             this.getNativeLogger().trace("Parse response payload wrapper.");
-            agrirouter.response.Response.ResponsePayloadWrapper responsePayloadWrapper =
+            var responsePayloadWrapper =
                     agrirouter.response.Response.ResponsePayloadWrapper.parseDelimitedFrom(inputStream);
-            DecodeMessageResponse decodeMessageResponse = new DecodeMessageResponse();
+            var decodeMessageResponse = new DecodeMessageResponse();
             decodeMessageResponse.setResponseEnvelope(responseEnvelope);
             decodeMessageResponse.setResponsePayloadWrapper(responsePayloadWrapper);
 
@@ -57,7 +57,7 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
             this.logMethodBegin(message);
 
             this.getNativeLogger().trace("Decoding byte string.");
-            MessageOuterClass.Message decodedMessage = MessageOuterClass.Message.parseFrom(message);
+            var decodedMessage = MessageOuterClass.Message.parseFrom(message);
 
             this.logMethodEnd(decodedMessage);
             return decodedMessage;
@@ -70,7 +70,7 @@ public class DecodeMessageServiceImpl extends NonEnvironmentalService
     public MessageOuterClass.Messages decode(Any any) {
         try {
             this.logMethodBegin(any);
-            MessageOuterClass.Messages messages =
+            var messages =
                     any.unpack(agrirouter.commons.MessageOuterClass.Messages.class);
             this.logMethodEnd();
             return messages;

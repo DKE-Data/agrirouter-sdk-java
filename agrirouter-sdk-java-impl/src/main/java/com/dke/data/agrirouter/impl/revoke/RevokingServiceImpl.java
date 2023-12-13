@@ -32,10 +32,10 @@ public class RevokingServiceImpl extends EnvironmentalService
     public RevokeResponse revoke(RevokeParameters revokeParameters) {
         revokeParameters.validate();
         Response response = null;
-        RevokeRequest revokeRequest = createRevokeRequestBody(revokeParameters);
-        Gson gson = new Gson();
-        String jsonBody = gson.toJson(revokeRequest).replace("\n", "");
-        String encodedSignature = this.createSignature(revokeParameters, jsonBody);
+        var revokeRequest = createRevokeRequestBody(revokeParameters);
+        var gson = new Gson();
+        var jsonBody = gson.toJson(revokeRequest).replace("\n", "");
+        var encodedSignature = this.createSignature(revokeParameters, jsonBody);
         this.verifySignature(jsonBody, decodeHex(encodedSignature), revokeParameters.getPublicKey());
 
         try {
@@ -46,7 +46,7 @@ public class RevokingServiceImpl extends EnvironmentalService
                             .invoke();
 
             response.bufferEntity();
-            RevokeResponse result = RevokeResponse.Filter.valueOf(response.getStatus());
+            var result = RevokeResponse.Filter.valueOf(response.getStatus());
             if (Objects.requireNonNull(result).getKey() == RevokeResponse.SUCCESS.getKey()) {
                 return result;
             } else {
@@ -60,13 +60,13 @@ public class RevokingServiceImpl extends EnvironmentalService
     }
 
     private String createSignature(RevokeParameters revokeParameters, String jsonBody) {
-        byte[] signature = this.createSignature(jsonBody, revokeParameters.getPrivateKey());
+        var signature = this.createSignature(jsonBody, revokeParameters.getPrivateKey());
         return Hex.encodeHexString(signature);
     }
 
     private RevokeRequest createRevokeRequestBody(RevokeParameters parameters) {
         this.getNativeLogger().info("BEGIN | Create revoking request. | '{}'.", parameters);
-        RevokeRequest revokeRequest = new RevokeRequest();
+        var revokeRequest = new RevokeRequest();
         revokeRequest.setAccountId(Objects.requireNonNull(parameters.getAccountId()));
         revokeRequest.setEndpointIds(
                 Objects.requireNonNull(parameters.getEndpointIds()).toArray(new String[]{}));
@@ -83,7 +83,7 @@ public class RevokingServiceImpl extends EnvironmentalService
     }
 
     private RevokingError failSafeGsonParsing(String error) {
-        Gson gson = new Gson();
+        var gson = new Gson();
         try {
             return gson.fromJson(error, RevokingError.class);
         } catch (Exception e) {
