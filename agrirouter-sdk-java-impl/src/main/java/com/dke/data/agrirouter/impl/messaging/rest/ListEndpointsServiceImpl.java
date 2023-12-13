@@ -22,6 +22,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("unused")
 public class ListEndpointsServiceImpl extends EnvironmentalService
         implements ListEndpointsService,
         MessageSender,
@@ -39,8 +40,8 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     @Override
     public String send(ListEndpointsParameters parameters) {
         parameters.validate();
-        EncodedMessage encodedMessage = this.encode(parameters);
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var encodedMessage = this.encode(parameters);
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessage.getEncodedMessage()));
@@ -51,12 +52,12 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     @Override
     public HttpAsyncMessageSendingResult sendAsync(ListEndpointsParameters parameters) {
         parameters.validate();
-        EncodedMessage encodedMessage = this.encode(parameters);
-        SendMessageParameters sendMessageParameters = new SendMessageParameters();
+        var encodedMessage = this.encode(parameters);
+        var sendMessageParameters = new SendMessageParameters();
         sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
         sendMessageParameters.setEncodedMessages(
                 Collections.singletonList(encodedMessage.getEncodedMessage()));
-        final CompletableFuture<MessageSendingResponse> response =
+        final var response =
                 this.sendMessageAsync(sendMessageParameters);
         return new HttpAsyncMessageSendingResult(response, encodedMessage.getApplicationMessageID());
     }
@@ -68,7 +69,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
 
     @Override
     public String sendMessageToListAllWithExistingRoute(OnboardingResponse onboardingResponse) {
-        ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+        var listEndpointsParameters = new ListEndpointsParameters();
         listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
         listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
         listEndpointsParameters.setOnboardingResponse(onboardingResponse);
@@ -78,7 +79,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
 
     @Override
     public String sendMessageToListAll(OnboardingResponse onboardingResponse) {
-        ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+        var listEndpointsParameters = new ListEndpointsParameters();
         listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
         listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
         listEndpointsParameters.setOnboardingResponse(onboardingResponse);
@@ -89,7 +90,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     @Override
     public HttpAsyncMessageSendingResult sendMessageToListAllWithExistingRouteAsync(
             OnboardingResponse onboardingResponse) {
-        ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+        var listEndpointsParameters = new ListEndpointsParameters();
         listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
         listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
         listEndpointsParameters.setOnboardingResponse(onboardingResponse);
@@ -100,7 +101,7 @@ public class ListEndpointsServiceImpl extends EnvironmentalService
     @Override
     public HttpAsyncMessageSendingResult sendMessageToListAllAsync(
             OnboardingResponse onboardingResponse) {
-        ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
+        var listEndpointsParameters = new ListEndpointsParameters();
         listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
         listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
         listEndpointsParameters.setOnboardingResponse(onboardingResponse);
