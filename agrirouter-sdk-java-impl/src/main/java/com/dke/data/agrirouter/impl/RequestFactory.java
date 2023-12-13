@@ -87,7 +87,6 @@ public final class RequestFactory {
             return switch (certificationType) {
                 case PEM -> keyStoreCreationService.createAndReturnKeystoreFromPEM(x509Certificate, password);
                 case P12 -> keyStoreCreationService.createAndReturnKeystoreFromP12(x509Certificate, password);
-                default -> throw new CertificationTypeNotSupportedException(certificationType);
             };
         } catch (Exception e) {
             throw new CouldNotCreateDynamicKeyStoreException(e);

@@ -117,7 +117,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
                                         messageQueryService.decode(
                                                 decodeMessageResponse.getResponsePayloadWrapper().getDetails().getValue()))
                         .map(messageQueryResponse -> messageQueryResponse.getMessages(0))
-                        .collect(Collectors.toList());
+                        .toList();
         Assertions.assertEquals(expectedNrOfChunks, feedMessages.size());
         feedMessages.forEach(
                 feedMessage -> Assertions.assertNotNull(feedMessage.getHeader().getChunkContext()));
