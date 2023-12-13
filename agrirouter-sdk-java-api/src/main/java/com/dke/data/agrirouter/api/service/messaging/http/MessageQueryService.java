@@ -6,6 +6,7 @@ import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 
+@SuppressWarnings("unused")
 public interface MessageQueryService
         extends MessagingService<MessageQueryParameters>,
         MessageDecoder<FeedResponse.MessageQueryResponse> {

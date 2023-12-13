@@ -16,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
  * Sending messages via MQTT using the given MQTT client. The service itself can not access the
  * queue because connection handling should not be part of the API.
  */
+@SuppressWarnings("unused")
 public class SendMessageServiceImpl extends MqttService
         implements SendMessageService<Void>, MessageBodyCreator {
 
@@ -31,8 +32,8 @@ public class SendMessageServiceImpl extends MqttService
     public void send(SendMessageParameters sendMessageParameters) {
         sendMessageParameters.validate();
         try {
-            String messageAsJson = this.createMessageBody(sendMessageParameters);
-            byte[] payload = messageAsJson.getBytes();
+            var messageAsJson = this.createMessageBody(sendMessageParameters);
+            var payload = messageAsJson.getBytes();
             this.getMqttClient()
                     .publish(
                             Objects.requireNonNull(sendMessageParameters.getOnboardingResponse())
