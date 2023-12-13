@@ -5,10 +5,6 @@ package com.dke.data.agrirouter.api.exception;
  */
 public class CouldNotCreateMqttOptionException extends RuntimeException {
 
-    public CouldNotCreateMqttOptionException(String message) {
-        super(message);
-    }
-
     public CouldNotCreateMqttOptionException(String message, Throwable cause) {
         super(message, cause);
     }
