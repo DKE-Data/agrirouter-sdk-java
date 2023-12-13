@@ -6,7 +6,6 @@ import com.dke.data.agrirouter.api.service.HasLogger;
 import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.dke.data.agrirouter.impl.RequestFactory;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import jakarta.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;

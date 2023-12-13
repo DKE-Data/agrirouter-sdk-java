@@ -1,9 +1,7 @@
 package com.dke.data.agrirouter.convenience.decode;
 
 import agrirouter.cloud.registration.CloudVirtualizedAppRegistration;
-import agrirouter.commons.MessageOuterClass;
 import agrirouter.response.Response;
-import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotOnboardVirtualCommunicationUnitException;

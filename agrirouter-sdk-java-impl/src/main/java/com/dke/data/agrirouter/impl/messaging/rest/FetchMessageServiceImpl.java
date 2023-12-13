@@ -9,7 +9,6 @@ import com.dke.data.agrirouter.api.service.parameters.FetchMessageParameters;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 

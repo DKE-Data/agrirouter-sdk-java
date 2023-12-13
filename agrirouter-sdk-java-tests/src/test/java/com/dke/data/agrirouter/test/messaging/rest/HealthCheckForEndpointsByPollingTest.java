@@ -1,8 +1,6 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
-import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
-import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.exception.UnauthorizedRequestException;
 import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
@@ -13,8 +11,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Class to show how health checking via polling can be implemented.

@@ -1,9 +1,6 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
-import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
-import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
-import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.CloudOffboardingService;
@@ -25,8 +22,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 import static com.dke.data.agrirouter.test.OnboardingResponseRepository.Identifier;
 import static com.dke.data.agrirouter.test.OnboardingResponseRepository.read;

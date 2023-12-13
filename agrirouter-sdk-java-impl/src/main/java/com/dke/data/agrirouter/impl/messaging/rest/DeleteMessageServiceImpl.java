@@ -1,9 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
-import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
-import com.dke.data.agrirouter.api.messaging.MessageSendingResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.DeleteMessageService;
 import com.dke.data.agrirouter.api.service.parameters.DeleteMessageParameters;
@@ -14,7 +12,6 @@ import com.dke.data.agrirouter.impl.messaging.helper.DeleteAllMessagesParameterC
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 
 import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
 
 public class DeleteMessageServiceImpl
         implements DeleteMessageService,

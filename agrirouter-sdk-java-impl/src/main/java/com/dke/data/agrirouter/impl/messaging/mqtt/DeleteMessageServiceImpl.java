@@ -1,6 +1,5 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
-import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
@@ -21,6 +20,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("unused")
 public class DeleteMessageServiceImpl extends MqttService
         implements DeleteMessageService,
         MessageBodyCreator,

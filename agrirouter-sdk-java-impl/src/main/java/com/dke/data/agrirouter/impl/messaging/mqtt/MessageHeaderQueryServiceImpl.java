@@ -12,10 +12,9 @@ import com.dke.data.agrirouter.impl.messaging.helper.mqtt.MessageQueryHelperServ
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.util.concurrent.CompletableFuture;
-
-import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 @SuppressWarnings("unused")
 public class MessageHeaderQueryServiceImpl extends MqttService

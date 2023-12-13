@@ -1,11 +1,7 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
-import agrirouter.commons.MessageOuterClass;
 import agrirouter.request.payload.endpoint.Capabilities;
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
-import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
-import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
-import com.dke.data.agrirouter.api.dto.messaging.inner.Message;
 import com.dke.data.agrirouter.api.enums.ContentMessageType;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.env.QA;
@@ -24,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static com.dke.data.agrirouter.test.OnboardingResponseRepository.Identifier;
 import static com.dke.data.agrirouter.test.OnboardingResponseRepository.read;

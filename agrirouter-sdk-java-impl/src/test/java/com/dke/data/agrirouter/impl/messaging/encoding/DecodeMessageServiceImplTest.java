@@ -1,6 +1,5 @@
 package com.dke.data.agrirouter.impl.messaging.encoding;
 
-import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

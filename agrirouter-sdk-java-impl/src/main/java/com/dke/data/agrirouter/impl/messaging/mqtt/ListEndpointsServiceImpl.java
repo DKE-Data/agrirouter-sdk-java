@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import agrirouter.request.payload.account.Endpoints;
-import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;

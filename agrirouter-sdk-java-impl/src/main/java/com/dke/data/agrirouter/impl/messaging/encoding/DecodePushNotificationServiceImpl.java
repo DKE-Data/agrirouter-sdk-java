@@ -2,7 +2,6 @@ package com.dke.data.agrirouter.impl.messaging.encoding;
 
 import agrirouter.feed.push.notification.PushNotificationOuterClass;
 import agrirouter.response.Response;
-import com.dke.data.agrirouter.api.dto.encoding.DecodeMessageResponse;
 import com.dke.data.agrirouter.api.exception.CouldNotDecodePushNotificationException;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodePushNotificationService;
 import com.dke.data.agrirouter.impl.NonEnvironmentalService;

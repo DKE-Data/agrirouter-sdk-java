@@ -17,7 +17,6 @@ import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 import com.google.gson.Gson;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 

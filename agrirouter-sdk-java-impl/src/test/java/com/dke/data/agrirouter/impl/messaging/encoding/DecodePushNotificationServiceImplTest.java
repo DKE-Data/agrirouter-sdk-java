@@ -1,6 +1,5 @@
 package com.dke.data.agrirouter.impl.messaging.encoding;
 
-import agrirouter.feed.push.notification.PushNotificationOuterClass;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodePushNotificationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

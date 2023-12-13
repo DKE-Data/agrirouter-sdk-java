@@ -1,6 +1,5 @@
 package com.dke.data.agrirouter.test.onboarding;
 
-import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.enums.Gateway;
 import com.dke.data.agrirouter.api.env.QA;

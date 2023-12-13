@@ -1,9 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.helper;
 
-import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
 import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
-import com.dke.data.agrirouter.api.messaging.MessageSendingResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
@@ -13,7 +11,6 @@ import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 
 import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
 
 public class MessageQueryHelperService extends NonEnvironmentalService
         implements MessageSender, MessageEncoder, ResponseValidator, QueryAllMessagesParameterCreator {

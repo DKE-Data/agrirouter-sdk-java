@@ -1,9 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.rest;
 
-import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.env.Environment;
 import com.dke.data.agrirouter.api.messaging.HttpAsyncMessageSendingResult;
-import com.dke.data.agrirouter.api.messaging.MessageSendingResponse;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.MessageConfirmationService;
 import com.dke.data.agrirouter.api.service.parameters.MessageConfirmationParameters;
@@ -14,7 +12,6 @@ import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
 
 import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
 
 public class MessageConfirmationServiceImpl extends EnvironmentalService
         implements MessageConfirmationService, MessageSender, MessageEncoder, ResponseValidator {
