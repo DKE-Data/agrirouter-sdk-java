@@ -36,7 +36,7 @@ class OnboardingWithErrorMessageTest extends AbstractIntegrationTest {
                         OnboardingException.class, () -> onboardingService.onboard(onboardingParameters));
         Assertions.assertNotNull(onboardingException.getOnboardingError());
         Assertions.assertNotNull(onboardingException.getOnboardingError().getError());
-        Assertions.assertEquals("0401", onboardingException.getOnboardingError().getError().getCode());
+        Assertions.assertEquals(401, onboardingException.getOnboardingError().getError().getCode());
         Assertions.assertEquals(
                 "Bearer not found.", onboardingException.getOnboardingError().getError().getMessage());
     }
