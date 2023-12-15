@@ -6,11 +6,11 @@ package com.dke.data.agrirouter.api.exception;
  */
 public class CouldNotDecodePushNotificationException extends RuntimeException {
 
-  public CouldNotDecodePushNotificationException(Throwable cause) {
-    super(cause);
-  }
+    public CouldNotDecodePushNotificationException(Throwable cause) {
+        super(cause);
+    }
 
-  public CouldNotDecodePushNotificationException(String message) {
-    super(message);
-  }
+    public CouldNotDecodePushNotificationException(String message) {
+        super(message);
+    }
 }

@@ -13,6 +13,7 @@ class OnboardingRequest {
 
     lateinit var gatewayId: String
 
+    @Suppress("PropertyName")
     lateinit var UTCTimestamp: String
 
     lateinit var timeZone: String

@@ -6,36 +6,37 @@ import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.common.UtcTimeService;
 import com.dke.data.agrirouter.impl.gson.MessageTypeAdapter;
 import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public interface MessageBodyCreator {
 
-  default String createMessageBody(SendMessageParameters parameters) {
-    parameters.validate();
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.registerTypeAdapter(Message.class, new MessageTypeAdapter());
-    return gsonBuilder.create().toJson(this.createSendMessageRequest(parameters));
-  }
+    default String createMessageBody(SendMessageParameters parameters) {
+        parameters.validate();
+        var gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Message.class, new MessageTypeAdapter());
+        return gsonBuilder.create().toJson(this.createSendMessageRequest(parameters));
+    }
 
-  default SendMessageRequest createSendMessageRequest(SendMessageParameters parameters) {
-    parameters.validate();
-    SendMessageRequest sendMessageRequest = new SendMessageRequest();
-    sendMessageRequest.setSensorAlternateId(
-        Objects.requireNonNull(parameters.getOnboardingResponse()).getSensorAlternateId());
-    sendMessageRequest.setCapabilityAlternateId(
-        parameters.getOnboardingResponse().getCapabilityAlternateId());
-    List<Message> messages = new ArrayList<>();
-    Objects.requireNonNull(parameters.getEncodedMessages())
-        .forEach(
-            messageToSend -> {
-              Message message = new Message();
-              message.setMessage(messageToSend);
-              message.setTimestamp("" + UtcTimeService.now().toEpochSecond());
-              messages.add(message);
-            });
-    sendMessageRequest.setMessages(messages);
-    return sendMessageRequest;
-  }
+    default SendMessageRequest createSendMessageRequest(SendMessageParameters parameters) {
+        parameters.validate();
+        var sendMessageRequest = new SendMessageRequest();
+        sendMessageRequest.setSensorAlternateId(
+                Objects.requireNonNull(parameters.getOnboardingResponse()).getSensorAlternateId());
+        sendMessageRequest.setCapabilityAlternateId(
+                parameters.getOnboardingResponse().getCapabilityAlternateId());
+        List<Message> messages = new ArrayList<>();
+        Objects.requireNonNull(parameters.getEncodedMessages())
+                .forEach(
+                        messageToSend -> {
+                            var message = new Message();
+                            message.setMessage(messageToSend);
+                            message.setTimestamp("" + UtcTimeService.now().toEpochSecond());
+                            messages.add(message);
+                        });
+        sendMessageRequest.setMessages(messages);
+        return sendMessageRequest;
+    }
 }

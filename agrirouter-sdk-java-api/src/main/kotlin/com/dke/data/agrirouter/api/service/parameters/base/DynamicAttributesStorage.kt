@@ -8,7 +8,7 @@ open class DynamicAttributesStorage {
     private var attributes: HashMap<String, Any> = HashMap()
 
     fun storeAttribute(key: String, value: Any) {
-        attributes.put(key, value)
+        attributes[key] = value
     }
 
     fun fetchAttribute(key: String): Any? {

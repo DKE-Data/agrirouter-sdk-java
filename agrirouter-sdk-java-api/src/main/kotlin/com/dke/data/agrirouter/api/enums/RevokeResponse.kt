@@ -5,7 +5,7 @@ enum class RevokeResponse(val key: Int) {
     VALIDATION_ERROR(400),
     UNAUTHORIZED(401);
 
-    companion object Filter{
-        fun valueOf(value: Int): RevokeResponse? = RevokeResponse.values().find { it.key == value }
+    companion object Filter {
+        fun valueOf(value: Int): RevokeResponse? = entries.find { it.key == value }
     }
 }

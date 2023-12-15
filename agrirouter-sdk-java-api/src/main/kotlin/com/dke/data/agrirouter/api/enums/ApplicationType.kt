@@ -10,7 +10,7 @@ enum class ApplicationType(val key: String) {
 
     companion object {
         fun of(key: String): Optional<ApplicationType>? {
-            return Arrays.stream(values()).filter { a -> a.key.contentEquals(key) }.findFirst()
+            return Arrays.stream(entries.toTypedArray()).filter { a -> a.key.contentEquals(key) }.findFirst()
         }
     }
 

@@ -1,6 +1,5 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
-import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
@@ -12,54 +11,56 @@ import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.util.Collections;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+
+@SuppressWarnings("unused")
 public class SetCapabilityServiceImpl extends MqttService
-    implements SetCapabilityService, MessageSender, MessageEncoder, ResponseValidator {
+        implements SetCapabilityService, MessageSender, MessageEncoder, ResponseValidator {
 
-  private final EncodeMessageService encodeMessageService;
+    private final EncodeMessageService encodeMessageService;
 
-  public SetCapabilityServiceImpl(IMqttClient mqttClient) {
-    super(mqttClient);
-    this.encodeMessageService = new EncodeMessageServiceImpl();
-  }
-
-  @Override
-  public String send(SetCapabilitiesParameters parameters) {
-    parameters.validate();
-    try {
-      EncodedMessage encodedMessage = this.encode(parameters);
-      SendMessageParameters sendMessageParameters = new SendMessageParameters();
-      sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-      sendMessageParameters.setEncodedMessages(
-          Collections.singletonList(encodedMessage.getEncodedMessage()));
-      String messageAsJson = this.createMessageBody(sendMessageParameters);
-      byte[] payload = messageAsJson.getBytes();
-      this.getMqttClient()
-          .publish(
-              Objects.requireNonNull(parameters.getOnboardingResponse())
-                  .getConnectionCriteria()
-                  .getMeasures(),
-              new MqttMessage(payload));
-      return encodedMessage.getApplicationMessageID();
-    } catch (MqttException e) {
-      throw new CouldNotSendMqttMessageException(e);
+    public SetCapabilityServiceImpl(IMqttClient mqttClient) {
+        super(mqttClient);
+        this.encodeMessageService = new EncodeMessageServiceImpl();
     }
-  }
 
-  @Override
-  public MqttAsyncMessageSendingResult sendAsync(SetCapabilitiesParameters parameters) {
-    return new MqttAsyncMessageSendingResult(
-        CompletableFuture.supplyAsync(() -> this.send(parameters)));
-  }
+    @Override
+    public String send(SetCapabilitiesParameters parameters) {
+        parameters.validate();
+        try {
+            var encodedMessage = this.encode(parameters);
+            var sendMessageParameters = new SendMessageParameters();
+            sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+            sendMessageParameters.setEncodedMessages(
+                    Collections.singletonList(encodedMessage.getEncodedMessage()));
+            var messageAsJson = this.createMessageBody(sendMessageParameters);
+            var payload = messageAsJson.getBytes();
+            this.getMqttClient()
+                    .publish(
+                            Objects.requireNonNull(parameters.getOnboardingResponse())
+                                    .getConnectionCriteria()
+                                    .getMeasures(),
+                            new MqttMessage(payload));
+            return encodedMessage.getApplicationMessageID();
+        } catch (MqttException e) {
+            throw new CouldNotSendMqttMessageException(e);
+        }
+    }
 
-  @Override
-  public EncodeMessageService getEncodeMessageService() {
-    return encodeMessageService;
-  }
+    @Override
+    public MqttAsyncMessageSendingResult sendAsync(SetCapabilitiesParameters parameters) {
+        return new MqttAsyncMessageSendingResult(
+                CompletableFuture.supplyAsync(() -> this.send(parameters)));
+    }
+
+    @Override
+    public EncodeMessageService getEncodeMessageService() {
+        return encodeMessageService;
+    }
 }

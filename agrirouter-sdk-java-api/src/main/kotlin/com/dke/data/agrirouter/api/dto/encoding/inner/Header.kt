@@ -1,5 +1,6 @@
 package com.dke.data.agrirouter.api.dto.encoding.inner
 
+@Suppress("unused")
 class Header {
 
     lateinit var applicationMessageId: String

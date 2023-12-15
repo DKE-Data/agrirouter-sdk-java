@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.api.dto.registrationrequest.secured
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+@Suppress("unused")
 @JsonIgnoreProperties(ignoreUnknown = true)
 class AuthorizationResponseToken {
 

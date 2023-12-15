@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import agrirouter.request.payload.account.Endpoints;
-import com.dke.data.agrirouter.api.dto.encoding.EncodedMessage;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
@@ -17,105 +16,107 @@ import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.util.Collections;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+
+@SuppressWarnings("unused")
 public class ListEndpointsServiceImpl extends MqttService
-    implements ListEndpointsService,
+        implements ListEndpointsService,
         MessageBodyCreator,
         MessageEncoder,
         MessageDecoder<agrirouter.response.payload.account.Endpoints.ListEndpointsResponse> {
 
-  private final EncodeMessageService encodeMessageService;
+    private final EncodeMessageService encodeMessageService;
 
-  public ListEndpointsServiceImpl(IMqttClient mqttClient) {
-    super(mqttClient);
-    this.encodeMessageService = new EncodeMessageServiceImpl();
-  }
-
-  @Override
-  public String send(ListEndpointsParameters parameters) {
-    parameters.validate();
-    try {
-      EncodedMessage encodedMessage = this.encode(parameters);
-      SendMessageParameters sendMessageParameters = new SendMessageParameters();
-      sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-      sendMessageParameters.setEncodedMessages(
-          Collections.singletonList(encodedMessage.getEncodedMessage()));
-      String messageAsJson = this.createMessageBody(sendMessageParameters);
-      byte[] payload = messageAsJson.getBytes();
-      this.getMqttClient()
-          .publish(
-              Objects.requireNonNull(parameters.getOnboardingResponse())
-                  .getConnectionCriteria()
-                  .getMeasures(),
-              new MqttMessage(payload));
-      return encodedMessage.getApplicationMessageID();
-    } catch (MqttException e) {
-      throw new CouldNotSendMqttMessageException(e);
+    public ListEndpointsServiceImpl(IMqttClient mqttClient) {
+        super(mqttClient);
+        this.encodeMessageService = new EncodeMessageServiceImpl();
     }
-  }
 
-  @Override
-  public MqttAsyncMessageSendingResult sendAsync(ListEndpointsParameters parameters) {
-    return new MqttAsyncMessageSendingResult(
-        CompletableFuture.supplyAsync(() -> this.send(parameters)));
-  }
+    @Override
+    public String send(ListEndpointsParameters parameters) {
+        parameters.validate();
+        try {
+            var encodedMessage = this.encode(parameters);
+            var sendMessageParameters = new SendMessageParameters();
+            sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+            sendMessageParameters.setEncodedMessages(
+                    Collections.singletonList(encodedMessage.getEncodedMessage()));
+            var messageAsJson = this.createMessageBody(sendMessageParameters);
+            var payload = messageAsJson.getBytes();
+            this.getMqttClient()
+                    .publish(
+                            Objects.requireNonNull(parameters.getOnboardingResponse())
+                                    .getConnectionCriteria()
+                                    .getMeasures(),
+                            new MqttMessage(payload));
+            return encodedMessage.getApplicationMessageID();
+        } catch (MqttException e) {
+            throw new CouldNotSendMqttMessageException(e);
+        }
+    }
 
-  @Override
-  public EncodeMessageService getEncodeMessageService() {
-    return this.encodeMessageService;
-  }
+    @Override
+    public MqttAsyncMessageSendingResult sendAsync(ListEndpointsParameters parameters) {
+        return new MqttAsyncMessageSendingResult(
+                CompletableFuture.supplyAsync(() -> this.send(parameters)));
+    }
 
-  @Override
-  public String sendMessageToListAllWithExistingRoute(OnboardingResponse onboardingResponse) {
-    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
-    listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
-    listEndpointsParameters.setOnboardingResponse(onboardingResponse);
-    listEndpointsParameters.setUnfilteredList(false);
-    return send(listEndpointsParameters);
-  }
+    @Override
+    public EncodeMessageService getEncodeMessageService() {
+        return this.encodeMessageService;
+    }
 
-  @Override
-  public String sendMessageToListAll(OnboardingResponse onboardingResponse) {
-    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
-    listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
-    listEndpointsParameters.setOnboardingResponse(onboardingResponse);
-    listEndpointsParameters.setUnfilteredList(true);
-    return send(listEndpointsParameters);
-  }
+    @Override
+    public String sendMessageToListAllWithExistingRoute(OnboardingResponse onboardingResponse) {
+        var listEndpointsParameters = new ListEndpointsParameters();
+        listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
+        listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
+        listEndpointsParameters.setOnboardingResponse(onboardingResponse);
+        listEndpointsParameters.setUnfilteredList(false);
+        return send(listEndpointsParameters);
+    }
 
-  @Override
-  public MqttAsyncMessageSendingResult sendMessageToListAllWithExistingRouteAsync(
-      OnboardingResponse onboardingResponse) {
-    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
-    listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
-    listEndpointsParameters.setOnboardingResponse(onboardingResponse);
-    listEndpointsParameters.setUnfilteredList(false);
-    return sendAsync(listEndpointsParameters);
-  }
+    @Override
+    public String sendMessageToListAll(OnboardingResponse onboardingResponse) {
+        var listEndpointsParameters = new ListEndpointsParameters();
+        listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
+        listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
+        listEndpointsParameters.setOnboardingResponse(onboardingResponse);
+        listEndpointsParameters.setUnfilteredList(true);
+        return send(listEndpointsParameters);
+    }
 
-  @Override
-  public MqttAsyncMessageSendingResult sendMessageToListAllAsync(
-      OnboardingResponse onboardingResponse) {
-    ListEndpointsParameters listEndpointsParameters = new ListEndpointsParameters();
-    listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
-    listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
-    listEndpointsParameters.setOnboardingResponse(onboardingResponse);
-    listEndpointsParameters.setUnfilteredList(true);
-    return sendAsync(listEndpointsParameters);
-  }
+    @Override
+    public MqttAsyncMessageSendingResult sendMessageToListAllWithExistingRouteAsync(
+            OnboardingResponse onboardingResponse) {
+        var listEndpointsParameters = new ListEndpointsParameters();
+        listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
+        listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
+        listEndpointsParameters.setOnboardingResponse(onboardingResponse);
+        listEndpointsParameters.setUnfilteredList(false);
+        return sendAsync(listEndpointsParameters);
+    }
 
-  @Override
-  public agrirouter.response.payload.account.Endpoints.ListEndpointsResponse unsafeDecode(
-      ByteString message) throws InvalidProtocolBufferException {
-    return agrirouter.response.payload.account.Endpoints.ListEndpointsResponse.parseFrom(message);
-  }
+    @Override
+    public MqttAsyncMessageSendingResult sendMessageToListAllAsync(
+            OnboardingResponse onboardingResponse) {
+        var listEndpointsParameters = new ListEndpointsParameters();
+        listEndpointsParameters.setDirection(Endpoints.ListEndpointsQuery.Direction.SEND_RECEIVE);
+        listEndpointsParameters.setTechnicalMessageType(SystemMessageType.EMPTY);
+        listEndpointsParameters.setOnboardingResponse(onboardingResponse);
+        listEndpointsParameters.setUnfilteredList(true);
+        return sendAsync(listEndpointsParameters);
+    }
+
+    @Override
+    public agrirouter.response.payload.account.Endpoints.ListEndpointsResponse unsafeDecode(
+            ByteString message) throws InvalidProtocolBufferException {
+        return agrirouter.response.payload.account.Endpoints.ListEndpointsResponse.parseFrom(message);
+    }
 }

@@ -1,8 +1,8 @@
 package com.dke.data.agrirouter.api.dto.onboard
 
-class RouterDevice{
+class RouterDevice {
 
-    class Authentication{
+    class Authentication {
 
         lateinit var type: String
 
@@ -12,21 +12,22 @@ class RouterDevice{
 
     }
 
-    class ConnectionCriteria{
+    class ConnectionCriteria {
 
-        lateinit var clientId:String
+        lateinit var clientId: String
 
-        lateinit var gatewayId:String
+        lateinit var gatewayId: String
 
-        lateinit var host:String
+        lateinit var host: String
 
-        var port:Int = 0
+        var port: Int = 0
     }
 
-    var authentication: Authentication = Authentication();
+    var authentication: Authentication = Authentication()
 
-    var connectionCriteria: ConnectionCriteria = ConnectionCriteria();
+    var connectionCriteria: ConnectionCriteria = ConnectionCriteria()
 
-    lateinit var deviceAlternateId:String
+    @Suppress("unused")
+    lateinit var deviceAlternateId: String
 
 }

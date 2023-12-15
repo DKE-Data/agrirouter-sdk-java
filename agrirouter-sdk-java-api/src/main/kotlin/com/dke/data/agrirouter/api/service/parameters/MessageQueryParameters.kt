@@ -25,7 +25,13 @@ class MessageQueryParameters : AbstractParameterBase(), ParameterValidation {
 
     override fun businessValidation() {
         if (null == messageIds && null == senderIds && null == sentFromInSeconds && null == sentToInSeconds) {
-            rise("There has to be a filter criteria for the query.", "messageIds", "senderIds", "sentFromInSeconds & sendToInSeconds", "")
+            rise(
+                "There has to be a filter criteria for the query.",
+                "messageIds",
+                "senderIds",
+                "sentFromInSeconds & sendToInSeconds",
+                ""
+            )
         }
     }
 
