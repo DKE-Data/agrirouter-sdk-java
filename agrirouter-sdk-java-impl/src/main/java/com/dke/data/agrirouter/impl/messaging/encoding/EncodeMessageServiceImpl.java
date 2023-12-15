@@ -19,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -160,8 +159,7 @@ public class EncodeMessageServiceImpl extends NonEnvironmentalService
                                         .encodeToString(
                                                 payloadParameters
                                                         .getValue()
-                                                        .toStringUtf8()
-                                                        .getBytes(StandardCharsets.UTF_8))));
+                                                        .toByteArray())));
                 return Collections.singletonList(
                         new MessageParameterTuple(messageHeaderParameters, payload));
             }
