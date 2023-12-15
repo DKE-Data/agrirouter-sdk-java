@@ -1,4 +1,3 @@
-
 = agrirouter-sdk-java
 :imagesdir: assets/images
 :toc:
@@ -7,28 +6,33 @@
 
 [abstract]
 == Abstract
+
 image::agrirouter.svg[agrirouter]
 
-The agrirouter is a universal data exchange platform for farmers and agricultural contractors that makes it possible to connect machinery and agricultural software, regardless of vendor or manufacturer. Agrirouter does not save data; it transfers data.
-As a universal data exchange platform, agrirouter fills a gap on the way to Farming 4.0. Its underlying concept unites cross-vendor and discrimination-free data transfer. You retain full control over your data. Even data exchange with service providers (e.g. agricultural contractors) and other partners is uncomplicated: Data are very rapidly transferred via the online connection, and if you wish, is intelligently connected to other datasets.
+The agrirouter is a universal data exchange platform for farmers and agricultural contractors that makes it possible to connect machinery and agricultural software, regardless of vendor or manufacturer.
+Agrirouter does not save data; it transfers data.
+As a universal data exchange platform, agrirouter fills a gap on the way to Farming 4.0. Its underlying concept unites cross-vendor and discrimination-free data transfer.
+You retain full control over your data.
+Even data exchange with service providers (e.g. agricultural contractors) and other partners is uncomplicated: Data are very rapidly transferred via the online connection, and if you wish, is intelligently connected to other datasets.
 
 == Supporters & Maintainers
+
 image::lmis.svg[agrirouter]
 
-The LMIS AG is a recognised german IT service company, certified according to DIN EN ISO 9001:2015 and based in
-Osnabrück, Berlin, Friedland and Wuppertal. Our core competence is the individual development, optimization and support
-of IT solutions. We also provide professional IT consulting services and training courses. We have been supporting
-the whole project during the development in the field of test management and are currently responsible for the development
-support of the platform.
+The LMIS AG is a recognised german IT service company, certified according to DIN EN ISO 9001:2015 and based in Osnabrück, Berlin, Friedland and Wuppertal.
+Our core competence is the individual development, optimization and support of IT solutions.
+We also provide professional IT consulting services and training courses.
+We have been supporting the whole project during the development in the field of test management and are currently responsible for the development support of the platform.
 
-We are active maintainers of the SDK and are using the SDK for internal testing as well. Therefore, we have a
-high interest in a stable and usable interface to connect to the agrirouter.
+We are active maintainers of the SDK and are using the SDK for internal testing as well.
+Therefore, we have a high interest in a stable and usable interface to connect to the agrirouter.
 
 Feel free to get in touch by visiting our https://www.lmis.de[website] or contacting us via GitHub.
 
 == The current project you're looking at
 
-This project contains the SDK for the communication with the agrirouter. Everything you need for the onboarding process, secure communication, and much more.
+This project contains the SDK for the communication with the agrirouter.
+Everything you need for the onboarding process, secure communication, and much more.
 
 == Releases
 
@@ -36,11 +40,13 @@ The release workflow follows the https://docs.microsoft.com/en-us/azure/devops/r
 
 === Update from 1.4.x to 2.x
 
-The update for the new release includes some breaking changes. To have a rough overview of what has to be done to have the new features from 2.x in your application, please see the following migration / update guide when updating.
+The update for the new release includes some breaking changes.
+To have a rough overview of what has to be done to have the new features from 2.x in your application, please see the following migration / update guide when updating.
 
 ==== Update the Maven dependencies
 
-The first step is to update the coordinates of the dependencies. With the release 2.x the coordinates changed to a new name and a new version.
+The first step is to update the coordinates of the dependencies.
+With the release 2.x the coordinates changed to a new name and a new version.
 
 [xml]
 ----
@@ -63,7 +69,8 @@ The first step is to update the coordinates of the dependencies. With the releas
 
 ==== Update package declarations for services and internal classes
 
-Since the package declaration was updated along with the coordinates, there will be compiler errors that should be fixed. Some classes have moved to a more meaningful package.
+Since the package declaration was updated along with the coordinates, there will be compiler errors that should be fixed.
+Some classes have moved to a more meaningful package.
 
 image::migration_1-4_to_2-0/compiler-errors-before.png[Compiler errors before the migration.]
 
@@ -73,7 +80,9 @@ image::migration_1-4_to_2-0/package-declaration-after-refactoring.png[Package de
 
 ==== Update the usage of the enums for message types
 
-To have a better understanding about system message types and content message types, the declaration for the different types has changed. There are two new classes, the `ContentMessageType` for content messages and the `SystemMessageType` for system messages. The former technical message type will cause a compiler error, since it was replaced.
+To have a better understanding about system message types and content message types, the declaration for the different types has changed.
+There are two new classes, the `ContentMessageType` for content messages and the `SystemMessageType` for system messages.
+The former technical message type will cause a compiler error, since it was replaced.
 
 image::migration_1-4_to_2-0/former-technical-message-types.png[Former message types.]
 
@@ -108,7 +117,8 @@ The `impl` module contains the implementation of the given SDK defined by the `a
 
 === `convenience` Module
 
-The `convenience` module contains common implementations for different problems which are not located within the SDK. Those could be capability setting, MQTT client creation or other common problems that are normally not part of the SDK.
+The `convenience` module contains common implementations for different problems which are not located within the SDK.
+Those could be capability setting, MQTT client creation or other common problems that are normally not part of the SDK.
 
 === `test` Module
 
@@ -116,9 +126,11 @@ The `test` module contains integration tests not only for the SDK, but also for 
 
 === Integration
 
-If you want to add a dependency feel free to fetch the latest release from Github Packages. Please find the documentation right https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages[here].
+If you want to add a dependency feel free to fetch the latest release from Github Packages.
+Please find the documentation right https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages[here].
 
-If you want to add the packages, you need to define the settings within your `pom` or the `settings.xml` otherwise. If you need an example, you can either have a look at the `ci/settings.xml` for general purpose or check out the snippet below for a custom `settings.xml`.
+If you want to add the packages, you need to define the settings within your `pom` or the `settings.xml` otherwise.
+If you need an example, you can either have a look at the `ci/settings.xml` for general purpose or check out the snippet below for a custom `settings.xml`.
 
 [xml]
 ----
@@ -154,11 +166,13 @@ If you want to add the packages, you need to define the settings within your `po
 </settings>
 ----
 
-You can use this `settings.xml` and include it during the build process in a specific way. Just use `mvn clean verify -s your_path_to_the_file/settings.xml` to use the settings if they are set in a local file.
+You can use this `settings.xml` and include it during the build process in a specific way.
+Just use `mvn clean verify -s your_path_to_the_file/settings.xml` to use the settings if they are set in a local file.
 
 === Compatibility
 
-We are supporting JDK 8 and later, releases are build using a JDK 8 to have compatibility for most users. If you need to build the current development branch, please feel free build the branch on yourself and install it to your local repository.
+We are supporting JDK 8 and later, releases are build using a JDK 8 to have compatibility for most users.
+If you need to build the current development branch, please feel free build the branch on yourself and install it to your local repository.
 
 == Certificates for the communication
 
