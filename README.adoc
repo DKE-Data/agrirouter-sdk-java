@@ -11,9 +11,11 @@ image::agrirouter.svg[agrirouter]
 
 The agrirouter is a universal data exchange platform for farmers and agricultural contractors that makes it possible to connect machinery and agricultural software, regardless of vendor or manufacturer.
 Agrirouter does not save data; it transfers data.
-As a universal data exchange platform, agrirouter fills a gap on the way to Farming 4.0. Its underlying concept unites cross-vendor and discrimination-free data transfer.
+As a universal data exchange platform, agrirouter fills a gap on the way to Farming 4.0.
+Its underlying concept unites cross-vendor and discrimination-free data transfer.
 You retain full control over your data.
-Even data exchange with service providers (e.g. agricultural contractors) and other partners is uncomplicated: Data are very rapidly transferred via the online connection, and if you wish, is intelligently connected to other datasets.
+Even data exchange with service providers, (e.g., agricultural contractors) and other partners is uncomplicated:
+Data is very rapidly transferred via the online connection, and if you wish, is intelligently connected to other datasets.
 
 == Supporters & Maintainers
 
@@ -46,7 +48,7 @@ To have a rough overview of what has to be done to have the new features from 2.
 ==== Update the Maven dependencies
 
 The first step is to update the coordinates of the dependencies.
-With the release 2.x the coordinates changed to a new name and a new version.
+With the release 2.x, the coordinates changed to a new name and a new version.
 
 [xml]
 ----
@@ -82,7 +84,7 @@ image::migration_1-4_to_2-0/package-declaration-after-refactoring.png[Package de
 
 To have a better understanding about system message types and content message types, the declaration for the different types has changed.
 There are two new classes, the `ContentMessageType` for content messages and the `SystemMessageType` for system messages.
-The former technical message type will cause a compiler error, since it was replaced.
+The former technical message type will cause a compiler error since it was replaced.
 
 image::migration_1-4_to_2-0/former-technical-message-types.png[Former message types.]
 
@@ -92,11 +94,11 @@ image::migration_1-4_to_2-0/system-message-type-afterwards.png[System message ty
 
 ==== Remove former URLs for ProtoBuf message types
 
-With the new release the URLs can be fetched from the content message types and there is no need to put them into a helper method any longer.
+With the new release, the URLs can be fetched from the content message types and there is no need to put them into a helper method any longer.
 
 image::migration_1-4_to_2-0/former-content-message-type-urls.png[Former content message types.]
 
-With the new release fetch the URLs is way more comfortable.
+With the new release, fetch, the URLs are way more comfortable.
 
 image::migration_1-4_to_2-0/type-urls-from-technical-message-types.png[Type URLs from content message types.]
 
@@ -104,6 +106,11 @@ image::migration_1-4_to_2-0/type-urls-from-technical-message-types.png[Type URLs
 
 The http://www.agrirouter-middleware.de[agrirouter middleware] has been updated after the release of version 2.x and can be an indicator regarding the workload for the migration.
 Have a look at the following https://github.com/agrirouter-middleware/agrirouter-middleware/pull/12[PR #12] to see the necessary adaptions.
+
+=== Update from 2.x to 3.x
+
+With the release of version 3.x, the SDK now supports Java 17 and uses Jakarta EE 9.1, with this version you are no longer able to use Java 8.
+We will continue to support Java 8 with the 2.x branch, but we will not add any new features to the 2.x branch.
 
 == Modules
 
@@ -126,7 +133,7 @@ The `test` module contains integration tests not only for the SDK, but also for 
 
 === Integration
 
-If you want to add a dependency feel free to fetch the latest release from Github Packages.
+If you want to add a dependency, feel free to fetch the latest release from GitHub Packages.
 Please find the documentation right https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages[here].
 
 If you want to add the packages, you need to define the settings within your `pom` or the `settings.xml` otherwise.
@@ -171,25 +178,25 @@ Just use `mvn clean verify -s your_path_to_the_file/settings.xml` to use the set
 
 === Compatibility
 
-We are supporting JDK 8 and later, releases are build using a JDK 8 to have compatibility for most users.
-If you need to build the current development branch, please feel free build the branch on yourself and install it to your local repository.
+We are supporting JDK 17 and later, releases are build using a JDK 17 to have compatibility for most users.
+If you need to build the current development branch, please feel free to build the branch on yourself and install it to your local repository.
 
-== Certificates for the communication
+== Certificates for communication
 
-We do not longer maintain the certificates within the SDK.
-Maintaining them in the SDK would mean, that we have to release the SDK with every change of the certificate.
-Therefore feel free to add the root certificates to a Java Key Store add reference it within your application.
+We do no longer maintain the certificates within the SDK.
+Maintaining them in the SDK would mean that we have to release the SDK with every change of the certificate.
+Therefore, feel free to add the root certificates to a Java Key Store add reference it within your application.
 
 === Adding a certificate to the JKS
 
-The certificates are PEM files which can be added directly to the keystore using the following command.
+The certificates are PEM files that can be added directly to the keystore using the following command.
 
 [source]
 ----
 keytool -importcert -file certificate.pem -keystore my_agrirouter_key_store.jks
 ----
 
-If you try to add the command, please be aware, that the containing PEM file has to fulfill the following requirements:
+If you try to add the command, please be aware that the containing PEM file has to fulfill the following requirements:
 
 * The header and footer are included enclosed between five dashes.
 * There are no trailing spaces on each line.
