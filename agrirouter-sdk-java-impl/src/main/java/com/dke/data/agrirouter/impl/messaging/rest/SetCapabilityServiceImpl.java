@@ -6,20 +6,36 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageServi
 import com.dke.data.agrirouter.api.service.messaging.http.SetCapabilityService;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.api.service.parameters.SetCapabilitiesParameters;
-import com.dke.data.agrirouter.impl.EnvironmentalService;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 
-public class SetCapabilityServiceImpl extends EnvironmentalService
+public class SetCapabilityServiceImpl
         implements SetCapabilityService, MessageSender, MessageEncoder, ResponseValidator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SetCapabilityServiceImpl.class);
 
     private final EncodeMessageService encodeMessageService;
 
-    public SetCapabilityServiceImpl(Environment environment) {
-        super(environment);
+    /**
+     * Implements the SetCapabilityService interface and provides methods for sending
+     * capability data to the agrirouter.
+     *
+     * @deprecated This class is deprecated since version 3.1.0 and will be removed in a future release.
+     * The environment parameter is no longer necessary to use the service.
+     * Please use the default constructor instead.
+     */
+    @Deprecated(since = "3.1.0", forRemoval = true)
+    public SetCapabilityServiceImpl(Environment ignoredEnvironment) {
+        LOGGER.warn("This constructor is deprecated. The environment is not necessary to use the service. Within the next major release this constructor will be removed.");
+        this.encodeMessageService = new EncodeMessageServiceImpl();
+    }
+
+    public SetCapabilityServiceImpl() {
         this.encodeMessageService = new EncodeMessageServiceImpl();
     }
 
