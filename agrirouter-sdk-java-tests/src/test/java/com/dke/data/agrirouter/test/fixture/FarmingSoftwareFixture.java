@@ -73,7 +73,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
         SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-        onboardingParameters.setRegistrationCode("c9a36827a2");
+        onboardingParameters.setRegistrationCode("4699be2f62");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
         onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
         onboardingParameters.setCertificationType(CertificationType.P12);
