@@ -54,9 +54,7 @@ public final class RequestFactory {
                     Environment.ENABLE_HTTP_REQUEST_LOGGING);
         }
         var target = client.target(url);
-        var request = target.request(MediaType.APPLICATION_JSON_TYPE);
-        request.accept(MediaType.APPLICATION_JSON_TYPE);
-        return request;
+        return target.request(MediaType.APPLICATION_JSON_TYPE);
     }
 
     private static Client createClient(
