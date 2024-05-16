@@ -62,8 +62,7 @@ class CommunicationUnitFixture extends AbstractIntegrationTest {
         assertNotNull(onboardingResponse.getConnectionCriteria().getCommands());
         OnboardingResponseRepository.save(
                 OnboardingResponseRepository.Identifier.COMMUNICATION_UNIT, onboardingResponse);
-        final SetCapabilityServiceImpl setCapabilityService = new SetCapabilityServiceImpl(new QA() {
-        });
+        final SetCapabilityServiceImpl setCapabilityService = new SetCapabilityServiceImpl();
         final SetCapabilitiesParameters setCapabilitiesParameters = new SetCapabilitiesParameters();
         setCapabilitiesParameters.setApplicationId(communicationUnit.getApplicationId());
         setCapabilitiesParameters.setCertificationVersionId(

@@ -32,8 +32,7 @@ class SetCapabilityServiceTest extends AbstractIntegrationTest {
     @Test
     void givenValidEndpointWhenSendingCapabilitiesTheCapabilityMessageShouldBeAccepted()
             throws Throwable {
-        SetCapabilityService setCapabilityService = new SetCapabilityServiceImpl(new QA() {
-        });
+        SetCapabilityService setCapabilityService = new SetCapabilityServiceImpl();
 
         var parameters = new SetCapabilitiesParameters();
         parameters.setApplicationId(farmingSoftware.getApplicationId());
@@ -76,8 +75,7 @@ class SetCapabilityServiceTest extends AbstractIntegrationTest {
     @Test
     void givenValidEndpointWhenSendingInvalidCapabilitiesTheCapabilityMessageShouldNotBeAccepted()
             throws Throwable {
-        SetCapabilityService setCapabilityService = new SetCapabilityServiceImpl(new QA() {
-        });
+        SetCapabilityService setCapabilityService = new SetCapabilityServiceImpl();
 
         var parameters = new SetCapabilitiesParameters();
         parameters.setApplicationId(farmingSoftware.getApplicationId());
