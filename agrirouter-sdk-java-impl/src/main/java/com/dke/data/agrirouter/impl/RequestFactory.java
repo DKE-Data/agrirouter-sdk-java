@@ -139,15 +139,9 @@ public final class RequestFactory {
      * @param accessToken -
      * @return Builder -
      */
-    @SuppressWarnings("resource")
     public static Invocation.Builder bearerTokenRequest(
             String url, String accessToken, String applicationId, String signature) {
-        var client = ClientBuilder.newClient();
-        client.property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "INFO");
-        var target = client.target(url);
-        var request = target.request(MediaType.APPLICATION_JSON_TYPE);
-        request.accept(MediaType.APPLICATION_JSON_TYPE);
-        request.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        var request = bearerTokenRequest(url, accessToken);
         request.header(AgrirouterHttpHeader.APPLICATION_ID, applicationId);
         request.header(AgrirouterHttpHeader.SIGNATURE, signature);
         return request;
