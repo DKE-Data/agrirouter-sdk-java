@@ -38,7 +38,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
         SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-        onboardingParameters.setRegistrationCode("cf3a08a02f");
+        onboardingParameters.setRegistrationCode("6a049384e3");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
         onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
         onboardingParameters.setCertificationType(CertificationType.P12);
@@ -73,7 +73,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
         SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-        onboardingParameters.setRegistrationCode("528bdeab8a");
+        onboardingParameters.setRegistrationCode("4699be2f62");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
         onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
         onboardingParameters.setCertificationType(CertificationType.P12);
