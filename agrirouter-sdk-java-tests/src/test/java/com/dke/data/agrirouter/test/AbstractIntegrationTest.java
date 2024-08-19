@@ -99,7 +99,8 @@ public abstract class AbstractIntegrationTest {
                             BwPdbJx1m7V0dVHNJm6q+Ig7L3ovbJt88599T0Nf7WyEhbUaXVWKkH/OxCvesLX3
                             b0VMOte/UYuSoGiOuOmzFoQoR1IAjqlC0vHqfzMJRGvOT9k/ZHvI2HwlHax0wcTI
                             wy+YtX0o2eOcr4QVO+M/kOI=
-                            -----END PRIVATE KEY-----                            """;
+                            -----END PRIVATE KEY-----
+                            """;
                 }
 
                 @Override
