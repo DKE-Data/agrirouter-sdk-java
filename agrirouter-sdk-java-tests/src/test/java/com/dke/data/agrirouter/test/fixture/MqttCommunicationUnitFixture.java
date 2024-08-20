@@ -38,6 +38,7 @@ class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MqttCommunicationUnitFixture.class);
 
+    private static boolean messageHasArrived = false;
     private static boolean messageHasBeenDelivered = false;
 
     /**
@@ -50,7 +51,7 @@ class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
         OnboardingParameters onboardingParameters = new OnboardingParameters();
-        onboardingParameters.setRegistrationCode("7140425316");
+        onboardingParameters.setRegistrationCode("4822479417");
         onboardingParameters.setApplicationId(communicationUnit.getApplicationId());
         onboardingParameters.setCertificationVersionId(communicationUnit.getCertificationVersionId());
         onboardingParameters.setCertificationType(CertificationType.P12);
@@ -80,6 +81,7 @@ class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
         });
         mqttClient.setCallback(new InternalCallback());
         mqttClient.connect(mqttOptionService.createMqttConnectOptions(onboardingResponse));
+        mqttClient.subscribe(onboardingResponse.getConnectionCriteria().getCommands());
 
         final SetCapabilityServiceImpl setCapabilityService = new SetCapabilityServiceImpl(mqttClient);
         final SetCapabilitiesParameters setCapabilitiesParameters = new SetCapabilitiesParameters();
@@ -96,7 +98,7 @@ class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
         setCapabilityService.send(setCapabilitiesParameters);
 
         int nrOfRetries = 0;
-        while (!messageHasBeenDelivered && nrOfRetries < 10) {
+        while (!messageHasBeenDelivered && !messageHasArrived && nrOfRetries < 10) {
             LOGGER.debug("Waiting for message to arrive, retrying in 1 second. This is the {} retry.", nrOfRetries);
             Thread.sleep(1000);
             nrOfRetries++;
@@ -104,6 +106,7 @@ class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
         mqttClient.disconnect();
 
         Assertions.assertTrue(messageHasBeenDelivered, "Message has not delivered within the timeout configured. There were " + nrOfRetries + " retries.");
+        Assertions.assertTrue(messageHasArrived, "Message has not arrived within the timeout configured. There were " + nrOfRetries + " retries.");
     }
 
     class InternalCallback implements MqttCallback {
@@ -115,6 +118,7 @@ class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
 
         @Override
         public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
+            messageHasArrived = true;
         }
 
         @Override
