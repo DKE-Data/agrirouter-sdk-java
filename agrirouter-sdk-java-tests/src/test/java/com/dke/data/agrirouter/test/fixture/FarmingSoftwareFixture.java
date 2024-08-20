@@ -33,12 +33,12 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
      * <p>https://agrirouter-qa.cfapps.eu10.hana.ondemand.com/application/905152eb-c526-47a3-b871-aa46d065bb4c/authorize?response_type=onboard&state=my-custom-state-to-identify-the-request&redirect_uri=
      */
     @Test
-    @Disabled("Please replace the placeholder for the registration code to run the test case.")
+    //@Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardFarmingSoftwareAndSaveToFile() throws IOException {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
         SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-        onboardingParameters.setRegistrationCode("6a049384e3");
+        onboardingParameters.setRegistrationCode("2067663604");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
         onboardingParameters.setCertificationVersionId(farmingSoftware.getCertificationVersionId());
         onboardingParameters.setCertificationType(CertificationType.P12);
