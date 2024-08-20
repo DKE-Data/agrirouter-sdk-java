@@ -36,12 +36,12 @@ class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
      * application for CUs.
      */
     @Test
-    @Disabled("Please replace the placeholder for the registration code to run the test case.")
+    //@Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardCommunicationUnitAndSaveToFile() throws IOException {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
         OnboardingParameters onboardingParameters = new OnboardingParameters();
-        onboardingParameters.setRegistrationCode("f50319dc13");
+        onboardingParameters.setRegistrationCode("0639546829");
         onboardingParameters.setApplicationId(communicationUnit.getApplicationId());
         onboardingParameters.setCertificationVersionId(communicationUnit.getCertificationVersionId());
         onboardingParameters.setCertificationType(CertificationType.P12);

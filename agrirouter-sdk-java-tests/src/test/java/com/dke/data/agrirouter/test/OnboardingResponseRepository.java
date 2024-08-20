@@ -54,7 +54,7 @@ public class OnboardingResponseRepository {
         TELEMETRY_PLATFORM_REMOVED("telemetry-platform-removed"),
         TELEMETRY_PLATFORM_DEACTIVATED("telemetry-platform-deactivated"),
         COMMUNICATION_UNIT("communication-unit"),
-        MQTT_COMMUNICATION_UNIT("communication-unit");
+        MQTT_COMMUNICATION_UNIT("mqtt-communication-unit");
 
         private final String fileName;
 
