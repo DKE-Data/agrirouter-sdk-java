@@ -29,12 +29,12 @@ class TelemetryPlatformFixture extends AbstractIntegrationTest {
      * <p>https://agrirouter-qa.cfapps.eu10.hana.ondemand.com/application/3c3559c9-7062-4628-a4f7-c9f5aa07265f/authorize?response_type=onboard&state=my-custom-state-to-identify-the-request&redirect_uri=
      */
     @Test
-    @Disabled("Please replace the placeholder for the registration code to run the test case.")
+    //@Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardTelemetryPlatformAndSaveToFile() throws IOException {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
         SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
-        onboardingParameters.setRegistrationCode("3e22929d3f");
+        onboardingParameters.setRegistrationCode("8530975704");
         onboardingParameters.setApplicationId(telemetryPlatform.getApplicationId());
         onboardingParameters.setCertificationVersionId(telemetryPlatform.getCertificationVersionId());
         onboardingParameters.setCertificationType(CertificationType.P12);
