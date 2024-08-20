@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.test.messaging.rest;
 
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
-import com.dke.data.agrirouter.api.exception.UnauthorizedRequestException;
 import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
 import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageFetcher;

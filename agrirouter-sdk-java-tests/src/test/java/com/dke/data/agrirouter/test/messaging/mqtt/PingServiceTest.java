@@ -75,7 +75,7 @@ class PingServiceTest extends AbstractIntegrationTest {
         }
 
         @Override
-        public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
+        public void messageArrived(String s, MqttMessage mqttMessage) {
             var payload = StringUtils.toEncodedString(mqttMessage.getPayload(), StandardCharsets.UTF_8);
             final var fetchMessageResponse = new Gson().fromJson(payload, FetchMessageResponse.class);
             final var decodedMessageResponse = decodeMessageService.decode(fetchMessageResponse.getCommand().getMessage());
