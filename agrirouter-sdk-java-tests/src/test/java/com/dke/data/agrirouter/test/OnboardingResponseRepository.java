@@ -48,12 +48,9 @@ public class OnboardingResponseRepository {
      */
     public enum Identifier {
         FARMING_SOFTWARE("farming-software"),
-        FARMING_SOFTWARE_REMOVED("farming-software-removed"),
-        FARMING_SOFTWARE_DEACTIVATED("farming-software-deactivated"),
         TELEMETRY_PLATFORM("telemetry-platform"),
-        TELEMETRY_PLATFORM_REMOVED("telemetry-platform-removed"),
-        TELEMETRY_PLATFORM_DEACTIVATED("telemetry-platform-deactivated"),
-        COMMUNICATION_UNIT("communication-unit");
+        COMMUNICATION_UNIT("communication-unit"),
+        MQTT_COMMUNICATION_UNIT("mqtt-communication-unit");
 
         private final String fileName;
 

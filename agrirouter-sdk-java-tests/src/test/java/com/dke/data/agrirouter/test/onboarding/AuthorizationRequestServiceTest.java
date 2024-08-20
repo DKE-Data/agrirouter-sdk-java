@@ -33,7 +33,7 @@ public class AuthorizationRequestServiceTest extends AbstractIntegrationTest {
         assertNotNull(authorizationRequestURL);
         assertTrue(StringUtils.isNotBlank(authorizationRequestURL));
         assertEquals(
-                "https://agrirouter-qa.cfapps.eu10.hana.ondemand.com/application/905152eb-c526-47a3-b871-aa46d065bb4c/authorize?response_type=onboard&state=my-custom-state-to-identify-the-request&redirect_uri=",
+                "https://app.qa.agrirouter.farm/application/" + farmingSoftware.getApplicationId() + "/authorize?response_type=onboard&state=my-custom-state-to-identify-the-request&redirect_uri=",
                 authorizationRequestURL);
     }
 
@@ -52,7 +52,7 @@ public class AuthorizationRequestServiceTest extends AbstractIntegrationTest {
         assertNotNull(authorizationRequestURL);
         assertTrue(StringUtils.isNotBlank(authorizationRequestURL));
         assertEquals(
-                "https://agrirouter-qa.cfapps.eu10.hana.ondemand.com/application/3c3559c9-7062-4628-a4f7-c9f5aa07265f/authorize?response_type=onboard&state=my-custom-state-to-identify-the-request&redirect_uri=",
+                "https://app.qa.agrirouter.farm/application/" + telemetryPlatform.getApplicationId() + "/authorize?response_type=onboard&state=my-custom-state-to-identify-the-request&redirect_uri=",
                 authorizationRequestURL);
     }
 
@@ -66,7 +66,6 @@ public class AuthorizationRequestServiceTest extends AbstractIntegrationTest {
         authorizationRequestParameters.setResponseType(SecuredOnboardingResponseType.ONBOARD);
         Assertions.assertThrows(
                 IllegalParameterDefinitionException.class,
-                () ->
-                        authorizationRequestService.getAuthorizationRequestURL(authorizationRequestParameters));
+                () -> authorizationRequestService.getAuthorizationRequestURL(authorizationRequestParameters));
     }
 }

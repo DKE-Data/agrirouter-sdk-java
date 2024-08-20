@@ -16,6 +16,7 @@ import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageServi
 import com.dke.data.agrirouter.api.service.parameters.*;
 import com.dke.data.agrirouter.api.util.TimestampUtil;
 import com.dke.data.agrirouter.impl.common.MessageIdService;
+import com.google.protobuf.ByteString;
 
 import java.util.Objects;
 
@@ -451,9 +452,44 @@ public interface MessageEncoder extends HasLogger {
     }
 
     /**
+     * Encode a message to send a message.
+     *
+     * @param parameters -
+     * @return -
+     */
+    default EncodedMessage encode(PingParameters parameters) {
+        final var applicationMessageID =
+                parameters.getApplicationMessageId() == null
+                        ? MessageIdService.generateMessageId()
+                        : parameters.getApplicationMessageId();
+
+        var messageContent = ""; // No content for ping messages.
+
+        var messageHeaderParameters = new MessageHeaderParameters();
+        messageHeaderParameters.setApplicationMessageId(applicationMessageID);
+        messageHeaderParameters.setTechnicalMessageType(SystemMessageType.DKE_PING);
+        messageHeaderParameters.setMode(Request.RequestEnvelope.Mode.DIRECT);
+        messageHeaderParameters.setMetadata(MessageOuterClass.Metadata.newBuilder().build());
+
+        setSequenceNumber(
+                messageHeaderParameters,
+                parameters.getSequenceNumber(),
+                parameters.getOnboardingResponse());
+        var payloadParameters = new PayloadParameters();
+        payloadParameters.setTypeUrl(SystemMessageType.DKE_PING.getTypeUrl());
+
+        payloadParameters.setValue(ByteString.copyFrom(messageContent.getBytes()));
+
+        var encodedMessage =
+                this.getEncodeMessageService().encode(messageHeaderParameters, payloadParameters);
+        return new EncodedMessage(applicationMessageID, encodedMessage);
+    }
+
+    /**
      * Get the service to encode messages.
      *
      * @return -
      */
     EncodeMessageService getEncodeMessageService();
+
 }

@@ -1,7 +1,6 @@
 package com.dke.data.agrirouter.test.fixture;
 
 import agrirouter.request.payload.endpoint.Capabilities;
-import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.ApplicationType;
 import com.dke.data.agrirouter.api.enums.CertificationType;
@@ -11,15 +10,21 @@ import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.SetCapabilitiesParameters;
-import com.dke.data.agrirouter.impl.messaging.rest.FetchMessageServiceImpl;
-import com.dke.data.agrirouter.impl.messaging.rest.SetCapabilityServiceImpl;
+import com.dke.data.agrirouter.convenience.mqtt.client.MqttClientService;
+import com.dke.data.agrirouter.convenience.mqtt.client.MqttOptionService;
+import com.dke.data.agrirouter.impl.messaging.mqtt.SetCapabilityServiceImpl;
 import com.dke.data.agrirouter.impl.onboard.OnboardingServiceImpl;
 import com.dke.data.agrirouter.test.AbstractIntegrationTest;
 import com.dke.data.agrirouter.test.OnboardingResponseRepository;
-import org.junit.jupiter.api.Disabled;
+import org.eclipse.paho.client.mqttv3.IMqttClient;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -29,23 +34,28 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * Class to onboard endpoints for different reasons.
  */
 @SuppressWarnings("ALL")
-class CommunicationUnitFixture extends AbstractIntegrationTest {
+class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MqttCommunicationUnitFixture.class);
+
+    private static boolean messageHasArrived = false;
+    private static boolean messageHasBeenDelivered = false;
 
     /**
      * Create a new registration token by using the agrirouter UI and select the integration test
      * application for CUs.
      */
     @Test
-    @Disabled("Please replace the placeholder for the registration code to run the test case.")
-    void onboardCommunicationUnitAndSaveToFile() throws IOException {
+    //@Disabled("Please replace the placeholder for the registration code to run the test case.")
+    void onboardCommunicationUnitAndSaveToFile() throws Throwable {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
         OnboardingParameters onboardingParameters = new OnboardingParameters();
-        onboardingParameters.setRegistrationCode("8908462691");
+        onboardingParameters.setRegistrationCode("4822479417");
         onboardingParameters.setApplicationId(communicationUnit.getApplicationId());
         onboardingParameters.setCertificationVersionId(communicationUnit.getCertificationVersionId());
         onboardingParameters.setCertificationType(CertificationType.P12);
-        onboardingParameters.setGatewayId(Gateway.REST.getKey());
+        onboardingParameters.setGatewayId(Gateway.MQTT.getKey());
         onboardingParameters.setApplicationType(ApplicationType.APPLICATION);
         onboardingParameters.setUuid(UUID.randomUUID().toString());
         final OnboardingResponse onboardingResponse = onboardingService.onboard(onboardingParameters);
@@ -61,8 +71,19 @@ class CommunicationUnitFixture extends AbstractIntegrationTest {
         assertNotNull(onboardingResponse.getConnectionCriteria().getMeasures());
         assertNotNull(onboardingResponse.getConnectionCriteria().getCommands());
         OnboardingResponseRepository.save(
-                OnboardingResponseRepository.Identifier.COMMUNICATION_UNIT, onboardingResponse);
-        final SetCapabilityServiceImpl setCapabilityService = new SetCapabilityServiceImpl();
+                OnboardingResponseRepository.Identifier.MQTT_COMMUNICATION_UNIT, onboardingResponse);
+
+        MqttClientService mqttClientService = new MqttClientService(new QA() {
+        });
+        IMqttClient mqttClient = mqttClientService.create(onboardingResponse);
+
+        MqttOptionService mqttOptionService = new MqttOptionService(new QA() {
+        });
+        mqttClient.setCallback(new InternalCallback());
+        mqttClient.connect(mqttOptionService.createMqttConnectOptions(onboardingResponse));
+        mqttClient.subscribe(onboardingResponse.getConnectionCriteria().getCommands());
+
+        final SetCapabilityServiceImpl setCapabilityService = new SetCapabilityServiceImpl(mqttClient);
         final SetCapabilitiesParameters setCapabilitiesParameters = new SetCapabilitiesParameters();
         setCapabilitiesParameters.setApplicationId(communicationUnit.getApplicationId());
         setCapabilitiesParameters.setCertificationVersionId(
@@ -75,9 +96,34 @@ class CommunicationUnitFixture extends AbstractIntegrationTest {
         setCapabilitiesParameters.setCapabilitiesParameters(
                 Collections.singletonList(capabilityParameters));
         setCapabilityService.send(setCapabilitiesParameters);
-        final FetchMessageServiceImpl fetchMessageService = new FetchMessageServiceImpl();
-        fetchMessageService.fetch(
-                onboardingResponse,
-                new DefaultCancellationToken(MAX_TRIES_BEFORE_FAILURE, DEFAULT_INTERVAL));
+
+        int nrOfRetries = 0;
+        while (!messageHasBeenDelivered && !messageHasArrived && nrOfRetries < 10) {
+            LOGGER.debug("Waiting for message to arrive, retrying in 1 second. This is the {} retry.", nrOfRetries);
+            Thread.sleep(1000);
+            nrOfRetries++;
+        }
+        mqttClient.disconnect();
+
+        Assertions.assertTrue(messageHasBeenDelivered, "Message has not delivered within the timeout configured. There were " + nrOfRetries + " retries.");
+        Assertions.assertTrue(messageHasArrived, "Message has not arrived within the timeout configured. There were " + nrOfRetries + " retries.");
+    }
+
+    class InternalCallback implements MqttCallback {
+
+
+        @Override
+        public void connectionLost(Throwable throwable) {
+        }
+
+        @Override
+        public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
+            messageHasArrived = true;
+        }
+
+        @Override
+        public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+            messageHasBeenDelivered = true;
+        }
     }
 }

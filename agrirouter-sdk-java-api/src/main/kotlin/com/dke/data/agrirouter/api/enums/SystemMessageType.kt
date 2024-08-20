@@ -29,7 +29,8 @@ enum class SystemMessageType(private val key: String, private val typeUrl: Strin
     DKE_FEED_CONFIRM("dke:feed_confirm", FeedRequests.MessageConfirm.getDescriptor().fullName),
     DKE_FEED_DELETE("dke:feed_delete", FeedRequests.MessageDelete.getDescriptor().fullName),
     DKE_FEED_MESSAGE_QUERY("dke:feed_message_query", FeedRequests.MessageQuery.getDescriptor().fullName),
-    DKE_FEED_HEADER_QUERY("dke:feed_header_query", FeedRequests.MessageQuery.getDescriptor().fullName);
+    DKE_FEED_HEADER_QUERY("dke:feed_header_query", FeedRequests.MessageQuery.getDescriptor().fullName),
+    DKE_PING("dke:ping", "");
 
     override fun getKey(): String {
         return key
