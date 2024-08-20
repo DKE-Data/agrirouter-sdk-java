@@ -1,13 +1,19 @@
 package com.dke.data.agrirouter.test.messaging.mqtt;
 
+import agrirouter.response.Response;
+import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
 import com.dke.data.agrirouter.api.env.QA;
+import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.PingService;
 import com.dke.data.agrirouter.api.service.parameters.PingParameters;
 import com.dke.data.agrirouter.convenience.mqtt.client.MqttClientService;
 import com.dke.data.agrirouter.convenience.mqtt.client.MqttOptionService;
+import com.dke.data.agrirouter.impl.messaging.encoding.DecodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.mqtt.PingServiceImpl;
 import com.dke.data.agrirouter.test.AbstractIntegrationTest;
 import com.dke.data.agrirouter.test.OnboardingResponseRepository;
+import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -16,13 +22,17 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.StandardCharsets;
+
 class PingServiceTest extends AbstractIntegrationTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PingServiceTest.class);
 
-    private static boolean messageHasArrived = false;
-    private static boolean messageHasBeenDelivered = false;
+    private boolean messageHasArrived = false;
+    private boolean messageHasBeenDelivered = false;
+    private static String healthMessageId = null;
 
+    private final DecodeMessageService decodeMessageService = new DecodeMessageServiceImpl();
 
     @Test
     void sendHealthMessageToPingEndpoint() throws Throwable {
@@ -42,7 +52,7 @@ class PingServiceTest extends AbstractIntegrationTest {
         pingParameters.setOnboardingResponse(onboardingResponse);
 
         PingService pingService = new PingServiceImpl(mqttClient);
-        pingService.send(pingParameters);
+        healthMessageId = pingService.send(pingParameters);
 
         var nrOfRetries = 0;
         while (!messageHasBeenDelivered && !messageHasArrived && nrOfRetries < 10) {
@@ -57,7 +67,7 @@ class PingServiceTest extends AbstractIntegrationTest {
         Assertions.assertTrue(messageHasArrived, "Message has not arrived within the timeout configured. There were " + nrOfRetries + " retries.");
     }
 
-    static class InternalCallback implements MqttCallback {
+    class InternalCallback implements MqttCallback {
 
 
         @Override
@@ -66,7 +76,15 @@ class PingServiceTest extends AbstractIntegrationTest {
 
         @Override
         public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
-            messageHasArrived = true;
+            var payload = StringUtils.toEncodedString(mqttMessage.getPayload(), StandardCharsets.UTF_8);
+            final var fetchMessageResponse = new Gson().fromJson(payload, FetchMessageResponse.class);
+            final var decodedMessageResponse = decodeMessageService.decode(fetchMessageResponse.getCommand().getMessage());
+            LOGGER.debug("Message arrived: {}", decodedMessageResponse);
+            if (decodedMessageResponse.getResponseEnvelope().getType() == Response.ResponseEnvelope.ResponseBodyType.ACK) {
+                messageHasArrived = StringUtils.equals(decodedMessageResponse.getResponseEnvelope().getApplicationMessageId(), healthMessageId);
+            } else {
+                LOGGER.warn("Message arrived, but this should not be the case {}.", decodedMessageResponse);
+            }
         }
 
         @Override
