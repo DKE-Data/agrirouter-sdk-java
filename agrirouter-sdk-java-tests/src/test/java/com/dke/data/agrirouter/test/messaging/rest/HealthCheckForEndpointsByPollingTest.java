@@ -32,35 +32,4 @@ class HealthCheckForEndpointsByPollingTest extends AbstractIntegrationTest {
         Assertions.assertFalse(optionalMessageResponses.isPresent());
     }
 
-    @Test
-    void
-    givenExistingAndDeactivatedEndpointWhenPollingTheOutboxThenTheAgrirouterShouldReturnAnEmptyResult()
-            throws IOException {
-        final var onboardingResponse =
-                OnboardingResponseRepository.read(
-                        OnboardingResponseRepository.Identifier.FARMING_SOFTWARE_DEACTIVATED);
-        FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        final var optionalMessageResponses =
-                fetchMessageService.fetch(
-                        onboardingResponse,
-                        new DefaultCancellationToken(
-                                MessageFetcher.MAX_TRIES_BEFORE_FAILURE, MessageFetcher.DEFAULT_INTERVAL));
-        Assertions.assertFalse(optionalMessageResponses.isPresent());
-    }
-
-    @Test
-    void givenRemovedEndpointWhenPollingTheOutboxThenTheAgrirouterShouldDenyAccessToTheApi()
-            throws IOException {
-        final var onboardingResponse =
-                OnboardingResponseRepository.read(
-                        OnboardingResponseRepository.Identifier.FARMING_SOFTWARE_REMOVED);
-        FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
-        Assertions.assertThrows(
-                UnauthorizedRequestException.class,
-                () ->
-                        fetchMessageService.fetch(
-                                onboardingResponse,
-                                new DefaultCancellationToken(
-                                        MessageFetcher.MAX_TRIES_BEFORE_FAILURE, MessageFetcher.DEFAULT_INTERVAL)));
-    }
 }

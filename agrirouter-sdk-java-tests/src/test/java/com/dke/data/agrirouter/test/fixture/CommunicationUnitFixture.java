@@ -36,7 +36,7 @@ class CommunicationUnitFixture extends AbstractIntegrationTest {
      * application for CUs.
      */
     @Test
-    //@Disabled("Please replace the placeholder for the registration code to run the test case.")
+    @Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardCommunicationUnitAndSaveToFile() throws IOException {
         OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
         });
