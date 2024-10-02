@@ -5,7 +5,7 @@
 
     <groupId>com.agrirouter.api</groupId>
     <artifactId>agrirouter-sdk-java</artifactId>
-    <version>3.2.1</version>
+    <version>3.2.2</version>
     <packaging>pom</packaging>
 
     <name>AGRIROUTER SDK JAVA</name>
