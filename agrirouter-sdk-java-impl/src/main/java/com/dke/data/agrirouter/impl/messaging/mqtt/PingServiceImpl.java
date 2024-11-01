@@ -54,7 +54,7 @@ public class PingServiceImpl extends MqttService
 
     @Override
     public MqttAsyncMessageSendingResult sendAsync(PingParameters parameters) {
-        return null;
+        throw new RuntimeException("Not implemented, please use the synchronous send method.");
     }
 
     @Override
