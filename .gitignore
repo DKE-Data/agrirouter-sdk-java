@@ -29,3 +29,6 @@ src/main/generated
 
 # LOCAL SETTINGS #
 ci/local-settings.xml
+
+# LCK #
+*.lck
