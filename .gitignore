@@ -26,3 +26,6 @@ buildNumber.properties
 
 # GENERATED #
 src/main/generated
+
+# LCK #
+*.lck
