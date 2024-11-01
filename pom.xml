@@ -5,7 +5,7 @@
 
     <groupId>com.agrirouter.api</groupId>
     <artifactId>agrirouter-sdk-java</artifactId>
-    <version>3.3.0</version>
+    <version>3.2.2</version>
     <packaging>pom</packaging>
 
     <name>AGRIROUTER SDK JAVA</name>
@@ -212,7 +212,7 @@
             <dependency>
                 <groupId>org.eclipse.paho</groupId>
                 <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-                <version>1.2.4</version>
+                <version>1.2.5</version>
             </dependency>
 
             <!-- PROTOBUF -->
