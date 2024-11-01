@@ -4,6 +4,8 @@ import agrirouter.feed.response.FeedResponse;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
+import com.dke.data.agrirouter.api.mqtt.HiveMqttClientWrapper;
+import com.dke.data.agrirouter.api.mqtt.PahoMqttClientWrapper;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.MessageQueryService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
@@ -13,6 +15,7 @@ import com.dke.data.agrirouter.impl.messaging.helper.mqtt.MessageQueryHelperServ
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.util.concurrent.CompletableFuture;
@@ -26,7 +29,14 @@ public class MessageQueryServiceImpl extends MqttService
     private final MessageQueryHelperService messageQueryHelperService;
 
     public MessageQueryServiceImpl(IMqttClient mqttClient) {
-        super(mqttClient);
+        super(new PahoMqttClientWrapper(mqttClient));
+        this.messageQueryHelperService =
+                new MessageQueryHelperService(
+                        mqttClient, new EncodeMessageServiceImpl(), SystemMessageType.DKE_FEED_MESSAGE_QUERY);
+    }
+
+    public MessageQueryServiceImpl(Mqtt3AsyncClient mqttClient) {
+        super(new HiveMqttClientWrapper(mqttClient));
         this.messageQueryHelperService =
                 new MessageQueryHelperService(
                         mqttClient, new EncodeMessageServiceImpl(), SystemMessageType.DKE_FEED_MESSAGE_QUERY);

@@ -3,8 +3,9 @@ package com.dke.data.agrirouter.impl.messaging.mqtt;
 import agrirouter.request.payload.account.Endpoints;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
-import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
+import com.dke.data.agrirouter.api.mqtt.HiveMqttClientWrapper;
+import com.dke.data.agrirouter.api.mqtt.PahoMqttClientWrapper;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.ListEndpointsService;
@@ -16,9 +17,8 @@ import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -34,31 +34,32 @@ public class ListEndpointsServiceImpl extends MqttService
     private final EncodeMessageService encodeMessageService;
 
     public ListEndpointsServiceImpl(IMqttClient mqttClient) {
-        super(mqttClient);
+        super(new PahoMqttClientWrapper(mqttClient));
+        this.encodeMessageService = new EncodeMessageServiceImpl();
+    }
+
+    public ListEndpointsServiceImpl(Mqtt3AsyncClient mqttClient) {
+        super(new HiveMqttClientWrapper(mqttClient));
         this.encodeMessageService = new EncodeMessageServiceImpl();
     }
 
     @Override
     public String send(ListEndpointsParameters parameters) {
         parameters.validate();
-        try {
-            var encodedMessage = this.encode(parameters);
-            var sendMessageParameters = new SendMessageParameters();
-            sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
-            sendMessageParameters.setEncodedMessages(
-                    Collections.singletonList(encodedMessage.getEncodedMessage()));
-            var messageAsJson = this.createMessageBody(sendMessageParameters);
-            var payload = messageAsJson.getBytes();
-            this.getMqttClient()
-                    .publish(
-                            Objects.requireNonNull(parameters.getOnboardingResponse())
-                                    .getConnectionCriteria()
-                                    .getMeasures(),
-                            new MqttMessage(payload));
-            return encodedMessage.getApplicationMessageID();
-        } catch (MqttException e) {
-            throw new CouldNotSendMqttMessageException(e);
-        }
+        var encodedMessage = this.encode(parameters);
+        var sendMessageParameters = new SendMessageParameters();
+        sendMessageParameters.setOnboardingResponse(parameters.getOnboardingResponse());
+        sendMessageParameters.setEncodedMessages(
+                Collections.singletonList(encodedMessage.getEncodedMessage()));
+        var messageAsJson = this.createMessageBody(sendMessageParameters);
+        var payload = messageAsJson.getBytes();
+        this.getMqttClient()
+                .publish(
+                        Objects.requireNonNull(parameters.getOnboardingResponse())
+                                .getConnectionCriteria()
+                                .getMeasures(),
+                        payload);
+        return encodedMessage.getApplicationMessageID();
     }
 
     @Override
