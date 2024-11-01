@@ -30,6 +30,7 @@ public class PingServiceImpl extends MqttService
         this.encodeMessageService = new EncodeMessageServiceImpl();
     }
 
+    @SuppressWarnings("unused")
     public PingServiceImpl(Mqtt3AsyncClient mqttClient) {
         super(new HiveMqttClientWrapper(mqttClient));
         this.encodeMessageService = new EncodeMessageServiceImpl();
