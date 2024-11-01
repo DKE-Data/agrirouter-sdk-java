@@ -4,6 +4,7 @@ import agrirouter.request.payload.account.Endpoints;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
+import com.dke.data.agrirouter.api.mqtt.HiveMqttClientWrapper;
 import com.dke.data.agrirouter.api.mqtt.PahoMqttClientWrapper;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.encoding.MessageDecoder;
@@ -16,6 +17,7 @@ import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.util.Collections;
@@ -33,6 +35,11 @@ public class ListEndpointsServiceImpl extends MqttService
 
     public ListEndpointsServiceImpl(IMqttClient mqttClient) {
         super(new PahoMqttClientWrapper(mqttClient));
+        this.encodeMessageService = new EncodeMessageServiceImpl();
+    }
+
+    public ListEndpointsServiceImpl(Mqtt3AsyncClient mqttClient) {
+        super(new HiveMqttClientWrapper(mqttClient));
         this.encodeMessageService = new EncodeMessageServiceImpl();
     }
 

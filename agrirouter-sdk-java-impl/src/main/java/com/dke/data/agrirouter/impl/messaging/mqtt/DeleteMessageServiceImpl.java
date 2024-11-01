@@ -2,6 +2,7 @@ package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
+import com.dke.data.agrirouter.api.mqtt.HiveMqttClientWrapper;
 import com.dke.data.agrirouter.api.mqtt.PahoMqttClientWrapper;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.DeleteMessageService;
@@ -12,6 +13,7 @@ import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.helper.DeleteAllMessagesParameterCreator;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.util.Collections;
@@ -29,6 +31,10 @@ public class DeleteMessageServiceImpl extends MqttService
 
     public DeleteMessageServiceImpl(IMqttClient mqttClient) {
         super(new PahoMqttClientWrapper(mqttClient));
+    }
+
+    public DeleteMessageServiceImpl(Mqtt3AsyncClient mqttClient) {
+        super(new HiveMqttClientWrapper(mqttClient));
     }
 
     @Override

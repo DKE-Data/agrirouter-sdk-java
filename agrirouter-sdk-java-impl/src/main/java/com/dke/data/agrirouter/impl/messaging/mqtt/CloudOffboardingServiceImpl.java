@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
+import com.dke.data.agrirouter.api.mqtt.HiveMqttClientWrapper;
 import com.dke.data.agrirouter.api.mqtt.PahoMqttClientWrapper;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.CloudOffboardingService;
@@ -10,6 +11,7 @@ import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.util.Collections;
@@ -29,13 +31,17 @@ public class CloudOffboardingServiceImpl extends MqttService
         super(new PahoMqttClientWrapper(mqttClient));
     }
 
-    /**
+    public CloudOffboardingServiceImpl(Mqtt3AsyncClient mqttClient) {
+        super(new HiveMqttClientWrapper(mqttClient));
+    }
+
+                                       /**
      * Offboarding a virtual CU. Will deliver no result if the action was successful, if there's any
      * error an exception will be thrown.
      *
      * @param parameters Parameters for offboarding.
      */
-    @Override
+                                       @Override
     public String send(CloudOffboardingParameters parameters) {
         parameters.validate();
         var encodedMessage = this.encode(parameters);

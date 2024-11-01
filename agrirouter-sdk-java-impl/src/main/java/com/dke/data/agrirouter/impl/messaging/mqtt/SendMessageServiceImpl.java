@@ -1,10 +1,12 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
+import com.dke.data.agrirouter.api.mqtt.HiveMqttClientWrapper;
 import com.dke.data.agrirouter.api.mqtt.PahoMqttClientWrapper;
 import com.dke.data.agrirouter.api.service.messaging.SendMessageService;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.util.Objects;
@@ -20,6 +22,10 @@ public class SendMessageServiceImpl extends MqttService
 
     public SendMessageServiceImpl(IMqttClient mqttClient) {
         super(new PahoMqttClientWrapper(mqttClient));
+    }
+
+    public SendMessageServiceImpl(Mqtt3AsyncClient mqttClient) {
+        super(new HiveMqttClientWrapper(mqttClient));
     }
 
     /**

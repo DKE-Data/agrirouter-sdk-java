@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.helper.mqtt;
 
 import com.dke.data.agrirouter.api.enums.TechnicalMessageType;
+import com.dke.data.agrirouter.api.mqtt.HiveMqttClientWrapper;
 import com.dke.data.agrirouter.api.mqtt.PahoMqttClientWrapper;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.parameters.MessageQueryParameters;
@@ -9,6 +10,7 @@ import com.dke.data.agrirouter.impl.messaging.MessageEncoder;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.helper.QueryAllMessagesParameterCreator;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.util.Collections;
@@ -25,10 +27,17 @@ public class MessageQueryHelperService extends MqttService
             EncodeMessageService encodeMessageService,
             TechnicalMessageType technicalMessageType) {
         super(new PahoMqttClientWrapper(mqttClient));
-        this.logMethodBegin();
         this.encodeMessageService = encodeMessageService;
         this.technicalMessageType = technicalMessageType;
-        this.logMethodEnd();
+    }
+
+    public MessageQueryHelperService(
+            Mqtt3AsyncClient mqttClient,
+            EncodeMessageService encodeMessageService,
+            TechnicalMessageType technicalMessageType) {
+        super(new HiveMqttClientWrapper(mqttClient));
+        this.encodeMessageService = encodeMessageService;
+        this.technicalMessageType = technicalMessageType;
     }
 
     public String send(MessageQueryParameters parameters) {

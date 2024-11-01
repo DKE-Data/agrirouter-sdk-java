@@ -1,6 +1,7 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
 import com.dke.data.agrirouter.api.messaging.MqttAsyncMessageSendingResult;
+import com.dke.data.agrirouter.api.mqtt.HiveMqttClientWrapper;
 import com.dke.data.agrirouter.api.mqtt.PahoMqttClientWrapper;
 import com.dke.data.agrirouter.api.service.messaging.encoding.EncodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.SetCapabilityService;
@@ -11,6 +12,7 @@ import com.dke.data.agrirouter.impl.messaging.MqttService;
 import com.dke.data.agrirouter.impl.messaging.encoding.EncodeMessageServiceImpl;
 import com.dke.data.agrirouter.impl.messaging.rest.MessageSender;
 import com.dke.data.agrirouter.impl.validation.ResponseValidator;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.util.Collections;
@@ -25,6 +27,11 @@ public class SetCapabilityServiceImpl extends MqttService
 
     public SetCapabilityServiceImpl(IMqttClient mqttClient) {
         super(new PahoMqttClientWrapper(mqttClient));
+        this.encodeMessageService = new EncodeMessageServiceImpl();
+    }
+
+    public SetCapabilityServiceImpl(Mqtt3AsyncClient mqttClient) {
+        super(new HiveMqttClientWrapper(mqttClient));
         this.encodeMessageService = new EncodeMessageServiceImpl();
     }
 
