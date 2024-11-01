@@ -1,13 +1,11 @@
 package com.dke.data.agrirouter.impl.messaging.mqtt;
 
-import com.dke.data.agrirouter.api.exception.CouldNotSendMqttMessageException;
+import com.dke.data.agrirouter.api.mqtt.PahoMqttClientWrapper;
 import com.dke.data.agrirouter.api.service.messaging.SendMessageService;
 import com.dke.data.agrirouter.api.service.parameters.SendMessageParameters;
 import com.dke.data.agrirouter.impl.messaging.MessageBodyCreator;
 import com.dke.data.agrirouter.impl.messaging.MqttService;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -21,7 +19,7 @@ public class SendMessageServiceImpl extends MqttService
         implements SendMessageService<Void>, MessageBodyCreator {
 
     public SendMessageServiceImpl(IMqttClient mqttClient) {
-        super(mqttClient);
+        super(new PahoMqttClientWrapper(mqttClient));
     }
 
     /**
@@ -31,18 +29,14 @@ public class SendMessageServiceImpl extends MqttService
      */
     public void send(SendMessageParameters sendMessageParameters) {
         sendMessageParameters.validate();
-        try {
-            var messageAsJson = this.createMessageBody(sendMessageParameters);
-            var payload = messageAsJson.getBytes();
-            this.getMqttClient()
-                    .publish(
-                            Objects.requireNonNull(sendMessageParameters.getOnboardingResponse())
-                                    .getConnectionCriteria()
-                                    .getMeasures(),
-                            new MqttMessage(payload));
-        } catch (MqttException e) {
-            throw new CouldNotSendMqttMessageException(e);
-        }
+        var messageAsJson = this.createMessageBody(sendMessageParameters);
+        var payload = messageAsJson.getBytes();
+        this.getMqttClient()
+                .publish(
+                        Objects.requireNonNull(sendMessageParameters.getOnboardingResponse())
+                                .getConnectionCriteria()
+                                .getMeasures(),
+                        payload);
     }
 
     @Override
