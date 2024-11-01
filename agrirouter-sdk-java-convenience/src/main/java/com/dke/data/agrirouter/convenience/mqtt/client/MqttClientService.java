@@ -1,4 +1,4 @@
-package com.dke.data.agrirouter.convenience.mqtt.paho;
+package com.dke.data.agrirouter.convenience.mqtt.client;
 
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.dto.onboard.RouterDevice;
