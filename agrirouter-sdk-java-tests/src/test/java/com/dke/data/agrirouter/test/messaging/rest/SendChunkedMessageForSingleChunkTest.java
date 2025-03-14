@@ -64,26 +64,35 @@ class SendChunkedMessageForSingleChunkTest extends AbstractIntegrationTest {
                 ByteString.copyFrom(ContentReader.readRawData(ContentReader.Identifier.SMALL_TASK_DATA)));
         payloadParameters.setTypeUrl(SystemMessageType.EMPTY.getKey());
 
+        // create message tuples for each chunk
         List<MessageParameterTuple> tuples =
                 encodeMessageService.chunkAndBase64EncodeEachChunk(
                         messageHeaderParameters, payloadParameters, onboardingResponse);
 
-        tuples.forEach(
-                messageParameterTuple ->
-                        Assertions.assertTrue(
-                                Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue())
-                                        .toStringUtf8()
-                                        .length()
-                                        <= MAX_CHUNK_SIZE));
-
-        List<String> encodedMessages = encodeMessageService.encode(tuples);
-
         SendMessageParameters sendMessageParameters = new SendMessageParameters();
-        sendMessageParameters.setEncodedMessages(encodedMessages);
         sendMessageParameters.setOnboardingResponse(onboardingResponse);
-        sendMessageService.send(sendMessageParameters);
+
+        // encode and send each chunk
+        tuples.forEach(
+                messageParameterTuple -> {
+                    Assertions.assertTrue(
+                            Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue())
+                                    .toStringUtf8()
+                                    .length()
+                                    <= MAX_CHUNK_SIZE);
+                    String encodedMessage = encodeMessageService.encode(
+                            messageParameterTuple.getMessageHeaderParameters(),
+                            messageParameterTuple.getPayloadParameters());
+                    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
+                    sendMessageService.send(sendMessageParameters);
+                }
+        );
 
         waitForTheAgrirouterToProcessMultipleMessages();
+
+        // WARNING: receiving part might not be accurate for now, as we changed the sending structure from
+        // sending all chunks in _one_ agrirouter message (which was incorrect) to sending each chunk in a
+        // dedicated message
 
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
         Optional<List<FetchMessageResponse>> fetchMessageResponses =

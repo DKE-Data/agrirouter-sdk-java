@@ -192,26 +192,34 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
                 encodeMessageService.chunkAndBase64EncodeEachChunk(
                         messageHeaderParameters, payloadParameters, onboardingResponse);
 
-        tuples.forEach(
-                messageParameterTuple ->
-                        Assertions.assertTrue(
-                                Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue())
-                                        .toStringUtf8()
-                                        .length()
-                                        <= MAX_CHUNK_SIZE));
-
-        var encodedMessages = encodeMessageService.encode(tuples);
-
-        // [3] Send the chunks to the agrirouter.
+        // [3] Send each chunk to the agrirouter.
         var sendMessageParameters = new SendMessageParameters();
-        sendMessageParameters.setEncodedMessages(encodedMessages);
         sendMessageParameters.setOnboardingResponse(onboardingResponse);
-        sendMessageService.send(sendMessageParameters);
+
+        tuples.forEach(
+                messageParameterTuple -> {
+                    Assertions.assertTrue(
+                            Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue())
+                                    .toStringUtf8()
+                                    .length()
+                                    <= MAX_CHUNK_SIZE);
+                    String encodedMessage = encodeMessageService.encode(
+                            messageParameterTuple.getMessageHeaderParameters(),
+                            messageParameterTuple.getPayloadParameters());
+                    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
+                    sendMessageService.send(sendMessageParameters);
+                }
+        );
 
         // [4] Wait for the AR to process the chunks.
         waitForTheAgrirouterToProcessMultipleMessages();
 
         // [5] Check if the chunks were processed successfully.
+
+        // WARNING: receiving part might not be accurate for now, as we changed the sending structure from
+        // sending all chunks in _one_ agrirouter message (which was incorrect) to sending each chunk in a
+        // dedicated message
+
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
         var fetchMessageResponses =
                 fetchMessageService.fetch(

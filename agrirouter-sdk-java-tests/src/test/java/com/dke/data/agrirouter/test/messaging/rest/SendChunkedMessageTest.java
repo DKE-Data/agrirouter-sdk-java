@@ -42,7 +42,7 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
     @Test
     @Disabled("Issue #197 | Needs investigation, not running any longer.")
     void
-    givenLargeContentMessageWhenSendingTheMessageToTheAhrgrirouterTheSdkShouldHelpToSendTheFileInMultipleChunks()
+    givenLargeContentMessageWhenSendingTheMessageToTheAgrirouterTheSdkShouldHelpToSendTheFileInMultipleChunks()
             throws Throwable {
 
         final EncodeMessageService encodeMessageService = new EncodeMessageServiceImpl();
@@ -64,26 +64,35 @@ class SendChunkedMessageTest extends AbstractIntegrationTest {
                 ByteString.copyFrom(ContentReader.readRawData(ContentReader.Identifier.BIG_TASK_DATA)));
         payloadParameters.setTypeUrl(SystemMessageType.EMPTY.getKey());
 
+        // create message tuples for each chunk
         var tuples =
                 encodeMessageService.chunkAndBase64EncodeEachChunk(
                         messageHeaderParameters, payloadParameters, onboardingResponse);
 
-        tuples.forEach(
-                messageParameterTuple ->
-                        Assertions.assertTrue(
-                                Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue())
-                                        .toStringUtf8()
-                                        .length()
-                                        <= MAX_CHUNK_SIZE));
-
-        var encodedMessages = encodeMessageService.encode(tuples);
-
         var sendMessageParameters = new SendMessageParameters();
-        sendMessageParameters.setEncodedMessages(encodedMessages);
         sendMessageParameters.setOnboardingResponse(onboardingResponse);
-        sendMessageService.send(sendMessageParameters);
+
+        // encode and send each chunk
+        tuples.forEach(
+                messageParameterTuple -> {
+                    Assertions.assertTrue(
+                            Objects.requireNonNull(messageParameterTuple.getPayloadParameters().getValue())
+                                    .toStringUtf8()
+                                    .length()
+                                    <= MAX_CHUNK_SIZE);
+                    String encodedMessage = encodeMessageService.encode(
+                            messageParameterTuple.getMessageHeaderParameters(),
+                            messageParameterTuple.getPayloadParameters());
+                    sendMessageParameters.setEncodedMessages(Collections.singletonList(encodedMessage));
+                    sendMessageService.send(sendMessageParameters);
+                }
+        );
 
         waitForTheAgrirouterToProcessMultipleMessages();
+
+        // WARNING: receiving part might not be accurate for now, as we changed the sending structure from
+        // sending all chunks in _one_ agrirouter message (which was incorrect) to sending each chunk in a
+        // dedicated message
 
         FetchMessageService fetchMessageService = new FetchMessageServiceImpl();
         var fetchMessageResponses =
