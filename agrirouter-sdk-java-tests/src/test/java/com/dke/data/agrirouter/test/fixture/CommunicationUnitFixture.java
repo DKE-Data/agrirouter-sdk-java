@@ -38,8 +38,7 @@ class CommunicationUnitFixture extends AbstractIntegrationTest {
     @Test
     @Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardCommunicationUnitAndSaveToFile() throws IOException {
-        OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
-        });
+        OnboardingService onboardingService = new OnboardingServiceImpl(communicationUnit.getEnvironment());
         OnboardingParameters onboardingParameters = new OnboardingParameters();
         onboardingParameters.setRegistrationCode("8908462691");
         onboardingParameters.setApplicationId(communicationUnit.getApplicationId());

@@ -21,7 +21,7 @@ class OnboardingWithErrorMessageTest extends AbstractIntegrationTest {
     @Test
     void
     givenInvalidRegistrationCodeWhenSendingTheOnboardingRequestThenThereShouldBeAnOnboardingExceptionWithFilledErrorMessage() {
-        OnboardingService onboardingService = new OnboardingServiceImpl(getEnv());
+        OnboardingService onboardingService = new OnboardingServiceImpl(communicationUnit.getEnvironment());
         var onboardingParameters = new OnboardingParameters();
         onboardingParameters.setApplicationMessageId(MessageIdService.generateMessageId());
         onboardingParameters.setApplicationType(ApplicationType.APPLICATION);
@@ -41,8 +41,4 @@ class OnboardingWithErrorMessageTest extends AbstractIntegrationTest {
                 "Bearer not found.", onboardingException.getOnboardingError().getError().getMessage());
     }
 
-    private Environment getEnv() {
-        return new QA() {
-        };
-    }
 }

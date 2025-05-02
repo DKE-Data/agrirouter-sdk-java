@@ -34,8 +34,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
     @Test
     @Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardFarmingSoftwareAndSaveToFile() throws IOException {
-        OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
-        });
+        OnboardingService onboardingService = new OnboardingServiceImpl(farmingSoftware.getEnvironment());
         SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
         onboardingParameters.setRegistrationCode("2067663604");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());

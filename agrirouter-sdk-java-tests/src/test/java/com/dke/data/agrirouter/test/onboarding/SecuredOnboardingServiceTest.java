@@ -24,8 +24,7 @@ class SecuredOnboardingServiceTest extends AbstractIntegrationTest {
     @Test
     void
     givenInvalidRegistrationCodeThereShouldBeAnOnboardingExceptionWhenSendingAnOnboardingRequest() {
-        OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
-        });
+        OnboardingService onboardingService = new OnboardingServiceImpl(farmingSoftware.getEnvironment());
         var onboardingParameters = new SecuredOnboardingParameters();
         onboardingParameters.setRegistrationCode("SOME_INVALID_REGISTRATION_CODE");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
@@ -42,8 +41,7 @@ class SecuredOnboardingServiceTest extends AbstractIntegrationTest {
     @Disabled("Please replace the placeholder for the registration code to run the test case.")
     void
     givenValidRegistrationCodeThereShouldBeAnOnboardingResponseWhenSendingAnOnboardingRequestForFarmingSoftware() {
-        OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
-        });
+        OnboardingService onboardingService = new OnboardingServiceImpl(farmingSoftware.getEnvironment());
         var onboardingParameters = new SecuredOnboardingParameters();
         onboardingParameters.setRegistrationCode("PLEASE_REPLACE_ME");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());
@@ -71,8 +69,7 @@ class SecuredOnboardingServiceTest extends AbstractIntegrationTest {
     @Disabled("Please replace the placeholder for the registration code to run the test case.")
     void
     givenValidRegistrationCodeThereShouldBeAnOnboardingResponseWhenSendingAnOnboardingRequestForTelemetryPlatform() {
-        OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
-        });
+        OnboardingService onboardingService = new OnboardingServiceImpl(farmingSoftware.getEnvironment());
         var onboardingParameters = new SecuredOnboardingParameters();
         onboardingParameters.setRegistrationCode("PLEASE_REPLACE_ME");
         onboardingParameters.setApplicationId(telemetryPlatform.getApplicationId());

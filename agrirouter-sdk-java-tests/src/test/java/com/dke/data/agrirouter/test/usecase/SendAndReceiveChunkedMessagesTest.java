@@ -68,8 +68,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
             throws Throwable {
         // [1] Fetch all the messages within the feed. The number of headers should match the number of
         // chunks sent.
-        final var messageQueryService = new MessageQueryServiceImpl(new QA() {
-        });
+        final var messageQueryService = new MessageQueryServiceImpl(communicationUnit.getEnvironment());
         final var messageQueryParameters = new MessageQueryParameters();
         final var recipient =
                 OnboardingResponseRepository.read(
@@ -135,8 +134,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
                         .map(feedMessage -> feedMessage.getHeader().getMessageId())
                         .collect(Collectors.toList());
         final var messageConfirmationService =
-                new MessageConfirmationServiceImpl(new QA() {
-                });
+                new MessageConfirmationServiceImpl(communicationUnit.getEnvironment());
         final var messageConfirmationParameters =
                 new MessageConfirmationParameters();
         messageConfirmationParameters.setOnboardingResponse(recipient);
@@ -271,8 +269,7 @@ class SendAndReceiveChunkedMessagesTest extends AbstractIntegrationTest {
                 OnboardingResponseRepository.read(
                         OnboardingResponseRepository.Identifier.COMMUNICATION_UNIT);
         final var messageHeaderQueryService =
-                new MessageHeaderQueryServiceImpl(new QA() {
-                });
+                new MessageHeaderQueryServiceImpl(communicationUnit.getEnvironment());
 
         // [1] Clean the outbox of the endpoint.
         fetchMessageService.fetch(

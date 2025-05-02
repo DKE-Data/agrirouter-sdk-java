@@ -1,5 +1,7 @@
 package com.dke.data.agrirouter.test;
 
+import com.dke.data.agrirouter.api.env.Environment;
+import com.dke.data.agrirouter.api.env.QA;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.concurrent.TimeUnit;
@@ -51,6 +53,12 @@ public abstract class AbstractIntegrationTest {
                 public String getCertificationVersionId() {
                     return "96c2c3e8-5e30-11ef-a95b-d2e1bbd0b244";
                 }
+
+                @Override
+                public Environment getEnvironment() {
+                    return new QA() {
+                    };
+                }
             };
 
     /**
@@ -67,6 +75,12 @@ public abstract class AbstractIntegrationTest {
                 @Override
                 public String getCertificationVersionId() {
                     return "4dc7a506-5e31-11ef-a95b-d2e1bbd0b244";
+                }
+
+                @Override
+                public Environment getEnvironment() {
+                    return new QA() {
+                    };
                 }
 
                 @Override
@@ -133,6 +147,12 @@ public abstract class AbstractIntegrationTest {
                 @Override
                 public String getCertificationVersionId() {
                     return "e743930a-5e31-11ef-a95b-d2e1bbd0b244";
+                }
+
+                @Override
+                public Environment getEnvironment() {
+                    return new QA() {
+                    };
                 }
 
                 @Override
@@ -203,6 +223,13 @@ public abstract class AbstractIntegrationTest {
          * @return -
          */
         public abstract String getCertificationVersionId();
+
+        /**
+         * Environment for the application.
+         *
+         * @return -
+         */
+        public abstract Environment getEnvironment();
 
         /**
          * Private key for the application.

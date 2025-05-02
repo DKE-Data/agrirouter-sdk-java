@@ -31,8 +31,7 @@ class TelemetryPlatformFixture extends AbstractIntegrationTest {
     @Test
     @Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardTelemetryPlatformAndSaveToFile() throws IOException {
-        OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
-        });
+        OnboardingService onboardingService = new OnboardingServiceImpl(telemetryPlatform.getEnvironment());
         SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
         onboardingParameters.setRegistrationCode("8530975704");
         onboardingParameters.setApplicationId(telemetryPlatform.getApplicationId());
