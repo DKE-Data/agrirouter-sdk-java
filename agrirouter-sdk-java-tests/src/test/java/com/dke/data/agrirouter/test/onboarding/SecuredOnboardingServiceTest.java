@@ -2,7 +2,6 @@ package com.dke.data.agrirouter.test.onboarding;
 
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.enums.Gateway;
-import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.exception.OnboardingException;
 import com.dke.data.agrirouter.api.service.onboard.secured.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.SecuredOnboardingParameters;

@@ -2,7 +2,6 @@ package com.dke.data.agrirouter.test.messaging.mqtt;
 
 import agrirouter.response.Response;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
-import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.PingService;
 import com.dke.data.agrirouter.api.service.parameters.PingParameters;
