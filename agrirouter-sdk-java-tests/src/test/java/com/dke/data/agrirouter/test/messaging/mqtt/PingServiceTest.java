@@ -2,7 +2,6 @@ package com.dke.data.agrirouter.test.messaging.mqtt;
 
 import agrirouter.response.Response;
 import com.dke.data.agrirouter.api.dto.messaging.FetchMessageResponse;
-import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.mqtt.PingService;
 import com.dke.data.agrirouter.api.service.parameters.PingParameters;
@@ -38,12 +37,10 @@ class PingServiceTest extends AbstractIntegrationTest {
     void sendHealthMessageToPingEndpoint() throws Throwable {
         var onboardingResponse = OnboardingResponseRepository.read(OnboardingResponseRepository.Identifier.MQTT_COMMUNICATION_UNIT);
 
-        var mqttClientService = new MqttClientService(new QA() {
-        });
+        var mqttClientService = new MqttClientService(communicationUnit.getEnvironment());
         var mqttClient = mqttClientService.create(onboardingResponse);
 
-        var mqttOptionService = new MqttOptionService(new QA() {
-        });
+        var mqttOptionService = new MqttOptionService(communicationUnit.getEnvironment());
         mqttClient.setCallback(new PingServiceTest.InternalCallback());
         mqttClient.connect(mqttOptionService.createMqttConnectOptions(onboardingResponse));
         mqttClient.subscribe(onboardingResponse.getConnectionCriteria().getCommands());

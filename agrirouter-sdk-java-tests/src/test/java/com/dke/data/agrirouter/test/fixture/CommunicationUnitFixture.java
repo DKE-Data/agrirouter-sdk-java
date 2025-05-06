@@ -7,7 +7,6 @@ import com.dke.data.agrirouter.api.enums.ApplicationType;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.enums.ContentMessageType;
 import com.dke.data.agrirouter.api.enums.Gateway;
-import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.SetCapabilitiesParameters;
@@ -38,8 +37,7 @@ class CommunicationUnitFixture extends AbstractIntegrationTest {
     @Test
     @Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardCommunicationUnitAndSaveToFile() throws IOException {
-        OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
-        });
+        OnboardingService onboardingService = new OnboardingServiceImpl(communicationUnit.getEnvironment());
         OnboardingParameters onboardingParameters = new OnboardingParameters();
         onboardingParameters.setRegistrationCode("8908462691");
         onboardingParameters.setApplicationId(communicationUnit.getApplicationId());

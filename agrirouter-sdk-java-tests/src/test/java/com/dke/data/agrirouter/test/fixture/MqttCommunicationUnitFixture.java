@@ -6,7 +6,6 @@ import com.dke.data.agrirouter.api.enums.ApplicationType;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.enums.ContentMessageType;
 import com.dke.data.agrirouter.api.enums.Gateway;
-import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
 import com.dke.data.agrirouter.api.service.parameters.SetCapabilitiesParameters;
@@ -48,8 +47,7 @@ class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
     @Test
     //@Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardCommunicationUnitAndSaveToFile() throws Throwable {
-        OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
-        });
+        OnboardingService onboardingService = new OnboardingServiceImpl(communicationUnit.getEnvironment());
         OnboardingParameters onboardingParameters = new OnboardingParameters();
         onboardingParameters.setRegistrationCode("4822479417");
         onboardingParameters.setApplicationId(communicationUnit.getApplicationId());
@@ -73,12 +71,10 @@ class MqttCommunicationUnitFixture extends AbstractIntegrationTest {
         OnboardingResponseRepository.save(
                 OnboardingResponseRepository.Identifier.MQTT_COMMUNICATION_UNIT, onboardingResponse);
 
-        MqttClientService mqttClientService = new MqttClientService(new QA() {
-        });
+        MqttClientService mqttClientService = new MqttClientService(communicationUnit.getEnvironment());
         IMqttClient mqttClient = mqttClientService.create(onboardingResponse);
 
-        MqttOptionService mqttOptionService = new MqttOptionService(new QA() {
-        });
+        MqttOptionService mqttOptionService = new MqttOptionService(communicationUnit.getEnvironment());
         mqttClient.setCallback(new InternalCallback());
         mqttClient.connect(mqttOptionService.createMqttConnectOptions(onboardingResponse));
         mqttClient.subscribe(onboardingResponse.getConnectionCriteria().getCommands());

@@ -3,7 +3,6 @@ package com.dke.data.agrirouter.test.fixture;
 import com.dke.data.agrirouter.api.dto.onboard.OnboardingResponse;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.enums.Gateway;
-import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.onboard.secured.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.SecuredOnboardingParameters;
 import com.dke.data.agrirouter.impl.onboard.secured.OnboardingServiceImpl;
@@ -34,8 +33,7 @@ class FarmingSoftwareFixture extends AbstractIntegrationTest {
     @Test
     @Disabled("Please replace the placeholder for the registration code to run the test case.")
     void onboardFarmingSoftwareAndSaveToFile() throws IOException {
-        OnboardingService onboardingService = new OnboardingServiceImpl(new QA() {
-        });
+        OnboardingService onboardingService = new OnboardingServiceImpl(farmingSoftware.getEnvironment());
         SecuredOnboardingParameters onboardingParameters = new SecuredOnboardingParameters();
         onboardingParameters.setRegistrationCode("2067663604");
         onboardingParameters.setApplicationId(farmingSoftware.getApplicationId());

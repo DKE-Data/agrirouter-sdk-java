@@ -3,7 +3,6 @@ package com.dke.data.agrirouter.test.messaging.rest;
 import com.dke.data.agrirouter.api.cancellation.DefaultCancellationToken;
 import com.dke.data.agrirouter.api.enums.ContentMessageType;
 import com.dke.data.agrirouter.api.enums.SystemMessageType;
-import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.service.messaging.encoding.DecodeMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.FetchMessageService;
 import com.dke.data.agrirouter.api.service.messaging.http.SetSubscriptionService;
@@ -31,8 +30,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
     @Test
     void givenValidEndpointWhenSendingSubscriptionsTheSubscriptionMessageShouldBeAccepted()
             throws Throwable {
-        SetSubscriptionService setSubscriptionService = new SetSubscriptionServiceImpl(new QA() {
-        });
+        SetSubscriptionService setSubscriptionService = new SetSubscriptionServiceImpl(farmingSoftware.getEnvironment());
 
         var parameters = new SetSubscriptionParameters();
         parameters.setOnboardingResponse(read(Identifier.FARMING_SOFTWARE));
@@ -70,8 +68,7 @@ class SetSubscriptionServiceTest extends AbstractIntegrationTest {
     @Test
     void givenValidEndpointWhenSendingInvalidSubscriptionsTheSubscriptionMessageShouldNotBeAccepted()
             throws Throwable {
-        SetSubscriptionService setSubscriptionService = new SetSubscriptionServiceImpl(new QA() {
-        });
+        SetSubscriptionService setSubscriptionService = new SetSubscriptionServiceImpl(farmingSoftware.getEnvironment());
 
         var parameters = new SetSubscriptionParameters();
         parameters.setOnboardingResponse(read(Identifier.FARMING_SOFTWARE));

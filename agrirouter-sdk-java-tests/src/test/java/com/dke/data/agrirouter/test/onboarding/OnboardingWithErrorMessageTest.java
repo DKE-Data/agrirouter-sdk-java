@@ -3,8 +3,6 @@ package com.dke.data.agrirouter.test.onboarding;
 import com.dke.data.agrirouter.api.enums.ApplicationType;
 import com.dke.data.agrirouter.api.enums.CertificationType;
 import com.dke.data.agrirouter.api.enums.Gateway;
-import com.dke.data.agrirouter.api.env.Environment;
-import com.dke.data.agrirouter.api.env.QA;
 import com.dke.data.agrirouter.api.exception.OnboardingException;
 import com.dke.data.agrirouter.api.service.onboard.OnboardingService;
 import com.dke.data.agrirouter.api.service.parameters.OnboardingParameters;
@@ -21,7 +19,7 @@ class OnboardingWithErrorMessageTest extends AbstractIntegrationTest {
     @Test
     void
     givenInvalidRegistrationCodeWhenSendingTheOnboardingRequestThenThereShouldBeAnOnboardingExceptionWithFilledErrorMessage() {
-        OnboardingService onboardingService = new OnboardingServiceImpl(getEnv());
+        OnboardingService onboardingService = new OnboardingServiceImpl(communicationUnit.getEnvironment());
         var onboardingParameters = new OnboardingParameters();
         onboardingParameters.setApplicationMessageId(MessageIdService.generateMessageId());
         onboardingParameters.setApplicationType(ApplicationType.APPLICATION);
@@ -41,8 +39,4 @@ class OnboardingWithErrorMessageTest extends AbstractIntegrationTest {
                 "Bearer not found.", onboardingException.getOnboardingError().getError().getMessage());
     }
 
-    private Environment getEnv() {
-        return new QA() {
-        };
-    }
 }
