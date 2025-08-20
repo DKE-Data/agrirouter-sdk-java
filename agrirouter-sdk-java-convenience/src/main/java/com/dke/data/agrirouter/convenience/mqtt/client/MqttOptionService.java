@@ -53,7 +53,6 @@ public class MqttOptionService extends EnvironmentalService {
                         certificationType));
         options.setKeepAliveInterval(60);
         options.setAutomaticReconnect(true);
-        options.setCleanSession(true);
         return options;
     }
 
@@ -75,7 +74,6 @@ public class MqttOptionService extends EnvironmentalService {
                         certificationType));
         options.setKeepAliveInterval(60);
         options.setAutomaticReconnect(true);
-        options.setCleanSession(true);
         return options;
     }
 
