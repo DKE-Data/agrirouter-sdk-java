@@ -22,7 +22,10 @@ enum class ContentMessageType(
     VID_WMV("vid:wmv", "", true),
     GPS_INFO("gps:info", Gps.GPSList.getDescriptor().fullName, false),
 
-    //FIXME Since the spec is not public, we can only use those literals.
+    ISO_11783_FIELD("masterdata:partfield", "iso11783p10.v0.m0.messages.Partfield", false),
+    ISO_11783_FARM("masterdata:farm", "iso11783p10.v0.m0.messages.Farm", false),
+    ISO_11783_CUSTOMER("masterdata:customer", "iso11783p10.v0.m0.messages.Customer", false),
+
     ISO_11783_DEVICE_DESCRIPTION(
         "iso:11783:-10:device_description:protobuf",
         "types.agrirouter.com/efdi.ISO11783_TaskData",
